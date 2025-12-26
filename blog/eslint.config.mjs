@@ -36,7 +36,7 @@ export default defineConfig([
       'unused-imports': unusedImports,
     },
     rules: {
-      'react-refresh/only-export-components': 'warn',
+      'react-refresh/only-export-components': ['warn', { allowNamedExports: true }],
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
       //
