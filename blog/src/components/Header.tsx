@@ -1,5 +1,5 @@
 import headerNavLinks from '@/data/headerNavLinks';
-import Link from 'next/link'
+import { Link } from '@/components'
 import { SearchButton, ThemeSwitch } from '@/components';
 
 const Logo = () => {
@@ -40,7 +40,7 @@ const ActionBtns = () => {
 
 export const Header = () => {
   return (
-    <header className="border border-e-red-400 flex items-center bg-transparent backdrop-blur-sm justify-between py-8">
+    <header className="flex items-center bg-transparent backdrop-blur-sm justify-between py-8">
       <Logo />
       <div className="flex flex-row items-center gap-6">
         <Navigation />

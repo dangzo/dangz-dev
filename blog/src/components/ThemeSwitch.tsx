@@ -1,16 +1,8 @@
 'use client';
 
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
-import {
-  Menu,
-  Button,
-  MenuItem,
-  MenuItems,
-  Radio,
-  RadioGroup,
-  Transition,
-} from '@headlessui/react';
+import { Menu, Button } from '@headlessui/react';
 
 const Sun = () => (
   <svg
@@ -26,6 +18,7 @@ const Sun = () => (
     />
   </svg>
 )
+
 const Moon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -36,6 +29,7 @@ const Moon = () => (
     <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
   </svg>
 )
+
 const Blank = () => <svg className="h-6 w-6" />
 
 const ThemeSwitch = () => {

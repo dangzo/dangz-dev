@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { Link } from '@/components';
 import { type SanityDocument } from 'next-sanity';
 
 import { client } from '@/sanity/client';
