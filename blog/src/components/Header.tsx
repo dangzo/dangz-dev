@@ -1,3 +1,6 @@
+import headerNavLinks from '@/data/headerNavLinks';
+import Link from 'next/link'
+
 const Logo = () => {
   return (
     <div className="border border-blue-700">
@@ -8,11 +11,18 @@ const Logo = () => {
 
 const Navigation = () => {
   return (
-    <nav className="border border-red-700">
+    <nav>
       <ul className="flex flex-row gap-4">
-        <li><a href="/">Home</a></li>
-        <li><a href="/blog">Blog</a></li>
-        <li><a href="/about">About</a></li>
+        {headerNavLinks.map((link) => (
+          <li key={link.title}>
+            <Link
+              className="hover:text-primary-500 dark:hover:text-primary-400 m-1 font-medium text-gray-900 dark:text-gray-100"
+              href={link.href}
+            >
+              {link.title}
+            </Link>
+          </li>
+        ))}
       </ul>
     </nav>
   );
