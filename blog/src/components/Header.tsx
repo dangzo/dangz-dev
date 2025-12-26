@@ -1,9 +1,10 @@
 import headerNavLinks from '@/data/headerNavLinks';
 import Link from 'next/link'
+import ThemeSwitch from './ThemeSwitch';
 
 const Logo = () => {
   return (
-    <div className="border border-blue-700">
+    <div>
       <a href="/">Dangz.dev</a>
     </div>
   );
@@ -30,9 +31,9 @@ const Navigation = () => {
 
 const ActionBtns = () => {
   return (
-    <div className="flex flex-row gap-4 border border-green-700">
+    <div className="flex flex-row gap-4">
       <button>Seach</button>
-      <button>Theme</button>
+      <ThemeSwitch />
     </div>
   );
 }
