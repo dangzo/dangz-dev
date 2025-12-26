@@ -20,9 +20,9 @@ const Navigation = () => {
 
 const ActionBtns = () => {
   return (
-    <div className="border border-green-700">
-      <button>Login</button>
-      <button>Sign Up</button>
+    <div className="flex flex-row gap-4 border border-green-700">
+      <button>Seach</button>
+      <button>Theme</button>
     </div>
   );
 }

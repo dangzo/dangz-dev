@@ -10,7 +10,7 @@ const POSTS_QUERY = `*[
 
 const options = { next: { revalidate: 30 } };
 
-export default async function IndexPage() {
+export default async function HomePage() {
   const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY, {}, options);
 
   return (
