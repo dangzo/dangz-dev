@@ -1,6 +1,6 @@
 import headerNavLinks from '@/data/headerNavLinks';
 import Link from 'next/link'
-import ThemeSwitch from './ThemeSwitch';
+import { SearchButton, ThemeSwitch } from '@/components';
 
 const Logo = () => {
   return (
@@ -32,7 +32,7 @@ const Navigation = () => {
 const ActionBtns = () => {
   return (
     <div className="flex flex-row gap-4">
-      <button>Seach</button>
+      <SearchButton />
       <ThemeSwitch />
     </div>
   );
