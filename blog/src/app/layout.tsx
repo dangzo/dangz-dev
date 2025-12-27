@@ -38,7 +38,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <ThemeProvider>
           <div className="mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0">
             <Header />
-            <main className="container mx-auto min-h-screen w-full pb-8 pt-6">
+            <main className="container mx-auto min-h-[calc(100vh-200px)] w-full pb-8 pt-6">
               {children}
             </main>
           </div>
