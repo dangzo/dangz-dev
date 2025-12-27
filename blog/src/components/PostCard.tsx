@@ -20,8 +20,8 @@ const PostCard = () => {
             opacity:0 group-hover:opacity-100 blur-xl
             transition-all duration-300
             -inset-1 h-full w-full
-            bg-linear-to-r from-0% via-50% to-100%
-            group-hover:from-white group-hover:via-sky-50/50 group-hover:to-white group-hover:dark:from-gray-950 group-hover:dark:via-sky-900/50 group-hover:dark:to-gray-950
+            bg-linear-to-r from-0% via-30% to-180%
+            group-hover:from-white group-hover:via-primary-50/80 group-hover:to-white group-hover:dark:from-gray-950 group-hover:dark:via-primary-900/40 group-hover:dark:to-gray-950
           "
         />
         <div className="flex flex-row relative">
