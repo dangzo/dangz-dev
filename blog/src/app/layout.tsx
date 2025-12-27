@@ -27,9 +27,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       suppressHydrationWarning
     >
       <meta name="msapplication-TileColor" content="#000000" />
-      <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
+      <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eee" />
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
-      <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-gray-950 dark:text-white">
+      <body
+        className="
+          pl-[calc(100vw-100%)] antialiased
+          bg-background-main-light text-main-light dark:bg-background-main-dark dark:text-main-dark
+        "
+      >
         <ThemeProvider>
           <div className="mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0">
             <Header />
