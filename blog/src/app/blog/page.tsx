@@ -1,4 +1,5 @@
 import { Link } from '@/components';
+import TagList from '@/components/TagList';
 
 const TagsSidebar = () => {
   return (
@@ -35,6 +36,7 @@ const PostList = () => {
             >
               Sample Post Title
             </Link>
+            <TagList className="mt-1" tags={['React', 'TypeScript']} />
             <p className="mt-4 mb-4 text text-secondary-light dark:text-secondary-dark">
               This is a brief excerpt from the sample post to give readers an idea of the content.
             </p>
@@ -55,6 +57,7 @@ const PostList = () => {
             >
               Sample Post Title
             </Link>
+            <TagList className="mt-1" tags={['React', 'TypeScript']} />
             <p className="mt-4 mb-4 text text-secondary-light dark:text-secondary-dark">
               This is a brief excerpt from the sample post to give readers an idea of the content.
             </p>
