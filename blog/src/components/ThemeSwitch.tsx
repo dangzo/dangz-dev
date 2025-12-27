@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import { useTheme } from 'next-themes';
-import { Button } from '@headlessui/react';
+import { Button, Transition } from '@headlessui/react';
 
 const Sun = () => (
   <svg
@@ -39,13 +39,52 @@ const ThemeSwitch = () => {
   // When mounted on client, now we can show the UI
   useEffect(() => setMounted(true), [])
 
+  const handleClick = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark')
+  }
+
+  const isDark = resolvedTheme === 'dark'
+
   return (
     <Button
       aria-label="Theme switcher"
-      className="data-hover:cursor-pointer hover:text-primary-500 dark:hover:text-primary-400 flex items-center justify-center"
-      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+      className="data-hover:cursor-pointer hover:text-primary-500 dark:hover:text-primary-400 flex items-center justify-center relative w-8"
+      onClick={handleClick}
     >
-      {mounted ? resolvedTheme === 'dark' ? <Moon /> : <Sun /> : <Blank />}
+      {mounted ? (
+        <>
+          <Transition
+            show={!isDark}
+            as={Fragment}
+            enter="transition-all duration-500"
+            enterFrom="opacity-0 rotate-180"
+            enterTo="opacity-100 rotate-0"
+            leave="transition-all duration-500"
+            leaveFrom="opacity-100 rotate-0"
+            leaveTo="opacity-0 -rotate-180"
+          >
+            <div className="absolute">
+              <Sun />
+            </div>
+          </Transition>
+          <Transition
+            show={isDark}
+            as={Fragment}
+            enter="transition-all duration-500"
+            enterFrom="opacity-0 rotate-180"
+            enterTo="opacity-100 rotate-0"
+            leave="transition-all duration-500"
+            leaveFrom="opacity-100 rotate-0"
+            leaveTo="opacity-0 rotate-180"
+          >
+            <div className="absolute">
+              <Moon />
+            </div>
+          </Transition>
+        </>
+      ) : (
+        <Blank />
+      )}
     </Button>
   )
 }

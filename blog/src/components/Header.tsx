@@ -29,7 +29,9 @@ const Navigation = () => {
 
 const ActionBtns = () => {
   return (
-    <div className="flex flex-row gap-4">
+    <div
+      className="flex flex-row gap-4 border border-dashed px-4 py-2 rounded-md dark:border-border-dark border-border-light"
+    >
       <SearchButton />
       <ThemeSwitch />
     </div>
@@ -40,7 +42,7 @@ export const Header = () => {
   return (
     <header className="flex items-center bg-transparent backdrop-blur-sm justify-between py-8">
       <Logo />
-      <div className="flex flex-row items-center gap-6">
+      <div className="flex flex-row items-center gap-10">
         <Navigation />
         <ActionBtns />
       </div>
