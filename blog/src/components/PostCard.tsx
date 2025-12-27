@@ -1,4 +1,4 @@
-import { Heading, Link, TagList } from '@/components';
+import { Text, Link, TagList } from '@/components';
 
 const PostCard = () => {
   return (
@@ -25,9 +25,9 @@ const PostCard = () => {
           "
         />
         <div className="flex flex-row relative">
-          <p className="pt-1 text-secondary-light dark:text-secondary-dark w-48 font-bold">
+          <Text className="leading-8 w-48 font-bold">
             January 1, 2024
-          </p>
+          </Text>
           <div>
             <Link
               href="/post/sample-post"
@@ -36,9 +36,9 @@ const PostCard = () => {
               Sample Post Title
             </Link>
             <TagList className="mt-1" tags={['React', 'TypeScript']} />
-            <p className="mt-4 mb-4 text text-secondary-light dark:text-secondary-dark">
+            <Text className="my-4">
               This is a brief excerpt from the sample post to give readers an idea of the content.
-            </p>
+            </Text>
             <Link href="/post/sample-post" type="accent">
               Read more →
             </Link>

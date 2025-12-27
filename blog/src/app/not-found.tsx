@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Heading } from '@/components';
+import { Button, Heading, Text } from '@/components';
 
 export default function NotFound() {
   return (
@@ -13,9 +13,9 @@ export default function NotFound() {
           Page Not Found
         </Heading>
 
-        <p className="text-xl text-slate-400 mb-8 max-w-md mx-auto">
+        <Text size="large" className="max-w-md mx-auto">
           Looks like this page wandered off into the digital void. Let's get you back on track.
-        </p>
+        </Text>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -27,9 +27,7 @@ export default function NotFound() {
         </Button>
       </div>
 
-      <div className="mt-16 text-slate-500 text-sm">
-        <p>✨ Error Code: 404 - The page you're looking for doesn't exist</p>
-      </div>
+      <Text className="mt-16" size="small">✨ Error Code: 404 - The page you're looking for doesn't exist</Text>
     </div>
   );
 }

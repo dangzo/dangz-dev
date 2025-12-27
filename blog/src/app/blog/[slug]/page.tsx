@@ -1,10 +1,10 @@
-import Heading from "@/components/Heading";
+import { Text, Heading } from "@/components";
 
 export default async function PostPage() {
   return (
-    <main className="container mx-auto max-w-3xl p-8">
+    <article>
       <Heading as="h1" className="text-4xl font-bold mb-8">Single Post Page</Heading>
-      <p>Text here</p>
-    </main>
+      <Text>Text here</Text>
+    </article>
   );
 }

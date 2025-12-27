@@ -4,9 +4,7 @@ import { SearchButton, ThemeSwitch } from '@/components';
 
 const Logo = () => {
   return (
-    <div>
-      <a href="/">Dangz.dev</a>
-    </div>
+    <Link href="/">Dangz.dev</Link>
   );
 }
 

@@ -1,4 +1,4 @@
-import { Heading, PostCard } from '@/components';
+import { Heading, Text, PostCard } from '@/components';
 
 const TagsSidebar = () => {
   return (
@@ -11,10 +11,10 @@ const TagsSidebar = () => {
     >
       <Heading as="h4" className="mb-4 text-2xl font-semibold">All tags</Heading>
       <ul className="list-disc list-inside space-y-2 text-secondary-light dark:text-secondary-dark text-sm">
-        <li>React (8)</li>
-        <li>TypeScript (3)</li>
-        <li>UX/IX (2)</li>
-        <li>Frontend (5)</li>
+        <li><Text size="small" className="inline">React (8)</Text></li>
+        <li><Text size="small" className="inline">TypeScript (3)</Text></li>
+        <li><Text size="small" className="inline">UX/IX (2)</Text></li>
+        <li><Text size="small" className="inline">Frontend (5)</Text></li>
       </ul>
     </aside>
   );
@@ -39,9 +39,9 @@ export default async function BlogPage() {
       <Heading as="h1" className="text-6xl font-bold mb-8">
         All Posts
       </Heading>
-      <p className="text-secondary-light dark:text-secondary-dark mb-12 text-lg">
+      <Text className="mb-12" size="large">
         Brief description of what I'm writing about in my blog
-      </p>
+      </Text>
 
       <div className="flex flex-row my-10 gap-10">
         <TagsSidebar />

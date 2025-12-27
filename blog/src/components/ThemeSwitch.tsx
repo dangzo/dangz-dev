@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
-import { Menu, Button } from '@headlessui/react';
+import { Button } from '@headlessui/react';
 
 const Sun = () => (
   <svg
@@ -40,19 +40,13 @@ const ThemeSwitch = () => {
   useEffect(() => setMounted(true), [])
 
   return (
-    <div className="flex items-center">
-      <Menu as="div" className="relative inline-block text-left">
-        <div className="hover:text-primary-500 dark:hover:text-primary-400 flex items-center justify-center">
-          <Button
-            aria-label="Theme switcher"
-            className="data-hover:cursor-pointer"
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          >
-            {mounted ? resolvedTheme === 'dark' ? <Moon /> : <Sun /> : <Blank />}
-          </Button>
-        </div>
-      </Menu>
-    </div>
+    <Button
+      aria-label="Theme switcher"
+      className="data-hover:cursor-pointer hover:text-primary-500 dark:hover:text-primary-400 flex items-center justify-center"
+      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+    >
+      {mounted ? resolvedTheme === 'dark' ? <Moon /> : <Sun /> : <Blank />}
+    </Button>
   )
 }
 
