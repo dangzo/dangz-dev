@@ -31,10 +31,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
       <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-gray-950 dark:text-white">
         <ThemeProvider>
-          <section className="mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0">
+          <div className="mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0">
             <Header />
-            {children}
-          </section>
+            <main className="container mx-auto min-h-screen w-full pb-8 pt-6">
+              {children}
+            </main>
+          </div>
         </ThemeProvider>
       </body>
     </html>

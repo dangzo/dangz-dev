@@ -1,8 +1,88 @@
+import { Link } from '@/components';
+
+const TagsSidebar = () => {
+  return (
+    <aside
+      className="
+        p-4 mb-8 w-full max-w-[256px] rounded border-2
+        border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark
+      "
+    >
+      <h2 className="mb-4 text-2xl font-semibold">All tags</h2>
+      <ul className="list-disc list-inside space-y-2 text-secondary-light dark:text-secondary-dark text-sm">
+        <li>React (8)</li>
+        <li>TypeScript (3)</li>
+        <li>UX/IX (2)</li>
+        <li>Frontend (5)</li>
+      </ul>
+    </aside>
+  );
+}
+
+const PostList = () => {
+  return (
+    <section className="flex-1">
+      <ul className="space-y-6">
+        {/* Map through posts and render them here */}
+        <li className="border-2 rounded border-border-light dark:border-border-dark pb-4 flex flex-row p-4 bg-background-light dark:bg-background-dark">
+          <p className="pt-1 text-secondary-light dark:text-secondary-dark w-48 font-bold">
+            January 1, 2024
+          </p>
+          <div>
+            <Link
+              href="/post/sample-post"
+              className="text-2xl font-semibold text-main-light dark:text-main-dark"
+            >
+              Sample Post Title
+            </Link>
+            <p className="mt-4 mb-4 text text-secondary-light dark:text-secondary-dark">
+              This is a brief excerpt from the sample post to give readers an idea of the content.
+            </p>
+            <Link href="/post/sample-post">
+              Read more →
+            </Link>
+          </div>
+        </li>
+
+        <li className="border-2 rounded border-border-light dark:border-border-dark pb-4 flex flex-row p-4 bg-background-light dark:bg-background-dark">
+          <p className="pt-1 text-secondary-light dark:text-secondary-dark w-48 font-bold">
+            January 1, 2024
+          </p>
+          <div>
+            <Link
+              href="/post/sample-post"
+              className="text-2xl font-semibold text-main-light dark:text-main-dark"
+            >
+              Sample Post Title
+            </Link>
+            <p className="mt-4 mb-4 text text-secondary-light dark:text-secondary-dark">
+              This is a brief excerpt from the sample post to give readers an idea of the content.
+            </p>
+            <Link href="/post/sample-post">
+              Read more →
+            </Link>
+          </div>
+        </li>
+        {/* More posts... */}
+      </ul>
+    </section>
+  );
+}
+
 export default async function BlogPage() {
   return (
-    <main className="container mx-auto min-h-screen max-w-3xl p-8">
-      <h1 className="text-4xl font-bold mb-8">Blog Page</h1>
-      <p>Text here</p>
-    </main>
+    <article>
+      <h1 className="text-6xl font-bold mb-8">
+        All Posts
+      </h1>
+      <p className="text-secondary-light dark:text-secondary-dark mb-12 text-lg">
+        Brief description of what I'm writing about in my blog
+      </p>
+
+      <div className="flex flex-row my-10 gap-10">
+        <TagsSidebar />
+        <PostList />
+      </div>
+    </article>
   );
 }

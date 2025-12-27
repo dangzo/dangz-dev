@@ -31,9 +31,20 @@
   --color-gray-500: oklch(55.1% 0.027 264.364);
   --color-gray-600: oklch(44.6% 0.03 256.802);
   --color-gray-700: oklch(37.3% 0.034 259.733);
-  --color-gray-800: oklch(27.8% 0.033 256.848);
-  --color-gray-900: oklch(21% 0.034 264.665);
+  --color-gray-800: oklch(25.8% 0.033 256.848);
+  --color-gray-900: oklch(16% 0.034 264.665);
   --color-gray-950: oklch(13% 0.028 261.692);
+
+  --color-main-light: var(--color-gray-900);
+  --color-main-dark: var(--color-gray-100);
+  --color-secondary-light: var(--color-gray-700);
+  --color-secondary-dark: var(--color-gray-400);
+  --color-accent-light: var(--color-primary-600);
+  --color-accent-dark: var(--color-primary-400);
+  --color-background-light: var(--color-gray-50);
+  --color-background-dark: var(--color-gray-900);
+  --color-border-light: var(--color-gray-200);
+  --color-border-dark: var(--color-gray-700);
 
   /* Line heights */
   --line-height-11: 2.75rem;
