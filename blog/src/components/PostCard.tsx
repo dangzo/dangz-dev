@@ -1,4 +1,4 @@
-import { Link, TagList } from '@/components';
+import { Heading, Link, TagList } from '@/components';
 
 const PostCard = () => {
   return (
@@ -31,7 +31,7 @@ const PostCard = () => {
           <div>
             <Link
               href="/post/sample-post"
-              className="text-2xl font-semibold text-main-light dark:text-main-dark"
+              className="text-2xl font-semibold"
             >
               Sample Post Title
             </Link>

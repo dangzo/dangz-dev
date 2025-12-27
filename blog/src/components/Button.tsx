@@ -1,18 +1,18 @@
 'use client';
 
-import { useCallback, type ReactNode, ButtonHTMLAttributes } from 'react';
+import { useCallback } from 'react';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 
 export type ButtonType = 'primary' | 'secondary' | 'ghost';
 export type ButtonSize = 'small' | 'medium' | 'large';
 
-interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'type'> {
+interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'type'> {
   type?: ButtonType;
   size?: ButtonSize;
   to?: string;
   onClick?: () => void;
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 const Button = ({ type = 'primary', size = 'medium', to, onClick, children }: ButtonProps) => {

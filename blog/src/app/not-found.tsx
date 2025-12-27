@@ -1,17 +1,18 @@
 'use client';
 
-import { Button } from '@/components';
+import { Button, Heading } from '@/components';
 
 export default function NotFound() {
   return (
     <div className="h-[calc(100vh-200px)] flex flex-col items-center justify-center text-center px-4">
       <div className="mb-8">
-        <h1 className="text-9xl font-bold text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-500 mb-4">
+        <h1 className="text-9xl font-bold text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-600 mb-4">
           404
         </h1>
-        <h2 className="text-4xl font-bold text-white mb-4">
+        <Heading as="h2">
           Page Not Found
-        </h2>
+        </Heading>
+
         <p className="text-xl text-slate-400 mb-8 max-w-md mx-auto">
           Looks like this page wandered off into the digital void. Let's get you back on track.
         </p>

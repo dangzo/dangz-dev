@@ -1,4 +1,4 @@
-import { Link } from '@/components';
+import { Link, Heading } from '@/components';
 import { type SanityDocument } from 'next-sanity';
 
 import { client } from '@/sanity/client';
@@ -15,12 +15,12 @@ export default async function HomePage() {
 
   return (
     <article>
-      <h1 className="text-4xl font-bold mb-8">Posts</h1>
+      <Heading as="h1" className="mb-8">Posts</Heading>
       <ul className="flex flex-col gap-y-4">
         {posts.map((post) => (
           <li className="hover:underline" key={post._id}>
             <Link href={`/${post.slug.current}`}>
-              <h2 className="text-xl font-semibold">{post.title}</h2>
+              <Heading as="h2" className="text-xl font-semibold">{post.title}</Heading>
               <p>{new Date(post.publishedAt).toLocaleDateString()}</p>
             </Link>
           </li>

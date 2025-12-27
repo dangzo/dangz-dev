@@ -1,4 +1,4 @@
-import { PostCard } from '@/components';
+import { Heading, PostCard } from '@/components';
 
 const TagsSidebar = () => {
   return (
@@ -9,7 +9,7 @@ const TagsSidebar = () => {
         bg-background-secondary-light dark:bg-background-secondary-dark
       "
     >
-      <h2 className="mb-4 text-2xl font-semibold">All tags</h2>
+      <Heading as="h4" className="mb-4 text-2xl font-semibold">All tags</Heading>
       <ul className="list-disc list-inside space-y-2 text-secondary-light dark:text-secondary-dark text-sm">
         <li>React (8)</li>
         <li>TypeScript (3)</li>
@@ -36,9 +36,9 @@ const PostList = () => {
 export default async function BlogPage() {
   return (
     <article>
-      <h1 className="text-6xl font-bold mb-8">
+      <Heading as="h1" className="text-6xl font-bold mb-8">
         All Posts
-      </h1>
+      </Heading>
       <p className="text-secondary-light dark:text-secondary-dark mb-12 text-lg">
         Brief description of what I'm writing about in my blog
       </p>
