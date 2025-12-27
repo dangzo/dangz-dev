@@ -26,7 +26,7 @@ const Button = ({ type = 'primary', size = 'medium', to, onClick, children }: Bu
     { 'px-8 py-3 text-md': size === 'large' },
     // Type styles
     {
-      'rounded-lg border-2 border-slate-500 text-slate-300 hover:border-primary-400 hover:text-primary-400':
+      'rounded-lg border-2 border-slate-600 text-slate-600 hover:border-primary-400 hover:text-primary-400':
         type === 'ghost'
     },
     {
@@ -34,7 +34,7 @@ const Button = ({ type = 'primary', size = 'medium', to, onClick, children }: Bu
         type === 'primary'
     },
     {
-      'bg-linear-to-r from-primary-500 to-blue-500 text-white rounded-lg hover:shadow-lg hover:shadow-primary-500/50':
+      'text-white rounded-md bg-gray-800/80 hover:bg-background-secondary-dark dark:text-main-dark dark:bg-slate-800/80 dark:hover:bg-slate-600/60':
         type === 'secondary'
     },
   ]);

@@ -21,10 +21,7 @@ export default function NotFound() {
         <Button type="primary" size="large" to="/">
           Back Home
         </Button>
-        <Button type="ghost" size="medium" to="/blog">
-          View Blog
-        </Button>
-        <Button type="secondary" size="small" to="/blog">
+        <Button type="ghost" size="large" to="/blog">
           View Blog
         </Button>
       </div>
