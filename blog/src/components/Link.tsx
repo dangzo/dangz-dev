@@ -2,6 +2,12 @@ import { clsx } from 'clsx';
 import { default as NextLink } from 'next/link';
 import type { LinkProps as NextLinkProps } from 'next/link';
 import { AnchorHTMLAttributes } from 'react';
+import { Roboto } from 'next/font/google'
+
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+})
 
 export type LinkType = 'accent' | 'primary' | 'secondary';
 interface LinkProps extends NextLinkProps {
@@ -18,7 +24,8 @@ export default function Link({ href, className, type = 'primary', ...rest }: Lin
       'text-accent-light dark:text-accent-dark hover:text-primary-500 dark:hover:text-primary-300': type === 'accent',
       'text-main-light dark:text-main-dark hover:text-gray-600 dark:hover:text-gray-300': type === 'primary',
       'text-secondary-light dark:text-secondary-dark hover:text-secondary-dark dark:hover:text-secondary-light': type === 'secondary',
-    }
+    },
+    roboto.className,
   ]);
 
   if (isInternalLink) {
