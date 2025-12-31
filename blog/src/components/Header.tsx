@@ -1,5 +1,5 @@
 import headerNavLinks from '@/data/headerNavLinks';
-import { Link } from '@/components/ui';
+import Link from 'next/link';
 import { SearchButton, ThemeSwitch } from '@/components';
 
 const Logo = () => {
@@ -15,10 +15,16 @@ const Navigation = () => {
         {headerNavLinks.map((link) => (
           <li key={link.title}>
             <Link
-              className="hover:text-primary-500 dark:hover:text-primary-400 m-1 font-medium text-gray-900 dark:text-gray-100"
+              className="
+                group font-semibold transition-colors
+                text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-50
+              "
               href={link.href}
             >
-              {link.title}
+              <span className="relative z-10">
+                {link.title}
+                <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-primary-500 transition-all duration-200 ease-out group-hover:w-full dark:bg-primary-400"/>
+              </span>
             </Link>
           </li>
         ))}

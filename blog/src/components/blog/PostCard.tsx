@@ -1,5 +1,5 @@
 import { TagList } from '@/components';
-import { Text, Link } from '@/components/ui';
+import { Text, Link, Heading } from '@/components/ui';
 import type { PostWithTags } from '@/types/PostWithTags.types';
 
 const PostCard = ({ post }: { post: PostWithTags }) => {
@@ -41,7 +41,7 @@ const PostCard = ({ post }: { post: PostWithTags }) => {
               href={`/blog/${post.slug?.current}`}
               className="text-2xl font-semibold"
             >
-              {post.title}
+              <Heading as="h4" className="inline-block">{post.title}</Heading>
             </Link>
 
             <TagList className="mt-1" tags={post.tags} />
