@@ -1,6 +1,11 @@
 import { Text, Heading } from '@/components/ui';
+import { TAGS_WITH_COUNT_QUERY } from '@/api/queries';
+import { client } from '@/sanity/client';
+import type { TagWithCount } from '@/types/TagWithCount.types';
 
 async function TagsSidebar() {
+  const tags = await client.fetch<TagWithCount[]>(TAGS_WITH_COUNT_QUERY);
+
   return (
     <aside
       className="
@@ -11,10 +16,13 @@ async function TagsSidebar() {
     >
       <Heading as="h4" className="mb-4 text-2xl font-semibold">All tags</Heading>
       <ul className="list-disc list-inside space-y-2 text-secondary-light dark:text-secondary-dark text-sm">
-        <li><Text size="small" className="inline">React (8)</Text></li>
-        <li><Text size="small" className="inline">TypeScript (3)</Text></li>
-        <li><Text size="small" className="inline">UX/IX (2)</Text></li>
-        <li><Text size="small" className="inline">Frontend (5)</Text></li>
+        {tags.map(tag => (
+          <li key={tag._id}>
+            <Text size="small" className="inline">
+              {tag.name} ({tag.postCount})
+            </Text>
+          </li>
+        ))}
       </ul>
     </aside>
   );

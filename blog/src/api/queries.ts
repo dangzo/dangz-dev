@@ -10,3 +10,10 @@ export const POST_LIST_QUERY = `*[
   body,
   publishedAt
 }`;
+
+export const TAGS_WITH_COUNT_QUERY = `*[_type == "tag"]{
+  _id,
+  name,
+  "slug": slug.current,
+  "postCount": count(*[_type == "post" && references(^._id)])
+} | order(name asc)`;
