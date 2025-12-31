@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import { client } from '@/sanity/client';
 import { PostCard } from '@/components/blog/';
 import { POST_LIST_QUERY } from '@/api/queries';
@@ -7,6 +8,10 @@ const options = { next: { revalidate: 30 } };
 
 const PostList = async ({ tag }: { tag?: string }) => {
   const posts = await client.fetch<PostWithTags[]>(POST_LIST_QUERY(tag), {}, options);
+
+  if (posts.length === 0) {
+    return notFound();
+  }
 
   return (
     <section className="flex-1">
