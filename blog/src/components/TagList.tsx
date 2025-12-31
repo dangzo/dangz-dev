@@ -1,17 +1,18 @@
 import Link from './Link';
+import type { Tag } from '@/types/sanity.types';
 
 interface TagListProps {
-  tags: string[]
+  tags: Tag[];
   className?: string
 }
 
-export default function TagList({ tags, className = '' }: TagListProps) {
+export default async function TagList({ tags, className = '' }: TagListProps) {
   return (
     <div className={`flex flex-wrap gap-1.5 ${className}`}>
       {tags.map((tag) => (
         <Link
-          key={tag}
-          href={`/tags/${tag}`}
+          key={tag._id}
+          href={`/tags/${tag.slug}`}
           type='accent'
           className="
             inline-flex items-center rounded-md
@@ -21,7 +22,7 @@ export default function TagList({ tags, className = '' }: TagListProps) {
             transition-colors duration-300
             uppercase"
         >
-          {tag}
+          {tag.name}
         </Link>
       ))}
     </div>

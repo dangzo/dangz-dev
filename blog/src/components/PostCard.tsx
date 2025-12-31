@@ -1,7 +1,7 @@
 import { Text, Link, TagList } from '@/components';
-import type { Post } from '@/types/sanity.types';
+import type { PostWithTags } from '@/types/custom.types';
 
-const PostCard = ({ post }: { post: Post }) => {
+const PostCard = ({ post }: { post: PostWithTags }) => {
   return (
     <>
       <li
@@ -33,7 +33,7 @@ const PostCard = ({ post }: { post: Post }) => {
                 month: 'long',
                 day: 'numeric',
               })
-              : 'No date'}
+              : '--'}
           </Text>
           <div>
             <Link
@@ -43,7 +43,7 @@ const PostCard = ({ post }: { post: Post }) => {
               {post.title}
             </Link>
 
-            <TagList className="mt-1" tags={['React', 'TypeScript']} />
+            <TagList className="mt-1" tags={post.tags} />
 
             <Text className="my-4">
               {post.body && post.body.length > 0

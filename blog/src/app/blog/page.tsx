@@ -1,11 +1,11 @@
 import { Heading, Text, PostCard } from '@/components';
 import { POST_LIST_QUERY } from '@/api/queries';
 import { client } from '@/sanity/client';
-import type { Post } from '@/types/sanity.types';
+import type { PostWithTags } from '@/types/custom.types';
 
 const options = { next: { revalidate: 30 } };
 
-const TagsSidebar = () => {
+async function TagsSidebar() {
   return (
     <aside
       className="
@@ -26,7 +26,7 @@ const TagsSidebar = () => {
 };
 
 async function PostList() {
-  const posts = await client.fetch<Post[]>(POST_LIST_QUERY, {}, options);
+  const posts = await client.fetch<PostWithTags[]>(POST_LIST_QUERY, {}, options);
 
   return (
     <section className="flex-1">
