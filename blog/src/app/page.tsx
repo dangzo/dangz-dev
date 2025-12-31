@@ -1,4 +1,4 @@
-import { Link, Text, Heading } from '@/components';
+import { Link, Text, Heading } from '@/components/ui';
 import { type SanityDocument } from 'next-sanity';
 import { POST_LIST_QUERY } from '@/api/queries';
 import { client } from '@/sanity/client';

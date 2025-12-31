@@ -1,12 +1,12 @@
-import Link from './Link';
+import Link from './ui/Link';
 import type { Tag } from '@/types/sanity.types';
 
-interface TagListProps {
+interface PostTagsProps {
   tags: Tag[];
   className?: string
 }
 
-export default async function TagList({ tags, className = '' }: TagListProps) {
+export default async function PostTags({ tags, className = '' }: PostTagsProps) {
   return (
     <div className={`flex flex-wrap gap-1.5 ${className}`}>
       {tags.map((tag) => (

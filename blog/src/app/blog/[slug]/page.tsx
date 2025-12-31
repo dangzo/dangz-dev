@@ -1,4 +1,4 @@
-import { Text, Heading } from '@/components';
+import { Text, Heading } from '@/components/ui';
 
 export default async function PostPage() {
   return (

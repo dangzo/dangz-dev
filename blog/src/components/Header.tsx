@@ -1,5 +1,5 @@
 import headerNavLinks from '@/data/headerNavLinks';
-import { Link } from '@/components';
+import { Link } from '@/components/ui';
 import { SearchButton, ThemeSwitch } from '@/components';
 
 const Logo = () => {

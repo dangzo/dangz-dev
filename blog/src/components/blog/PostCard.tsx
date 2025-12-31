@@ -1,5 +1,6 @@
-import { Text, Link, TagList } from '@/components';
-import type { PostWithTags } from '@/types/custom.types';
+import { TagList } from '@/components';
+import { Text, Link } from '@/components/ui';
+import type { PostWithTags } from '@/types/PostWithTags.types';
 
 const PostCard = ({ post }: { post: PostWithTags }) => {
   return (

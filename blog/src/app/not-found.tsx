@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Heading, Text } from '@/components';
+import { Button, Heading, Text } from '@/components/ui';
 
 export default function NotFound() {
   return (
