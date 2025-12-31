@@ -1,4 +1,4 @@
-import { Heading, Text } from "@/components";
+import { Heading, Text } from '@/components';
 
 export default async function AboutPage() {
   return (

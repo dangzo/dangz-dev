@@ -18,7 +18,7 @@ const TagsSidebar = () => {
       </ul>
     </aside>
   );
-}
+};
 
 const PostList = () => {
   return (
@@ -31,7 +31,7 @@ const PostList = () => {
       </ul>
     </section>
   );
-}
+};
 
 export default async function BlogPage() {
   return (

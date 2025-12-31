@@ -47,6 +47,6 @@ const PostCard = () => {
       </li>
     </>
   );
-}
+};
 
 export default PostCard;

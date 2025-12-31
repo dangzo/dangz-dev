@@ -1,4 +1,4 @@
-import Link from './Link'
+import Link from './Link';
 
 interface TagListProps {
   tags: string[]
@@ -25,5 +25,5 @@ export default function TagList({ tags, className = '' }: TagListProps) {
         </Link>
       ))}
     </div>
-  )
+  );
 }

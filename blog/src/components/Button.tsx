@@ -56,6 +56,6 @@ const Button = ({ type = 'primary', size = 'medium', to, onClick, children }: Bu
       {children}
     </button>
   );
-}
+};
 
 export default Button;

@@ -20,7 +20,7 @@ const SearchButton = () => {
         />
       </svg>
     </Button>
-  )
-}
+  );
+};
 
-export default SearchButton
+export default SearchButton;

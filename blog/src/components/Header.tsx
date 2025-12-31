@@ -1,12 +1,12 @@
 import headerNavLinks from '@/data/headerNavLinks';
-import { Link } from '@/components'
+import { Link } from '@/components';
 import { SearchButton, ThemeSwitch } from '@/components';
 
 const Logo = () => {
   return (
     <Link href="/">Dangz.dev</Link>
   );
-}
+};
 
 const Navigation = () => {
   return (
@@ -25,7 +25,7 @@ const Navigation = () => {
       </ul>
     </nav>
   );
-}
+};
 
 const ActionBtns = () => {
   return (
@@ -36,7 +36,7 @@ const ActionBtns = () => {
       <ThemeSwitch />
     </div>
   );
-}
+};
 
 export const Header = () => {
   return (
@@ -48,4 +48,4 @@ export const Header = () => {
       </div>
     </header>
   );
-}
+};

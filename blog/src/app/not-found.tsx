@@ -6,7 +6,7 @@ export default function NotFound() {
   return (
     <div className="h-[calc(100vh-200px)] flex flex-col items-center justify-center text-center px-4">
       <div className="mb-8">
-        <h1 className="text-9xl font-bold text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-600 mb-4">
+        <h1 className="text-9xl font-bold text-transparent bg-clip-text bg-linear-to-r from-primary-400 to-primary-600 mb-4">
           404
         </h1>
         <Heading as="h2">

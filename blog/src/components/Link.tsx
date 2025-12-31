@@ -2,12 +2,12 @@ import { clsx } from 'clsx';
 import { default as NextLink } from 'next/link';
 import type { LinkProps as NextLinkProps } from 'next/link';
 import { AnchorHTMLAttributes } from 'react';
-import { Roboto } from 'next/font/google'
+import { Roboto } from 'next/font/google';
 
 const roboto = Roboto({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
-})
+});
 
 export type LinkType = 'accent' | 'primary' | 'secondary';
 interface LinkProps extends NextLinkProps {
@@ -15,8 +15,8 @@ interface LinkProps extends NextLinkProps {
 }
 
 export default function Link({ href, className, type = 'primary', ...rest }: LinkProps & AnchorHTMLAttributes<HTMLAnchorElement>) {
-  const isInternalLink = href && href.startsWith('/')
-  const isAnchorLink = href && href.startsWith('#')
+  const isInternalLink = href && href.startsWith('/');
+  const isAnchorLink = href && href.startsWith('#');
 
   const linkClasses = clsx([
     'wrap-break-word transition-all duration-300',
@@ -29,14 +29,14 @@ export default function Link({ href, className, type = 'primary', ...rest }: Lin
   ]);
 
   if (isInternalLink) {
-    return <NextLink className={clsx([linkClasses, className])} href={href} {...rest} />
+    return <NextLink className={clsx([linkClasses, className])} href={href} {...rest} />;
   }
 
   if (isAnchorLink) {
-    return <a className={clsx([linkClasses, className])} href={href} {...rest} />
+    return <a className={clsx([linkClasses, className])} href={href} {...rest} />;
   }
 
   return (
     <a className={clsx([linkClasses, className])} target="_blank" rel="noopener noreferrer" href={href} {...rest} />
-  )
+  );
 }

@@ -1,10 +1,10 @@
-import clsx from "clsx";
-import { Roboto } from 'next/font/google'
+import clsx from 'clsx';
+import { Roboto } from 'next/font/google';
 
 const roboto = Roboto({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
-})
+});
 
 interface TextProps extends React.HTMLAttributes<HTMLParagraphElement> {
   size?: 'small' | 'medium' | 'large';
