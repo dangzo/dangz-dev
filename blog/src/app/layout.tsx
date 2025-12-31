@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { Header } from '@/components';
+import { Header, Footer } from '@/components';
 import ThemeProvider from '@/contexts/ThemeProvider';
 import '@/styles/tailwind.css';
 
@@ -42,6 +42,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               {children}
             </main>
           </div>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
