@@ -22,7 +22,7 @@ export default function Link({ href, className, type = 'primary', ...rest }: Lin
     'wrap-break-word transition-all duration-300',
     {
       'text-accent-light dark:text-accent-dark hover:text-primary-500 dark:hover:text-primary-300': type === 'accent',
-      'text-main-light dark:text-main-dark hover:text-gray-600 dark:hover:text-gray-300': type === 'primary',
+      'text-main-light dark:text-main-dark hover:text-primary-500 dark:hover:text-primary-500': type === 'primary',
       'text-secondary-light dark:text-secondary-dark hover:text-secondary-dark dark:hover:text-secondary-light': type === 'secondary',
     },
     roboto.className,
