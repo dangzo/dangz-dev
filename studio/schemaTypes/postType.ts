@@ -27,6 +27,11 @@ export const postType = defineType({
       type: 'image',
     }),
     defineField({
+      name: 'tags',
+      type: 'array',
+      of: [{ type: 'reference', to: { type: 'tag' } }],
+    }),
+    defineField({
       name: 'body',
       type: 'array',
       of: [{ type: 'block' }],
