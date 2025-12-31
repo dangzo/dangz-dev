@@ -1,6 +1,7 @@
 import { Text, Link, TagList } from '@/components';
+import type { Post } from '@/types/sanity.types';
 
-const PostCard = () => {
+const PostCard = ({ post }: { post: Post }) => {
   return (
     <>
       <li
@@ -25,21 +26,36 @@ const PostCard = () => {
           "
         />
         <div className="flex flex-row relative">
-          <Text className="leading-8 w-48 font-bold">
-            January 1, 2024
+          <Text className="leading-8 min-w-40 font-bold">
+            {post.publishedAt
+              ? new Date(post.publishedAt).toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })
+              : 'No date'}
           </Text>
           <div>
             <Link
-              href="/post/sample-post"
+              href={`/blog/${post.slug?.current}`}
               className="text-2xl font-semibold"
             >
-              Sample Post Title
+              {post.title}
             </Link>
+
             <TagList className="mt-1" tags={['React', 'TypeScript']} />
+
             <Text className="my-4">
-              This is a brief excerpt from the sample post to give readers an idea of the content.
+              {post.body && post.body.length > 0
+                ? post.body
+                  .filter((block) => block._type === 'block')
+                  .map((block) => block.children?.map((child) => child.text).join(' '))
+                  .join(' ')
+                  .slice(0, 150) + '...'
+                : 'No description available.'}
             </Text>
-            <Link href="/post/sample-post" type="accent">
+
+            <Link href={`/blog/${post.slug?.current}`} type="accent">
               Read more →
             </Link>
           </div>

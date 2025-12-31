@@ -1,4 +1,9 @@
 import { Heading, Text, PostCard } from '@/components';
+import { POST_LIST_QUERY } from '@/api/queries';
+import { client } from '@/sanity/client';
+import type { Post } from '@/types/sanity.types';
+
+const options = { next: { revalidate: 30 } };
 
 const TagsSidebar = () => {
   return (
@@ -20,14 +25,15 @@ const TagsSidebar = () => {
   );
 };
 
-const PostList = () => {
+async function PostList() {
+  const posts = await client.fetch<Post[]>(POST_LIST_QUERY, {}, options);
+
   return (
     <section className="flex-1">
       <ul className="space-y-6">
-        {/* Map through posts and render them here */}
-        <PostCard />
-        <PostCard />
-        {/* More posts... */}
+        {posts.map((post) => (
+          <PostCard key={post._id} post={post} />
+        ))}
       </ul>
     </section>
   );
