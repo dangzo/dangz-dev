@@ -11,10 +11,11 @@ const roboto = Roboto({
 
 export type LinkType = 'accent' | 'primary' | 'secondary';
 interface LinkProps extends NextLinkProps {
+  isActive?: boolean;
   type?: string;
 }
 
-export default function Link({ href, className, type = 'primary', ...rest }: LinkProps & AnchorHTMLAttributes<HTMLAnchorElement>) {
+export default function Link({ href, className, type = 'primary', isActive = false, ...rest }: LinkProps & AnchorHTMLAttributes<HTMLAnchorElement>) {
   const isInternalLink = href && href.startsWith('/');
   const isAnchorLink = href && href.startsWith('#');
 
@@ -25,8 +26,17 @@ export default function Link({ href, className, type = 'primary', ...rest }: Lin
       'text-main-light dark:text-main-dark hover:text-primary-500 dark:hover:text-primary-500': type === 'primary',
       'text-secondary-light dark:text-secondary-dark hover:text-secondary-dark dark:hover:text-secondary-light': type === 'secondary',
     },
+    {
+      'text-primary-500 dark:text-primary-300': isActive && type === 'accent',
+      'text-primary-500 dark:text-primary-500': isActive && type === 'primary',
+      'text-secondary-dark dark:text-secondary-light': isActive && type === 'secondary',
+    },
     roboto.className,
   ]);
+
+  if (isActive) {
+    return <span className={clsx([linkClasses, className])} {...rest}>{rest.children}</span>;
+  }
 
   if (isInternalLink) {
     return <NextLink className={clsx([linkClasses, className])} href={href} {...rest} />;
