@@ -1,8 +1,12 @@
 ## dangz-dev
 
-TBD.
+Personal blog - Work In Progress.
 
-### TODO
+Check the dev deployment live [here](https://dangz-dev-git-dev-dangzo-5484s-projects.vercel.app/).
 
-- Switch system them from Sun to Moon with transition. No dropdown menu, change on click.
-- Search bar component with CTRL+K
+### Tech stack
+
+- React / Next.js
+- TypeScript
+- [Sanity CMS](https://www.sanity.io/)
+- [HeadlessUI](https://headlessui.com/)
