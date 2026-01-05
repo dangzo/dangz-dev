@@ -1,4 +1,4 @@
-import {tagType} from './tagType'
-import {postType} from './postType'
+import { tagType } from './tagType';
+import { postType } from './postType';
 
-export const schemaTypes = [postType, tagType]
+export const schemaTypes = [postType, tagType];

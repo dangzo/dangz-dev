@@ -1,10 +1,16 @@
-import {defineCliConfig} from 'sanity/cli'
+import { defineCliConfig } from 'sanity/cli';
 
 export default defineCliConfig({
   api: {
     projectId: 'wdxhl3tc',
     dataset: 'production'
   },
+  graphql: [
+    {
+      playground: true,
+      tag: 'default',
+    },
+ ],
   deployment: {
     /**
      * Enable auto-updates for studios.
@@ -12,4 +18,4 @@ export default defineCliConfig({
      */
     autoUpdates: true,
   }
-})
+});

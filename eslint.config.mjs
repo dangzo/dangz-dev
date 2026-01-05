@@ -6,7 +6,6 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import unusedImports from "eslint-plugin-unused-imports";
-import tseslint from 'typescript-eslint'
 
 export default defineConfig([
   ...nextVitals,
@@ -19,12 +18,20 @@ export default defineConfig([
     "build/**",
     "next-env.d.ts",
     "dist",
+    ".vercel/**",
+    // Studio folder:
+    "studio/node_modules/**",
+    "studio/.sanity/**",
+    "studio/dist/**",
+    "studio/build/**",
+    // Custom ignores:
+    "public/**",
+    "scripts/**",
   ]),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
       js.configs.recommended,
-      tseslint.configs.recommended,
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
     ],
@@ -44,6 +51,7 @@ export default defineConfig([
       'object-curly-newline': 'warn',
       'object-curly-spacing': ['warn', 'always'],
       'no-multi-spaces': 'error',
+      'no-undef': 'off',
       "no-unused-vars": "off", // or "@typescript-eslint/no-unused-vars": "off",
         "unused-imports/no-unused-imports": "error",
         "unused-imports/no-unused-vars": [
