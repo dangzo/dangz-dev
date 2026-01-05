@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export const postType = defineType({
   name: 'post',
@@ -37,4 +37,4 @@ export const postType = defineType({
       of: [{ type: 'block' }],
     }),
   ],
-})
+});

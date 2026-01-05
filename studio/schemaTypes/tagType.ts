@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export const tagType = defineType({
   name: 'tag',
@@ -21,4 +21,4 @@ export const tagType = defineType({
       type: 'text',
     }),
   ],
-})
+});

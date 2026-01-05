@@ -1,3 +1,5 @@
 import studio from '@sanity/eslint-config-studio'
 
-export default [...studio]
+const studioExport = [...studio]
+
+export default studioExport
