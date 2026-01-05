@@ -14,7 +14,12 @@ export default defineConfig({
   plugins: [
     structureTool(),
     visionTool(),
-    graphiQLTool({ apiVersion: '1', url: '/GraphQL', name: 'graphiql', title: ' GraphQL' }),
+    graphiQLTool({
+      apiVersion: '2023-08-01',
+      url: 'https://wdxhl3tc.api.sanity.io/v2023-08-01/graphql/production/default',
+      name: 'graphiql',
+      title: 'GraphQL',
+    }),
   ],
 
   schema: {

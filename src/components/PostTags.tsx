@@ -12,7 +12,7 @@ export default async function PostTags({ tags, className = '' }: PostTagsProps) 
       {tags.map((tag) => (
         <Link
           key={tag._id}
-          href={`/blog/tags/${tag.slug}`}
+          href={`/blog/tags/${tag.slug?.current}`}
           type='accent'
           className="
             inline-flex items-center rounded-md

@@ -1,27 +1,48 @@
-export const POST_LIST_QUERY = (tag?: string) => {
-  const queryHeader = tag
-    ? `
-      _type == "post"
-        && defined(slug.current)
-        && "${tag.toLowerCase()}" in tags[]->slug.current`
-    : `
-      _type == "post" && defined(slug.current)
-      `
-    ;
-  return `*[${queryHeader}]|order(publishedAt desc)[0...12]{
-    _id,
-    title,
-    slug,
-    image,
-    tags[] -> { _id, name, "slug": slug.current },
-    body,
-    publishedAt
-  }`;
+import { gql } from '@apollo/client';
+
+export const POST_LIST_QUERY = ({ limit = 12, offset = 0 }: {limit?: number, offset?: number}) => {
+  return gql`
+    query AllPosts {
+      allPost(sort: [{ publishedAt: DESC }], limit: ${limit}, offset: ${offset}) {
+        _id
+        title
+        slug {
+          current
+        }
+        image {
+          asset {
+            url
+          }
+        }
+        tags {
+          _id
+          name
+          slug {
+            current
+          }
+        }
+        bodyRaw
+        publishedAt
+      }
+    }
+  `;
 };
 
-export const TAGS_WITH_COUNT_QUERY = `*[_type == "tag"]{
-  _id,
-  name,
-  "slug": slug.current,
-  "postCount": count(*[_type == "post" && references(^._id)])
-} | order(name asc)`;
+export const TAGS_WITH_COUNT_QUERY = gql`
+  query AllTags {
+    allPost {
+      tags {
+        slug {
+          current
+        }
+      }
+    },
+    allTag(sort: [{ name: ASC }]) {
+      _id
+      name
+      slug {
+        current
+      }
+    }
+  }
+`;

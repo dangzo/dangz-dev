@@ -5,6 +5,12 @@ export default defineCliConfig({
     projectId: 'wdxhl3tc',
     dataset: 'production'
   },
+  graphql: [
+    {
+      playground: true,
+      tag: 'default',
+    },
+ ],
   deployment: {
     /**
      * Enable auto-updates for studios.

@@ -1,10 +1,16 @@
 import { Link, Heading } from '@/components/ui';
 import { TAGS_WITH_COUNT_QUERY } from '@/api/queries';
-import { client } from '@/sanity/client';
+import { query } from '@/api/apollo-client';
 import type { TagWithCount } from '@/types/TagWithCount.types';
+import type { PostTags } from '@/types/PostTags.types';
 
 async function TagsSidebar({ activeSlug }: { activeSlug?: string }) {
-  const tags = await client.fetch<TagWithCount[]>(TAGS_WITH_COUNT_QUERY);
+  const { data } = await query<{ allTag: TagWithCount[], allPost: PostTags[] }>({ query: TAGS_WITH_COUNT_QUERY });
+  const { allTag: tags, allPost: postTags } = data ?? {};
+
+  const tagCount = (slug?: string) => {
+    return postTags?.filter(pt => pt?.tags?.some(t => t.slug?.current === slug)).length ?? 0;
+  };
 
   return (
     <aside
@@ -21,13 +27,13 @@ async function TagsSidebar({ activeSlug }: { activeSlug?: string }) {
       </Link>
 
       <ul className="pl-4 list-none space-y-2.5 text-secondary-light dark:text-secondary-dark text-sm">
-        {tags.map(tag => (
+        {tags?.map(tag => (
           <li key={tag._id}>
             <Link
               className="text-xs font-semibold tracking-wide uppercase"
               type="primary"
-              isActive={activeSlug === tag.slug}
-              href={`/blog/tags/${tag.slug}`}>{tag.name?.toUpperCase()} ({tag.postCount})
+              isActive={activeSlug === tag.slug?.current}
+              href={`/blog/tags/${tag.slug?.current}`}>{tag.name?.toUpperCase()} ({tagCount(tag.slug?.current)})
             </Link>
           </li>
         ))}

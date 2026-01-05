@@ -1,22 +1,34 @@
 import { notFound } from 'next/navigation';
-import { client } from '@/sanity/client';
+import { query } from '@/api/apollo-client';
 import { PostCard } from '@/components/blog/';
 import { POST_LIST_QUERY } from '@/api/queries';
+import type { Tag } from '@/types/sanity.types';
 import type { PostWithTags } from '@/types/PostWithTags.types';
 
-const options = { next: { revalidate: 30 } };
-
 const PostList = async ({ tag }: { tag?: string }) => {
-  const posts = await client.fetch<PostWithTags[]>(POST_LIST_QUERY(tag), {}, options);
+  const { data } = await query<{ allPost: PostWithTags[] }>({ query: POST_LIST_QUERY({ limit: 12, offset: 0 }) });
+  const posts = data?.allPost;
 
-  if (posts.length === 0) {
+  if (!posts || posts.length === 0) {
+    return notFound();
+  }
+
+  const filteredPosts = tag
+    ? posts.filter((post) =>
+      post.tags?.some(
+        (t: Tag) => t.slug?.current?.toLowerCase() === tag.toLowerCase()
+      )
+    )
+    : posts;
+
+  if (tag && filteredPosts?.length === 0) {
     return notFound();
   }
 
   return (
     <section className="flex-1">
       <ul className="space-y-6">
-        {posts.map((post) => (
+        {filteredPosts?.map((post) => (
           <PostCard key={post._id} post={post} />
         ))}
       </ul>

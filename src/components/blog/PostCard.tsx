@@ -1,5 +1,6 @@
+import { Text } from '@/components/ui';
+import { Heading, Link } from '@/components/ui';
 import { TagList } from '@/components';
-import { Text, Link, Heading } from '@/components/ui';
 import type { PostWithTags } from '@/types/PostWithTags.types';
 
 const PostCard = ({ post }: { post: PostWithTags }) => {
@@ -47,13 +48,14 @@ const PostCard = ({ post }: { post: PostWithTags }) => {
             <TagList className="mt-1" tags={post.tags} />
 
             <Text className="my-4">
-              {post.body && post.body.length > 0
-                ? post.body
+              {post.bodyRaw && post.bodyRaw.length > 0
+                ? post.bodyRaw
                   .filter((block) => block._type === 'block')
                   .map((block) => block.children?.map((child) => child.text).join(' '))
                   .join(' ')
                   .slice(0, 150) + '...'
                 : 'No description available.'}
+
             </Text>
 
             <Link href={`/blog/${post.slug?.current}`} type="accent">
