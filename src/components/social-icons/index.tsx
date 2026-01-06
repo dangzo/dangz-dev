@@ -12,6 +12,7 @@ import {
   Medium,
   Bluesky,
 } from './icons';
+import { Link } from '@/components/ui';
 
 const components = {
   mail: Mail,
@@ -44,17 +45,21 @@ const SocialIcon = ({ kind, href, size = 8 }: SocialIconProps) => {
   const SocialSvg = components[kind];
 
   return (
-    <a
-      className="text-sm text-gray-500 transition hover:text-gray-600"
+    <Link
+      className="text-sm"
       target="_blank"
       rel="noopener noreferrer"
       href={href}
     >
       <span className="sr-only">{kind}</span>
       <SocialSvg
-        className={`hover:text-primary-500 dark:hover:text-primary-400 fill-current text-gray-700 dark:text-gray-200 h-${size} w-${size}`}
+        className={`
+          h-${size} w-${size}
+          fill-current transition-colors duration-300
+          hover:text-primary-500 dark:hover:text-primary-400 text-gray-700 dark:text-gray-200
+        `}
       />
-    </a>
+    </Link>
   );
 };
 
