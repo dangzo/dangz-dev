@@ -4,19 +4,26 @@ import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './schemaTypes';
 import { graphiQLTool } from 'sanity-plugin-graphiql';
 
+const {
+  SANITY_STUDIO_PROJECT_ID = '',
+  SANITY_STUDIO_DATASET = '',
+  SANITY_STUDIO_API_VERSION = '',
+  SANITY_STUDIO_GRAPHQL_API_URL = '',
+} = process.env;
+
 export default defineConfig({
   name: 'default',
   title: 'dangz-dev',
 
-  projectId: 'wdxhl3tc',
-  dataset: 'production',
+  projectId: SANITY_STUDIO_PROJECT_ID,
+  dataset: SANITY_STUDIO_DATASET,
 
   plugins: [
     structureTool(),
     visionTool(),
     graphiQLTool({
-      apiVersion: '2023-08-01',
-      url: 'https://wdxhl3tc.api.sanity.io/v2023-08-01/graphql/production/default',
+      apiVersion: SANITY_STUDIO_API_VERSION,
+      url: SANITY_STUDIO_GRAPHQL_API_URL,
       name: 'graphiql',
       title: 'GraphQL',
     }),
