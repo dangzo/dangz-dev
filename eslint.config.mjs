@@ -13,20 +13,17 @@ export default defineConfig([
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-    "dist",
-    ".vercel/**",
-    // Studio folder:
-    "studio/node_modules/**",
-    "studio/.sanity/**",
-    "studio/dist/**",
-    "studio/build/**",
+    "**/.next/",
+    "**/.vercel",
+    "**/next-env.d.ts",
+    "**/node_modules",
+    "**/.sanity*",
+    "**/dist",
+    "**/build",
+    "**/out",
     // Custom ignores:
-    "public/**",
-    "scripts/**",
+    "public",
+    "scripts",
   ]),
   {
     files: ['**/*.{ts,tsx}'],
