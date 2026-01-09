@@ -10,7 +10,7 @@ interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
   children: React.ReactNode;
 }
 
-const Heading = ({ as: Tag = 'h1', children, className, ...rest }: HeadingProps) => {
+const Heading = async ({ as: Tag = 'h1', children, className, ...rest }: HeadingProps) => {
   const headingClasses = clsx([
     {
       'text-5xl font-bold mb-8': Tag === 'h1',

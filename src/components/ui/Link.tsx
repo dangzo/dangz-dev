@@ -15,7 +15,7 @@ interface LinkProps extends NextLinkProps {
   type?: string;
 }
 
-export default function Link({ href, className, type = 'primary', isActive = false, ...rest }: LinkProps & AnchorHTMLAttributes<HTMLAnchorElement>) {
+export default async function Link({ href, className, type = 'primary', isActive = false, ...rest }: LinkProps & AnchorHTMLAttributes<HTMLAnchorElement>) {
   const isInternalLink = href && href.startsWith('/');
   const isAnchorLink = href && href.startsWith('#');
 
