@@ -37,7 +37,7 @@ const HeaderLogo = () => {
       style={typewriterStyle}
     >
       <span>guest&#64;dangz.dev:&nbsp;</span>
-      <span className="animate-typewriter" key={currentPage}>
+      <span className="animate-typewriter text-primary-400" key={currentPage}>
         {currentPage}
       </span>
       <span className="animate-caret">|</span>
