@@ -1,7 +1,7 @@
 import headerNavLinks from '@/data/headerNavLinks';
 import Link from 'next/link';
 import { SearchButton, ThemeSwitch } from '@/components';
-import HeaderLogo from '@/components/HeaderLogo';
+import HeaderLogo from '@/components/header/HeaderLogo';
 
 const Navigation = () => {
   return (

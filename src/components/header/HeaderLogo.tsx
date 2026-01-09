@@ -4,7 +4,6 @@ import type { CSSProperties } from 'react';
 import { usePathname } from 'next/navigation';
 import { useCallback } from 'react';
 import Link from 'next/link';
-import clsx from 'clsx';
 
 const HeaderLogo = () => {
   const pathname = usePathname();
@@ -20,25 +19,20 @@ const HeaderLogo = () => {
     return '/' + segments.slice(0, index + 1).join('/');
   }, [segments]);
 
-  const pathnameClasses = clsx([
-    'animate-typewriter inline-block',
-    'text-primary-500 dark:text-primary-400 font-mono!',
-  ]);
-  const linkClasses = clsx([
-    'hover:underline hover:underline-offset-4',
-  ]);
+  const pathnameClasses = 'relative inline-flex items-center text-primary-500 dark:text-primary-400 font-mono leading-none';
+  const linkClasses = 'hover:underline hover:underline-offset-4';
 
   return (
     <h1
       className="
-        hidden sm:flex text-lg w-max [&>span]:font-mono
+        hidden sm:flex items-center text-lg w-max [&>span]:font-mono
         text-gray-900 [text-shadow:0_0_5px_rgba(150,150,150,0.3)]
         dark:text-gray-100 dark:[text-shadow:0_0_5px_rgba(255,255,255,0.3)]
       "
     >
       <span>guest&#64;dangz.dev:&nbsp;</span>
-      <span className="relative inline-block" style={typewriterStyle} key={fullPath}>
-        <span className={pathnameClasses}>
+      <span className={pathnameClasses} style={typewriterStyle} key={fullPath}>
+        <span className='animate-typewriter inline-block'>
           <Link href="/" className={linkClasses}>
             ~
           </Link>
@@ -52,7 +46,7 @@ const HeaderLogo = () => {
             </span>
           ))}
         </span>
-        <span className="animate-caret absolute top-0">|</span>
+        <span className="animate-caret ml-1 align-middle">|</span>
       </span>
     </h1>
   );
