@@ -5,7 +5,7 @@ const siteMetadata = {
   language: 'en-us',
   // siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
-  email: 'hello@dangz.dev',
+  email: 'dangz.dev@gmail.com',
   github: 'https://github.com/dangzo',
   linkedin: 'https://www.linkedin.com/in/dangzo',
   locale: 'en-US',

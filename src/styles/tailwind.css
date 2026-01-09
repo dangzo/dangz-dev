@@ -40,6 +40,7 @@
   --color-main-dark: var(--color-gray-100);
   --color-secondary-light: var(--color-gray-700);
   --color-secondary-dark: var(--color-gray-400);
+
   --color-accent-light: var(--color-primary-600);
   --color-accent-dark: var(--color-primary-400);
 
@@ -134,59 +135,42 @@
   }
 }
 
-.task-list-item::before {
-  @apply hidden;
+/* Animations */
+@keyframes blink-cursor {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
 }
 
-.task-list-item {
-  @apply list-none;
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: calc(var(--chars, 0) * 1ch);
+  }
 }
 
-.footnotes {
-  @apply mt-12 border-t border-gray-200 pt-8 dark:border-gray-700;
+@keyframes caret {
+  0%, 50% {
+    opacity: 1;
+  }
+  50.1%, 100% {
+    opacity: 0;
+  }
 }
 
-.data-footnote-backref {
-  @apply no-underline;
-}
-
-.csl-entry {
-  @apply my-5;
-}
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.no-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-/* https://stackoverflow.com/questions/61083813/how-to-avoid-internal-autofill-selected-style-to-be-applied */
-input:-webkit-autofill,
-input:-webkit-autofill:focus {
-  transition:
-    background-color 600000s 0s,
-    color 600000s 0s;
-}
-
-.katex-display {
-  overflow: auto hidden;
-}
-
-.content-header-link {
-  opacity: 0;
-  margin-left: -24px;
-  padding-right: 4px;
-}
-
-.content-header:hover .content-header-link,
-.content-header-link:hover {
-  opacity: 1;
-}
-
-.linkicon {
+.animate-typewriter {
   display: inline-block;
-  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  width: calc(var(--chars, 0) * 1ch);
+  animation: typewriter calc(var(--chars, 1) * 0.05s) steps(var(--chars, 1)) forwards;
+}
+
+.animate-caret {
+  animation: caret 1s steps(1) infinite calc(var(--chars, 1) * 0.1s);
 }
