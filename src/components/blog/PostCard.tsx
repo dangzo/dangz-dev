@@ -23,7 +23,7 @@ const PostCard = ({ post }: { post: PostWithTags }) => {
             opacity:0 group-hover:opacity-100 blur-xl
             transition-all duration-300
             -inset-1 h-full w-full
-            bg-linear-to-r from-0% via-30% to-180%
+            bg-linear-to-r from-0% via-5% to-200%
             group-hover:from-white group-hover:via-primary-50/80 group-hover:to-white group-hover:dark:from-gray-950 group-hover:dark:via-primary-900/40 group-hover:dark:to-gray-950
           "
         />

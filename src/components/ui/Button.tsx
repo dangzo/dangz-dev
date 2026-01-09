@@ -26,11 +26,11 @@ const Button = ({ type = 'primary', size = 'medium', to, onClick, children }: Bu
     { 'px-8 py-3 text-md': size === 'large' },
     // Type styles
     {
-      'rounded-lg border-2 border-gray-400 text-gray-400 dark:border-gray-400 dark:hover:border-primary-400 dark:hover:text-primary-400':
+      'rounded-lg border-2 border-gray-400 text-gray-500 dark:border-gray-400 dark:hover:border-primary-400 dark:hover:text-primary-400':
         type === 'ghost'
     },
     {
-      'bg-primary-600 text-white rounded-lg hover:shadow-lg hover:shadow-primary-500/50':
+      'bg-primary-600 text-white rounded-lg hover:bg-primary-500 hover:shadow-lg hover:shadow-primary-400/50':
         type === 'primary'
     },
     {
