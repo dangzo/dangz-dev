@@ -26,7 +26,7 @@ const PostList = async ({ tag }: { tag?: string }) => {
   }
 
   return (
-    <section className="flex-1">
+    <section className="flex-1 mt-4">
       <ul className="space-y-6">
         {filteredPosts?.map((post) => (
           <PostCard key={post._id} post={post} />

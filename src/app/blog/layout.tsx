@@ -9,7 +9,7 @@ export default async function BlogLayout({ children, heading, sidebar }: BlogLay
     <article>
       {heading}
 
-      <div className="flex flex-row my-10 gap-10">
+      <div className="flex flex-row my-8 gap-10 border-t">
         {sidebar}
         {children}
       </div>

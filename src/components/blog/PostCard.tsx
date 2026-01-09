@@ -6,27 +6,7 @@ import type { PostWithTags } from '@/types/PostWithTags.types';
 const PostCard = ({ post }: { post: PostWithTags }) => {
   return (
     <>
-      <li
-        className="
-          group
-          relative overflow-hidden
-          pb-4 p-4
-          border-2 rounded-md border-border-light hover:border-primary-500/50 dark:border-border-dark dark:hover:border-primary-400/50
-          transition-all duration-300  dark:bg-background-secondary-dark
-          backdrop-blur-sm
-          hover:shadow-lg hover:shadow-primary-500/20 dark:hover:shadow-primary-400/20
-        "
-      >
-        <div
-          className="
-            absolute
-            opacity:0 group-hover:opacity-100 blur-xl
-            transition-all duration-300
-            -inset-1 h-full w-full
-            bg-linear-to-r from-0% via-5% to-200%
-            group-hover:from-white group-hover:via-primary-50/80 group-hover:to-white group-hover:dark:from-gray-950 group-hover:dark:via-primary-900/40 group-hover:dark:to-gray-950
-          "
-        />
+      <li className="relative pb-4 p-4 duration-300  dark:bg-background-secondary-darks">
         <div className="flex flex-row relative">
           <Text className="leading-8 min-w-40 font-bold">
             {post.publishedAt
