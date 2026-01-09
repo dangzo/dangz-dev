@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useCallback } from 'react';
 import Link from 'next/link';
 
-const HeaderLogo = () => {
+const Prompt = () => {
   const pathname = usePathname();
   const fullPath = `~${pathname}`;
   const segments = pathname.split('/').filter(Boolean);
@@ -26,7 +26,7 @@ const HeaderLogo = () => {
     <h1
       className="
         relative top-0.5 xl:top-0
-        hidden sm:flex w-max [&>span]:font-mono
+        hidden sm:flex w-max [&>span]:font-mono font-semibold
         text-sm md:text-md mt-4 md:mt-0
         [text-shadow:0_0_5px_rgba(150,150,150,0.3)]
         dark:[text-shadow:0_0_5px_rgba(255,255,255,0.3)]
@@ -54,4 +54,4 @@ const HeaderLogo = () => {
   );
 };
 
-export default HeaderLogo;
+export default Prompt;
