@@ -19,15 +19,15 @@ const HeaderLogo = () => {
     return '/' + segments.slice(0, index + 1).join('/');
   }, [segments]);
 
-  const pathnameClasses = 'relative inline-flex items-center text-primary-500 dark:text-primary-400 font-mono leading-none';
-  const linkClasses = 'hover:underline hover:underline-offset-4';
+  const pathnameClasses = 'relative inline-flex items-center text-primary-500 dark:text-primary-400 font-mono';
+  const linkClasses = 'hover:underline hover:underline-offset-4 hover:text-accent-dark';
 
   return (
     <h1
       className="
         hidden sm:flex items-center text-lg w-max [&>span]:font-mono
-        text-gray-900 [text-shadow:0_0_5px_rgba(150,150,150,0.3)]
-        dark:text-gray-100 dark:[text-shadow:0_0_5px_rgba(255,255,255,0.3)]
+        [text-shadow:0_0_5px_rgba(150,150,150,0.3)]
+        dark:[text-shadow:0_0_5px_rgba(255,255,255,0.3)]
       "
     >
       <span>guest&#64;dangz.dev:&nbsp;</span>
