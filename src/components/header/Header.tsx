@@ -41,7 +41,9 @@ const ActionBtns = () => {
 
 export const Header = () => {
   return (
-    <header className="flex items-center bg-transparent backdrop-blur-sm justify-between py-8">
+    <header
+      className="flex flex-col-reverse md:flex-row items-center bg-transparent backdrop-blur-sm justify-between py-8"
+    >
       <HeaderLogo />
       <div className="flex flex-row items-center gap-10">
         <Navigation />

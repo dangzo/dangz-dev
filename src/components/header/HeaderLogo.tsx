@@ -19,13 +19,15 @@ const HeaderLogo = () => {
     return '/' + segments.slice(0, index + 1).join('/');
   }, [segments]);
 
-  const pathnameClasses = 'relative inline-flex items-center text-primary-500 dark:text-primary-400 font-mono';
+  const pathnameClasses = 'relative inline-flex text-primary-500 dark:text-primary-400 font-mono';
   const linkClasses = 'hover:underline hover:underline-offset-4 hover:text-accent-dark';
 
   return (
     <h1
       className="
-        hidden sm:flex items-center text-lg w-max [&>span]:font-mono
+        relative top-0.5 xl:top-0
+        hidden sm:flex w-max [&>span]:font-mono
+        text-sm md:text-md mt-4 md:mt-0
         [text-shadow:0_0_5px_rgba(150,150,150,0.3)]
         dark:[text-shadow:0_0_5px_rgba(255,255,255,0.3)]
       "
