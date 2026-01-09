@@ -5,26 +5,7 @@ import { usePathname } from 'next/navigation';
 
 const HeaderLogo = () => {
   const pathname = usePathname();
-
-  const getPagePath = () => {
-    switch (pathname) {
-    case '/':
-      return '~';
-    case '/about':
-      return '~/about';
-    case '/blog':
-      return '~/blog';
-    default: {
-      if (pathname.startsWith('/blog/')) {
-        const slug = pathname.split('/').pop();
-        return `~/blog/${slug}`;
-      }
-      return '~' + pathname;
-    }
-    }
-  };
-
-  const currentPage = getPagePath();
+  const currentPage = `~${pathname}`;
   const typewriterStyle: CSSProperties = { '--chars': currentPage.length } as CSSProperties & { '--chars': number };
 
   return (
