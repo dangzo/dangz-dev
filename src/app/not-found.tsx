@@ -1,5 +1,3 @@
-'use client';
-
 import { Button, Heading, Text } from '@/components/ui';
 
 export default function NotFound() {
@@ -7,7 +5,7 @@ export default function NotFound() {
     <div className="h-[calc(100vh-200px)] flex flex-col items-center justify-center text-center px-4">
       <div className="mb-8">
         <h1
-          className="text-9xl font-bold text-transparent bg-clip-text bg-linear-to-r from-primary-400 to-primary-600 mb-4"
+          className="text-9xl font-bold text-primary-600"
         >
           404
         </h1>
