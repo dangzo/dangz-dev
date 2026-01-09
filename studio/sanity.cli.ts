@@ -10,7 +10,7 @@ export default defineCliConfig({
       playground: true,
       tag: 'default',
     },
- ],
+  ],
   deployment: {
     /**
      * Enable auto-updates for studios.
