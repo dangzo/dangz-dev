@@ -25,8 +25,9 @@ const Button = ({ type = 'primary', size = 'medium', to, onClick, children }: Bu
     { 'px-6 py-2.5 text-sm': size === 'medium' },
     { 'px-8 py-3 text-md': size === 'large' },
     // Type styles
+
     {
-      'rounded-lg border-2 border-gray-400 text-gray-500 dark:border-gray-400 dark:hover:border-primary-400 dark:hover:text-primary-400':
+      'rounded-lg border-2 border-gray-400 text-gray-500 hover:text-main-light hover:border-main-light dark:border-gray-400 dark:hover:border-primary-400 dark:hover:text-primary-400':
         type === 'ghost'
     },
     {
