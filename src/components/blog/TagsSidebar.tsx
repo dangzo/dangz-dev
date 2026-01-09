@@ -13,7 +13,7 @@ async function TagsSidebar({ activeSlug }: { activeSlug?: string }) {
   };
 
   return (
-    <aside className="p-4 pt-8 mb-8 w-full min-h-72 max-w-[256px] border-border-light border-r">
+    <>
       <Link href="/blog" isActive={activeSlug === undefined}>
         <Heading as="h4" className="mb-4 text-2xl font-semibold inline-block">
           All tags
@@ -32,7 +32,7 @@ async function TagsSidebar({ activeSlug }: { activeSlug?: string }) {
           </li>
         ))}
       </ul>
-    </aside>
+    </>
   );
 };
 
