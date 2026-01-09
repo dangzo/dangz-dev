@@ -1,12 +1,7 @@
 import headerNavLinks from '@/data/headerNavLinks';
 import Link from 'next/link';
 import { SearchButton, ThemeSwitch } from '@/components';
-
-const Logo = () => {
-  return (
-    <Link href="/">Dangz.dev</Link>
-  );
-};
+import HeaderLogo from '@/components/HeaderLogo';
 
 const Navigation = () => {
   return (
@@ -47,7 +42,7 @@ const ActionBtns = () => {
 export const Header = () => {
   return (
     <header className="flex items-center bg-transparent backdrop-blur-sm justify-between py-8">
-      <Logo />
+      <HeaderLogo />
       <div className="flex flex-row items-center gap-10">
         <Navigation />
         <ActionBtns />
