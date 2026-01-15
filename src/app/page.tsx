@@ -2,8 +2,8 @@ import { Text, Button, Heading } from '@/components/ui';
 import TagChip from '@/components/ui/TagChip';
 import { TAGS_WITH_COUNT_QUERY } from '@/api/queries';
 import { query } from '@/api/apollo-client';
-import type { TagWithCount } from '@/types/TagWithCount.types';
-import type { PostTags } from '@/types/PostTags.types';
+import type { TagWithCount } from '@/types/Tag.types';
+import type { PostTags } from '@/types/Tag.types';
 
 export default async function HomePage() {
   const { data } = await query<{ allTag: TagWithCount[]; allPost: PostTags[] }>({ query: TAGS_WITH_COUNT_QUERY });
