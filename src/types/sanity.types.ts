@@ -60,6 +60,7 @@ export type Post = {
     crop?: SanityImageCrop
     _type: 'image'
   }
+  imageAlt?: string
   tags?: Array<
     {
       _key: string
@@ -214,4 +215,4 @@ export type AllSanitySchemaTypes =
   | SanityImageAsset
   | Geopoint
 
-export declare const internalGroqTypeReferenceTo: unique symbol;
+export declare const internalGroqTypeReferenceTo: unique symbol
