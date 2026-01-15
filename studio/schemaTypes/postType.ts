@@ -27,6 +27,10 @@ export const postType = defineType({
       type: 'image',
     }),
     defineField({
+      name: 'imageAlt',
+      type: 'text',
+    }),
+    defineField({
       name: 'tags',
       type: 'array',
       of: [{ type: 'reference', to: { type: 'tag' } }],
