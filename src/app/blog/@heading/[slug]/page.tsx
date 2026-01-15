@@ -1,4 +1,4 @@
-import { Heading, Text } from '@/components/ui';
+import { DateText, Heading } from '@/components/ui';
 import { POSTS_BY_SLUG_QUERY } from '@/api/queries';
 import { query } from '@/api/apollo-client';
 import { notFound } from 'next/navigation';
@@ -23,16 +23,7 @@ export default async function BlogSlugHeading({ params }: { params: Promise<{ sl
       <Heading as="h1">
         {post.title || '(Untitled)'}
       </Heading>
-      <time dateTime={post.publishedAt || undefined}>
-        <Text>
-          {post.publishedAt && new Date(post.publishedAt).toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}
-        </Text>
-      </time>
+      <DateText date={post.publishedAt || ''} />
     </>
   );
 }
