@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "generate-types": "cd studio && sanity schema extract && sanity typegen generate && mv sanity.types.ts ../src/types/sanity.types.ts",
+    "deploy-studio": "cd studio && sanity deploy",
     "deploy-graphql": "cd studio && sanity graphql deploy"
   },
   "dependencies": {
