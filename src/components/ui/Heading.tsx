@@ -13,7 +13,7 @@ interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
 const Heading = async ({ as: Tag = 'h1', children, className, ...rest }: HeadingProps) => {
   const headingClasses = clsx([
     {
-      'text-5xl font-bold mb-8': Tag === 'h1',
+      'text-5xl font-bold mb-4': Tag === 'h1',
       'text-4xl font-semibold mb-6': Tag === 'h2',
       'text-3xl font-semibold mb-4': Tag === 'h3',
       'text-2xl font-semibold mb-3': Tag === 'h4',

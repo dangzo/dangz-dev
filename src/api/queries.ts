@@ -28,6 +28,34 @@ export const POST_LIST_QUERY = ({ limit = 12, offset = 0 }: {limit?: number, off
   `;
 };
 
+export const POSTS_BY_SLUG_QUERY = ({ slug }: { slug: string }) => {
+  return gql`
+    query postsBySlug {
+      allPost(where: { slug: { current: { eq: "${slug}" } } }) {
+        _id
+        title
+        slug {
+          current
+        }
+        image {
+          asset {
+            url
+          }
+        }
+        tags {
+          _id
+          name
+          slug {
+            current
+          }
+        }
+        bodyRaw
+        publishedAt
+      }
+    }
+  `;
+};
+
 export const TAGS_WITH_COUNT_QUERY = gql`
   query AllTags {
     allPost {
