@@ -1,15 +1,13 @@
 import { DateText, Text, Heading, Link } from '@/components/ui';
 import { TagList } from '@/components';
-import type { PostWithTags } from '@/types/PostWithTags.types';
+import type { PostWithTags } from '@/types/Post.types';
 
 const PostCard = ({ post }: { post: PostWithTags }) => {
   return (
     <>
       <li className="relative pb-4 p-4 duration-300  dark:bg-background-secondary-darks">
         <div className="flex flex-row relative">
-          <Text className="leading-8 min-w-40 font-bold">
-            <DateText date={post.publishedAt} />
-          </Text>
+          <DateText date={post.publishedAt} className="leading-8 min-w-38" />
           <div>
             <Link
               href={`/blog/${post.slug?.current}`}
@@ -21,8 +19,8 @@ const PostCard = ({ post }: { post: PostWithTags }) => {
             <TagList className="mt-1" tags={post.tags} />
 
             <Text className="my-4">
-              {post.bodyRaw && post.bodyRaw.length > 0
-                ? post.bodyRaw
+              {post.body && post.body.length > 0
+                ? post.body
                   .filter((block) => block._type === 'block')
                   .map((block) => block.children?.map((child) => child.text).join(' '))
                   .join(' ')

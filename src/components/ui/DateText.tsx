@@ -1,4 +1,10 @@
-export default function DateText({ date }: { date?: string }) {
+import { Text } from '@/components/ui';
+
+interface DateTextProps extends React.HTMLAttributes<HTMLElement> {
+  date?: string;
+}
+
+export default function DateText({ date, className }: DateTextProps) {
   if (!date) {
     return null;
   }
@@ -9,5 +15,11 @@ export default function DateText({ date }: { date?: string }) {
     day: 'numeric',
   });
 
-  return <time dateTime={date}>{formattedDate}</time>;
+  return (
+    <Text className={className} size="small">
+      <time dateTime={date} className="italic">
+        {formattedDate}
+      </time>
+    </Text>
+  );
 }

@@ -3,7 +3,7 @@ import { query } from '@/api/apollo-client';
 import { PostCard } from '@/components/blog/';
 import { POST_LIST_QUERY } from '@/api/queries';
 import type { Tag } from '@/types/sanity.types';
-import type { PostWithTags } from '@/types/PostWithTags.types';
+import type { PostWithTags } from '@/types/Post.types';
 
 const PostList = async ({ tag }: { tag?: string }) => {
   const { data } = await query<{ allPost: PostWithTags[] }>({ query: POST_LIST_QUERY({ limit: 12, offset: 0 }) });

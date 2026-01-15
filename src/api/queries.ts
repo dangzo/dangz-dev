@@ -21,7 +21,7 @@ export const POST_LIST_QUERY = ({ limit = 12, offset = 0 }: {limit?: number, off
             current
           }
         }
-        bodyRaw
+        body: bodyRaw
         publishedAt
       }
     }
@@ -49,7 +49,7 @@ export const POSTS_BY_SLUG_QUERY = ({ slug }: { slug: string }) => {
             current
           }
         }
-        bodyRaw
+        body: bodyRaw
         publishedAt
       }
     }
