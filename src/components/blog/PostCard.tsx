@@ -1,5 +1,4 @@
-import { Text } from '@/components/ui';
-import { Heading, Link } from '@/components/ui';
+import { DateText, Text, Heading, Link } from '@/components/ui';
 import { TagList } from '@/components';
 import type { PostWithTags } from '@/types/PostWithTags.types';
 
@@ -9,13 +8,7 @@ const PostCard = ({ post }: { post: PostWithTags }) => {
       <li className="relative pb-4 p-4 duration-300  dark:bg-background-secondary-darks">
         <div className="flex flex-row relative">
           <Text className="leading-8 min-w-40 font-bold">
-            {post.publishedAt
-              ? new Date(post.publishedAt).toLocaleDateString(undefined, {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })
-              : '--'}
+            <DateText date={post.publishedAt} />
           </Text>
           <div>
             <Link
