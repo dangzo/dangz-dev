@@ -6,7 +6,7 @@ interface ImgProps extends React.HTMLAttributes<HTMLImageElement> {
   source?: SanityImageSource;
   width: number;
   height: number;
-  alt: string;
+  alt?: string;
 }
 
 export default function Img({ source, alt, height, width, ...props }: ImgProps) {
@@ -20,7 +20,7 @@ export default function Img({ source, alt, height, width, ...props }: ImgProps) 
           .height(height)
           .url()
       }
-      alt={alt}
+      alt={alt || '(Image)'}
       width={width}
       height={height}
       {...props}

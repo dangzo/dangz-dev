@@ -27,8 +27,8 @@ export const postType = defineType({
       type: 'image',
     }),
     defineField({
-      name: 'imageAlt',
-      type: 'text',
+      name: 'imageAltText',
+      type: 'string',
     }),
     defineField({
       name: 'tags',

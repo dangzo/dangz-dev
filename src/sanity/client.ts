@@ -3,7 +3,7 @@ import { createClient } from 'next-sanity';
 const client = createClient({
   projectId: 'wdxhl3tc',
   dataset: 'production',
-  apiVersion: '2024-01-01',
+  apiVersion: '2021-08-31',
   useCdn: false,
 });
 

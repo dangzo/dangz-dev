@@ -32,7 +32,13 @@ export default async function PostPage({
   return (
     <article className="max-w-3xl mx-auto p-4">
       <div className="mb-8 rounded-lg overflow-hidden">
-        <Img source={post.image} alt={'Hardcoded alt text'} className="w-full h-auto object-cover" width={700} height={350} />
+        <Img
+          source={post.image}
+          alt={post.imageAltText}
+          className="w-full h-auto object-cover"
+          width={700}
+          height={350}
+        />
       </div>
 
       {/* Body Content */}

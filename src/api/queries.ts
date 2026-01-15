@@ -9,6 +9,7 @@ export const POST_LIST_QUERY = ({ limit = 12, offset = 0 }: {limit?: number, off
         slug {
           current
         }
+        imageAltText
         image {
           asset {
             url
@@ -42,6 +43,7 @@ export const POSTS_BY_SLUG_QUERY = ({ slug }: { slug: string }) => {
             url
           }
         }
+        imageAltText
         tags {
           _id
           name
