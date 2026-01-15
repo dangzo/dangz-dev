@@ -5,10 +5,10 @@ export default async function BlogTagsSlugHeading({ params }: { params: Promise<
   const { slug } = await params;
   return (
     <>
-      <Heading as="h1" className="text-6xl font-bold mb-8">
+      <Heading as="h1">
         {`Tag: ${startCase(slug)}`}
       </Heading>
-      <Text size="large">
+      <Text>
         Brief description of what I'm writing about in my blog
       </Text>
     </>

@@ -26,40 +26,36 @@ export default async function HomePage() {
         <Heading as="h1" className="text-7xl">
           Hi, I'm Daniele
         </Heading>
-        <Text className="max-w-xl text-xl text-gray-600 dark:text-gray-300">
+        <Text className="max-w-xl" size="x-large">
           This is where I document my journey on software engineering, share insights and write about things I enjoy.
         </Text>
 
-        <div>
-          <Button to="/blog" type="primary" size="large">
-            Let's dive in
-          </Button>
-        </div>
+        <Button to="/blog" type="primary" size="large">
+          Let's dive in
+        </Button>
 
-        <div className="flex flex-col items-center gap-3 mt-10">
-          <div className="flex flex-wrap justify-center gap-3">
-            {topTags.length > 0 ? (
-              topTags.map(tag => (
-                <div
-                  key={tag._id}
-                  className="
+        <div className="flex flex-row items-center gap-3 mt-10 flex-wrap justify-center">
+          {topTags.length > 0 ? (
+            topTags.map(tag => (
+              <div
+                key={tag._id}
+                className="
                     flex items-center gap-2 rounded-full border border-border-light/60 dark:border-border-dark/60
                     bg-background-secondary-light/60 dark:bg-background-secondary-dark/60
                     px-3 py-1.5 shadow-sm shadow-black/5 dark:shadow-black/30
                   "
-                >
-                  <TagChip {...tag} />
-                  <span className="text-xs font-medium text-secondary-light dark:text-secondary-dark">
-                    {tag.postCount} {tag.postCount === 1 ? 'post' : 'posts'}
-                  </span>
-                </div>
-              ))
-            ) : (
-              <Text className="text-sm text-secondary-light dark:text-secondary-dark">
+              >
+                <TagChip {...tag} />
+                <span className="text-xs font-medium text-secondary-light dark:text-secondary-dark">
+                  {tag.postCount} {tag.postCount === 1 ? 'post' : 'posts'}
+                </span>
+              </div>
+            ))
+          ) : (
+            <Text size="small" className="text-secondary-light dark:text-secondary-dark">
                 No tags yet.
-              </Text>
-            )}
-          </div>
+            </Text>
+          )}
         </div>
       </div>
     </article>

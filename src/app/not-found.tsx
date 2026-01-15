@@ -13,7 +13,7 @@ export default function NotFound() {
           Page Not Found
         </Heading>
 
-        <Text size="large" className="max-w-md mx-auto">
+        <Text className="max-w-md mx-auto">
           Looks like this page wandered off into the digital void. Let's get you back on track.
         </Text>
       </div>
