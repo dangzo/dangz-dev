@@ -6,11 +6,9 @@ import {
   Linkedin,
   Twitter,
   X,
-  Mastodon,
   Threads,
   Instagram,
   Medium,
-  Bluesky,
 } from './icons';
 import { Link } from '@/components/ui';
 
@@ -22,23 +20,22 @@ const components = {
   linkedin: Linkedin,
   twitter: Twitter,
   x: X,
-  mastodon: Mastodon,
   threads: Threads,
   instagram: Instagram,
   medium: Medium,
-  bluesky: Bluesky,
 };
 
 type SocialIconProps = {
-  kind: keyof typeof components
-  href: string | undefined
-  size?: number
-}
+  kind: keyof typeof components;
+  href: string | undefined;
+  size?: number;
+};
 
 const SocialIcon = ({ kind, href, size = 8 }: SocialIconProps) => {
   if (
     !href ||
-    (kind === 'mail' && !/^mailto:[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(href))
+    (kind === 'mail' &&
+      !/^mailto:[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(href))
   )
     return null;
 
