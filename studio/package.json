@@ -16,17 +16,16 @@
   ],
   "dependencies": {
     "@sanity/vision": "^5.4.0",
-    "sanity-plugin-graphiql": "^1.7.1",
     "react": "^19.1",
     "react-dom": "^19.1",
     "sanity": "^5.4.0",
+    "sanity-plugin-graphiql": "^1.7.1",
     "styled-components": "^6.1.18"
   },
   "devDependencies": {
     "@sanity/eslint-config-studio": "^5.0.2",
     "@types/react": "^19.1",
     "eslint": "^9.28",
-    "prettier": "^3.5",
     "typescript": "^5.8"
   },
   "prettier": {
