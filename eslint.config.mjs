@@ -1,11 +1,11 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import unusedImports from "eslint-plugin-unused-imports";
+import { defineConfig, globalIgnores } from 'eslint/config';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import nextTs from 'eslint-config-next/typescript';
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import unusedImports from 'eslint-plugin-unused-imports';
 
 export default defineConfig([
   ...nextVitals,
@@ -13,17 +13,17 @@ export default defineConfig([
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
-    "**/.next/",
-    "**/.vercel",
-    "**/next-env.d.ts",
-    "**/node_modules",
-    "**/.sanity*",
-    "**/dist",
-    "**/build",
-    "**/out",
+    '**/.next/',
+    '**/.vercel',
+    '**/next-env.d.ts',
+    '**/node_modules',
+    '**/.sanity*',
+    '**/dist',
+    '**/build',
+    '**/out',
     // Custom ignores:
-    "public",
-    "scripts",
+    'public',
+    'scripts',
   ]),
   {
     files: ['**/*.{ts,tsx}'],
@@ -40,30 +40,34 @@ export default defineConfig([
       'unused-imports': unusedImports,
     },
     rules: {
-      'react-refresh/only-export-components': ['warn', { 'allowConstantExport': true, 'allowExportNames': ['metadata'] }],
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true, allowExportNames: ['metadata'] },
+      ],
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
-      "react/no-unescaped-entities": "off",
+      'react/no-unescaped-entities': 'off',
       //
       'object-curly-newline': 'warn',
       'object-curly-spacing': ['warn', 'always'],
+      'multiline-ternary': 'always-multiline',
       'no-multi-spaces': 'error',
       'no-undef': 'off',
-      "no-unused-vars": "off", // or "@typescript-eslint/no-unused-vars": "off",
-        "unused-imports/no-unused-imports": "error",
-        "unused-imports/no-unused-vars": [
-            "warn",
-            {
-                "vars": "all",
-                "varsIgnorePattern": "^_",
-                "args": "after-used",
-                "argsIgnorePattern": "^_",
-            },
-        ],
+      'no-unused-vars': 'off', // or "@typescript-eslint/no-unused-vars": "off",
+      'unused-imports/no-unused-imports': 'error',
+      'unused-imports/no-unused-vars': [
+        'warn',
+        {
+          vars: 'all',
+          varsIgnorePattern: '^_',
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+        },
+      ],
       'no-console': 'warn',
-      'indent': ['error', 2],
-      'quotes': ['error', 'single'],
-      'semi': ['error', 'always'],
+      indent: ['error', 2],
+      quotes: ['error', 'single'],
+      semi: ['error', 'always'],
     },
   },
-])
+]);
