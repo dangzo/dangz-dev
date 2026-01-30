@@ -19,7 +19,7 @@ export const PostCardSkeleton = () => {
   );
 };
 
-export const PostCard = async ({ post }: { post: PostWithTags }) => {
+export const PostCard = ({ post }: { post: PostWithTags }) => {
   return (
     <div className="flex flex-row relative">
       <DateText date={post.publishedAt} className="leading-8 min-w-38" />
