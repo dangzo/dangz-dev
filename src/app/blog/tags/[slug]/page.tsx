@@ -1,9 +1,12 @@
-import { PostList } from '@/components/blog';
+import { Suspense } from 'react';
+import { PostList, PostListSkeleton } from '@/components/blog';
 
 const TagsPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
   return (
-    <PostList tag={slug} />
+    <Suspense fallback={<PostListSkeleton />}>
+      <PostList tag={slug} />
+    </Suspense>
   );
 };
 
