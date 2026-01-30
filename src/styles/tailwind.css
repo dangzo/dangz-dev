@@ -3,11 +3,23 @@
 @plugin '@tailwindcss/typography';
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* React Loading Skeleton color overrides */
+.react-loading-skeleton {
+  --base-color: #e2e8f0;
+  --highlight-color: #f1f5f9;
+}
+
+:where(.dark, .dark *) .react-loading-skeleton {
+  --base-color: #374151;
+  --highlight-color: #6b7280;
+}
+
 /* Core theme configuration */
 @theme {
   /* Font families */
-  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
-    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-sans:
+    var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
   /* Colors - Modern slate-blue & warm accent system */
 
@@ -139,10 +151,12 @@
 
 /* Animations */
 @keyframes blink-cursor {
-  0%, 49% {
+  0%,
+  49% {
     opacity: 1;
   }
-  50%, 100% {
+  50%,
+  100% {
     opacity: 0;
   }
 }
@@ -157,10 +171,12 @@
 }
 
 @keyframes caret {
-  0%, 50% {
+  0%,
+  50% {
     opacity: 1;
   }
-  50.1%, 100% {
+  50.1%,
+  100% {
     opacity: 0;
   }
 }
@@ -170,7 +186,8 @@
   white-space: nowrap;
   overflow: hidden;
   width: calc(var(--chars, 0) * 1ch);
-  animation: typewriter calc(var(--chars, 1) * 0.05s) steps(var(--chars, 1)) forwards;
+  animation: typewriter calc(var(--chars, 1) * 0.05s) steps(var(--chars, 1))
+    forwards;
 }
 
 .animate-caret {
