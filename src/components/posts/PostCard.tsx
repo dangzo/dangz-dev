@@ -27,7 +27,7 @@ export const PostCard = ({ post }: { post: PostWithTags }) => {
           href={`/blog/${post.slug?.current}`}
           className="text-2xl font-semibold"
         >
-          <Heading as="h4" className="inline-block">
+          <Heading as="h3" className="inline-block">
             {post.title}
           </Heading>
         </Link>

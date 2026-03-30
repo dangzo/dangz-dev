@@ -12,7 +12,7 @@ export default function PostSidebar({ post }: PostSidebarProps) {
   return (
     <div className="space-y-12">
       <section>
-        <Heading as="h4" className="mb-4 text-2xl font-semibold inline-block">
+        <Heading as="h3" className="mb-4 text-2xl font-semibold inline-block">
           Table of Contents
         </Heading>
 
