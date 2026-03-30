@@ -1,70 +1,12 @@
 import { Button, Heading, Link, Text } from '@/components/ui';
+import { kebabCase } from 'lodash-es';
+import aboutMeData from '@/data/aboutMeData';
 import siteMetadata from '@/data/siteMetadata';
 
-const strengths = [
-  {
-    title: 'I Start From The User',
-    description: 'The best frontend work starts with empathy. I like turning product ideas into interfaces that feel simple, clear, and trustworthy.',
-  },
-  {
-    title: 'I Enjoy Complex Problems',
-    description: 'From energy platforms to DevOps tools, I have spent years shaping data-heavy products into experiences people can navigate with confidence.',
-  },
-  {
-    title: 'I Care About Team Health',
-    description: 'Good software comes from good collaboration. I invest in mentoring, thoughtful code reviews, and onboarding that helps people grow fast.',
-  },
-];
-
-const skills = [
-  'React 18+, Vue (Composition API), Nuxt, TypeScript, JavaScript (ES6+)',
-  'Redux, Zustand, Jotai, Pinia, Vuex',
-  'Storybook, Vite, Webpack, component-driven development',
-  'GraphQL, REST, Highcharts, AgGrid',
-  'Jest, Testing Library, Cypress (E2E)',
-  'Tailwind, SASS, Figma, design systems, Agile workflows',
-];
-
-const experience = [
-  {
-    role: 'Senior Frontend Engineer',
-    company: 'Granular Energy',
-    period: 'Apr 2023 - Aug 2025',
-    summary: 'I led end-to-end delivery across multiple applications, from architecture to release. I also focused on improving developer experience through refactoring, stronger tests, and mentorship.',
-  },
-  {
-    role: 'Senior Frontend Developer',
-    company: 'Cycloid',
-    period: 'Aug 2019 - Apr 2023',
-    summary: 'This was a key chapter in my growth: I shipped complex features, pushed component-driven practices with Storybook, and actively contributed to hiring and team onboarding.',
-  },
-  {
-    role: 'Full-Stack Developer',
-    company: 'Saavu',
-    period: 'Nov 2018 - Jul 2019',
-    summary: 'Working in a small team taught me speed and ownership. I built core modules across frontend and backend while keeping performance and testing front and center. TDD, clean code and architecture, and close collaboration with the CEO were daily practices that shaped my approach to product engineering.',
-  },
-  {
-    role: 'Full-Stack Developer',
-    company: '33 Mile Radius',
-    period: 'Dec 2015 - Oct 2018',
-    summary: 'I owned the full lifecycle of web and mobile products, from shipping new features to maintaining production systems and supporting marketing websites. I helped them build their main product - a hybrid mobile/desktop reviews generation app.',
-  },
-  {
-    role: 'Freelance JavaScript Developer',
-    company: 'Upwork',
-    period: 'Jan 2015 - Nov 2015',
-    summary: 'Freelancing sharpened my adaptability. I worked with different industries and stacks, delivering React frontends, full-stack features on Node.js, and custom WordPress work.',
-  },
-  {
-    role: 'Earlier Roles',
-    company: '(condensed)',
-    period: '2013 - 2015',
-    summary: 'Backend and game development roles using Node.js, RabbitMQ, Oracle and Postgres DBs, C#, Unity, and TypeScript. Delivered enterprise modules, internal tools, and a Microsoft-compatible 3D educational game.',
-  },
-];
 
 export default async function AboutPage() {
+  const { skills, experience } = aboutMeData;
+
   return (
     <article className="max-w-5xl mx-auto px-4 py-8 md:py-12">
       <section className="mb-16 md:mb-20">
@@ -99,38 +41,17 @@ export default async function AboutPage() {
 
       <section className="mb-16 md:mb-20">
         <Heading as="h2" className="mb-8">
-          What defines my approach
-        </Heading>
-
-        <div className="grid gap-4 md:grid-cols-3">
-          {strengths.map((item) => (
-            <div
-              key={item.title}
-              className="rounded-2xl border border-border-light/70 dark:border-border-dark/70 bg-background-secondary-light/40 dark:bg-background-secondary-dark/40 p-6"
-            >
-              <Heading as="h3" className="text-2xl mb-3">
-                {item.title}
-              </Heading>
-              <Text className="mb-0">
-                {item.description}
-              </Text>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mb-16 md:mb-20">
-        <Heading as="h2" className="mb-8">
           Tools I trust
         </Heading>
 
         <ul className="space-y-4">
-          {skills.map((skill) => (
+          {skills.map(({ value, label }) => (
             <li
-              key={skill}
+              key={kebabCase(label)}
               className="rounded-xl border border-border-light/60 dark:border-border-dark/60 px-5 py-4"
             >
-              <Text className="mb-0">{skill}</Text>
+              <Heading as="h4">{label}</Heading>
+              <Text className="mb-0">{value}</Text>
             </li>
           ))}
         </ul>
@@ -168,12 +89,12 @@ export default async function AboutPage() {
           what shaped me came from shipping real products with real teams.
         </Text>
         <Text className="max-w-3xl mb-4">
-          My coding journey started when I was still a teenager, wondering school corridors in search of books of <strong>Pascal</strong> and <strong>BASIC</strong>. Reading about hacker news, experinting with Linux and open source, writing software of every kind.
+          My coding journey started when I was still a teenager, wandering school corridors in search of books of <strong>Pascal</strong> and <strong>BASIC</strong>, which sooner became of <strong>C++</strong>, <strong>JavaScript</strong> and <strong>CSS</strong>. Reading about hacker news, experinting with Linux and open source, writing software of every kind.
         </Text>
 
 
         <Text className="mt-4 mb-0">
-          In my free time you may find me practicing sports of different kinds: tennis, padel, calisthenics, or going for a free run.
+          In my free time you may find me practicing sport, like tennis, padel, calisthenics, or going for a free run.
         </Text>
 
         <Text className="max-w-3xl mb-6 mt-6 border-b border-border-light/60 dark:border-border-dark/60 pb-6">
