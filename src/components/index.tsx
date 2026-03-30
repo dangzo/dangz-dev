@@ -1,3 +1,3 @@
-export * from './header';
-export * from './post-list';
-export * from './footer';
+export { Header } from './header';
+export { PostList } from './post-list';
+export { Footer } from './footer';

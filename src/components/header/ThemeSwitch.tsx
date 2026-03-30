@@ -53,40 +53,42 @@ const ThemeSwitch = () => {
       className="data-hover:cursor-pointer hover:text-primary-500 dark:hover:text-primary-400 flex items-center justify-center relative w-8"
       onClick={handleClick}
     >
-      {mounted ? (
-        <>
-          <Transition
-            show={!isDark}
-            as={Fragment}
-            enter="transition-all duration-500"
-            enterFrom="opacity-0 rotate-180"
-            enterTo="opacity-100 rotate-0"
-            leave="transition-all duration-500"
-            leaveFrom="opacity-100 rotate-0"
-            leaveTo="opacity-0 -rotate-180"
-          >
-            <div className="absolute">
-              <Sun />
-            </div>
-          </Transition>
-          <Transition
-            show={isDark}
-            as={Fragment}
-            enter="transition-all duration-500"
-            enterFrom="opacity-0 rotate-180"
-            enterTo="opacity-100 rotate-0"
-            leave="transition-all duration-500"
-            leaveFrom="opacity-100 rotate-0"
-            leaveTo="opacity-0 rotate-180"
-          >
-            <div className="absolute">
-              <Moon />
-            </div>
-          </Transition>
-        </>
-      ) : (
-        <Blank />
-      )}
+      {mounted
+        ? (
+          <>
+            <Transition
+              show={!isDark}
+              as={Fragment}
+              enter="transition-all duration-500"
+              enterFrom="opacity-0 rotate-180"
+              enterTo="opacity-100 rotate-0"
+              leave="transition-all duration-500"
+              leaveFrom="opacity-100 rotate-0"
+              leaveTo="opacity-0 -rotate-180"
+            >
+              <div className="absolute">
+                <Sun />
+              </div>
+            </Transition>
+            <Transition
+              show={isDark}
+              as={Fragment}
+              enter="transition-all duration-500"
+              enterFrom="opacity-0 rotate-180"
+              enterTo="opacity-100 rotate-0"
+              leave="transition-all duration-500"
+              leaveFrom="opacity-100 rotate-0"
+              leaveTo="opacity-0 rotate-180"
+            >
+              <div className="absolute">
+                <Moon />
+              </div>
+            </Transition>
+          </>
+        )
+        : (
+          <Blank />
+        )}
     </Button>
   );
 };

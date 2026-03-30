@@ -11,10 +11,10 @@ interface PostListProps {
 export const PostList = async ({ tag, posts }: PostListProps) => {
   const filteredPosts = tag
     ? posts.filter((post) =>
-        post.tags?.some(
-          (t: Tag) => t.slug?.current?.toLowerCase() === tag.toLowerCase(),
-        ),
-      )
+      post.tags?.some(
+        (t: Tag) => t.slug?.current?.toLowerCase() === tag.toLowerCase(),
+      ),
+    )
     : posts;
 
   if (tag && filteredPosts?.length === 0) {

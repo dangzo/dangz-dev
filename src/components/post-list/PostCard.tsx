@@ -38,12 +38,12 @@ export const PostCard = ({ post }: { post: PostWithTags }) => {
         <Text className="my-4">
           {post.body && post.body.length > 0
             ? post.body
-                .filter((block) => block._type === 'block')
-                .map((block) =>
-                  block.children?.map((child) => child.text).join(' '),
-                )
-                .join(' ')
-                .slice(0, 150) + '...'
+              .filter((block) => block._type === 'block')
+              .map((block) =>
+                block.children?.map((child) => child.text).join(' '),
+              )
+              .join(' ')
+              .slice(0, 150) + '...'
             : 'No description available.'}
         </Text>
 
