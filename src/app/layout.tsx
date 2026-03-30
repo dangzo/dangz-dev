@@ -32,15 +32,14 @@ export default function RootLayout({
         />
       </head>
       <body
-        className="
-          pl-[calc(100vw-100%)] antialiased
+        className="antialiased
           bg-background-main-light text-main-light dark:bg-background-main-dark dark:text-main-dark
         "
       >
         <ThemeProvider>
-          <div className="mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 xl:px-0">
             <Header />
-            <main className="container min-h-[calc(100vh-300px)] pb-8 pt-6">
+            <main className="min-h-[calc(100vh-300px)] pb-8 pt-6">
               {children}
             </main>
           </div>

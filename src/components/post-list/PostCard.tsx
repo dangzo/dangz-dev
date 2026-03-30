@@ -1,4 +1,4 @@
-import { DateText, Text, Heading, Link } from '@/components/core';
+import { DateText, Text, Heading, Link, Img } from '@/components/core';
 import TagList from './TagList';
 import Skeleton from 'react-loading-skeleton';
 import type { PostWithTags } from '@/types/Post.types';
@@ -21,7 +21,7 @@ export const PostCardSkeleton = () => {
 
 export const PostCard = ({ post }: { post: PostWithTags }) => {
   return (
-    <div className="flex flex-row relative">
+    <article className="flex flex-col-reverse md:flex-row relative items-center">
       <div>
         <Link
           href={`/blog/${post.slug?.current}`}
@@ -54,6 +54,14 @@ export const PostCard = ({ post }: { post: PostWithTags }) => {
           Read more →
         </Link>
       </div>
-    </div>
+
+      <Img
+        source={post.image}
+        alt={post.imageAltText}
+        className="object-cover rounded-md ml-4 hidden sm:block sm:w-38 md:h-24 w-20 h-16"
+        width={150}
+        height={96}
+      />
+    </article>
   );
 };
