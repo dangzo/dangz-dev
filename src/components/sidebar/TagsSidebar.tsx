@@ -11,7 +11,7 @@ async function TagsSidebar({ activeSlug, tags, tagCount }: TagsSidebarProps) {
   return (
     <>
       <Link href="/blog" isActive={activeSlug === undefined}>
-        <Heading as="h4" className="mb-4 text-2xl font-semibold inline-block">
+        <Heading as="h3" className="mb-4 text-2xl font-semibold inline-block">
           All tags
         </Heading>
       </Link>
