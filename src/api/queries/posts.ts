@@ -1,7 +1,6 @@
 import type { PostWithTags } from '@/types/Post.types';
 import { query } from '@/api/apollo-client';
 import { gql } from '@apollo/client';
-import { Post } from '@/types/sanity.types';
 
 export const POST_LIST_QUERY = ({ limit = 12, offset = 0 }: {limit?: number, offset?: number}) => {
   return gql`

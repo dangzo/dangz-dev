@@ -1,9 +1,12 @@
 import { Link, Heading } from '@/components/core';
-import { getTagsWithCount } from '@/api/queries/tags';
 
-async function TagsSidebar({ activeSlug }: { activeSlug?: string }) {
-  const { tags, tagCount } = await getTagsWithCount();
+interface TagsSidebarProps {
+  activeSlug?: string;
+  tags?: any[];
+  tagCount?: (slug?: string) => number;
+}
 
+async function TagsSidebar({ activeSlug, tags, tagCount }: TagsSidebarProps) {
   return (
     <>
       <Link href="/blog" isActive={activeSlug === undefined}>
@@ -19,7 +22,7 @@ async function TagsSidebar({ activeSlug }: { activeSlug?: string }) {
               className="text-xs font-semibold tracking-wide uppercase"
               type="primary"
               isActive={activeSlug === tag.slug?.current}
-              href={`/blog/tags/${tag.slug?.current}`}>{tag.name?.toUpperCase()} ({tagCount(tag.slug?.current)})
+              href={`/blog/tags/${tag.slug?.current}`}>{tag.name?.toUpperCase()} ({tagCount?.(tag.slug?.current)})
             </Link>
           </li>
         ))}

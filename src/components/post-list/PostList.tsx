@@ -1,27 +1,14 @@
 import { notFound } from 'next/navigation';
 import { PostCard, PostCardSkeleton } from './PostCard';
-import { getPostList } from '@/api/queries/posts';
+import type { PostWithTags } from '@/types/Post.types'; 
 import type { Tag } from '@/types/sanity.types';
 
-export const PostListSkeleton = () => {
-  return (
-    <ul className="space-y-6">
-      {Array.from({ length: 3 }).map((_, index) => (
-        <li key={index} className="relative pb-4 p-4">
-          <PostCardSkeleton />
-        </li>
-      ))}
-    </ul>
-  );
-};
+interface PostListProps {
+  tag?: string;
+  posts: PostWithTags[];
+}
 
-export const PostList = async ({ tag }: { tag?: string }) => {
-  const posts = await getPostList();
-
-  if (!posts || posts.length === 0) {
-    return notFound();
-  }
-
+export const PostList = async ({ tag, posts }: PostListProps) => {
   const filteredPosts = tag
     ? posts.filter((post) =>
         post.tags?.some(
@@ -42,6 +29,18 @@ export const PostList = async ({ tag }: { tag?: string }) => {
           className="relative pb-4 p-4 duration-300  dark:bg-background-secondary-darks"
         >
           <PostCard key={post._id} post={post} />
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+export const PostListSkeleton = () => {
+  return (
+    <ul className="space-y-6">
+      {Array.from({ length: 3 }).map((_, index) => (
+        <li key={index} className="relative pb-4 p-4">
+          <PostCardSkeleton />
         </li>
       ))}
     </ul>
