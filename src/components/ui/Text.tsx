@@ -1,10 +1,4 @@
 import clsx from 'clsx';
-import { Roboto } from 'next/font/google';
-
-const roboto = Roboto({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-});
 
 interface TextProps extends React.HTMLAttributes<HTMLParagraphElement> {
   size?: 'small' | 'medium' | 'large' | 'x-large';
@@ -13,14 +7,13 @@ interface TextProps extends React.HTMLAttributes<HTMLParagraphElement> {
 
 const Text = ({ size = 'medium', className, children, ...rest }: TextProps) => {
   const textClasses = clsx([
-    'text-secondary-light dark:text-secondary-dark',
+    'text-secondary-light dark:text-secondary-dark font-body',
     {
       'text-sm leading-5 mb-2': size === 'small',
       'text-base leading-6 mb-4': size === 'medium',
       'text-lg leading-7.5 mb-6': size === 'large',
       'text-xl leading-8 mb-8': size === 'x-large',
     },
-    roboto.className,
   ], className);
 
   return <p className={textClasses} {...rest}>{children}</p>;
