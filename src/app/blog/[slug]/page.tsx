@@ -43,7 +43,7 @@ export default async function PostPage({
 
       {/* Body Content */}
       {post.body && post.body.length > 0 ? (
-        <div className="prose dark:prose-invert max-w-none">
+        <div className="prose dark:prose-invert max-w-none font-body">
           <PortableText value={post.body} />
         </div>
       ) : (
