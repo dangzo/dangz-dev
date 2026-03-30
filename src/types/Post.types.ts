@@ -1,5 +1,5 @@
 import type { Post, Tag } from '@/types/sanity.types';
 
-export type PostWithTags = Post & {
+export type PostWithTags = Omit<Post, 'tags'> & {
   tags: Tag[];
 };
