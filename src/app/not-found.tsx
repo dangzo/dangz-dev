@@ -1,4 +1,4 @@
-import { Button, Heading, Text } from '@/components/ui';
+import { Button, Heading, Text } from '@/components/core';
 
 export default function NotFound() {
   return (

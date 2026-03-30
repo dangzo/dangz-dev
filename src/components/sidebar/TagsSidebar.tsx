@@ -1,4 +1,4 @@
-import { Link, Heading } from '@/components/ui';
+import { Link, Heading } from '@/components/core';
 import { TAGS_WITH_COUNT_QUERY } from '@/api/queries';
 import { query } from '@/api/apollo-client';
 import type { PostTags, TagWithCount } from '@/types/Tag.types';

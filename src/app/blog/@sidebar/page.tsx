@@ -1,4 +1,4 @@
-import { TagsSidebar } from '@/components/blog';
+import { TagsSidebar } from '@/components/sidebar';
 
 export default async function BlogSidebar() {
   return <TagsSidebar />;

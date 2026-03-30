@@ -2,7 +2,7 @@ import { PortableText } from 'next-sanity';
 import { POSTS_BY_SLUG_QUERY } from '@/api/queries';
 import { query } from '@/api/apollo-client';
 import { notFound } from 'next/navigation';
-import { Img, Text } from '@/components/ui';
+import { Img, Text } from '@/components/core';
 
 import type { PostWithTags } from '@/types/Post.types';
 

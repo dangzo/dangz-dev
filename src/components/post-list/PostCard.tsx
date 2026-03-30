@@ -1,5 +1,5 @@
-import { DateText, Text, Heading, Link } from '@/components/ui';
-import { TagList } from '@/components';
+import { DateText, Text, Heading, Link } from '@/components/core';
+import TagList from './TagList';
 import Skeleton from 'react-loading-skeleton';
 import type { PostWithTags } from '@/types/Post.types';
 

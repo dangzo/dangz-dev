@@ -1,5 +1,5 @@
-import { Text, Button, Heading } from '@/components/ui';
-import TagChip from '@/components/ui/TagChip';
+import { Text, Button, Heading } from '@/components/core';
+import TagChip from '@/components/core/TagChip';
 import { TAGS_WITH_COUNT_QUERY } from '@/api/queries';
 import { query } from '@/api/apollo-client';
 import type { TagWithCount } from '@/types/Tag.types';
