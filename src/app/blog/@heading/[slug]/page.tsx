@@ -1,6 +1,7 @@
-import { DateText, Heading } from '@/components/core';
+import { DateText, Text, Heading } from '@/components/core';
 import { notFound } from 'next/navigation';
 import { getPostBySlug } from '@/api/queries/posts';
+import { estimateReadingTimeMinutes } from '@/lib/postToc';
 import type { PostWithTags } from '@/types/Post.types';
 import TagList from '@/components/post-list/TagList';
 
@@ -17,6 +18,8 @@ export default async function BlogSlugHeading({ params }: { params: Promise<{ sl
     return notFound();
   }
 
+  const readingTimeMinutes = estimateReadingTimeMinutes(post.body as never[] | undefined);
+  
   return (
     <>
       <Heading as="h1">
@@ -25,7 +28,15 @@ export default async function BlogSlugHeading({ params }: { params: Promise<{ sl
       
       <div className="flex flex-row items-center">
         <DateText date={post.publishedAt} className="mb-0!" />
+
         <span className="mx-2">&bull;</span>
+
+        <Text size="small" className="italic mb-0!">
+          {readingTimeMinutes} min read
+        </Text>
+
+        <span className="mx-2">&bull;</span>
+        
         <TagList tags={post.tags} />
       </div>
     </>
