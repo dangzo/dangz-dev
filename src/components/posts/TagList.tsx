@@ -1,4 +1,4 @@
-import { TagChip } from '@/components/core';
+import { TagChip } from '@/components/ui';
 import type { Tag as TagType } from '@/types/sanity.types';
 
 interface TagListProps {

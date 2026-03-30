@@ -1,4 +1,4 @@
-import { Heading, Text } from '@/components/core';
+import { Heading, Text } from '@/components/ui';
 
 const NotFound = () => {
   return (

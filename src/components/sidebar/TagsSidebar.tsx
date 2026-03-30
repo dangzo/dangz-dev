@@ -1,4 +1,4 @@
-import { Link, Heading } from '@/components/core';
+import { Link, Heading } from '@/components/ui';
 import type { Tag } from '@/types/sanity.types';
 
 interface TagsSidebarProps {
