@@ -1,9 +1,4 @@
 import clsx from 'clsx';
-import { Roboto_Slab } from 'next/font/google';
-
-const robotoSlab = Roboto_Slab({
-  subsets: ['latin'],
-});
 
 interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
@@ -12,6 +7,7 @@ interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
 
 const Heading = async ({ as: Tag = 'h1', children, className, ...rest }: HeadingProps) => {
   const headingClasses = clsx([
+    'font-heading',
     {
       'text-5xl font-bold mb-4': Tag === 'h1',
       'text-4xl font-semibold mb-6': Tag === 'h2',
@@ -20,7 +16,6 @@ const Heading = async ({ as: Tag = 'h1', children, className, ...rest }: Heading
       'text-xl font-semibold mb-2': Tag === 'h5',
       'text-md font-semibold mb-1': Tag === 'h6',
     },
-    robotoSlab.className,
     className,
   ]);
 

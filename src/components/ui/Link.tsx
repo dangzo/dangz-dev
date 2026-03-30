@@ -2,12 +2,6 @@ import { clsx } from 'clsx';
 import { default as NextLink } from 'next/link';
 import type { LinkProps as NextLinkProps } from 'next/link';
 import { AnchorHTMLAttributes } from 'react';
-import { Roboto } from 'next/font/google';
-
-const roboto = Roboto({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-});
 
 export type LinkType = 'accent' | 'primary' | 'secondary';
 interface LinkProps extends NextLinkProps {
@@ -20,7 +14,7 @@ export default async function Link({ href, className, type = 'primary', isActive
   const isAnchorLink = href && href.startsWith('#');
 
   const linkClasses = clsx([
-    'wrap-break-word transition-all duration-300',
+    'wrap-break-word transition-all duration-300 font-body',
     {
       'text-accent-light dark:text-accent-dark hover:text-primary-500 dark:hover:text-primary-300': type === 'accent',
       'text-main-light dark:text-main-dark hover:text-primary-500 dark:hover:text-primary-500': type === 'primary',
@@ -31,7 +25,6 @@ export default async function Link({ href, className, type = 'primary', isActive
       'text-primary-500 dark:text-primary-500': isActive && type === 'primary',
       'text-secondary-dark dark:text-secondary-light': isActive && type === 'secondary',
     },
-    roboto.className,
   ]);
 
   if (isActive) {
