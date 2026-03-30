@@ -1,21 +1,7 @@
 import { PortableText } from 'next-sanity';
-import { POSTS_BY_SLUG_QUERY } from '@/api/queries';
-import { query } from '@/api/apollo-client';
 import { notFound } from 'next/navigation';
 import { Img, Text } from '@/components/core';
-
-import type { PostWithTags } from '@/types/Post.types';
-
-async function getPostBySlug(slug: string): Promise<PostWithTags | null> {
-  const { data } = await query<{ allPost: PostWithTags[] }>({ query: POSTS_BY_SLUG_QUERY({ slug }) });
-  const post = data?.allPost?.[0];
-
-  if (!post) {
-    return notFound();
-  }
-
-  return post;
-}
+import { getPostBySlug } from '@/api/queries/posts';
 
 export default async function PostPage({
   params,

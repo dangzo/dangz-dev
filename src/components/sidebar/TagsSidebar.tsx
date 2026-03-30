@@ -1,15 +1,8 @@
 import { Link, Heading } from '@/components/core';
-import { TAGS_WITH_COUNT_QUERY } from '@/api/queries';
-import { query } from '@/api/apollo-client';
-import type { PostTags, TagWithCount } from '@/types/Tag.types';
+import { getTagsWithCount } from '@/api/queries/tags';
 
 async function TagsSidebar({ activeSlug }: { activeSlug?: string }) {
-  const { data } = await query<{ allTag: TagWithCount[], allPost: PostTags[] }>({ query: TAGS_WITH_COUNT_QUERY });
-  const { allTag: tags, allPost: postTags } = data ?? {};
-
-  const tagCount = (slug?: string) => {
-    return postTags?.filter(pt => pt?.tags?.some(t => t.slug?.current === slug)).length ?? 0;
-  };
+  const { tags, tagCount } = await getTagsWithCount();
 
   return (
     <>

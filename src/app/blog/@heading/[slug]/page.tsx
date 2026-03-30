@@ -1,7 +1,6 @@
 import { DateText, Heading } from '@/components/core';
-import { POSTS_BY_SLUG_QUERY } from '@/api/queries';
-import { query } from '@/api/apollo-client';
 import { notFound } from 'next/navigation';
+import { getPostBySlug } from '@/api/queries/posts';
 import type { Post } from '@/types/sanity.types';
 
 export default async function BlogSlugHeading({ params }: { params: Promise<{ slug?: string }> }) {
@@ -11,8 +10,7 @@ export default async function BlogSlugHeading({ params }: { params: Promise<{ sl
     return notFound();
   }
 
-  const { data } = await query<{ allPost: Post[] }>({ query: POSTS_BY_SLUG_QUERY({ slug }) });
-  const post = data?.allPost?.[0];
+  const post = await getPostBySlug(slug) as Post | null;
 
   if (!post) {
     return notFound();
