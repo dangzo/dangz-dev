@@ -1,24 +1,18 @@
-import { Text, Button, Heading } from '@/components/core';
 import TagChip from '@/components/core/TagChip';
-import { TAGS_WITH_COUNT_QUERY } from '@/api/queries';
-import { query } from '@/api/apollo-client';
-import type { TagWithCount } from '@/types/Tag.types';
-import type { PostTags } from '@/types/Tag.types';
+import { Text, Button, Heading } from '@/components/core';
+import { getTagsWithCount } from '@/api/queries/tags';
 
 export default async function HomePage() {
-  const { data } = await query<{ allTag: TagWithCount[]; allPost: PostTags[] }>({ query: TAGS_WITH_COUNT_QUERY });
+  const { tags, tagCount } = await getTagsWithCount();
 
-  const tags = data?.allTag ?? [];
-  const posts = data?.allPost ?? [];
-
-  const tagsWithCount = tags.map(tag => ({
+  const tagsWithCount = tags?.map(tag => ({
     ...tag,
-    postCount: posts.filter(pt => pt?.tags?.some(t => t.slug?.current === tag.slug?.current)).length,
+    postCount: tagCount(tag.slug?.current),
   }));
 
   const topTags = tagsWithCount
-    .sort((a, b) => (b.postCount - a.postCount) || (a.name ?? '').localeCompare(b.name ?? ''))
-    .slice(0, 5);
+    ?.sort((a, b) => (b.postCount - a.postCount) || (a.name ?? '').localeCompare(b.name ?? ''))
+    ?.slice(0, 5);
 
   return (
     <article>
@@ -35,7 +29,7 @@ export default async function HomePage() {
         </Button>
 
         <div className="flex flex-row items-center gap-3 mt-10 flex-wrap justify-center">
-          {topTags.length > 0 ? (
+          {topTags && topTags.length > 0 ? (
             topTags.map(tag => (
               <div
                 key={tag._id}

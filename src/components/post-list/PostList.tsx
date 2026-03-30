@@ -1,9 +1,7 @@
 import { notFound } from 'next/navigation';
-import { query } from '@/api/apollo-client';
-import { POST_LIST_QUERY } from '@/api/queries';
 import { PostCard, PostCardSkeleton } from './PostCard';
+import { getPostList } from '@/api/queries/posts';
 import type { Tag } from '@/types/sanity.types';
-import type { PostWithTags } from '@/types/Post.types';
 
 export const PostListSkeleton = () => {
   return (
@@ -18,11 +16,7 @@ export const PostListSkeleton = () => {
 };
 
 export const PostList = async ({ tag }: { tag?: string }) => {
-  const { data } = await query<{ allPost: PostWithTags[] }>({
-    query: POST_LIST_QUERY({ limit: 12, offset: 0 }),
-  });
-
-  const posts = data?.allPost;
+  const posts = await getPostList();
 
   if (!posts || posts.length === 0) {
     return notFound();
