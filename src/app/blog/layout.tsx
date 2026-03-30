@@ -13,7 +13,7 @@ export default async function BlogLayout({ children, heading, sidebar }: BlogLay
         <aside className="p-4 pt-8 mb-8 w-full min-h-72 max-w-[256px]">
           {sidebar}
         </aside>
-        <section className="flex-1 p-4 border-border-light dark:border-border-dark border-l">
+        <section className="flex-1 p-4">
           {children}
         </section>
       </div>
