@@ -1,0 +1,73 @@
+const skills = [
+  {
+    label: 'Frameworks & Languages',
+    value: 'React, Vue (Options and Composition API), Next.js, Nuxt.js, TypeScript, JavaScript (ES6+)'    
+  },
+  {
+    label: 'State Management',
+    value: 'Redux, Zustand, Jotai, Pinia, Vuex'    
+  },
+  {
+    label: 'Build Tools & Component Development',
+    value: 'Storybook, Vite, Webpack, component-driven development'    
+  },
+  {
+    label: 'APIs & Data Visualization',
+    value: 'GraphQL, REST, Highcharts, AgGrid'    
+  },
+  {
+    label: 'Testing & Quality Assurance',
+    value: 'Jest / Vitest, Testing Library, Cypress and Playwright'    
+  },
+  {
+    label: 'Design & Workflow',
+    value: 'Tailwind, SCSS/SASS, Figma, design systems, Agile workflows'    
+  },
+];
+
+const experience = [
+  {
+    role: 'Senior Frontend Engineer',
+    company: 'Granular Energy',
+    period: 'Apr 2023 - Aug 2025',
+    summary: 'I led end-to-end delivery across multiple applications, from architecture to release. I also focused on improving developer experience through refactoring, stronger tests, and mentorship.',
+  },
+  {
+    role: 'Senior Frontend Developer',
+    company: 'Cycloid',
+    period: 'Aug 2019 - Apr 2023',
+    summary: 'This was a key chapter in my growth: I shipped complex features, pushed component-driven practices with Storybook, and actively contributed to hiring and team onboarding.',
+  },
+  {
+    role: 'Full-Stack Developer',
+    company: 'Saavu',
+    period: 'Nov 2018 - Jul 2019',
+    summary: 'Working in a small team taught me speed and ownership. I built core modules across frontend and backend while keeping performance and testing front and center. TDD, clean code and architecture, and close collaboration with the CEO were daily practices that shaped my approach to product engineering.',
+  },
+  {
+    role: 'Full-Stack Developer',
+    company: '33 Mile Radius',
+    period: 'Dec 2015 - Oct 2018',
+    summary: 'I owned the full lifecycle of web and mobile products, from shipping new features to maintaining production systems and supporting marketing websites. I helped them build their main product - a hybrid mobile/desktop reviews generation app.',
+  },
+  {
+    role: 'Freelance JavaScript Developer',
+    company: 'Upwork',
+    period: 'Jan 2015 - Nov 2015',
+    summary: 'Freelancing sharpened my adaptability. I worked with different industries and stacks, delivering React frontends, full-stack features on Node.js, and custom WordPress work.',
+  },
+  {
+    role: 'Earlier Roles',
+    company: '(condensed)',
+    period: '2013 - 2015',
+    summary: 'Backend and game development roles using Node.js, RabbitMQ, Oracle and Postgres DBs, C#, Unity, and TypeScript. Delivered enterprise modules, internal tools, and a Microsoft-compatible 3D educational game.',
+  },
+];
+
+
+const aboutMeData = {
+  skills,
+  experience,
+};
+
+export default aboutMeData;
