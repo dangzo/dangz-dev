@@ -1,9 +1,8 @@
-import { DateText, Text, Heading } from '@/components/core';
+import { DateText, Heading } from '@/components/ui';
+import { ReadingTimeText, TagList } from '@/components/posts';
 import { notFound } from 'next/navigation';
 import { getPostBySlug } from '@/api/queries/posts';
-import { estimateReadingTimeMinutes } from '@/lib/postToc';
 import type { PostWithTags } from '@/types/Post.types';
-import TagList from '@/components/post-list/TagList';
 
 export default async function BlogSlugHeading({ params }: { params: Promise<{ slug?: string }> }) {
   const { slug } = await params;
@@ -18,8 +17,6 @@ export default async function BlogSlugHeading({ params }: { params: Promise<{ sl
     return notFound();
   }
 
-  const readingTimeMinutes = estimateReadingTimeMinutes(post.body as never[] | undefined);
-  
   return (
     <>
       <Heading as="h1">
@@ -31,9 +28,7 @@ export default async function BlogSlugHeading({ params }: { params: Promise<{ sl
 
         <span className="mx-2">&bull;</span>
 
-        <Text size="small" className="italic mb-0!">
-          {readingTimeMinutes} min read
-        </Text>
+        <ReadingTimeText postBody={post.body} className='mb-0!' />
 
         <span className="mx-2">&bull;</span>
         

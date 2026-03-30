@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
-import { PostList, PostListSkeleton } from '@/components/post-list';
+import { PostList, PostListSkeleton } from '@/components/posts';
 import { getPostList } from '@/api/queries/posts';
 
 export default async function BlogPage() {

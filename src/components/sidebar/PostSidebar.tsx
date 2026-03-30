@@ -1,4 +1,4 @@
-import { Heading, Link, Text } from '@/components/core';
+import { Heading, Link, Text } from '@/components/ui';
 import { extractTocFromBody } from '@/lib/postToc';
 import type { PostWithTags } from '@/types/Post.types';
 

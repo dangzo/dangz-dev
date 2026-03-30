@@ -1,5 +1,5 @@
-import TagChip from '@/components/core/TagChip';
-import { Text, Button, Heading } from '@/components/core';
+import TagChip from '@/components/ui/TagChip';
+import { Text, Button, Heading } from '@/components/ui';
 import { getTagsWithCount } from '@/api/queries/tags';
 
 export default async function HomePage() {

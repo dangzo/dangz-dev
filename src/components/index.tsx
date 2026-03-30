@@ -1,3 +1,3 @@
 export { Header } from './header';
-export { PostList } from './post-list';
+export { PostList } from './posts';
 export { Footer } from './footer';

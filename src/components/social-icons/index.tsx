@@ -10,7 +10,7 @@ import {
   Instagram,
   Medium,
 } from './icons';
-import { Link } from '@/components/core';
+import { Link } from '@/components/ui';
 
 const components = {
   mail: Mail,

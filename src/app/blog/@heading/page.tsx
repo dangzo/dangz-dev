@@ -1,4 +1,4 @@
-import { Heading, Text } from '@/components/core';
+import { Heading, Text } from '@/components/ui';
 
 export default function HeadingDefault() {
   return (
