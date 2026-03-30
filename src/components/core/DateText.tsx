@@ -11,7 +11,7 @@ export default function DateText({ date, className }: DateTextProps) {
 
   const formattedDate = new Date(date).toLocaleDateString('en-US', {
     year: 'numeric',
-    month: 'long',
+    month: 'short',
     day: 'numeric',
   });
 

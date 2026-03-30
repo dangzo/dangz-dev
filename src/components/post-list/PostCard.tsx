@@ -22,7 +22,6 @@ export const PostCardSkeleton = () => {
 export const PostCard = ({ post }: { post: PostWithTags }) => {
   return (
     <div className="flex flex-row relative">
-      <DateText date={post.publishedAt} className="leading-8 min-w-38" />
       <div>
         <Link
           href={`/blog/${post.slug?.current}`}
@@ -33,7 +32,11 @@ export const PostCard = ({ post }: { post: PostWithTags }) => {
           </Heading>
         </Link>
 
-        <TagList className="mt-1" tags={post.tags} />
+        <div className="flex flex-row items-center">
+          <DateText date={post.publishedAt} className="mb-0!" />
+          <span className="mx-2">&bull;</span>
+          <TagList tags={post.tags} />
+        </div>
 
         <Text className="my-4">
           {post.body && post.body.length > 0
