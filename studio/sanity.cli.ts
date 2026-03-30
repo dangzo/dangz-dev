@@ -12,7 +12,7 @@ export default defineCliConfig({
     },
   ],
   deployment: {
-    appId: 'gpa5us40z0cl5nh6sz76l9bl',
+    appId: 'igdyw1j1njx88r49y5zvgmga',
     autoUpdates: true,
   }
 });
