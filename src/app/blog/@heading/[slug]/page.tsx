@@ -1,4 +1,4 @@
-import { DateText, Heading } from '@/components/ui';
+import { DateText, Heading } from '@/components/core';
 import { POSTS_BY_SLUG_QUERY } from '@/api/queries';
 import { query } from '@/api/apollo-client';
 import { notFound } from 'next/navigation';

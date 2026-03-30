@@ -1,12 +1,12 @@
-import { TagChip } from '@/components/ui';
+import { TagChip } from '@/components/core';
 import type { Tag as TagType } from '@/types/sanity.types';
 
-interface PostTagsProps {
+interface TagListProps {
   tags: TagType[];
   className?: string
 }
 
-export default async function PostTags({ tags, className = '' }: PostTagsProps) {
+export default async function TagList({ tags, className = '' }: TagListProps) {
   return (
     <div className={`flex flex-wrap gap-1.5 ${className}`}>
       {tags.map((tag) => (

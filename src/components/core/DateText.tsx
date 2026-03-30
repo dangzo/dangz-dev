@@ -1,4 +1,4 @@
-import { Text } from '@/components/ui';
+import { Text } from '@/components/core';
 
 interface DateTextProps extends React.HTMLAttributes<HTMLElement> {
   date?: string;

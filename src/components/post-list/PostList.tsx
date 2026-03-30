@@ -1,9 +1,9 @@
 import { notFound } from 'next/navigation';
 import { query } from '@/api/apollo-client';
 import { POST_LIST_QUERY } from '@/api/queries';
+import { PostCard, PostCardSkeleton } from './PostCard';
 import type { Tag } from '@/types/sanity.types';
 import type { PostWithTags } from '@/types/Post.types';
-import { PostCard, PostCardSkeleton } from './PostCard';
 
 export const PostListSkeleton = () => {
   return (
@@ -17,7 +17,7 @@ export const PostListSkeleton = () => {
   );
 };
 
-const PostList = async ({ tag }: { tag?: string }) => {
+export const PostList = async ({ tag }: { tag?: string }) => {
   const { data } = await query<{ allPost: PostWithTags[] }>({
     query: POST_LIST_QUERY({ limit: 12, offset: 0 }),
   });
@@ -53,5 +53,3 @@ const PostList = async ({ tag }: { tag?: string }) => {
     </ul>
   );
 };
-
-export default PostList;
