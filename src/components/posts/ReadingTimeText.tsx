@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import { Text } from '@/components/ui';
-import { estimateReadingTimeMinutes } from '@/lib/postToc';
+import usePostInsights from '@/hooks/usePostInsights';
 
 interface ReadingTimeTextProps extends React.HTMLAttributes<HTMLElement> {
   date?: string;
@@ -8,7 +8,7 @@ interface ReadingTimeTextProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 function ReadingTimeText({ className, postBody }: ReadingTimeTextProps) {
-  const readingTimeMinutes = estimateReadingTimeMinutes(postBody as never[] | undefined);
+  const { readingTimeMinutes } = usePostInsights({ body: postBody } as never);
 
   return (
     <Text size="small" className={clsx('italic', className)}>

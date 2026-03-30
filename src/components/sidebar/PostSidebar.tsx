@@ -1,13 +1,13 @@
 import { Heading, Link, Text } from '@/components/ui';
-import { extractTocFromBody } from '@/lib/postToc';
 import type { PostWithTags } from '@/types/Post.types';
+import usePostInsights from '@/hooks/usePostInsights';
 
 interface PostSidebarProps {
   post: PostWithTags;
 }
 
-export default async function PostSidebar({ post }: PostSidebarProps) {
-  const toc = extractTocFromBody(post.body as never[] | undefined);
+export default function PostSidebar({ post }: PostSidebarProps) {
+  const { toc } = usePostInsights(post);
 
   return (
     <div className="space-y-12">

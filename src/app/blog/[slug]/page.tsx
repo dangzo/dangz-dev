@@ -2,7 +2,7 @@ import { PortableText } from 'next-sanity';
 import { notFound } from 'next/navigation';
 import { Img, Text } from '@/components/ui';
 import { getPostBySlug } from '@/api/queries/posts';
-import { createHeadingIdFactory, getNodeText } from '@/lib/postToc';
+import { createHeadingIdFactory, getNodeText } from '@/utils/posts';
 
 export default async function PostPage({
   params,
