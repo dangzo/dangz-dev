@@ -29,5 +29,5 @@ export async function getTagsWithCount() {
     return postTags?.filter(pt => pt?.tags?.some(t => t.slug?.current === slug)).length ?? 0;
   };
 
-  return { tags, tagCount}
+  return { tags, tagCount };
 }

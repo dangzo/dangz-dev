@@ -1,8 +1,9 @@
 import { Link, Heading } from '@/components/core';
+import type { Tag } from '@/types/sanity.types';
 
 interface TagsSidebarProps {
   activeSlug?: string;
-  tags?: any[];
+  tags?: Tag[];
   tagCount?: (slug?: string) => number;
 }
 

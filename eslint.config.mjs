@@ -50,7 +50,7 @@ export default defineConfig([
       //
       'object-curly-newline': 'warn',
       'object-curly-spacing': ['warn', 'always'],
-      'multiline-ternary': 'always-multiline',
+      'multiline-ternary': ["warn", "always-multiline"],
       'no-multi-spaces': 'error',
       'no-undef': 'off',
       'no-unused-vars': 'off', // or "@typescript-eslint/no-unused-vars": "off",

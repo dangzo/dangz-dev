@@ -28,15 +28,17 @@ export default async function PostPage({
       </div>
 
       {/* Body Content */}
-      {post.body && post.body.length > 0 ? (
-        <div className="prose dark:prose-invert max-w-none font-body">
-          <PortableText value={post.body} />
-        </div>
-      ) : (
-        <Text>
+      {post.body && post.body.length > 0
+        ? (
+          <div className="prose dark:prose-invert max-w-none font-body">
+            <PortableText value={post.body} />
+          </div>
+        )
+        : (
+          <Text>
           No content available for this post.
-        </Text>
-      )}
+          </Text>
+        )}
     </article>
   );
 }
