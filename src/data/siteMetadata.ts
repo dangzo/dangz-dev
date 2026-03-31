@@ -8,6 +8,7 @@ const siteMetadata = {
   email: 'dangz.dev@gmail.com',
   github: 'https://github.com/dangzo',
   linkedin: 'https://www.linkedin.com/in/dangzo',
+  resume: '/Daniele-Gazzelloni-Resume-2026.pdf',
   locale: 'en-US',
 };
 

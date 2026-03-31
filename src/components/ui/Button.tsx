@@ -1,23 +1,33 @@
 'use client';
 
-import { useCallback } from 'react';
 import clsx from 'clsx';
-import { useRouter } from 'next/navigation';
+import NextLink from 'next/link';
 
 export type ButtonType = 'primary' | 'secondary' | 'ghost';
 export type ButtonSize = 'small' | 'medium' | 'large';
 
-interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'type'> {
+interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
   type?: ButtonType;
   size?: ButtonSize;
   to?: string;
-  onClick?: () => void;
+  download?: boolean | string;
+  target?: React.HTMLAttributeAnchorTarget;
+  rel?: string;
   children: React.ReactNode;
 }
 
-const Button = ({ type = 'primary', size = 'medium', to, onClick, children }: ButtonProps) => {
-  const router = useRouter();
-
+const Button = ({
+  type = 'primary',
+  size = 'medium',
+  to,
+  onClick,
+  download,
+  target,
+  rel,
+  children,
+  className,
+  ...rest
+}: ButtonProps) => {
   const classNames = clsx([
     'cursor-pointer inline-block text-center transition-all duration-300 font-semibold',
     // Size styles
@@ -38,21 +48,40 @@ const Button = ({ type = 'primary', size = 'medium', to, onClick, children }: Bu
       'text-white rounded-md bg-gray-800/80 hover:bg-background-secondary-dark dark:text-main-dark dark:bg-slate-800/80 dark:hover:bg-slate-600/60':
         type === 'secondary'
     },
+    className,
   ]);
 
-  const handleOnClick = useCallback(() => {
-    if (to) {
-      router.push(to);
-    }
-    if (onClick) {
-      onClick();
-    }
-  }, [to, onClick, router]);
+  const isInternalRoute = Boolean(to?.startsWith('/')) && !download;
+
+  if (to && isInternalRoute) {
+    return (
+      <NextLink className={classNames} href={to} {...rest}>
+        {children}
+      </NextLink>
+    );
+  }
+
+  if (to) {
+    const resolvedRel = rel ?? (target === '_blank' || !isInternalRoute ? 'noopener noreferrer' : undefined);
+
+    return (
+      <a
+        className={classNames}
+        href={to}
+        download={download}
+        target={target ?? (!isInternalRoute ? '_blank' : undefined)}
+        rel={resolvedRel}
+      >
+        {children}
+      </a>
+    );
+  }
 
   return (
     <button
       className={classNames}
-      onClick={handleOnClick}
+      onClick={onClick}
+      {...rest}
     >
       {children}
     </button>
