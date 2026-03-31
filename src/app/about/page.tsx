@@ -7,6 +7,8 @@ import siteMetadata from '@/data/siteMetadata';
 export default async function AboutPage() {
   const { skills, experience } = aboutMeData;
 
+  const devYears = new Date().getFullYear() - 2013;
+
   return (
     <article className="max-w-5xl mx-auto px-4 py-8 md:py-12">
       <section className="mb-16 md:mb-20">
@@ -16,16 +18,16 @@ export default async function AboutPage() {
 
         <Heading as="h1" className="max-w-4xl mb-6">
           <span className="block text-4xl md:text-6xl leading-loose">Hi, I'm Daniele.</span>
-          <span className="block">I craft frontend solutions that help teams ship, products scale, and users love to use.</span>
+          <span className="block">I craft frontend solutions that help teams ship and products scale.</span>
         </Heading>
 
         <Text size="large" className="max-w-3xl">
-          Over the last 13 years, I have grown from full-stack and freelance work into a senior frontend role focused
-          on <Link type="accent" href="/blog/tags/react">#React</Link>, <Link type="accent" href="/blog/tags/vue">#Vue</Link> and <Link type="accent" href="/blog/tags/typescript">#TypeScript</Link>.
+          Over the last { devYears } years, I have grown from full-stack and freelance work into a senior frontend role focused
+          on <strong className="text-accent-dark">React</strong>, <strong className="text-accent-dark">Vue</strong> and <strong className="text-accent-dark">TypeScript</strong>.
         </Text>
 
         <Text size="large" className="max-w-3xl mb-0">
-          Today I work remotely from <strong>Santa Cruz de Tenerife</strong>, collaborating with distributed teams, mentoring engineers,
+          Today I work remotely from Santa Cruz de Tenerife, collaborating with distributed teams, mentoring engineers,
           and helping products move from idea to production with confidence.
         </Text>
 
@@ -84,14 +86,15 @@ export default async function AboutPage() {
         <Heading as="h2" className="mb-4">
           Beyond the stack
         </Heading>
+
         <Text className="max-w-3xl mb-4">
-          I hold a <strong>Bachelor in Computer Engineering</strong> from the <strong>University of Rome "La Sapienza"</strong>, but most of
+          I hold a Bachelor in Computer Engineering from the <strong>University of Rome "La Sapienza"</strong>, but most of
           what shaped me came from shipping real products with real teams.
         </Text>
+
         <Text className="max-w-3xl mb-4">
           My coding journey started when I was still a teenager, wandering school corridors in search of books of <strong>Pascal</strong> and <strong>BASIC</strong>, which sooner became of <strong>C++</strong>, <strong>JavaScript</strong> and <strong>CSS</strong>. Reading about hacker news, experinting with Linux and open source, writing software of every kind.
         </Text>
-
 
         <Text className="mt-4 mb-0">
           In my free time you may find me practicing sport, like tennis, padel, calisthenics, or going for a free run.
