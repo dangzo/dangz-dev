@@ -74,18 +74,18 @@ export default async function AboutPage() {
               <ul className="grid grid-cols-2 gap-3 xl:grid-cols-3">
                 {items.map((tool) => (
                   <li
-                    key={kebabCase(`${label}-${tool}`)}
+                    key={kebabCase(`${label}-${tool.label}`)}
                     className="flex items-center gap-3 rounded-xl px-3 py-3"
                   >
                     <span
                       aria-hidden="true"
                       className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-100 text-xs font-semibold tracking-wide text-primary-700 dark:bg-primary-950/60 dark:text-primary-200"
                     >
-                      {getPlaceholderIconText(tool)}
+                      {getPlaceholderIconText(tool.label)}
                     </span>
 
                     <Text size="small" className="mb-0 font-medium text-main-light dark:text-main-dark">
-                      {tool}
+                      {tool.label}
                     </Text>
                   </li>
                 ))}
