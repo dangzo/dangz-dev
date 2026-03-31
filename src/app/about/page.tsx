@@ -28,7 +28,7 @@ export default async function AboutPage() {
 
   return (
     <article className="max-w-5xl mx-auto px-4 py-8 md:py-12">
-      <section className="mb-16 md:mb-20">
+      <section className="mb-16 md:mb-44">
         <Text size="small" className="uppercase tracking-[0.2em] font-semibold text-primary-500 dark:text-primary-300">
           About
         </Text>
@@ -79,9 +79,9 @@ export default async function AboutPage() {
                   >
                     <span
                       aria-hidden="true"
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-100 text-xs font-semibold tracking-wide text-primary-700 dark:bg-primary-950/60 dark:text-primary-200"
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white text-xs font-semibold tracking-wide text-primary-700 dark:bg-primary-950/60 dark:text-primary-200"
                     >
-                      {getPlaceholderIconText(tool.label)}
+                      {tool.icon ? tool.icon() : getPlaceholderIconText(tool.label)}
                     </span>
 
                     <Text size="small" className="mb-0 font-medium text-main-light dark:text-main-dark">
