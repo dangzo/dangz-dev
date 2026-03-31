@@ -3,6 +3,23 @@ import { kebabCase } from 'lodash-es';
 import aboutMeData from '@/data/aboutMeData';
 import siteMetadata from '@/data/siteMetadata';
 
+const getPlaceholderIconText = (tool: string) => {
+  const words = tool
+    .replace(/[()./]/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean);
+
+  if (words.length === 1) {
+    return words[0].slice(0, 2).toUpperCase();
+  }
+
+  return words
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join('')
+    .toUpperCase();
+};
+
 
 export default async function AboutPage() {
   const { skills, experience } = aboutMeData;
@@ -46,14 +63,33 @@ export default async function AboutPage() {
           Tools I trust
         </Heading>
 
-        <ul className="space-y-4">
-          {skills.map(({ value, label }) => (
+        <ul className="grid gap-5 md:grid-cols-2">
+          {skills.map(({ items, label }) => (
             <li
               key={kebabCase(label)}
-              className="rounded-xl border border-border-light/60 dark:border-border-dark/60 px-5 py-4"
+              className="rounded-2xl border border-border-light/60 dark:border-border-dark/60 bg-background-secondary-light/70 dark:bg-background-secondary-dark/40 p-5"
             >
-              <Heading as="h4">{label}</Heading>
-              <Text className="mb-0">{value}</Text>
+              <Heading as="h4" className="mb-4">{label}</Heading>
+
+              <ul className="grid grid-cols-2 gap-3 xl:grid-cols-3">
+                {items.map((tool) => (
+                  <li
+                    key={kebabCase(`${label}-${tool}`)}
+                    className="flex items-center gap-3 rounded-xl px-3 py-3"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-100 text-xs font-semibold tracking-wide text-primary-700 dark:bg-primary-950/60 dark:text-primary-200"
+                    >
+                      {getPlaceholderIconText(tool)}
+                    </span>
+
+                    <Text size="small" className="mb-0 font-medium text-main-light dark:text-main-dark">
+                      {tool}
+                    </Text>
+                  </li>
+                ))}
+              </ul>
             </li>
           ))}
         </ul>

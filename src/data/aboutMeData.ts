@@ -1,27 +1,65 @@
 const skills = [
   {
     label: 'Frameworks & Languages',
-    value: 'React, Vue (Options and Composition API), Next.js, Nuxt.js, TypeScript, JavaScript (ES6+)'    
+    items: [
+      'React',
+      'Vue',
+      'TypeScript',
+      'JavaScript',
+      'Next.js',
+      'Nuxt.js',
+    ],
   },
   {
     label: 'State Management',
-    value: 'Redux, Zustand, Jotai, Pinia, Vuex'    
+    items: [
+      'Redux',
+      'Zustand',
+      'Jotai',
+      'Pinia',
+      'Vuex',
+    ],
   },
   {
     label: 'Build Tools & Component Development',
-    value: 'Storybook, Vite, Webpack, component-driven development'    
+    items: [
+      'Storybook',
+      'Vite',
+      'Webpack',
+      'Docker',
+      'CI/CD pipelines',
+    ],
   },
   {
     label: 'APIs & Data Visualization',
-    value: 'GraphQL, REST, Highcharts, AgGrid'    
+    items: [
+      'GraphQL',
+      'REST',
+      'React Query',
+      'Axios',
+      'D3.js, Highcharts',
+      'AG Grid',
+    ],
   },
   {
     label: 'Testing & Quality Assurance',
-    value: 'Jest / Vitest, Testing Library, Cypress and Playwright'    
+    items: [
+      'Jest',
+      'Vitest',
+      'Testing Library',
+      'Cypress, Playwright',
+    ],
   },
   {
     label: 'Design & Workflow',
-    value: 'Tailwind, SCSS/SASS, Figma, design systems, Agile workflows'    
+    items: [
+      'Tailwind CSS',
+      'SCSS, Sass',
+      'CSS-in-JS',
+      'Figma',
+      'Design systems',
+      'Agile workflows',
+    ],
   },
 ];
 
