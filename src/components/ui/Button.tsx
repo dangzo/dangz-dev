@@ -2,11 +2,12 @@
 
 import clsx from 'clsx';
 import NextLink from 'next/link';
+import React from 'react';
 
 export type ButtonType = 'primary' | 'secondary' | 'ghost';
 export type ButtonSize = 'small' | 'medium' | 'large';
 
-interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
+interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement> & React.AnchorHTMLAttributes<HTMLAnchorElement>, 'type'> {
   type?: ButtonType;
   size?: ButtonSize;
   to?: string;
@@ -30,12 +31,13 @@ const Button = ({
 }: ButtonProps) => {
   const classNames = clsx([
     'cursor-pointer inline-block text-center transition-all duration-300 font-semibold',
+    
     // Size styles
     { 'px-4 py-2 text-xs': size === 'small' },
     { 'px-6 py-2.5 text-sm': size === 'medium' },
     { 'px-8 py-3 text-md': size === 'large' },
+    
     // Type styles
-
     {
       'rounded-lg border-2 border-gray-400 text-gray-500 hover:text-main-light hover:border-main-light dark:border-gray-400 dark:hover:border-primary-400 dark:hover:text-primary-400':
         type === 'ghost'
