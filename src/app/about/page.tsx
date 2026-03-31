@@ -32,8 +32,8 @@ export default async function AboutPage() {
         </Text>
 
         <div className="flex flex-wrap items-center gap-3 mt-3">
-          <Button to="/blog" type="primary" size="medium">
-            Read the blog
+          <Button to={siteMetadata.resume} download type="primary" size="medium">
+            Download my resume
           </Button>
           <Button to={siteMetadata.linkedin} type="ghost" size="medium">
             Connect on LinkedIn
