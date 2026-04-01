@@ -9,13 +9,13 @@ export default async function AboutPage() {
   const devYears = new Date().getFullYear() - 2013;
 
   return (
-    <article className="mx-auto py-4 md:py-12">
-      <section className="mb-12 md:mb-44">
+    <article className="mx-auto sm:py-4 md:py-12">
+      <section className="mb-16 md:mb-44">
         <Text size="small" className="hidden sm:block uppercase tracking-[0.2em] font-semibold text-primary-500 dark:text-primary-300">
           About
         </Text>
 
-        <Heading as="h1" className="max-w-4xl mb-6">
+        <Heading as="h1" className="max-w-3xl mb-6">
           <span className="block text-3xl md:text-4xl lg:text-6xl leading-loose">Hi, I'm Daniele.</span>
           <span className="block text-xl md:text-2xl lg:text-4xl">I craft frontend solutions that help teams ship and products scale.</span>
         </Heading>
@@ -40,12 +40,12 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="mb-16 md:mb-20">
-        <Heading as="h2" className="mb-8">
+      <section className="mb-8 sm:mb-16 md:mb-20">
+        <Heading as="h2"className="mb-6 sm:mb-0!">
           Tools I trust
         </Heading>
 
-        <ul className="grid gap-5 md:grid-cols-2">
+        <ul className="grid gap-2 sm:gap-4 md:gap-5 md:grid-cols-2">
           {skills.map(({ items, label }) => (
             <li
               key={kebabCase(label)}
@@ -53,7 +53,7 @@ export default async function AboutPage() {
             >
               <Heading as="h4" className="mb-4">{label}</Heading>
 
-              <ul className="grid grid-cols-2 gap-3 xl:grid-cols-3">
+              <ul className="grid grid-cols-2 gap-2 sm:gap-3 xl:grid-cols-3">
                 {items.map((tool) => (
                   <li
                     key={kebabCase(`${label}-${tool.label}`)}
@@ -81,12 +81,18 @@ export default async function AboutPage() {
         </ul>
       </section>
 
-      <section className="mb-16 md:mb-20">
-        <Heading as="h2" className="mb-8">
+      <section className="mb-8 sm:mb-16 md:mb-20">
+        <Heading as="h2" className="mb-6 sm:mb-0!">
           My journey so far
         </Heading>
 
-        <div className="space-y-4">
+        <div className="hidden sm:block mb-4 md:mb-5 text-end">
+          <Button to={siteMetadata.resume} download type="ghost" size="small">
+            Download my resume
+          </Button>
+        </div>
+
+        <div className="space-y-2 sm:space-y-4">
           {experience.map((item) => (
             <div
               key={`${item.company}-${item.period}`}
@@ -109,8 +115,12 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-primary-300/40 dark:border-primary-500/40 bg-primary-100/40 dark:bg-primary-900/20 p-6 md:p-8">
-        <Heading as="h2" className="mb-4">
+      <section 
+        className="
+          rounded-2xl border border-primary-300/40 dark:border-primary-500/40 bg-primary-100/40 dark:bg-primary-900/20 p-6 md:p-8
+        "
+      >
+        <Heading as="h2" className="mb-6 sm:mb-0!">
           Beyond the stack
         </Heading>
 
