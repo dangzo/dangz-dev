@@ -25,7 +25,7 @@ export default function PortableText({ value }: PortableTextProps) {
   };
 
   return (
-    <div className="prose prose-sm sm:prose-base dark:prose-invert max-w-none font-body break-words">
+    <div className="prose prose-sm sm:prose-base dark:prose-invert max-w-none font-body wrap-break-words">
       <SanityPortableText value={value} components={portableTextComponents} />
     </div>
   );

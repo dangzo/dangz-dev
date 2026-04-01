@@ -41,7 +41,7 @@ export default async function AboutPage() {
       </section>
 
       <section className="mb-8 sm:mb-16 md:mb-20">
-        <Heading as="h2"className="mb-6 sm:mb-0!">
+        <Heading as="h2">
           Tools I trust
         </Heading>
 
@@ -70,7 +70,7 @@ export default async function AboutPage() {
                       {tool.icon({ height: 38, width: 38 })}
                     </span>
 
-                    <Text size="small" className="mb-0 font-medium text-main-light dark:text-main-dark">
+                    <Text size="small" className="mb-0! font-medium text-main-light dark:text-main-dark">
                       {tool.label}
                     </Text>
                   </li>
