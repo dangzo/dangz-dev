@@ -19,18 +19,18 @@ export default async function BlogSlugHeading({ params }: { params: Promise<{ sl
 
   return (
     <>
-      <Heading as="h1">
+      <Heading as="h1" className="text-3xl md:text-4xl lg:text-5xl mb-4 md:mb-6">
         {post.title || '(Untitled)'}
       </Heading>
       
-      <div className="flex flex-row items-center">
-        <DateText date={post.publishedAt} className="mb-0!" />
+      <div className="flex flex-wrap flex-col sm:flex-row sm:items-center gap-x-1 gap-y-1 text-sm md:text-base">
+        <div className="flex flex-row items-center gap-x-1">
+          <DateText date={post.publishedAt} className="mb-0!" />
+          <span className="mx-2">&bull;</span>
+          <ReadingTimeText postBody={post.body} className='mb-0!' />
+        </div>
 
-        <span className="mx-2">&bull;</span>
-
-        <ReadingTimeText postBody={post.body} className='mb-0!' />
-
-        <span className="mx-2">&bull;</span>
+        <span className="hidden sm:inline mx-2">&bull;</span>
         
         <TagList tags={post.tags} />
       </div>
