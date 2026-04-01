@@ -25,16 +25,16 @@ const Prompt = () => {
   return (
     <h1
       className="
-        relative top-0.5 xl:top-0
-        hidden sm:flex w-max [&>span]:font-mono font-semibold
-        text-sm md:text-md mt-4 md:mt-0
+        relative top-0
+        sm:flex w-max [&>span]:font-mono font-semibold
+        text-sm md:text-md mt-0
         [text-shadow:0_0_5px_rgba(150,150,150,0.3)]
         dark:[text-shadow:0_0_5px_rgba(255,255,255,0.3)]
       "
     >
-      <span>guest&#64;dangz.dev:&nbsp;</span>
+      <span className="hidden sm:inline-block">guest&#64;dangz.dev:&nbsp;</span>
       <span className={pathnameClasses} style={typewriterStyle} key={fullPath}>
-        <span className='animate-typewriter inline-block'>
+        <span className='inline-block animate-typewriter'>
           <Link href="/" className={linkClasses}>
             ~
           </Link>

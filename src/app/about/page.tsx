@@ -27,7 +27,7 @@ export default async function AboutPage() {
   const devYears = new Date().getFullYear() - 2013;
 
   return (
-    <article className="max-w-5xl mx-auto px-4 py-8 md:py-12">
+    <article className="mx-auto py-8 md:py-12">
       <section className="mb-16 md:mb-44">
         <Text size="small" className="uppercase tracking-[0.2em] font-semibold text-primary-500 dark:text-primary-300">
           About

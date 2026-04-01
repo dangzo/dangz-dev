@@ -1,13 +1,21 @@
+ 'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import headerNavLinks from '@/data/headerNavLinks';
 import SearchButton from './SearchButton';
 import ThemeSwitch from './ThemeSwitch';
 import HeaderLogo from './Prompt';
 
-const Navigation = () => {
+type NavigationProps = {
+  onNavigate?: () => void;
+  className?: string;
+};
+
+const Navigation = ({ onNavigate, className = '' }: NavigationProps) => {
   return (
-    <nav>
-      <ul className="flex flex-row gap-4">
+    <nav className={className}>
+      <ul className="flex flex-col md:flex-row gap-4">
         {headerNavLinks.map((link) => (
           <li key={link.title}>
             <Link
@@ -16,6 +24,7 @@ const Navigation = () => {
                 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-50
               "
               href={link.href}
+              onClick={onNavigate}
             >
               <span className="relative z-10">
                 {link.title}
@@ -40,16 +49,65 @@ const ActionBtns = () => {
   );
 };
 
-export const Header = () => {
+const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+  const closeMenu = () => setIsMenuOpen(false);
+
   return (
     <header
-      className="flex flex-col-reverse md:flex-row items-center bg-transparent backdrop-blur-sm justify-between py-8"
+      className="bg-transparent backdrop-blur-sm py-8"
     >
-      <HeaderLogo />
-      <div className="flex flex-row items-center gap-10">
-        <Navigation />
-        <ActionBtns />
+      <div className="flex items-center justify-between gap-4">
+        <HeaderLogo />
+
+        <div className="flex items-center gap-3">
+          <div className="hidden md:block">
+            <Navigation />
+          </div>
+
+          <ActionBtns />
+
+          <button
+            type="button"
+            aria-label="Toggle navigation menu"
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-nav-menu"
+            onClick={toggleMenu}
+            className="md:hidden rounded-md border border-dashed px-3 py-2 dark:border-border-dark border-border-light text-gray-700 dark:text-gray-200 hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              className="h-5 w-5"
+            >
+              {isMenuOpen
+                ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                )
+                : (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                )}
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div
+        id="mobile-nav-menu"
+        className={`md:hidden overflow-hidden transition-all duration-200 ease-out ${isMenuOpen ? 'max-h-64 opacity-100 mt-4' : 'max-h-0 opacity-0 mt-0'}`}
+      >
+        <Navigation
+          onNavigate={closeMenu}
+          className="border border-dashed rounded-md p-4 dark:border-border-dark border-border-light"
+        />
       </div>
     </header>
   );
 };
+
+export default Header;
