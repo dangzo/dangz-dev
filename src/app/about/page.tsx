@@ -79,7 +79,7 @@ export default async function AboutPage() {
                   >
                     <span
                       aria-hidden="true"
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white text-xs font-semibold tracking-wide text-primary-700 dark:bg-primary-950/60 dark:text-primary-200"
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white text-xs font-semibold tracking-wide text-primary-700 dark:bg-primary-100 dark:text-primary-200"
                     >
                       {tool.icon ? tool.icon() : getPlaceholderIconText(tool.label)}
                     </span>
