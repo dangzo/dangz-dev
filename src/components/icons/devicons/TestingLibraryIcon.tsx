@@ -5,76 +5,76 @@ function TestingLibraryIcon(svgProps: SVGProps<SVGSVGElement>) {
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" {...svgProps}>
       <defs xmlns="http://www.w3.org/2000/svg">
         <radialGradient cx="50.279%" cy="49.8468745%" fx="50.279%" fy="49.8468745%" r="50.334%" gradientTransform="translate(0.502790,0.498469),scale(1.000000,0.992517),translate(-0.502790,-0.498469)" id="radialGradient-1">
-            <stop stop-color="#E33332" offset="0%"/>
-            <stop stop-color="#E03330" offset="20%"/>
-            <stop stop-color="#D52E2C" offset="38%"/>
-            <stop stop-color="#C32827" offset="54%"/>
-            <stop stop-color="#A91F23" offset="71%"/>
-            <stop stop-color="#89181A" offset="86%"/>
-            <stop stop-color="#640E0E" offset="100%"/>
+            <stop stopColor="#E33332" offset="0%"/>
+            <stop stopColor="#E03330" offset="20%"/>
+            <stop stopColor="#D52E2C" offset="38%"/>
+            <stop stopColor="#C32827" offset="54%"/>
+            <stop stopColor="#A91F23" offset="71%"/>
+            <stop stopColor="#89181A" offset="86%"/>
+            <stop stopColor="#640E0E" offset="100%"/>
         </radialGradient>
         <linearGradient x1="0.003%" y1="49.969%" x2="100%" y2="49.969%" id="linearGradient-2">
-            <stop stop-color="#F7B3C5" offset="0%"/>
-            <stop stop-color="#F7B0C2" offset="19%"/>
-            <stop stop-color="#F6A4B6" offset="38%"/>
-            <stop stop-color="#F390A5" offset="58%"/>
-            <stop stop-color="#E7728B" offset="79%"/>
-            <stop stop-color="#DC4D6C" offset="99%"/>
-            <stop stop-color="#DA4B6A" offset="100%"/>
+            <stop stopColor="#F7B3C5" offset="0%"/>
+            <stop stopColor="#F7B0C2" offset="19%"/>
+            <stop stopColor="#F6A4B6" offset="38%"/>
+            <stop stopColor="#F390A5" offset="58%"/>
+            <stop stopColor="#E7728B" offset="79%"/>
+            <stop stopColor="#DC4D6C" offset="99%"/>
+            <stop stopColor="#DA4B6A" offset="100%"/>
         </linearGradient>
         <linearGradient x1="0.025%" y1="26.463%" x2="100.015%" y2="26.463%" id="linearGradient-3">
-            <stop stop-color="#F7B3C5" offset="0%"/>
-            <stop stop-color="#F7B0C2" offset="19%"/>
-            <stop stop-color="#F6A4B6" offset="38%"/>
-            <stop stop-color="#F390A5" offset="58%"/>
-            <stop stop-color="#E7728B" offset="79%"/>
-            <stop stop-color="#DC4D6C" offset="99%"/>
-            <stop stop-color="#DA4B6A" offset="100%"/>
+            <stop stopColor="#F7B3C5" offset="0%"/>
+            <stop stopColor="#F7B0C2" offset="19%"/>
+            <stop stopColor="#F6A4B6" offset="38%"/>
+            <stop stopColor="#F390A5" offset="58%"/>
+            <stop stopColor="#E7728B" offset="79%"/>
+            <stop stopColor="#DC4D6C" offset="99%"/>
+            <stop stopColor="#DA4B6A" offset="100%"/>
         </linearGradient>
         <radialGradient cx="50.879%" cy="49.5849298%" fx="50.879%" fy="49.5849298%" r="91.636%" gradientTransform="translate(0.508790,0.495849),scale(1.000000,0.419379),translate(-0.508790,-0.495849)" id="radialGradient-4">
-            <stop stop-color="#F7B3C5" offset="0%"/>
-            <stop stop-color="#F7B0C2" offset="19%"/>
-            <stop stop-color="#F6A4B6" offset="38%"/>
-            <stop stop-color="#F390A5" offset="58%"/>
-            <stop stop-color="#E7728B" offset="79%"/>
-            <stop stop-color="#DC4D6C" offset="99%"/>
-            <stop stop-color="#DA4B6A" offset="100%"/>
+            <stop stopColor="#F7B3C5" offset="0%"/>
+            <stop stopColor="#F7B0C2" offset="19%"/>
+            <stop stopColor="#F6A4B6" offset="38%"/>
+            <stop stopColor="#F390A5" offset="58%"/>
+            <stop stopColor="#E7728B" offset="79%"/>
+            <stop stopColor="#DC4D6C" offset="99%"/>
+            <stop stopColor="#DA4B6A" offset="100%"/>
         </radialGradient>
         <radialGradient cx="50.5432107%" cy="49.742%" fx="50.5432107%" fy="49.742%" r="56.1219498%" gradientTransform="translate(0.505432,0.497420),scale(0.815587,1.000000),translate(-0.505432,-0.497420)" id="radialGradient-5">
-            <stop stop-color="#F7B3C5" offset="0%"/>
-            <stop stop-color="#F7B0C2" offset="19%"/>
-            <stop stop-color="#F6A4B6" offset="38%"/>
-            <stop stop-color="#F390A5" offset="58%"/>
-            <stop stop-color="#E7728B" offset="79%"/>
-            <stop stop-color="#DC4D6C" offset="99%"/>
-            <stop stop-color="#DA4B6A" offset="100%"/>
+            <stop stopColor="#F7B3C5" offset="0%"/>
+            <stop stopColor="#F7B0C2" offset="19%"/>
+            <stop stopColor="#F6A4B6" offset="38%"/>
+            <stop stopColor="#F390A5" offset="58%"/>
+            <stop stopColor="#E7728B" offset="79%"/>
+            <stop stopColor="#DC4D6C" offset="99%"/>
+            <stop stopColor="#DA4B6A" offset="100%"/>
         </radialGradient>
         <linearGradient x1="0%" y1="49.997%" x2="99.996%" y2="49.997%" id="linearGradient-6">
-            <stop stop-color="#DA4B6A" offset="0%"/>
-            <stop stop-color="#DC4D6C" offset="1%"/>
-            <stop stop-color="#E7728B" offset="21%"/>
-            <stop stop-color="#F390A5" offset="42%"/>
-            <stop stop-color="#F6A4B6" offset="62%"/>
-            <stop stop-color="#F7B0C2" offset="81%"/>
-            <stop stop-color="#F7B3C5" offset="100%"/>
+            <stop stopColor="#DA4B6A" offset="0%"/>
+            <stop stopColor="#DC4D6C" offset="1%"/>
+            <stop stopColor="#E7728B" offset="21%"/>
+            <stop stopColor="#F390A5" offset="42%"/>
+            <stop stopColor="#F6A4B6" offset="62%"/>
+            <stop stopColor="#F7B0C2" offset="81%"/>
+            <stop stopColor="#F7B3C5" offset="100%"/>
         </linearGradient>
         <linearGradient x1="-0.004%" y1="26.478%" x2="99.975%" y2="26.478%" id="linearGradient-7">
-            <stop stop-color="#DA4B6A" offset="0%"/>
-            <stop stop-color="#DC4D6C" offset="1%"/>
-            <stop stop-color="#E7728B" offset="21%"/>
-            <stop stop-color="#F390A5" offset="42%"/>
-            <stop stop-color="#F6A4B6" offset="62%"/>
-            <stop stop-color="#F7B0C2" offset="81%"/>
-            <stop stop-color="#F7B3C5" offset="100%"/>
+            <stop stopColor="#DA4B6A" offset="0%"/>
+            <stop stopColor="#DC4D6C" offset="1%"/>
+            <stop stopColor="#E7728B" offset="21%"/>
+            <stop stopColor="#F390A5" offset="42%"/>
+            <stop stopColor="#F6A4B6" offset="62%"/>
+            <stop stopColor="#F7B0C2" offset="81%"/>
+            <stop stopColor="#F7B3C5" offset="100%"/>
         </linearGradient>
         <radialGradient cx="51.992%" cy="49.5817659%" fx="51.992%" fy="49.5817659%" r="91.664%" gradientTransform="translate(0.519920,0.495818),scale(1.000000,0.419250),translate(-0.519920,-0.495818)" id="radialGradient-8">
-            <stop stop-color="#F7B3C5" offset="0%"/>
-            <stop stop-color="#F7B0C2" offset="19%"/>
-            <stop stop-color="#F6A4B6" offset="38%"/>
-            <stop stop-color="#F390A5" offset="58%"/>
-            <stop stop-color="#E7728B" offset="79%"/>
-            <stop stop-color="#DC4D6C" offset="99%"/>
-            <stop stop-color="#DA4B6A" offset="100%"/>
+            <stop stopColor="#F7B3C5" offset="0%"/>
+            <stop stopColor="#F7B0C2" offset="19%"/>
+            <stop stopColor="#F6A4B6" offset="38%"/>
+            <stop stopColor="#F390A5" offset="58%"/>
+            <stop stopColor="#E7728B" offset="79%"/>
+            <stop stopColor="#DC4D6C" offset="99%"/>
+            <stop stopColor="#DA4B6A" offset="100%"/>
         </radialGradient>
     </defs>
     <g xmlns="http://www.w3.org/2000/svg">
