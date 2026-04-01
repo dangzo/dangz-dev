@@ -50,6 +50,7 @@ import PiniaIcon from './devicons/PiniaIcon';
 import JotaiIcon from './devicons/JotaiIcon';
 import DesignComponentsIcon from './devicons/DesignComponentsIcon';
 import ScrumIcon from './devicons/ScrumIcon';
+import SwaggerIcon from './devicons/SwaggerIcon';
 import TestingLibraryIcon from './devicons/TestingLibraryIcon';
 
 const components = {
@@ -85,7 +86,6 @@ const components = {
   nextjs: NextjsIcon,
   nuxtjs: NuxtjsIcon,
   vscode: VSCodeIcon,
-  'react-query': ReactQueryIcon,
   jest: JestIcon,
   vitest: VitestIcon,
   cypress: CypressIcon,
@@ -102,8 +102,10 @@ const components = {
   vite: ViteIcon,
   jotai: JotaiIcon,
   pinia: PiniaIcon,
-  'design-components': DesignComponentsIcon,
   agile: ScrumIcon,
+  swagger: SwaggerIcon,
+  'react-query': ReactQueryIcon,
+  'design-components': DesignComponentsIcon,
   'testing-library': TestingLibraryIcon,
 };
 
@@ -114,17 +116,20 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
   size?: number;
 };
 
-const Icon = ({ icon, href, size = 8, className, ...rest }: IconProps) => {
+const IconWrapper = ({ icon, size, ...rest }: React.SVGProps<SVGSVGElement> & { size?: number; icon: keyof typeof components }) => {
   const SVGIcon = components[icon];
-  const IconWrapper = ({ ...rest }: React.SVGProps<SVGSVGElement>) => (
+
+  return (
     <SVGIcon
       width={size}
       height={size}
       {...rest}
     />
   );
+};
 
-  if (!href) return <IconWrapper {...rest} />;
+const Icon = ({ icon, href, size = 8, className, ...rest }: IconProps) => {
+  if (!href) return <IconWrapper icon={icon} size={size} {...rest} />;
 
   return (
     <Link
@@ -135,6 +140,7 @@ const Icon = ({ icon, href, size = 8, className, ...rest }: IconProps) => {
     >
       <span className="sr-only">{icon}</span>
       <IconWrapper
+        icon={icon}
         className={clsx(`
           h-${size} w-${size}
           fill-current transition-colors duration-300
