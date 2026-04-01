@@ -6,13 +6,13 @@ function ViteIcon(svgProps: SVGProps<SVGSVGElement>) {
       
     <defs xmlns="http://www.w3.org/2000/svg">
       <linearGradient x1="-0.828097821%" y1="7.6518539%" x2="57.6359644%" y2="78.4107719%" id="linearGradient-1">
-        <stop stop-color="#41D1FF" offset="0%" />
-        <stop stop-color="#BD34FE" offset="100%" />
+        <stop stopColor="#41D1FF" offset="0%" />
+        <stop stopColor="#BD34FE" offset="100%" />
         </linearGradient>
         <linearGradient x1="43.3760053%" y1="2.24179788%" x2="50.3158848%" y2="89.0299051%" id="linearGradient-2">
-          <stop stop-color="#FFEA83" offset="0%" />
-          <stop stop-color="#FFDD35" offset="8.33333%" />
-          <stop stop-color="#FFA800" offset="100%" />
+          <stop stopColor="#FFEA83" offset="0%" />
+          <stop stopColor="#FFDD35" offset="8.33333%" />
+          <stop stopColor="#FFA800" offset="100%" />
       </linearGradient>
     </defs>
     <g xmlns="http://www.w3.org/2000/svg">

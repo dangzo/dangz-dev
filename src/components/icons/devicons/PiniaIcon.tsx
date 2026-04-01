@@ -21,20 +21,20 @@ function PiniaIcon(svgProps: SVGProps<SVGSVGElement>) {
       <path xmlns="http://www.w3.org/2000/svg" fill="#ffc73b" d="M50.4483 37.0677c.4185.4184.4185 1.0968 0 1.5152l-4.9889 4.9891 3.0409 3.041c.4068.4068.4181 1.0594.0339 1.4798l-.0339.0355c-.4184.4184-1.0968.4184-1.5152 0l-3.041-3.0409-3.0411 3.0409c-.4184.4184-1.0968.4184-1.5152 0-.4184-.4185-.4184-1.0968 0-1.5153l3.0409-3.041-4.9889-4.9891c-.4068-.4068-.4181-1.0593-.0339-1.4797l.0339-.0355c.4184-.4184 1.0968-.4184 1.5152 0l4.9891 4.9889 4.989-4.9889c.4185-.4184 1.0968-.4184 1.5152 0Z"/>
       <defs xmlns="http://www.w3.org/2000/svg">
         <linearGradient id="a" x1="999.028" x2="1322.02" y1="-748.436" y2="819.057" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#52ce63"/>
-          <stop offset="1" stop-color="#51a256"/>
+          <stop stopColor="#52ce63"/>
+          <stop offset="1" stopColor="#51a256"/>
         </linearGradient>
         <linearGradient id="b" x1="842.523" x2="-725.153" y1="1002.32" y2="1324.95" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#52ce63"/>
-          <stop offset="1" stop-color="#51a256"/>
+          <stop stopColor="#52ce63"/>
+          <stop offset="1" stopColor="#51a256"/>
         </linearGradient>
         <linearGradient id="c" x1="1036.61" x2="735.026" y1="123.263" y2="2579.44" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#8ae99c"/>
-          <stop offset="1" stop-color="#52ce63"/>
+          <stop stopColor="#8ae99c"/>
+          <stop offset="1" stopColor="#52ce63"/>
         </linearGradient>
         <linearGradient id="d" x1="3027.09" x2="2540.32" y1="1163.56" y2="6509" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#ffe56c"/>
-          <stop offset="1" stop-color="#ffc63a"/>
+          <stop stopColor="#ffe56c"/>
+          <stop offset="1" stopColor="#ffc63a"/>
         </linearGradient>
       </defs>
     </svg>
