@@ -3,24 +3,6 @@ import { kebabCase } from 'lodash-es';
 import aboutMeData from '@/data/aboutMeData';
 import siteMetadata from '@/data/siteMetadata';
 
-const getPlaceholderIconText = (tool: string) => {
-  const words = tool
-    .replace(/[()./]/g, ' ')
-    .split(/\s+/)
-    .filter(Boolean);
-
-  if (words.length === 1) {
-    return words[0].slice(0, 2).toUpperCase();
-  }
-
-  return words
-    .slice(0, 2)
-    .map((word) => word[0])
-    .join('')
-    .toUpperCase();
-};
-
-
 export default async function AboutPage() {
   const { skills, experience } = aboutMeData;
 
@@ -79,9 +61,13 @@ export default async function AboutPage() {
                   >
                     <span
                       aria-hidden="true"
-                      className="flex h-8 w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-lg bg-white text-xs font-semibold tracking-wide text-primary-700 dark:bg-primary-100 dark:text-primary-200"
+                      className="
+                        h-8 w-8 md:h-10 md:w-10 lg:h-12 lg:w-12
+                        flex shrink-0 items-center justify-center rounded-lg
+                        bg-white text-primary-700 dark:bg-neutral-100 dark:text-primary-200
+                      "
                     >
-                      {tool.icon ? tool.icon() : getPlaceholderIconText(tool.label)}
+                      {tool.icon({ height: 38, width: 38 })}
                     </span>
 
                     <Text size="small" className="mb-0 font-medium text-main-light dark:text-main-dark">
