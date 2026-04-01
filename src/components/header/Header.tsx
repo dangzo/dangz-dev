@@ -1,4 +1,4 @@
- 'use client';
+'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -77,7 +77,7 @@ const HamburgerMenu = ({ isMenuOpen, toggleMenu }: { isMenuOpen: boolean; toggle
       </svg>
     </button>
   );
-}
+};
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

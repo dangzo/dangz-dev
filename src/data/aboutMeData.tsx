@@ -45,6 +45,7 @@ const skills = [
       { icon: ({ ...props }) => <Icon icon="react-query" {...props} />, label: 'React Query' },
       { icon: ({ ...props }) => <Icon icon="highcharts" {...props} />, label: 'Highcharts' },
       { icon: ({ ...props }) => <Icon icon="aggrid" {...props} />, label: 'AG Grid' },
+      { icon: ({ ...props }) => <Icon icon="swagger" {...props} />, label: 'Swagger, OpenAPI' },
     ],
   },
   {
