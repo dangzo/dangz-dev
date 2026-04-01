@@ -5,8 +5,6 @@ const config: Config = {
     './src/**/*.{js,ts,jsx,tsx,mdx}',
     './public/**/*.{svg,html}',
   ],
-  theme: {
-  },
   darkMode: 'class',
   plugins: [],
 };

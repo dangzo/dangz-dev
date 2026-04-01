@@ -21,7 +21,7 @@ export const PostCardSkeleton = () => {
 
 export const PostCard = ({ post }: { post: PostWithTags }) => {
   return (
-    <article className="flex flex-col-reverse md:flex-row relative items-center">
+    <article className="flex flex-col-reverse sm:flex-row relative sm:items-center">
       <div>
         <Link
           href={`/blog/${post.slug?.current}`}
@@ -32,9 +32,9 @@ export const PostCard = ({ post }: { post: PostWithTags }) => {
           </Heading>
         </Link>
 
-        <div className="flex flex-row items-center">
-          <DateText date={post.publishedAt} className="mb-0!" />
-          <span className="mx-2">&bull;</span>
+        <div className="flex flex-col sm:flex-row sm:items-center">
+          <DateText date={post.publishedAt} className="sm:mb-0!" />
+          <span className="hidden sm:inline mx-2">&bull;</span>
           <TagList tags={post.tags} />
         </div>
 
@@ -58,7 +58,7 @@ export const PostCard = ({ post }: { post: PostWithTags }) => {
       <Img
         source={post.image}
         alt={post.imageAltText}
-        className="object-cover rounded-md ml-4 hidden sm:block sm:w-38 md:h-24 w-20 h-16"
+        className="object-cover rounded-md block sm:ml-4 sm:w-38 md:h-24 w-20 h-16 mb-2 sm:mb-0"
         width={150}
         height={96}
       />

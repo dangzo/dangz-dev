@@ -4,7 +4,7 @@ import Icon from '@/components/icons/Icon';
 export default function Footer() {
   return (
     <footer>
-      <div className="mt-16 mb-4 flex flex-col items-center">
+      <div className="mt-8 pt-8 border-t sm:border-0 mb-4 sm:mb-0 flex flex-col items-center">
         <div className="mb-3 flex space-x-4">
           <Icon icon="mail" href={`mailto:${siteMetadata.email}`} size={6} />
           <Icon icon="github" href={siteMetadata.github} size={6} />

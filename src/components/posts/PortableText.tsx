@@ -14,18 +14,18 @@ export default function PortableText({ value }: PortableTextProps) {
     block: {
       h2: ({ children }: { children?: React.ReactNode }) => {
         const id = getHeadingId(getNodeText(children));
-        return <Heading as="h2" id={id} className="scroll-mt-24">{children}</Heading>;
+        return <Heading as="h2" id={id}>{children}</Heading>;
       },
       h3: ({ children }: { children?: React.ReactNode }) => {
         const id = getHeadingId(getNodeText(children));
-        return <Heading as="h3" id={id} className="scroll-mt-24">{children}</Heading>;
+        return <Heading as="h3" id={id}>{children}</Heading>;
       },
       normal: ({ children }: { children?: React.ReactNode }) => <Text>{children}</Text>,
     },
   };
 
   return (
-    <div className="prose dark:prose-invert max-w-none font-body">
+    <div className="prose prose-sm sm:prose-base dark:prose-invert max-w-none font-body break-words">
       <SanityPortableText value={value} components={portableTextComponents} />
     </div>
   );

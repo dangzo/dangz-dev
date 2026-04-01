@@ -27,15 +27,15 @@ export default async function AboutPage() {
   const devYears = new Date().getFullYear() - 2013;
 
   return (
-    <article className="mx-auto py-8 md:py-12">
-      <section className="mb-16 md:mb-44">
-        <Text size="small" className="uppercase tracking-[0.2em] font-semibold text-primary-500 dark:text-primary-300">
+    <article className="mx-auto py-4 md:py-12">
+      <section className="mb-12 md:mb-44">
+        <Text size="small" className="hidden sm:block uppercase tracking-[0.2em] font-semibold text-primary-500 dark:text-primary-300">
           About
         </Text>
 
         <Heading as="h1" className="max-w-4xl mb-6">
-          <span className="block text-4xl md:text-6xl leading-loose">Hi, I'm Daniele.</span>
-          <span className="block">I craft frontend solutions that help teams ship and products scale.</span>
+          <span className="block text-3xl md:text-4xl lg:text-6xl leading-loose">Hi, I'm Daniele.</span>
+          <span className="block text-xl md:text-2xl lg:text-4xl">I craft frontend solutions that help teams ship and products scale.</span>
         </Heading>
 
         <Text size="large" className="max-w-3xl">
@@ -48,7 +48,7 @@ export default async function AboutPage() {
           and helping products move from idea to production with confidence.
         </Text>
 
-        <div className="flex flex-wrap items-center gap-3 mt-3">
+        <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 mt-3">
           <Button to={siteMetadata.resume} download type="primary" size="medium">
             Download my resume
           </Button>
@@ -67,7 +67,7 @@ export default async function AboutPage() {
           {skills.map(({ items, label }) => (
             <li
               key={kebabCase(label)}
-              className="rounded-2xl border border-border-light/60 dark:border-border-dark/60 bg-background-secondary-light/70 dark:bg-background-secondary-dark/40 p-5"
+              className="rounded-2xl border border-border-light/60 dark:border-border-dark/60 bg-background-secondary-light/70 dark:bg-background-secondary-dark/40 p-3 md:p-5"
             >
               <Heading as="h4" className="mb-4">{label}</Heading>
 
@@ -75,11 +75,11 @@ export default async function AboutPage() {
                 {items.map((tool) => (
                   <li
                     key={kebabCase(`${label}-${tool.label}`)}
-                    className="flex items-center gap-3 rounded-xl px-3 py-3"
+                    className="flex items-center gap-2 md:gap-3 rounded-xl px-2 py-2 md:px-3 md:py-3"
                   >
                     <span
                       aria-hidden="true"
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white text-xs font-semibold tracking-wide text-primary-700 dark:bg-primary-100 dark:text-primary-200"
+                      className="flex h-8 w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-lg bg-white text-xs font-semibold tracking-wide text-primary-700 dark:bg-primary-100 dark:text-primary-200"
                     >
                       {tool.icon ? tool.icon() : getPlaceholderIconText(tool.label)}
                     </span>
@@ -104,12 +104,17 @@ export default async function AboutPage() {
           {experience.map((item) => (
             <div
               key={`${item.company}-${item.period}`}
-              className="rounded-xl border border-border-light/60 dark:border-border-dark/60 p-5"
+              className="rounded-xl border border-border-light/60 dark:border-border-dark/60 p-4 md:p-5"
             >
-              <Heading as="h3" className="text-2xl mb-2">
-                {item.role} - {item.company}
+              <Heading as="h3">
+                <span className="block sm:inline">{item.role}</span>
+                <span className="hidden sm:inline"> - </span>
+                <span className="block sm:inline text-primary-600 dark:text-primary-400">{item.company}</span>
               </Heading>
-              <Text size="small" className="font-semibold text-primary-500 dark:text-primary-300 mb-3 uppercase tracking-wide">
+              <Text
+                size="x-small"
+                className="font-semibold text-primary-500 dark:text-primary-300 mb-3 uppercase tracking-wide"
+              >
                 {item.period}
               </Text>
               <Text className="mb-0">{item.summary}</Text>

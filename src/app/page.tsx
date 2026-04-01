@@ -16,11 +16,11 @@ export default async function HomePage() {
 
   return (
     <article>
-      <div className="flex justify-center flex-col items-center text-center gap-6 mt-[calc(20vh)] mb-20 px-4">
-        <Heading as="h1" className="text-7xl">
+      <div className="flex justify-center flex-col items-center text-center gap-4 md:gap-6 mt-[calc(8vh)] md:mt-[calc(18vh)] mb-10 md:mb-20 px-4">
+        <Heading as="h1" className="text-4xl md:text-5xl lg:text-7xl">
           Hi, I'm Daniele
         </Heading>
-        <Text className="max-w-xl" size="x-large">
+        <Text className="max-w-xl" size="large">
           This is where I document my journey on software engineering, share insights and write about things I enjoy.
         </Text>
 
@@ -28,7 +28,7 @@ export default async function HomePage() {
           Let's dive in
         </Button>
 
-        <div className="flex flex-row items-center gap-3 mt-10 flex-wrap justify-center">
+        <div className="flex flex-row items-center gap-2 md:gap-3 mt-6 md:mt-10 flex-wrap justify-center">
           {topTags && topTags.length > 0
             ? (
               topTags.map(tag => (

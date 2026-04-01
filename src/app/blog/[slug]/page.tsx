@@ -16,12 +16,12 @@ export default async function PostPage({
   }
 
   return (
-    <article className="max-w-3xl mx-auto p-4">
-      <div className="mb-8 rounded-lg overflow-hidden">
+    <article className="max-w-3xl mx-auto px-3 py-4 sm:px-4 sm:py-6 md:py-8">
+      <div className="mb-5 sm:mb-6 md:mb-8 rounded-lg overflow-hidden">
         <Img
           source={post.image}
           alt={post.imageAltText}
-          className="w-full h-auto object-cover"
+          className="w-full h-auto aspect-[16/9] object-cover"
           width={700}
           height={350}
         />
