@@ -2,7 +2,7 @@
 
 import { Button, Heading, Text } from '@/components/ui';
 import aboutMeData from '@/data/aboutMeData';
-import siteMetadata from '@/data/siteMetadata';
+import { links } from '@/data/siteMetadata';
 import useAnalytics from '@/hooks/useAnalytics';
 
 const { experience } = aboutMeData;
@@ -18,7 +18,7 @@ function MyJourneySoFar() {
 
       <div className="hidden sm:block mb-4 md:mb-5 text-end">
         <Button
-          to={siteMetadata.resume}
+          to={links.resumeURL}
           download
           type="ghost"
           size="small"

@@ -2,7 +2,7 @@
 
 import { Button, Heading, Text } from '@/components/ui';
 import useAnalytics from '@/hooks/useAnalytics';
-import siteMetadata from '@/data/siteMetadata';
+import { links } from '@/data/siteMetadata';
 
 const devYears = new Date().getFullYear() - 2013;
 
@@ -39,7 +39,7 @@ function IntroTextAndCTAs() {
 
       <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 mt-3">
         <Button
-          to={siteMetadata.resume}
+          to={links.resumeURL}
           download
           type="primary"
           size="medium"
@@ -52,7 +52,7 @@ function IntroTextAndCTAs() {
           Download my resume
         </Button>
         <Button
-          to={siteMetadata.linkedin}
+          to={links.linkedin}
           type="ghost"
           size="medium"
           onClick={() => sendEvent({
