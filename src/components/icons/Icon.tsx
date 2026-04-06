@@ -116,7 +116,9 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
   size?: number;
 };
 
-const IconWrapper = ({ icon, size, ...rest }: React.SVGProps<SVGSVGElement> & { size?: number; icon: keyof typeof components }) => {
+const IconWrapper = ({ icon, size, ...rest }: React.SVGProps<SVGSVGElement> & {
+  size?: number; icon: keyof typeof components
+}) => {
   const SVGIcon = components[icon];
 
   return (
@@ -151,6 +153,5 @@ const Icon = ({ icon, href, size = 8, className, ...rest }: IconProps) => {
     </Link>
   );
 };
-  
 
 export default Icon;

@@ -60,7 +60,6 @@ const POSTS_BY_SLUG_QUERY = ({ slug }: { slug: string }) => {
   `;
 };
 
-
 export async function getPostList() {
   const { data } = await query<{ allPost: PostWithTags[] }>({
     query: POST_LIST_QUERY({ limit: 12, offset: 0 }),
@@ -70,6 +69,8 @@ export async function getPostList() {
 }
 
 export async function getPostBySlug(slug: string): Promise<PostWithTags | undefined> {
-  const { data } = await query<{ allPost: PostWithTags[] }>({ query: POSTS_BY_SLUG_QUERY({ slug }) });
+  const { data } = await query<{ allPost: PostWithTags[] }>({
+    query: POSTS_BY_SLUG_QUERY({ slug })
+  });
   return data?.allPost?.[0];
 }

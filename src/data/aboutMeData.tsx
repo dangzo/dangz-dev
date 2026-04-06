@@ -112,7 +112,6 @@ const experience = [
   },
 ];
 
-
 const aboutMeData = {
   skills,
   experience,

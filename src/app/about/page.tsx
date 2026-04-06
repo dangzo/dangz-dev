@@ -16,18 +16,25 @@ export default async function AboutPage() {
         </Text>
 
         <Heading as="h1" className="max-w-3xl mb-6">
-          <span className="block text-3xl md:text-4xl lg:text-6xl leading-loose">Hi, I'm Daniele.</span>
-          <span className="block text-xl md:text-2xl lg:text-4xl">I craft frontend solutions that help teams ship and products scale.</span>
+          <span className="block text-3xl md:text-4xl lg:text-6xl leading-loose">
+            Hi, I'm Daniele.
+          </span>
+          <span className="block text-xl md:text-2xl lg:text-4xl">
+            I craft frontend solutions that help teams ship and products scale.
+          </span>
         </Heading>
 
         <Text size="large" className="max-w-3xl">
-          Over the last { devYears } years, I have grown from full-stack and freelance work into a senior frontend role focused
-          on <strong className="text-accent-dark">React</strong>, <strong className="text-accent-dark">Vue</strong> and <strong className="text-accent-dark">TypeScript</strong>.
+          Over the last { devYears } years, I have grown from full-stack and freelance work into a
+          senior frontend role focused on&nbsp;
+          <strong className="text-accent-dark">React</strong>,&nbsp;
+          <strong className="text-accent-dark">Vue</strong> and&nbsp;
+          <strong className="text-accent-dark">TypeScript</strong>.
         </Text>
 
         <Text size="large" className="max-w-3xl mb-0">
-          Today I work remotely from Santa Cruz de Tenerife, collaborating with distributed teams, mentoring engineers,
-          and helping products move from idea to production with confidence.
+          Today I work remotely from Santa Cruz de Tenerife, collaborating with distributed teams,
+          mentoring engineers, and helping products move from idea to production with confidence.
         </Text>
 
         <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 mt-3">
@@ -125,26 +132,35 @@ export default async function AboutPage() {
         </Heading>
 
         <Text className="max-w-3xl mb-4">
-          I hold a Bachelor in Computer Engineering from the <strong>University of Rome "La Sapienza"</strong>, but most of
+          I hold a Bachelor in Computer Engineering from the&nbsp;
+          <strong>University of Rome "La Sapienza"</strong>, but most of
           what shaped me came from shipping real products with real teams.
         </Text>
 
         <Text className="max-w-3xl mb-4">
-          My coding journey started when I was still a teenager, wandering school corridors in search of books of <strong>Pascal</strong> and <strong>BASIC</strong>, which sooner became of <strong>C++</strong>, <strong>JavaScript</strong> and <strong>CSS</strong>. Reading about hacker news, experinting with Linux and open source, writing software of every kind.
+          My coding journey started when I was still a teenager, wandering school corridors in
+          search of books of <strong>Pascal</strong> and <strong>BASIC</strong>, which sooner
+          became of <strong>C++</strong>, <strong>JavaScript</strong> and <strong>CSS</strong>.
+          Reading about hacker news, experimenting with Linux and open source, writing software
+          of every kind.
         </Text>
 
         <Text className="mt-4 mb-0">
-          In my free time you may find me practicing sport, like tennis, padel, calisthenics, or going for a free run.
+          In my free time you may find me practicing sport, like tennis, padel, calisthenics, or
+          going for a free run.
         </Text>
 
         <Text className="max-w-3xl mb-6 mt-6 border-b border-border-light/60 dark:border-border-dark/60 pb-6">
-          I'm fluent in <strong>English</strong>, <strong>Spanish</strong>, and <strong>Italian</strong>.
+          I'm fluent in <strong>English</strong>, <strong>Spanish</strong>, and&nbsp;
+          <strong>Italian</strong>.
         </Text>
 
         <Text className="max-w-3xl mb-4">
           If you&apos;d like to talk frontend architecture, design systems,
-          or product engineering, reach out via <Link href={`mailto:${siteMetadata.email}`} type="accent">email</Link>,
-          connect on <Link href={siteMetadata.linkedin} type="accent">LinkedIn</Link>, or explore my work on{' '}
+          or product engineering, reach out via&nbsp;
+          <Link href={`mailto:${siteMetadata.email}`} type="accent">email</Link>,
+          connect on <Link href={siteMetadata.linkedin} type="accent">LinkedIn</Link>,
+          or explore my work on{' '}
           <Link href={siteMetadata.github} type="accent">GitHub</Link>.
         </Text>
       </section>

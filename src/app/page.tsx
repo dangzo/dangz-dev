@@ -21,7 +21,8 @@ export default async function HomePage() {
           Hi, I'm Daniele
         </Heading>
         <Text className="max-w-xl" size="large">
-          This is where I document my journey on software engineering, share insights and write about things I enjoy.
+          This is where I document my journey on software engineering,
+          share insights and write about things I enjoy.
         </Text>
 
         <Button to="/blog" type="primary" size="large">

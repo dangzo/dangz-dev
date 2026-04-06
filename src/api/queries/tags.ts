@@ -22,7 +22,9 @@ const TAGS_WITH_COUNT_QUERY = gql`
 `;
 
 export async function getTagsWithCount() {
-  const { data } = await query<{ allTag: TagWithCount[], allPost: PostTags[] }>({ query: TAGS_WITH_COUNT_QUERY });
+  const { data } = await query<{ allTag: TagWithCount[], allPost: PostTags[] }>({
+    query: TAGS_WITH_COUNT_QUERY
+  });
   const { allTag: tags, allPost: postTags } = data ?? {};
 
   const tagCount = (slug?: string) => {

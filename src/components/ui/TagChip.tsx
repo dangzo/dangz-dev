@@ -1,7 +1,6 @@
 import Link from './Link';
 import type { Tag } from '@/types/sanity.types';
 
-
 export default async function TagChip({ _id, slug, name }: Tag) {
   return (
     <Link
