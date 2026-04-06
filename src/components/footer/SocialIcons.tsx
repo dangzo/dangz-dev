@@ -1,6 +1,6 @@
 'use client';
 
-import siteMetadata from '@/data/siteMetadata';
+import { links } from '@/data/siteMetadata';
 import Icon from '@/components/icons/Icon';
 import useAnalytics from '@/hooks/useAnalytics';
 
@@ -11,19 +11,19 @@ function SocialIcons() {
     <div className="mb-3 flex space-x-4">
       <Icon
         icon="mail"
-        href={`mailto:${siteMetadata.email}`}
+        href={`mailto:${links.email}`}
         size={6}
         onClick={() => sendEvent({ page: 'footer', category: 'social-icons', value: 'email' })}
       />
       <Icon
         icon="github"
-        href={siteMetadata.github}
+        href={links.github}
         size={6}
         onClick={() => sendEvent({ page: 'footer', category: 'social-icons', value: 'github' })}
       />
       <Icon
         icon="linkedin"
-        href={siteMetadata.linkedin}
+        href={links.linkedin}
         size={6}
         onClick={() => sendEvent({ page: 'footer', category: 'social-icons', value: 'linkedin' })}
       />

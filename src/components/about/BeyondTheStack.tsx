@@ -2,7 +2,7 @@
 
 import { Heading, Link, Text } from '@/components/ui';
 import useAnalytics from '@/hooks/useAnalytics';
-import siteMetadata from '@/data/siteMetadata';
+import { links } from '@/data/siteMetadata';
 
 function BeyondTheStack() {
   const { sendEvent } = useAnalytics();
@@ -45,13 +45,13 @@ function BeyondTheStack() {
         If you&apos;d like to talk frontend architecture, design systems,
         or product engineering, reach out via&nbsp;
         <Link
-          href={`mailto:${siteMetadata.email}`}
+          href={`mailto:${links.email}`}
           type="accent"
           onClick={() => sendEvent({ page: 'about', category: 'beyond-the-stack', value: 'email' })}
         >
           email
         </Link>, connect on <Link
-          href={siteMetadata.linkedin}
+          href={links.linkedin}
           type="accent"
           onClick={() => sendEvent({ page: 'about', category: 'beyond-the-stack', value: 'linkedin' })}
         >
@@ -59,7 +59,7 @@ function BeyondTheStack() {
         </Link>,
         or explore my work on{' '}
         <Link
-          href={siteMetadata.github}
+          href={links.github}
           type="accent"
           onClick={() => sendEvent({ page: 'about', category: 'beyond-the-stack', value: 'github' })}
         >
