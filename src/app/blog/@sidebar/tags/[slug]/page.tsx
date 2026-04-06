@@ -1,7 +1,7 @@
 import { getTagsWithCount } from '@/api/queries/tags';
 import { TagsSidebar } from '@/components/sidebar';
 
-export default async function BlogSidebar({ params }: { params: { slug?: string } }) {
+export default async function BlogSidebar({ params }: { params: Promise<{ slug?: string }> }) {
   const { slug } = await params;
   const { tags, tagCount } = await getTagsWithCount();
   

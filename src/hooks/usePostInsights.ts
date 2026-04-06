@@ -6,7 +6,7 @@ type PortableTextSpan = {
   text?: string;
 };
 
-type PortableTextBlock = {
+export type PortableTextBlock = {
   _type?: 'block';
   style?: string;
   children?: PortableTextSpan[];
@@ -18,7 +18,7 @@ export type TocItem = {
   level: 2 | 3;
 };
 
-export default function usePostInsights(post: PostWithTags) {
+export default function usePostInsights() {
   function extractTocFromBody(body?: PortableTextBlock[]): TocItem[] {
     if (!body?.length) {
       return [];
@@ -55,7 +55,7 @@ export default function usePostInsights(post: PostWithTags) {
     return toc;
   }
 
-  function estimateReadingTimeMinutes(body?: PortableTextBlock[]): number {
+  function getReadingTimeMinutes(body?: PortableTextBlock[]): number {
     if (!body?.length) {
       return 1;
     }
@@ -70,11 +70,23 @@ export default function usePostInsights(post: PostWithTags) {
     return Math.max(1, Math.ceil(words / 220));
   }
 
-  const toc = extractTocFromBody(post.body);
-  const readingTimeMinutes = estimateReadingTimeMinutes(post.body);
-
+  function getPostExcerpt(body?: PortableTextBlock[]): string | undefined {
+    if (!body?.length) {
+      return undefined;
+    }
+  
+    return body
+      .filter((block) => block._type === 'block')
+      .map((block) =>
+        block.children?.map((child) => child.text).join(' '),
+      )
+      .join(' ')
+      .slice(0, 150) + '...'
+  }
+  
   return {
-    toc,
-    readingTimeMinutes,
+    extractTocFromBody,
+    getPostExcerpt,
+    getReadingTimeMinutes,
   };
 }

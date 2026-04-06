@@ -1,18 +1,18 @@
 import { clsx } from 'clsx';
 import { Text } from '@/components/ui';
-import usePostInsights from '@/hooks/usePostInsights';
+import usePostInsights, { type PortableTextBlock} from '@/hooks/usePostInsights';
 
 interface ReadingTimeTextProps extends React.HTMLAttributes<HTMLElement> {
   date?: string;
-  postBody?: unknown[] | undefined;
+  postBody?: PortableTextBlock[];
 }
 
 function ReadingTimeText({ className, postBody }: ReadingTimeTextProps) {
-  const { readingTimeMinutes } = usePostInsights({ body: postBody } as never);
+  const { getReadingTimeMinutes } = usePostInsights();
 
   return (
     <Text size="small" className={clsx('italic', className)}>
-      {readingTimeMinutes} min read
+      {getReadingTimeMinutes(postBody)} min read
     </Text>
   );
 }
