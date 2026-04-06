@@ -49,7 +49,9 @@ const ActionBtns = () => {
   );
 };
 
-const HamburgerMenu = ({ isMenuOpen, toggleMenu }: { isMenuOpen: boolean; toggleMenu: () => void }) => {
+const HamburgerMenu = ({ isMenuOpen, toggleMenu }: {
+  isMenuOpen: boolean; toggleMenu: () => void,
+}) => {
   return (
     <button
       type="button"
