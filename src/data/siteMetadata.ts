@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
 
 const title = 'Daniele Gazzelloni - Frontend Engineering Blog';
-const description =
-  'Practical insights on how to build scalable, maintainable, and high-performance frontend web apps in React, Vue and TypeScript.';
+const description = 'Practical insights on how to build scalable, maintainable, and high-performance frontend web apps in React, Vue and TypeScript.';
 const author = 'Daniele Gazzelloni';
 const siteName = title.split('(')[0].trim();
+const siteUrl = 'https://www.dangz.dev';
 
 const baseMetadata: Metadata = {
-  authors: [{ name: 'Daniele Gazzelloni', url: 'https://www.dangz.dev' }],
+  metadataBase: new URL(siteUrl),
+  authors: [{ name: 'Daniele Gazzelloni', url: siteUrl }],
   publisher: 'Daniele Gazzelloni',
   creator: 'Daniele Gazzelloni',
   generator: 'Next.js',
@@ -32,7 +33,7 @@ const baseMetadata: Metadata = {
   openGraph: {
     title,
     description,
-    url: 'https://www.dangz.dev',
+    url: siteUrl,
     siteName,
     images: [
       {
@@ -52,7 +53,7 @@ const baseMetadata: Metadata = {
     images: ['/og-image.png'],
   },
   alternates: {
-    canonical: 'https://www.dangz.dev',
+    canonical: siteUrl,
   },
   robots: {
     index: true,
