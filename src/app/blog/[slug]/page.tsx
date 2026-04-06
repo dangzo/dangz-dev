@@ -2,6 +2,13 @@ import { notFound } from 'next/navigation';
 import { Img, Text } from '@/components/ui';
 import { PortableText } from '@/components/posts';
 import { getPostBySlug } from '@/api/queries/posts';
+import { Metadata } from 'next';
+import useDynamicMetadata from '@/hooks/useDynamicMetadata';
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { generateMetadata } = useDynamicMetadata();
+  return generateMetadata({ params });
+}
 
 export default async function PostPage({
   params,

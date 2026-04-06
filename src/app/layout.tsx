@@ -1,9 +1,13 @@
 import { Header, Footer } from '@/components';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import ThemeProvider from '@/contexts/ThemeProvider';
+import { baseMetadata } from '@/data/siteMetadata';
 import 'react-loading-skeleton/dist/skeleton.css';
 import '@/styles/tailwind.css';
 
+export const metadata = {
+  ...baseMetadata,
+}
 
 export default function RootLayout({
   children,

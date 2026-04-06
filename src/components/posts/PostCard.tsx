@@ -1,6 +1,7 @@
 import { DateText, Text, Heading, Link, Img } from '@/components/ui';
 import TagList from './TagList';
 import Skeleton from 'react-loading-skeleton';
+import usePostInsights from '@/hooks/usePostInsights';
 import type { PostWithTags } from '@/types/Post.types';
 
 export const PostCardSkeleton = () => {
@@ -20,6 +21,8 @@ export const PostCardSkeleton = () => {
 };
 
 export const PostCard = ({ post }: { post: PostWithTags }) => {
+  const { getPostExcerpt } = usePostInsights();
+
   return (
     <article className="flex flex-col-reverse sm:flex-row relative sm:items-center">
       <div>
@@ -39,15 +42,7 @@ export const PostCard = ({ post }: { post: PostWithTags }) => {
         </div>
 
         <Text className="my-4">
-          {post.body && post.body.length > 0
-            ? post.body
-              .filter((block) => block._type === 'block')
-              .map((block) =>
-                block.children?.map((child) => child.text).join(' '),
-              )
-              .join(' ')
-              .slice(0, 150) + '...'
-            : 'No description available.'}
+          {getPostExcerpt(post.body) ?? 'No description available.'}
         </Text>
 
         <Link href={`/blog/${post.slug?.current}`} type="accent">

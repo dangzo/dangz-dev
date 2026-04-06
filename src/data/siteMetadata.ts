@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 
-const title = 'Daniele Gazzelloni - Frontend Engineering Blog (React, Vue, TypeScript)';
+const title = 'Daniele Gazzelloni - Frontend Engineering Blog';
 const description =
   'Practical insights on how to build scalable, maintainable, and high-performance frontend web apps in React, Vue and TypeScript.';
 const author = 'Daniele Gazzelloni';
+const siteName = title.split('(')[0].trim();
 
 const baseMetadata: Metadata = {
   authors: [{ name: 'Daniele Gazzelloni', url: 'https://www.dangz.dev' }],
@@ -32,13 +33,13 @@ const baseMetadata: Metadata = {
     title,
     description,
     url: 'https://www.dangz.dev',
-    siteName: title.split('(')[0].trim(),
+    siteName,
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: title.split('(')[0].trim(),
+        alt: siteName,
       },
     ],
     locale: 'en_US',
@@ -75,4 +76,11 @@ const links = {
   resumeURL: '/Daniele-Gazzelloni-Resume-2026.pdf',
 };
 
-export { author, baseMetadata, links };
+export {
+  author,
+  title,
+  description,
+  siteName,
+  baseMetadata,
+  links,  
+};

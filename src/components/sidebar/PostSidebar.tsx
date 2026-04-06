@@ -7,7 +7,8 @@ interface PostSidebarProps {
 }
 
 export default function PostSidebar({ post }: PostSidebarProps) {
-  const { toc } = usePostInsights(post);
+  const { extractTocFromBody } = usePostInsights();
+  const toc = extractTocFromBody(post.body);
 
   return (
     <div className="space-y-12">
