@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { PostList, PostListSkeleton } from '@/components/posts';
+import { PostList, PostListSkeleton } from '@/components/blog';
 import { getPostList } from '@/api/queries/posts';
 import { notFound } from 'next/navigation';
 

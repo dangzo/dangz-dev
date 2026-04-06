@@ -1,14 +1,13 @@
-import { Heading, Text } from '@/components/ui';
+import { Heading } from '@/components/ui';
+import { BlogTagline } from '@/components/blog';
 
-export default function HeadingDefault() {
+export default async function HeadingDefault() {
   return (
     <>
       <Heading as="h1">
         All Posts
       </Heading>
-      <Text>
-        Brief description of what I'm writing about in my blog
-      </Text>
+      <BlogTagline />
     </>
   );
 }
