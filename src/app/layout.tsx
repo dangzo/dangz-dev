@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Header, Footer } from '@/components';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import ThemeProvider from '@/contexts/ThemeProvider';
 import 'react-loading-skeleton/dist/skeleton.css';
 import '@/styles/tailwind.css';
@@ -18,19 +19,12 @@ export default function RootLayout({
       className="antialiased"
       suppressHydrationWarning
     >
-      <head>
-        <meta name="msapplication-TileColor" content="#000000" />
-        <meta
-          name="theme-color"
-          media="(prefers-color-scheme: light)"
-          content="#eee"
-        />
-        <meta
-          name="theme-color"
-          media="(prefers-color-scheme: dark)"
-          content="#000"
-        />
-      </head>
+      <meta name="msapplication-TileColor" content="#000000" />
+      <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eee" />
+      <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
+
+      {process.env.NODE_ENV === 'production' && <GoogleAnalytics gaId={process.env.G_ID || ''} />}
+
       <body
         className="antialiased
           bg-background-main-light text-main-light dark:bg-background-main-dark dark:text-main-dark
