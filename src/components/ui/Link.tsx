@@ -1,3 +1,5 @@
+'use client';
+
 import { clsx } from 'clsx';
 import { default as NextLink } from 'next/link';
 import type { LinkProps as NextLinkProps } from 'next/link';
@@ -9,7 +11,7 @@ interface LinkProps extends NextLinkProps {
   type?: string;
 }
 
-export default async function Link({ href, className, type = 'primary', isActive = false, ...rest }: LinkProps & AnchorHTMLAttributes<HTMLAnchorElement>) {
+export default function Link({ href, className, type = 'primary', isActive = false, ...rest }: LinkProps & AnchorHTMLAttributes<HTMLAnchorElement>) {
   const isInternalLink = href && href.startsWith('/');
   const isAnchorLink = href && href.startsWith('#');
 
