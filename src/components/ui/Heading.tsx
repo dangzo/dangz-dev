@@ -1,3 +1,5 @@
+'use client';
+
 import clsx from 'clsx';
 
 interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
@@ -5,7 +7,7 @@ interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
   children: React.ReactNode;
 }
 
-const Heading = async ({ as: Tag = 'h1', children, className, ...rest }: HeadingProps) => {
+const Heading = ({ as: Tag = 'h1', children, className, ...rest }: HeadingProps) => {
   const headingClasses = clsx([
     'font-heading',
     {

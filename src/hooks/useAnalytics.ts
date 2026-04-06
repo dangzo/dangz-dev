@@ -1,14 +1,22 @@
 import { sendGAEvent } from '@next/third-parties/google';
 
+interface AnalyticsEvent {
+  page: string;
+  action?: string;
+  category: string;
+  value: string;
+}
+
 function useAnalytics() {
-  const sendEvent = (action: string, category: string, label: string) => {
+  const sendEvent = ({ page, action = 'click', category, value }: AnalyticsEvent) => {
     if (process.env.NODE_ENV !== 'production') {
       return;
     }
     sendGAEvent({
+      page,
       action,
       category,
-      label,
+      value,
     });
   };
 
