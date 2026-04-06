@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { Img, Text } from '@/components/ui';
-import { PortableText } from '@/components/posts';
+import { PortableText } from '@/components/blog';
 import { getPostBySlug } from '@/api/queries/posts';
 import { Metadata } from 'next';
 import useDynamicMetadata from '@/hooks/useDynamicMetadata';

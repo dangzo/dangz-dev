@@ -1,5 +1,6 @@
 import { startCase } from 'lodash-es';
-import { Heading, Text } from '@/components/ui';
+import { Heading } from '@/components/ui';
+import { BlogTagline } from '@/components/blog';
 
 export default async function BlogTagsSlugHeading({ params }: {
   params: Promise<{ slug: string }>
@@ -10,9 +11,7 @@ export default async function BlogTagsSlugHeading({ params }: {
       <Heading as="h1">
         {`Tag: ${startCase(slug)}`}
       </Heading>
-      <Text>
-        Brief description of what I'm writing about in my blog
-      </Text>
+      <BlogTagline topic={startCase(slug)} />
     </>
   );
 }

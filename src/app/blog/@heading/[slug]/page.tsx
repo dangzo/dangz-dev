@@ -1,5 +1,5 @@
 import { DateText, Heading } from '@/components/ui';
-import { ReadingTimeText, TagList } from '@/components/posts';
+import { ReadingTimeText, TagList } from '@/components/blog';
 import { notFound } from 'next/navigation';
 import { getPostBySlug } from '@/api/queries/posts';
 import type { PostWithTags } from '@/types/Post.types';
