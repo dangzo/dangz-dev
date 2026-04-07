@@ -12,7 +12,7 @@ const baseMetadata: Metadata = {
   publisher: 'Daniele Gazzelloni',
   creator: 'Daniele Gazzelloni',
   generator: 'Next.js',
-  icons: { icon: '/favicon.ico' },
+  icons: { icon: '/favicon.ico', shortcut: '/favicon.ico', apple: '/apple-icon.png' },
   title,
   description,
   keywords: [

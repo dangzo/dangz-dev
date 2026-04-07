@@ -18,9 +18,16 @@ export default function RootLayout({
       className="antialiased"
       suppressHydrationWarning
     >
-      <meta name="msapplication-TileColor" content="#000000" />
-      <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eee" />
-      <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
+      <head>
+        <meta name="msapplication-TileColor" content="#000000" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eee" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
+
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+      </head>
 
       {process.env.NODE_ENV === 'production' && <GoogleAnalytics gaId={process.env.G_ID || ''} />}
 
