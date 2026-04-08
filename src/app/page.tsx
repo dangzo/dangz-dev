@@ -12,6 +12,7 @@ export default async function HomePage() {
 
   const topTags = tagsWithCount
     ?.sort((a, b) => (b.postCount - a.postCount) || (a.name ?? '').localeCompare(b.name ?? ''))
+    ?.filter(tag => tag.postCount > 0)
     ?.slice(0, 5);
 
   return (
