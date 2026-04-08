@@ -1,4 +1,3 @@
-import type { PostWithTags } from '@/types/Post.types';
 import { createHeadingIdFactory } from '@/utils/posts';
 
 type PortableTextSpan = {
@@ -81,7 +80,7 @@ export default function usePostInsights() {
         block.children?.map((child) => child.text).join(' '),
       )
       .join(' ')
-      .slice(0, 150) + '...'
+      .slice(0, 150) + '...';
   }
   
   return {

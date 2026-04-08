@@ -12,14 +12,15 @@ interface ImgProps extends React.HTMLAttributes<HTMLImageElement> {
 export default function Img({ source, alt, height, width, ...props }: ImgProps) {
   const { urlFor } = useSanityImageUrl();
 
+  const sourceUrl = urlFor(source)?.width(width).height(height).url();
+
+  if (!sourceUrl) {
+    return null;
+  }
+
   return (
     <Image
-      src={
-        urlFor(source)
-          .width(width)
-          .height(height)
-          .url()
-      }
+      src={sourceUrl}
       alt={alt || '(Image)'}
       width={width}
       height={height}
