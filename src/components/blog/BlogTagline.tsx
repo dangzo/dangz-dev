@@ -27,7 +27,7 @@ const SUFFIXES = [
   'because clean code doesn\'t write itself.',
 ];
 
-export default function BlogTagline({ topic = 'Frontend Engineering' }: { topic?: string }) {
+function BlogTagline({ topic = 'Frontend Engineering' }: { topic?: string }) {
   const [suffix] = useState<string>(() => SUFFIXES[Math.floor(Math.random() * SUFFIXES.length)]);
 
   return (
@@ -36,3 +36,5 @@ export default function BlogTagline({ topic = 'Frontend Engineering' }: { topic?
     </Text>
   );
 }
+
+export default BlogTagline;
