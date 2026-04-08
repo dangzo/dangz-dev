@@ -2,6 +2,7 @@ import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './schemaTypes';
+import { codeInput } from '@sanity/code-input';
 import { graphiQLTool } from 'sanity-plugin-graphiql';
 
 export default defineConfig({
@@ -14,6 +15,7 @@ export default defineConfig({
   plugins: [
     structureTool(),
     visionTool(),
+    codeInput(),
     graphiQLTool({
       apiVersion: process.env.SANITY_STUDIO_API_VERSION || '',
       url: process.env.SANITY_STUDIO_GRAPHQL_API_URL || '',
