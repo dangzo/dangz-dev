@@ -16,11 +16,11 @@ async function TagsSidebar({ activeSlug, tags, tagCount }: TagsSidebarProps) {
         </Heading>
       </Link>
 
-      <ul className="pl-4 list-none space-y-2.5 text-secondary-light dark:text-secondary-dark text-sm">
+      <ul className="pl-4 list-none space-y-2 sm:space-y-3 text-secondary-light dark:text-secondary-dark">
         {tags?.map(tag => (
           <li key={tag._id}>
             <Link
-              className="text-xs font-semibold tracking-wide uppercase"
+              className="font-semibold tracking-wide uppercase text-sm!"
               type="primary"
               isActive={activeSlug === tag.slug?.current}
               href={`/blog/tags/${tag.slug?.current}`}>{tag.name?.toUpperCase()} ({tagCount?.(tag.slug?.current)})
