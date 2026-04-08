@@ -19,7 +19,7 @@ export default function PostSidebar({ post }: PostSidebarProps) {
         </Heading>
 
         {toc.length > 0 && (
-          <ul className="pl-4 list-none text-secondary-light dark:text-secondary-dark text-sm">
+          <ul className="pl-4 list-none">
             {toc.map(item => (
               <li
                 key={item.id}
@@ -30,7 +30,7 @@ export default function PostSidebar({ post }: PostSidebarProps) {
                 <Link
                   href={`#${item.id}`}
                   type="primary"
-                  className={item.level === 3 ? 'text-sm! pl-4 block' : 'font-semibold tracking-wide'}
+                  className={item.level === 3 ? 'text-sm! pl-4 block text-secondary-light dark:text-secondary-dark' : 'font-semibold tracking-wide'}
                 >
                   {item.title}
                 </Link>

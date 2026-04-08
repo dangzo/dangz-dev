@@ -62,8 +62,8 @@
   --color-gray-950: #020617;
 
   /* Semantic colors for light theme */
-  --color-main-light: var(--color-gray-900);
-  --color-main-dark: var(--color-gray-50);
+  --color-main-light: var(--color-gray-800);
+  --color-main-dark: var(--color-gray-200);
   --color-secondary-light: var(--color-gray-600);
   --color-secondary-dark: var(--color-gray-400);
 
@@ -162,20 +162,19 @@
     & :where(code):not(pre code) {
       color: var(--color-indigo-500);
     }
-  }
-
-  .prose-invert {
-    & a {
-      color: var(--color-primary-500);
-      &:hover {
-        color: var(--color-primary-400);
-      }
-      & code {
-        color: var(--color-primary-400);
-      }
+    & strong {
+      color: var(--color-main-light);
     }
-    & :where(h1, h2, h3, h4, h5, h6) {
-      color: var(--color-gray-100);
+    :where(.dark, .dark *) & {
+      & a:hover {
+        color: var(--color-primary-400);
+      }
+      & :where(h1, h2, h3, h4, h5, h6) {
+        color: var(--color-main-dark);
+      }
+      & strong {
+        color: var(--color-main-dark);
+      }
     }
   }
 }
