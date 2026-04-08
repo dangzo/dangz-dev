@@ -28,9 +28,9 @@ export default async function PostPage({
         <Img
           source={post.image}
           alt={post.imageAltText}
-          className="w-full h-auto aspect-video object-cover"
+          className="w-full h-auto object-cover"
           width={700}
-          height={350}
+          height={400}
         />
       </div>
 

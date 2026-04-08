@@ -1,14 +1,14 @@
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { tomorrowNightBright } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-interface Props {
+export interface CodeBlockProps {
   value: {
     code: string
     language: string
   }
 }
 
-const CodeBlock = ({ value }: Props) => {
+const CodeBlock = ({ value }: CodeBlockProps) => {
   const { code, language } = value;
   return (
     <SyntaxHighlighter
