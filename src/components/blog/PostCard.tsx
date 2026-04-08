@@ -35,9 +35,8 @@ export const PostCard = ({ post }: { post: PostWithTags }) => {
           </Heading>
         </Link>
 
-        <div className="flex flex-col sm:flex-row sm:items-center">
-          <DateText date={post.publishedAt} className="sm:mb-0!" />
-          <span className="hidden sm:inline mx-2">&bull;</span>
+        <div className="flex flex-col">
+          <DateText date={post.publishedAt} />
           <TagList tags={post.tags} />
         </div>
 
