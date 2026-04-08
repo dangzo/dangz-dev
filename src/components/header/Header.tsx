@@ -21,7 +21,7 @@ const Navigation = ({ onNavigate, className = '' }: NavigationProps) => {
             <Link
               className="
                 group font-semibold transition-colors
-                text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-50
+                text-main-light hover:text-gray-900 dark:text-main-dark dark:hover:text-white
               "
               href={link.href}
               onClick={onNavigate}

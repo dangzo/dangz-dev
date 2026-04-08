@@ -146,7 +146,7 @@ const Icon = ({ icon, href, size = 8, className, ...rest }: IconProps) => {
         className={clsx(`
           h-${size} w-${size}
           fill-current transition-colors duration-300
-          hover:text-primary-500 dark:hover:text-primary-400 text-gray-700 dark:text-gray-200
+          hover:text-primary-500 dark:hover:text-primary-400 text-gray-700 dark:text-main-dark
         `, className)}
         {...rest}
       />

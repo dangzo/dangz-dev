@@ -13,6 +13,11 @@ export default function PortableText({ value }: PortableTextProps) {
 
   const portableTextComponents = {
     block: {
+      h1: ({ children }: { children?: React.ReactNode }) => {
+        const id = getHeadingId(getNodeText(children));
+        return <Heading as="h1" id={id}>{children}</Heading>;
+      },
+
       h2: ({ children }: { children?: React.ReactNode }) => {
         const id = getHeadingId(getNodeText(children));
         return <Heading as="h2" id={id}>{children}</Heading>;
@@ -25,6 +30,25 @@ export default function PortableText({ value }: PortableTextProps) {
 
       normal: ({ children }: { children?: React.ReactNode }) => <Text>{children}</Text>,
     },
+
+    list: {
+      bullet: ({ children }: { children?: React.ReactNode }) => (
+        <ul className="list-disc ml-4 sm:mt-6! sm:mb-10!">{children}</ul>
+      ),
+      number: ({ children }: { children?: React.ReactNode }) => (
+        <ol className="list-decimal ml-4 sm:mt-6! sm:mb-10!">{children}</ol>
+      ),
+    },
+
+    listItem: {
+      bullet: ({ children }: { children?: React.ReactNode }) => (
+        <li className="mb-1 sm:mb-2"><Text>{children}</Text></li>
+      ),
+      number: ({ children }: { children?: React.ReactNode }) => (
+        <li className="mb-1 sm:mb-2"><Text>{children}</Text></li>
+      ),
+    },
+
     types: {
       image: ({ value }: { value: ImgProps }) => {
         if (!value) {
