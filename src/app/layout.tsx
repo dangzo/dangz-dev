@@ -7,7 +7,7 @@ import '@/styles/tailwind.css';
 
 export const metadata = {
   ...baseMetadata,
-}
+};
 
 export default function RootLayout({
   children,
