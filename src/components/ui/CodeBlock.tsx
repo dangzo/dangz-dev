@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { nightOwl, tomorrow } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { nightOwl, docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 export interface CodeBlockProps {
   value: {
@@ -28,7 +28,7 @@ const CodeBlock = ({ value }: CodeBlockProps) => {
       showLineNumbers={true}
       showInlineLineNumbers={true}
       language={language}
-      style={theme === 'dark' ? nightOwl : tomorrow}
+      style={theme === 'dark' ? nightOwl :docco}
       customStyle={{
         padding: '1em',
         marginBottom: '2em',
