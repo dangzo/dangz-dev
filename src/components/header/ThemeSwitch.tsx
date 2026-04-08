@@ -50,7 +50,7 @@ const ThemeSwitch = () => {
   return (
     <Button
       aria-label="Theme switcher"
-      className="data-hover:cursor-pointer hover:text-primary-500 dark:hover:text-primary-400 flex items-center justify-center relative w-8"
+      className="data-hover:cursor-pointer hover:text-primary-500 dark:hover:text-primary-400 flex items-center justify-center relative w-8 h-6"
       onClick={handleClick}
     >
       {mounted
