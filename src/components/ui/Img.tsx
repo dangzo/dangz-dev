@@ -2,7 +2,7 @@ import Image from 'next/image';
 import useSanityImageUrl from '@/hooks/useSanityImageUrl';
 import type { SanityImageSource } from '@sanity/image-url';
 
-interface ImgProps extends React.HTMLAttributes<HTMLImageElement> {
+export interface ImgProps extends React.HTMLAttributes<HTMLImageElement> {
   source?: SanityImageSource;
   width: number;
   height: number;
@@ -12,7 +12,7 @@ interface ImgProps extends React.HTMLAttributes<HTMLImageElement> {
 export default function Img({ source, alt, height, width, ...props }: ImgProps) {
   const { urlFor } = useSanityImageUrl();
 
-  const sourceUrl = urlFor(source)?.width(width).height(height).url();
+  const sourceUrl = urlFor(source)?.url();
 
   if (!sourceUrl) {
     return null;
