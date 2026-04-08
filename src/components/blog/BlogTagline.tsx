@@ -1,6 +1,3 @@
-'use client';
-
-import { useState } from 'react';
 import { Text } from '@/components/ui';
 
 const SUFFIXES = [
@@ -27,9 +24,9 @@ const SUFFIXES = [
   'because clean code doesn\'t write itself.',
 ];
 
-function BlogTagline({ topic = 'Frontend Engineering' }: { topic?: string }) {
-  const [suffix] = useState<string>(() => SUFFIXES[Math.floor(Math.random() * SUFFIXES.length)]);
+const suffix = SUFFIXES[Math.floor(Math.random() * SUFFIXES.length)];
 
+function BlogTagline({ topic = 'Frontend Engineering' }: { topic?: string }) {
   return (
     <Text>
       All things <em><strong>{topic}</strong></em> — {suffix}
