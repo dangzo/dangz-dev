@@ -6,17 +6,26 @@ import type { LinkProps as NextLinkProps } from 'next/link';
 import { AnchorHTMLAttributes } from 'react';
 
 export type LinkType = 'accent' | 'primary' | 'secondary';
+export type LinkSize = 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
 interface LinkProps extends NextLinkProps {
   isActive?: boolean;
   type?: string;
+  size?: LinkSize;
 }
 
-export default function Link({ href, className, type = 'primary', isActive = false, ...rest }: LinkProps & AnchorHTMLAttributes<HTMLAnchorElement>) {
+export default function Link({ href, className, type = 'primary', size = 'medium', isActive = false, ...rest }: LinkProps & AnchorHTMLAttributes<HTMLAnchorElement>) {
   const isInternalLink = href && href.startsWith('/');
   const isAnchorLink = href && href.startsWith('#');
 
   const linkClasses = clsx([
     'wrap-break-word transition-all duration-300 font-body',
+    {
+      'text-xs md:text-xs leading-4 md:leading-4': size === 'x-small',
+      'text-sm md:text-sm leading-5 md:leading-5': size === 'small',
+      'text-sm md:text-base leading-6 md:leading-6': size === 'medium',
+      'text-base md:text-lg leading-6 md:leading-7.5': size === 'large',
+      'text-lg md:text-xl lg:text-2xl leading-7 md:leading-8': size === 'x-large',
+    },
     {
       'text-accent-light dark:text-accent-dark hover:text-primary-500 dark:hover:text-primary-300': type === 'accent',
       'text-main-light dark:text-main-dark hover:text-primary-500 dark:hover:text-primary-500': type === 'primary',
