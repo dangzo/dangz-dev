@@ -25,7 +25,7 @@ export const PostCard = ({ post }: { post: PostWithTags }) => {
 
   return (
     <article className="flex flex-col-reverse sm:flex-row relative sm:items-center">
-      <div>
+      <div className="sm:w-5/7">
         <Link
           href={`/blog/${post.slug?.current}`}
           className="text-2xl font-semibold"
@@ -52,9 +52,9 @@ export const PostCard = ({ post }: { post: PostWithTags }) => {
       <Img
         source={post.image}
         alt={post.imageAltText}
-        className="object-cover rounded-md block sm:ml-4 sm:w-38 md:h-24 w-20 h-16 mb-2 sm:mb-0"
-        width={150}
-        height={96}
+        className="object-cover rounded-md block sm:ml-4 sm:w-38 mb-2 sm:mb-0 grow w-full"
+        width={600}
+        height={400}
       />
     </article>
   );
