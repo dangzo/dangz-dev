@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Text } from '@/components/ui';
 
 const SUFFIXES = [
@@ -17,7 +17,6 @@ const SUFFIXES = [
   'for engineers who like to know why.',
   'building better things, one bug at a time.',
   'less tutorial, more autopsy.',
-  'where abstractions go to be questioned.',
   'the stuff they cut from the official docs.',
   'patterns, pitfalls, and painful lessons.',
   'for when Stack Overflow just isn\'t enough.',
@@ -29,13 +28,7 @@ const SUFFIXES = [
 ];
 
 export default function BlogTagline({ topic = 'Frontend Engineering' }: { topic?: string }) {
-  const [suffix, setSuffix] = useState<string | null>(null);
-
-  useEffect(() => {
-    setSuffix(SUFFIXES[Math.floor(Math.random() * SUFFIXES.length)]);
-  }, []);
-
-  if (!suffix) return null;
+  const [suffix] = useState<string>(() => SUFFIXES[Math.floor(Math.random() * SUFFIXES.length)]);
 
   return (
     <Text>
