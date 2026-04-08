@@ -2,19 +2,19 @@ import { notFound } from 'next/navigation';
 import { Img, Text } from '@/components/ui';
 import { PortableText } from '@/components/blog';
 import { getPostBySlug } from '@/api/queries/posts';
-import { Metadata } from 'next';
-import useDynamicMetadata from '@/hooks/useDynamicMetadata';
+import getPostMetadata from '@/api/getPostMetadata';
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { generateMetadata } = useDynamicMetadata();
-  return generateMetadata({ params });
+interface PostPageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export async function Metadata({ params }: PostPageProps) {
+  return getPostMetadata({ params });
 }
 
 export default async function PostPage({
   params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+}: PostPageProps) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
 
@@ -28,7 +28,7 @@ export default async function PostPage({
         <Img
           source={post.image}
           alt={post.imageAltText}
-          className="w-full h-auto aspect-[16/9] object-cover"
+          className="w-full h-auto aspect-video object-cover"
           width={700}
           height={350}
         />
