@@ -1,6 +1,7 @@
 @font-face {
   font-family: 'Geist';
-  src: url('/fonts/geist-400.ttf') format('truetype');
+  src: url('/fonts/geist-400.woff2') format('woff2'),
+       url('/fonts/geist-400.ttf') format('truetype');
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -8,7 +9,8 @@
 
 @font-face {
   font-family: 'Geist';
-  src: url('/fonts/geist-500.ttf') format('truetype');
+  src: url('/fonts/geist-500.woff2') format('woff2'),
+       url('/fonts/geist-500.ttf') format('truetype');
   font-style: normal;
   font-weight: 500;
   font-display: swap;
@@ -16,7 +18,8 @@
 
 @font-face {
   font-family: 'Geist';
-  src: url('/fonts/geist-700.ttf') format('truetype');
+  src: url('/fonts/geist-700.woff2') format('woff2'),
+       url('/fonts/geist-700.ttf') format('truetype');
   font-style: normal;
   font-weight: 700;
   font-display: swap;
@@ -24,7 +27,8 @@
 
 @font-face {
   font-family: 'Geist Mono';
-  src: url('/fonts/geist-mono-400.ttf') format('truetype');
+  src: url('/fonts/geist-mono-400.woff2') format('woff2'),
+       url('/fonts/geist-mono-400.ttf') format('truetype');
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -32,7 +36,8 @@
 
 @font-face {
   font-family: 'Roboto';
-  src: url('/fonts/roboto-400.ttf') format('truetype');
+  src: url('/fonts/roboto-400.woff2') format('woff2'),
+       url('/fonts/roboto-400.ttf') format('truetype');
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -40,7 +45,8 @@
 
 @font-face {
   font-family: 'Roboto';
-  src: url('/fonts/roboto-400-italic.ttf') format('truetype');
+  src: url('/fonts/roboto-400-italic.woff2') format('woff2'),
+       url('/fonts/roboto-400-italic.ttf') format('truetype');
   font-style: italic;
   font-weight: 400;
   font-display: swap;
@@ -48,7 +54,8 @@
 
 @font-face {
   font-family: 'Roboto';
-  src: url('/fonts/roboto-500.ttf') format('truetype');
+  src: url('/fonts/roboto-500.woff2') format('woff2'),
+       url('/fonts/roboto-500.ttf') format('truetype');
   font-style: normal;
   font-weight: 500;
   font-display: swap;
@@ -56,7 +63,8 @@
 
 @font-face {
   font-family: 'Roboto';
-  src: url('/fonts/roboto-700.ttf') format('truetype');
+  src: url('/fonts/roboto-700.woff2') format('woff2'),
+       url('/fonts/roboto-700.ttf') format('truetype');
   font-style: normal;
   font-weight: 700;
   font-display: swap;
@@ -64,7 +72,8 @@
 
 @font-face {
   font-family: 'Roboto Slab';
-  src: url('/fonts/roboto-slab-400.ttf') format('truetype');
+  src: url('/fonts/roboto-slab-400.woff2') format('woff2'),
+       url('/fonts/roboto-slab-400.ttf') format('truetype');
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -72,7 +81,8 @@
 
 @font-face {
   font-family: 'Roboto Slab';
-  src: url('/fonts/roboto-slab-500.ttf') format('truetype');
+  src: url('/fonts/roboto-slab-500.woff2') format('woff2'),
+       url('/fonts/roboto-slab-500.ttf') format('truetype');
   font-style: normal;
   font-weight: 500;
   font-display: swap;
@@ -80,7 +90,8 @@
 
 @font-face {
   font-family: 'Roboto Slab';
-  src: url('/fonts/roboto-slab-600.ttf') format('truetype');
+  src: url('/fonts/roboto-slab-600.woff2') format('woff2'),
+       url('/fonts/roboto-slab-600.ttf') format('truetype');
   font-style: normal;
   font-weight: 600;
   font-display: swap;
@@ -88,7 +99,8 @@
 
 @font-face {
   font-family: 'Roboto Slab';
-  src: url('/fonts/roboto-slab-700.ttf') format('truetype');
+  src: url('/fonts/roboto-slab-700.woff2') format('woff2'),
+       url('/fonts/roboto-slab-700.ttf') format('truetype');
   font-style: normal;
   font-weight: 700;
   font-display: swap;

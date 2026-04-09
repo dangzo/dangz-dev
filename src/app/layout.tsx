@@ -23,6 +23,11 @@ export default function RootLayout({
         <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eee" />
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
 
+        {/* Preload critical above-the-fold fonts */}
+        <link rel="preload" href="/fonts/geist-400.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/roboto-400.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/roboto-slab-700.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon.png" />
         <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
