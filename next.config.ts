@@ -1,6 +1,14 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  experimental: {
+    optimizePackageImports: [
+      'clsx',
+      '@sanity/image-url',
+      'react-syntax-highlighter',
+      '@next/third-parties',
+    ],
+  },
   images: {
     remotePatterns: [
       {

@@ -46,5 +46,19 @@
     "eslint-plugin-unused-imports": "^4.3.0",
     "tailwindcss": "^4",
     "typescript": "^6"
+  },
+  "browserslist": {
+    "production": [
+      "chrome >= 80",
+      "edge >= 80",
+      "firefox >= 74",
+      "safari >= 13.1",
+      "not dead"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

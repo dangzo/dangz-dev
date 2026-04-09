@@ -1,5 +1,3 @@
-'use client';
-
 import { clsx } from 'clsx';
 import { default as NextLink } from 'next/link';
 import type { LinkProps as NextLinkProps } from 'next/link';
