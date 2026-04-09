@@ -67,7 +67,7 @@ const Button = ({
     const resolvedRel = rel ?? (target === '_blank' || !isInternalRoute ? 'noopener noreferrer' : undefined);
 
     return (
-      <a
+      <NextLink
         className={classNames}
         href={to}
         download={download}
@@ -75,7 +75,7 @@ const Button = ({
         rel={resolvedRel}
       >
         {children}
-      </a>
+      </NextLink>
     );
   }
 

@@ -47,10 +47,10 @@ export default function Link({ href, className, type = 'primary', size = 'medium
   }
 
   if (isAnchorLink) {
-    return <a className={clsx([linkClasses, className])} href={href} {...rest} />;
+    return <NextLink className={clsx([linkClasses, className])} href={href} {...rest} />;
   }
 
   return (
-    <a className={clsx([linkClasses, className])} target="_blank" rel="noopener noreferrer" href={href} {...rest} />
+    <NextLink className={clsx([linkClasses, className])} href={href} target="_blank" rel="noopener noreferrer" {...rest} />
   );
 }
