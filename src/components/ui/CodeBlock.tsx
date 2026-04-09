@@ -1,8 +1,10 @@
 'use client';
 
-import { useSyncExternalStore } from 'react';
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { nightOwl, docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import dynamic from 'next/dynamic';
+import { useSyncExternalStore, useState, useEffect } from 'react';
+import type { CSSProperties } from 'react';
+
+type SyntaxStyle = { [key: string]: CSSProperties };
 
 export interface CodeBlockProps {
   value: {
@@ -10,6 +12,11 @@ export interface CodeBlockProps {
     language: string
   }
 }
+
+const SyntaxHighlighter = dynamic(() => import('react-syntax-highlighter'), {
+  loading: () => <p>Loading...</p>,
+  ssr: false
+});
 
 function subscribe(onStoreChange: () => void) {
   const observer = new MutationObserver(onStoreChange);
@@ -22,13 +29,27 @@ const getServerSnapshot = () => 'light';
 
 const CodeBlock = ({ value }: CodeBlockProps) => {
   const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const [style, setStyle] = useState<SyntaxStyle | undefined>(undefined);
   const { code, language } = value;
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      import('react-syntax-highlighter/dist/esm/styles/hljs/night-owl').then(
+        (mod) => setStyle(mod.default)
+      );
+    } else {
+      import('react-syntax-highlighter/dist/esm/styles/hljs/docco').then(
+        (mod) => setStyle(mod.default)
+      );
+    }
+  }, [theme]);
+
   return (
     <SyntaxHighlighter
       showLineNumbers={true}
       showInlineLineNumbers={true}
       language={language}
-      style={theme === 'dark' ? nightOwl :docco}
+      style={style}
       customStyle={{
         padding: '1em',
         marginBottom: '2em',
