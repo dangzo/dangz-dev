@@ -1,5 +1,5 @@
-import { startCase } from 'lodash-es';
 import { Heading } from '@/components/ui';
+import { startCase } from '@/utils/strings';
 import { BlogTagline } from '@/components/blog';
 
 export default async function BlogTagsSlugHeading({ params }: {

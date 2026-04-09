@@ -1,5 +1,5 @@
-import { kebabCase } from 'lodash-es';
 import { Heading, Text } from '@/components/ui';
+import { kebabCase } from '@/utils/strings';
 import aboutMeData from '@/data/aboutMeData';
 
 const { skills } = aboutMeData;
