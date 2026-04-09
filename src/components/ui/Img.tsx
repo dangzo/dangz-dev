@@ -1,8 +1,8 @@
-import Image from 'next/image';
+import Image, { type ImageProps} from 'next/image';
 import useSanityImageUrl from '@/hooks/useSanityImageUrl';
 import type { SanityImageSource } from '@sanity/image-url';
 
-export interface ImgProps extends React.HTMLAttributes<HTMLImageElement> {
+export interface ImgProps extends Omit<ImageProps, 'src' | 'alt' | 'width' | 'height'> {
   source?: SanityImageSource;
   width: number;
   height: number;

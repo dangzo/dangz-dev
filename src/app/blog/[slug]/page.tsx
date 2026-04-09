@@ -31,6 +31,7 @@ export default async function PostPage({
           className="w-full h-auto object-cover"
           width={700}
           height={400}
+          preload
         />
       </div>
 
