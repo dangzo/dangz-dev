@@ -12,6 +12,7 @@ export const POST_LIST_QUERY = ({ limit = 12, offset = 0 }: {limit?: number, off
           current
         }
         imageAltText
+        excerpt
         image {
           asset {
             url
@@ -27,7 +28,6 @@ export const POST_LIST_QUERY = ({ limit = 12, offset = 0 }: {limit?: number, off
             current
           }
         }
-        body: bodyRaw
         publishedAt
       }
     }

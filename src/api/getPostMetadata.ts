@@ -16,14 +16,12 @@ async function getPostMetadata(
     };
   }
 
-  const postDescription = ''; // getPostExcerpt(post.body);
-
   return {
     title: post.title,
-    description: postDescription,
+    description: post.excerpt,
     openGraph: {
       title: post.title,
-      description: postDescription,
+      description: post.excerpt,
       url: `https://www.dangz.dev/blog/${slug}`,
       siteName: siteName,
       images: [
@@ -38,7 +36,7 @@ async function getPostMetadata(
     twitter: {
       card: 'summary_large_image',
       title: `${post.title} - ${baseMetadata.title}`,
-      description: postDescription,
+      description: post.excerpt,
       images: [urlFor(post.image)?.url() || '/og-image.png'],
     },
   };

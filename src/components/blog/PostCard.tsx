@@ -1,7 +1,6 @@
 import { DateText, Text, Heading, Link, Img } from '@/components/ui';
 import TagList from './TagList';
 import Skeleton from 'react-loading-skeleton';
-import usePostInsights from '@/hooks/usePostInsights';
 import type { PostWithTags } from '@/types/Post.types';
 
 interface PostCardProps {
@@ -26,8 +25,6 @@ export const PostCardSkeleton = () => {
 };
 
 export const PostCard = ({ post, preloadImage = false }: PostCardProps) => {
-  const { getPostExcerpt } = usePostInsights();
-
   return (
     <article className="flex flex-col-reverse sm:flex-row relative sm:items-center">
       <div className="sm:w-5/7">
@@ -46,7 +43,7 @@ export const PostCard = ({ post, preloadImage = false }: PostCardProps) => {
         </div>
 
         <Text className="my-4">
-          {getPostExcerpt(post.body) ?? 'No description available.'}
+          {post.excerpt ?? 'No description available.'}
         </Text>
 
         <Link href={`/blog/${post.slug?.current}`} type="accent">

@@ -31,6 +31,13 @@ export const postType = defineType({
       type: 'string',
     }),
     defineField({
+      name: 'excerpt',
+      type: 'text',
+      rows: 3,
+      description: 'A short summary shown in post listings. Avoids fetching the full body for previews.',
+      validation: (rule) => rule.max(300),
+    }),
+    defineField({
       name: 'tags',
       type: 'array',
       of: [{ type: 'reference', to: { type: 'tag' } }],
