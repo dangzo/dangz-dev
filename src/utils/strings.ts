@@ -7,3 +7,11 @@ export function slugify(text: string): string {
 
   return normalized || 'section';
 }
+
+export const kebabCase = (str: string) => {
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+};
+
+export const startCase = (str: string) => {
+  return str.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+};

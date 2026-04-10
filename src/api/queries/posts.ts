@@ -12,9 +12,13 @@ export const POST_LIST_QUERY = ({ limit = 12, offset = 0 }: {limit?: number, off
           current
         }
         imageAltText
+        excerpt
         image {
           asset {
             url
+            metadata {
+              lqip
+            }
           }
         }
         tags {
@@ -24,7 +28,6 @@ export const POST_LIST_QUERY = ({ limit = 12, offset = 0 }: {limit?: number, off
             current
           }
         }
-        body: bodyRaw
         publishedAt
       }
     }
@@ -43,6 +46,9 @@ const POSTS_BY_SLUG_QUERY = ({ slug }: { slug: string }) => {
         image {
           asset {
             url
+            metadata {
+              lqip
+            }
           }
         }
         imageAltText
@@ -53,12 +59,28 @@ const POSTS_BY_SLUG_QUERY = ({ slug }: { slug: string }) => {
             current
           }
         }
+        excerpt
         body: bodyRaw
         publishedAt
       }
     }
   `;
 };
+
+const POST_SLUGS_QUERY = gql`
+  query AllPostSlugs {
+    allPost {
+      slug { current }
+    }
+  }
+`;
+
+export async function getPostSlugs(): Promise<{ slug: { current: string } }[]> {
+  const { data } = await query<{ allPost: { slug: { current: string } }[] }>({
+    query: POST_SLUGS_QUERY,
+  });
+  return data?.allPost ?? [];
+}
 
 export async function getPostList() {
   const { data } = await query<{ allPost: PostWithTags[] }>({

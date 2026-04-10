@@ -1,15 +1,10 @@
-'use client';
-
-import { Button, Heading, Text } from '@/components/ui';
+import { Heading, Text } from '@/components/ui';
 import aboutMeData from '@/data/aboutMeData';
-import { links } from '@/data/siteMetadata';
-import useAnalytics from '@/hooks/useAnalytics';
+import ResumeDownloadButton from './ResumeDownloadButton';
 
 const { experience } = aboutMeData;
 
 function MyJourneySoFar() {
-  const { sendEvent } = useAnalytics();
-
   return (
     <section className="mb-8 sm:mb-16 md:mb-20">
       <Heading as="h2" className="mb-6 sm:mb-0!">
@@ -17,19 +12,7 @@ function MyJourneySoFar() {
       </Heading>
 
       <div className="hidden sm:block mb-4 md:mb-5 text-end">
-        <Button
-          to={links.resumeURL}
-          download
-          type="ghost"
-          size="small"
-          onClick={() => sendEvent({
-            page: 'about',
-            category: 'my-journey-so-far',
-            value: 'download_resume',
-          })}
-        >
-          Download my resume
-        </Button>
+        <ResumeDownloadButton />
       </div>
 
       <div className="space-y-2 sm:space-y-4">

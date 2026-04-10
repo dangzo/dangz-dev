@@ -1,29 +1,30 @@
 import { notFound } from 'next/navigation';
 import { PostCard, PostCardSkeleton } from './PostCard';
-import type { PostWithTags } from '@/types/Post.types'; 
 import type { Tag } from '@/types/sanity.types';
+import { getPostList } from '@/api/queries/posts';
 
 interface PostListProps {
   tag?: string;
-  posts: PostWithTags[];
 }
 
-export const PostList = async ({ tag, posts }: PostListProps) => {
+export const PostList = async ({ tag }: PostListProps) => {
+  const posts = await getPostList();
+
   const filteredPosts = tag
-    ? posts.filter((post) =>
+    ? posts?.filter((post) =>
       post.tags?.some(
         (t: Tag) => t.slug?.current?.toLowerCase() === tag.toLowerCase(),
       ),
     )
     : posts;
 
-  if (tag && filteredPosts?.length === 0) {
+  if (!filteredPosts?.length) {
     return notFound();
   }
 
   return (
     <ul className="space-y-6">
-      {filteredPosts?.map((post) => (
+      {filteredPosts?.map((post, index) => (
         <li
           key={post._id}
           className="
@@ -31,7 +32,7 @@ export const PostList = async ({ tag, posts }: PostListProps) => {
             px-0 py-6 my-3 sm:mb-3 md:py-4 md:mt-0 md:px-4
           "
         >
-          <PostCard key={post._id} post={post} />
+          <PostCard key={post._id} post={post} preloadImage={index === 0} />
         </li>
       ))}
     </ul>

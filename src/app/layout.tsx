@@ -2,6 +2,7 @@ import { Header, Footer } from '@/components';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import ThemeProvider from '@/contexts/ThemeProvider';
 import { baseMetadata } from '@/data/siteMetadata';
+import { geist, geistMono, roboto, robotoSlab } from '@/styles/fonts';
 import 'react-loading-skeleton/dist/skeleton.css';
 import '@/styles/tailwind.css';
 
@@ -15,7 +16,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="antialiased"
+      className={`${geist.variable} ${geistMono.variable} ${roboto.variable} ${robotoSlab.variable} antialiased`}
       suppressHydrationWarning
     >
       <head>

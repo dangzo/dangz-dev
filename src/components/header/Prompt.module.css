@@ -1,0 +1,12 @@
+.animate-typewriter {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  width: calc(var(--chars, 0) * 1ch);
+  animation: typewriter calc(var(--chars, 1) * 0.05s) steps(var(--chars, 1))
+    forwards;
+}
+
+.animate-caret {
+  animation: caret 1s steps(1) infinite calc(var(--chars, 1) * 0.1s);
+}

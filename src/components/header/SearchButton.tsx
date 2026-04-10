@@ -1,10 +1,8 @@
 'use client';
 
-import { Button } from '@headlessui/react';
-
 const SearchButton = () => {
   return (
-    <Button aria-label="Search" className="data-hover:cursor-pointer">
+    <button type="button" aria-label="Search" className="cursor-pointer">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -19,7 +17,7 @@ const SearchButton = () => {
           d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
         />
       </svg>
-    </Button>
+    </button>
   );
 };
 

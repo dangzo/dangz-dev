@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useState, Fragment } from 'react';
+import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
-import { Button, Transition } from '@headlessui/react';
 
 const Sun = () => (
   <svg
@@ -48,48 +47,27 @@ const ThemeSwitch = () => {
   const isDark = resolvedTheme === 'dark';
 
   return (
-    <Button
+    <button
+      type="button"
       aria-label="Theme switcher"
-      className="data-hover:cursor-pointer hover:text-primary-500 dark:hover:text-primary-400 flex items-center justify-center relative w-8 h-6"
+      className="cursor-pointer hover:text-primary-500 dark:hover:text-primary-400 flex items-center justify-center relative w-8 h-6"
       onClick={handleClick}
     >
       {mounted
         ? (
           <>
-            <Transition
-              show={!isDark}
-              as={Fragment}
-              enter="transition-all duration-500"
-              enterFrom="opacity-0 rotate-180"
-              enterTo="opacity-100 rotate-0"
-              leave="transition-all duration-500"
-              leaveFrom="opacity-100 rotate-0"
-              leaveTo="opacity-0 -rotate-180"
-            >
-              <div className="absolute">
-                <Sun />
-              </div>
-            </Transition>
-            <Transition
-              show={isDark}
-              as={Fragment}
-              enter="transition-all duration-500"
-              enterFrom="opacity-0 rotate-180"
-              enterTo="opacity-100 rotate-0"
-              leave="transition-all duration-500"
-              leaveFrom="opacity-100 rotate-0"
-              leaveTo="opacity-0 rotate-180"
-            >
-              <div className="absolute">
-                <Moon />
-              </div>
-            </Transition>
+            <div className={`absolute transition-all duration-500 ${isDark ? 'opacity-0 -rotate-180 pointer-events-none' : 'opacity-100 rotate-0'}`}>
+              <Sun />
+            </div>
+            <div className={`absolute transition-all duration-500 ${isDark ? 'opacity-100 rotate-0' : 'opacity-0 rotate-180 pointer-events-none'}`}>
+              <Moon />
+            </div>
           </>
         )
         : (
           <Blank />
         )}
-    </Button>
+    </button>
   );
 };
 

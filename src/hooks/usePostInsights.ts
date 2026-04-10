@@ -69,23 +69,8 @@ export default function usePostInsights() {
     return Math.max(1, Math.ceil(words / 220));
   }
 
-  function getPostExcerpt(body?: PortableTextBlock[]): string | undefined {
-    if (!body?.length) {
-      return undefined;
-    }
-  
-    return body
-      .filter((block) => block._type === 'block')
-      .map((block) =>
-        block.children?.map((child) => child.text).join(' '),
-      )
-      .join(' ')
-      .slice(0, 150) + '...';
-  }
-  
   return {
     extractTocFromBody,
-    getPostExcerpt,
     getReadingTimeMinutes,
   };
 }
