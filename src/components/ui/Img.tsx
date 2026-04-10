@@ -1,4 +1,4 @@
-import Image, { type ImageProps} from 'next/image';
+import Image, { type ImageProps } from 'next/image';
 import useSanityImageUrl from '@/hooks/useSanityImageUrl';
 import type { SanityImageSource } from '@sanity/image-url';
 

@@ -1,14 +1,9 @@
-'use client';
-
-import { Button, Heading, Text } from '@/components/ui';
-import useAnalytics from '@/hooks/useAnalytics';
-import { links } from '@/data/siteMetadata';
+import { Heading, Text } from '@/components/ui';
+import IntroCTAs from './IntroCTAs';
 
 const devYears = new Date().getFullYear() - 2013;
 
 function IntroTextAndCTAs() {
-  const { sendEvent } = useAnalytics();
-
   return (
     <section className="mb-16 md:mb-44">
       <Text size="small" className="hidden sm:block uppercase tracking-[0.2em] font-semibold text-primary-500 dark:text-primary-300">
@@ -37,33 +32,7 @@ function IntroTextAndCTAs() {
         mentoring engineers, and helping products move from idea to production with confidence.
       </Text>
 
-      <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 mt-3">
-        <Button
-          to={links.resumeURL}
-          download
-          type="primary"
-          size="medium"
-          onClick={() => sendEvent({
-            page: 'about',
-            category: 'intro-ctas',
-            value: 'download_resume',
-          })}
-        >
-          Download my resume
-        </Button>
-        <Button
-          to={links.linkedin}
-          type="ghost"
-          size="medium"
-          onClick={() => sendEvent({
-            page: 'about',
-            category: 'intro-ctas',
-            value: 'connect_linkedin',
-          })}
-        >
-          Connect on LinkedIn
-        </Button>
-      </div>
+      <IntroCTAs />
     </section>
   );
 }
