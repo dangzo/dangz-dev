@@ -24,7 +24,6 @@ export default function Img({ source, alt, height, width, ...props }: ImgProps) 
       alt={alt || '(Image)'}
       width={width}
       height={height}
-      placeholder='blur'
       {...props}
     />
   );

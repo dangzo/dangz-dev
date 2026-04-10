@@ -2,6 +2,7 @@ import { Header, Footer } from '@/components';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import ThemeProvider from '@/contexts/ThemeProvider';
 import { baseMetadata } from '@/data/siteMetadata';
+import { geist, geistMono, roboto, robotoSlab } from '@/styles/fonts';
 import 'react-loading-skeleton/dist/skeleton.css';
 import '@/styles/tailwind.css';
 
@@ -15,18 +16,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="antialiased"
+      className={`${geist.variable} ${geistMono.variable} ${roboto.variable} ${robotoSlab.variable} antialiased`}
       suppressHydrationWarning
     >
       <head>
         <meta name="msapplication-TileColor" content="#000000" />
         <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eee" />
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
-
-        {/* Preload critical above-the-fold fonts */}
-        <link rel="preload" href="/fonts/geist-400.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="/fonts/roboto-400.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="/fonts/roboto-slab-700.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
 
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon.png" />
         <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
