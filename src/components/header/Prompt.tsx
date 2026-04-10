@@ -3,6 +3,7 @@
 import type { CSSProperties } from 'react';
 import { usePathname } from 'next/navigation';
 import { useCallback } from 'react';
+import styles from './Prompt.module.css';
 import Link from 'next/link';
 
 const Prompt = () => {
@@ -34,7 +35,7 @@ const Prompt = () => {
     >
       <span className="hidden sm:inline-block">guest&#64;dangz.dev:&nbsp;</span>
       <span className={pathnameClasses} style={typewriterStyle} key={fullPath}>
-        <span className='inline-block animate-typewriter'>
+        <span className={`inline-block ${styles['animate-typewriter']}`}>
           <Link href="/" className={linkClasses}>
             ~
           </Link>
@@ -48,7 +49,7 @@ const Prompt = () => {
             </span>
           ))}
         </span>
-        <span className="animate-caret ml-1 align-middle">|</span>
+        <span className={`ml-1 align-middle ${styles['animate-caret']}`}>|</span>
       </span>
     </h1>
   );
