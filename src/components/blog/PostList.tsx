@@ -24,7 +24,7 @@ export const PostList = async ({ tag }: PostListProps) => {
 
   return (
     <ul className="space-y-6">
-      {filteredPosts?.map((post, index) => (
+      {filteredPosts?.map((post) => (
         <li
           key={post._id}
           className="
@@ -32,7 +32,7 @@ export const PostList = async ({ tag }: PostListProps) => {
             px-0 py-6 my-3 sm:mb-3 md:py-4 md:mt-0 md:px-4
           "
         >
-          <PostCard key={post._id} post={post} preloadImage={index === 0} />
+          <PostCard key={post._id} post={post} />
         </li>
       ))}
     </ul>
