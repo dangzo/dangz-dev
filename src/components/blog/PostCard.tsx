@@ -4,6 +4,11 @@ import Skeleton from 'react-loading-skeleton';
 import usePostInsights from '@/hooks/usePostInsights';
 import type { PostWithTags } from '@/types/Post.types';
 
+interface PostCardProps {
+  post: PostWithTags;
+  preloadImage?: boolean;
+}
+
 export const PostCardSkeleton = () => {
   return (
     <div className="flex flex-row relative">
@@ -20,7 +25,7 @@ export const PostCardSkeleton = () => {
   );
 };
 
-export const PostCard = ({ post }: { post: PostWithTags }) => {
+export const PostCard = ({ post, preloadImage = false }: PostCardProps) => {
   const { getPostExcerpt } = usePostInsights();
 
   return (
@@ -55,6 +60,9 @@ export const PostCard = ({ post }: { post: PostWithTags }) => {
         className="object-cover rounded-md block sm:ml-4 sm:w-38 mb-8 sm:mb-0 grow w-full"
         width={600}
         height={400}
+        sizes="(min-width: 640px) 152px, 100vw"
+        preload={preloadImage}
+        blurDataURL={post.image?.asset?.metadata?.lqip}
       />
     </article>
   );

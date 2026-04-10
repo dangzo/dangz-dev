@@ -7,9 +7,10 @@ export interface ImgProps extends Omit<ImageProps, 'src' | 'alt' | 'width' | 'he
   width: number;
   height: number;
   alt?: string;
+  blurDataURL?: string;
 }
 
-export default function Img({ source, alt, height, width, ...props }: ImgProps) {
+export default function Img({ source, alt, height, width, blurDataURL, ...props }: ImgProps) {
   const { urlFor } = useSanityImageUrl();
 
   const sourceUrl = urlFor(source)?.url();
@@ -24,6 +25,8 @@ export default function Img({ source, alt, height, width, ...props }: ImgProps) 
       alt={alt || '(Image)'}
       width={width}
       height={height}
+      placeholder={blurDataURL ? 'blur' : 'empty'}
+      blurDataURL={blurDataURL}
       {...props}
     />
   );
