@@ -1,15 +1,22 @@
 import { notFound } from 'next/navigation';
 import { Img, Text } from '@/components/ui';
 import { PortableText } from '@/components/blog';
-import { getPostBySlug } from '@/api/queries/posts';
+import { getPostBySlug, getPostSlugs } from '@/api/queries/posts';
 import getPostMetadata from '@/api/getPostMetadata';
 
 interface PostPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function Metadata({ params }: PostPageProps) {
+// eslint-disable-next-line react-refresh/only-export-components
+export async function generateMetadata({ params }: PostPageProps) {
   return getPostMetadata({ params });
+}
+
+// eslint-disable-next-line react-refresh/only-export-components
+export async function generateStaticParams() {
+  const posts = await getPostSlugs();
+  return posts.map(({ slug }) => ({ slug: slug.current }));
 }
 
 export default async function PostPage({
@@ -22,6 +29,8 @@ export default async function PostPage({
     notFound();
   }
 
+  const lqip = post.image?.asset?.metadata?.lqip;
+
   return (
     <article className="max-w-3xl mx-auto px-3 py-4 sm:px-4 sm:py-6 md:py-8">
       <div className="mb-5 sm:mb-6 md:mb-8 rounded-lg overflow-hidden">
@@ -31,7 +40,8 @@ export default async function PostPage({
           className="w-full h-auto object-cover"
           width={700}
           height={400}
-          preload
+          fetchPriority="high"
+          blurDataURL={lqip}
         />
       </div>
 

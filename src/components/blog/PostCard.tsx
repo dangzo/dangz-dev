@@ -5,7 +5,6 @@ import type { PostWithTags } from '@/types/Post.types';
 
 interface PostCardProps {
   post: PostWithTags;
-  preloadImage?: boolean;
 }
 
 export const PostCardSkeleton = () => {
@@ -24,7 +23,7 @@ export const PostCardSkeleton = () => {
   );
 };
 
-export const PostCard = ({ post, preloadImage = false }: PostCardProps) => {
+export const PostCard = ({ post }: PostCardProps) => {
   return (
     <article className="flex flex-col-reverse sm:flex-row relative sm:items-center">
       <div className="sm:w-5/7">
@@ -58,7 +57,7 @@ export const PostCard = ({ post, preloadImage = false }: PostCardProps) => {
         width={600}
         height={400}
         sizes="(min-width: 640px) 152px, 100vw"
-        preload={preloadImage}
+        fetchPriority="high"
         blurDataURL={post.image?.asset?.metadata?.lqip}
       />
     </article>

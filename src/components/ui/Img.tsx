@@ -13,7 +13,7 @@ export interface ImgProps extends Omit<ImageProps, 'src' | 'alt' | 'width' | 'he
 export default function Img({ source, alt, height, width, blurDataURL, ...props }: ImgProps) {
   const { urlFor } = useSanityImageUrl();
 
-  const sourceUrl = urlFor(source)?.url();
+  const sourceUrl = urlFor(source)?.width(width).auto('format').url();
 
   if (!sourceUrl) {
     return null;
