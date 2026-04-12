@@ -1,6 +1,11 @@
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
 import { Text, Button, Heading } from '@/components/ui';
 import TopTags from '@/components/home/TopTags';
+
+export const metadata: Metadata = {
+  title: 'Daniele Gazzelloni | Frontend Engineering Blog',
+};
 
 export default function HomePage() {
   return (

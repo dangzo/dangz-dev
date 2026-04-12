@@ -1,9 +1,14 @@
+import type { Metadata } from 'next';
 import {
   BeyondTheStack,
   ToolsITrust,
   IntroTextAndCTAs,
   MyJourneySoFar,  
 } from '@/components/about';
+
+export const metadata: Metadata = {
+  title: 'About',
+};
 
 export default async function AboutPage() {
   return (
