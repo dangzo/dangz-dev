@@ -12,7 +12,7 @@ export default function PostSidebar({ post }: PostSidebarProps) {
   const toc = extractTocFromBody(post.body);
 
   return (
-    <div className="space-y-12 hidden sm:block">
+    <div className="space-y-12 hidden sm:block sm:sticky sm:top-12">
       <section>
         <Heading as="h3" className="mb-1! text-2xl font-semibold inline-block">
           Table of Contents
