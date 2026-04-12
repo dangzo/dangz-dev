@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { baseMetadata, siteName } from '@/data/siteMetadata';
+import { siteName } from '@/data/siteMetadata';
 import { getPostBySlug } from '@/api/queries/posts';
 import { urlFor } from '@/utils/image';
 
@@ -20,7 +20,7 @@ async function getPostMetadata(
     title: post.title,
     description: post.excerpt,
     openGraph: {
-      title: post.title,
+      title: `${post.title} | ${siteName}`,
       description: post.excerpt,
       url: `https://www.dangz.dev/blog/${slug}`,
       siteName: siteName,
@@ -35,7 +35,7 @@ async function getPostMetadata(
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${post.title} - ${baseMetadata.title}`,
+      title: `${post.title} | ${siteName}`,
       description: post.excerpt,
       images: [urlFor(post.image)?.url() || '/og-image.png'],
     },

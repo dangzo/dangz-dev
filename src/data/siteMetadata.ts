@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 
-const title = 'Daniele Gazzelloni - Frontend Engineering Blog';
+const siteName = 'dangz.dev';
+const defaultPageTitle = 'Daniele Gazzelloni | Frontend Engineering Blog';
+const title = `${siteName} | ${defaultPageTitle}`;
 const description = 'Practical insights on how to build scalable, maintainable, and high-performance frontend web apps in React, Vue and TypeScript.';
 const author = 'Daniele Gazzelloni';
-const siteName = title.split('(')[0].trim();
 const siteUrl = 'https://www.dangz.dev';
 
 const baseMetadata: Metadata = {
@@ -12,7 +13,11 @@ const baseMetadata: Metadata = {
   publisher: 'Daniele Gazzelloni',
   creator: 'Daniele Gazzelloni',
   generator: 'Next.js',
-  title,
+  title: {
+    default: title,
+    // Any page-level title automatically becomes "{page} | dangz.dev".
+    template: `%s | ${siteName}`,
+  },
   description,
   keywords: [
     'frontend development',
