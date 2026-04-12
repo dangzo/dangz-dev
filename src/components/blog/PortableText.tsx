@@ -28,6 +28,11 @@ export default function PortableText({ value }: PortableTextProps) {
         return <Heading as="h3" id={id}>{children}</Heading>;
       },
 
+      h4: ({ children }: { children?: React.ReactNode }) => {
+        const id = getHeadingId(getNodeText(children));
+        return <Heading as="h4" id={id}>{children}</Heading>;
+      },
+
       normal: ({ children }: { children?: React.ReactNode }) => <Text>{children}</Text>,
     },
 
@@ -61,6 +66,7 @@ export default function PortableText({ value }: PortableTextProps) {
             alt={value.alt || ' '}
             width={value.width || 500}
             height={value.height || 500}
+            className="mx-auto my-6 rounded-md object-cover"
           />
         );
       },
