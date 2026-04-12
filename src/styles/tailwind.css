@@ -148,7 +148,7 @@
         color: var(--color-primary-600);
       }
       & code {
-        color: var(--color-primary-400);
+        color: var(--color-accent-light);
       }
     }
     & :where(h1, h2) {
@@ -159,14 +159,14 @@
       font-weight: 600;
     }
     & :where(code):not(pre code) {
-      color: var(--color-indigo-500);
+      color: var(--color-accent-light);
     }
     & strong {
       color: var(--color-main-light);
     }
     :where(.dark, .dark *) & {
       & a:hover {
-        color: var(--color-primary-400);
+        color: var(--color-accent-dark);
       }
       & :where(h1, h2, h3, h4, h5, h6) {
         color: var(--color-main-dark);

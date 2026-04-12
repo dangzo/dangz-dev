@@ -47,10 +47,23 @@ export default function PortableText({ value }: PortableTextProps) {
 
     listItem: {
       bullet: ({ children }: { children?: React.ReactNode }) => (
-        <li className="mb-1 sm:mb-2"><Text>{children}</Text></li>
+        <li><Text className="mt-0! mb-2! sm:mb-4!">{children}</Text></li>
       ),
       number: ({ children }: { children?: React.ReactNode }) => (
-        <li className="mb-1 sm:mb-2"><Text>{children}</Text></li>
+        <li><Text className="mt-0! mb-2! sm:mb-4!">{children}</Text></li>
+      ),
+    },
+
+    marks: {
+      inlineCode: ({ children }: { children?: React.ReactNode }) => (
+        <code
+          className="
+            rounded px-1 py-0.5 text-[0.8em]!
+            bg-accent-light/10 dark:bg-neutral-100/10
+          "
+        >
+          {children}
+        </code>
       ),
     },
 
