@@ -23,14 +23,18 @@ export default function PostSidebar({ post }: PostSidebarProps) {
             {toc.map(item => (
               <li
                 key={item.id}
-                className={clsx({
-                  'mt-3 mb-1': item.level < 3,
+                className={clsx('mb-1', {
+                  'mt-3': item.level === 2,
+                  'mt-1': item.level === 3,
                 })}
               >
                 <Link
                   href={`#${item.id}`}
                   type="primary"
-                  className={item.level === 3 ? 'text-sm! pl-4 block text-secondary-light dark:text-secondary-dark' : 'font-semibold tracking-wide'}
+                  className={clsx('block', {
+                    'font-semibold tracking-wide text-base text-main-light dark:text-main-dark': item.level === 2,
+                    'pl-4 text-sm! font-medium text-accent-light/90 dark:text-accent-dark/90 border-l border-accent-light/25 dark:border-accent-dark/25': item.level === 3,
+                  })}
                 >
                   {item.title}
                 </Link>
