@@ -28,6 +28,11 @@ export default function PortableText({ value }: PortableTextProps) {
         return <Heading as="h3" id={id}>{children}</Heading>;
       },
 
+      h4: ({ children }: { children?: React.ReactNode }) => {
+        const id = getHeadingId(getNodeText(children));
+        return <Heading as="h4" id={id}>{children}</Heading>;
+      },
+
       normal: ({ children }: { children?: React.ReactNode }) => <Text>{children}</Text>,
     },
 
@@ -42,10 +47,23 @@ export default function PortableText({ value }: PortableTextProps) {
 
     listItem: {
       bullet: ({ children }: { children?: React.ReactNode }) => (
-        <li className="mb-1 sm:mb-2"><Text>{children}</Text></li>
+        <li><Text className="mt-0! mb-2! sm:mb-4!">{children}</Text></li>
       ),
       number: ({ children }: { children?: React.ReactNode }) => (
-        <li className="mb-1 sm:mb-2"><Text>{children}</Text></li>
+        <li><Text className="mt-0! mb-2! sm:mb-4!">{children}</Text></li>
+      ),
+    },
+
+    marks: {
+      inlineCode: ({ children }: { children?: React.ReactNode }) => (
+        <code
+          className="
+            rounded px-1 py-0.5 text-[0.8em]!
+            bg-accent-light/10 dark:bg-neutral-100/10
+          "
+        >
+          {children}
+        </code>
       ),
     },
 
@@ -61,6 +79,7 @@ export default function PortableText({ value }: PortableTextProps) {
             alt={value.alt || ' '}
             width={value.width || 500}
             height={value.height || 500}
+            className="mx-auto my-6 rounded-md object-cover"
           />
         );
       },

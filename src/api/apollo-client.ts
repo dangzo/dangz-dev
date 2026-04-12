@@ -5,15 +5,40 @@ import {
   InMemoryCache,
 } from '@apollo/client-integration-nextjs';
 
-export const { getClient, query, PreloadQuery } = registerApolloClient(() => {
+const isDev = process.env.NODE_ENV === 'development';
+const readToken = process.env.SANITY_API_READ_ONLY_TOKEN;
+const canPreviewDrafts = isDev && Boolean(readToken);
+
+const graphqlBaseUrl = 'https://wdxhl3tc.api.sanity.io/v2023-08-01/graphql/production/default';
+const graphqlUri = canPreviewDrafts
+  ? `${graphqlBaseUrl}?perspective=previewDrafts`
+  : graphqlBaseUrl;
+
+export const { getClient, PreloadQuery } = registerApolloClient(() => {
+  if (isDev && !readToken) {
+    // eslint-expect-next-line no-console Warning is intentional here to inform developers about missing token for draft preview in development.
+    console.warn('Sanity draft preview disabled: set SANITY_API_READ_ONLY_TOKEN in .env');
+  }
+
   return new ApolloClient({
     cache: new InMemoryCache(),
-    link: new HttpLink({
-      // this needs to be an absolute url, as relative urls cannot be used in SSR
-      uri: 'https://wdxhl3tc.api.sanity.io/v2023-08-01/graphql/production/default',
-      fetchOptions: {
-        next: { revalidate: 3600 },
+    defaultOptions: {
+      query: {
+        fetchPolicy: canPreviewDrafts ? 'no-cache' : 'cache-first',
       },
+    },
+    link: new HttpLink({
+      // For draft preview in dev, set SANITY_API_READ_ONLY_TOKEN in .env.
+      // In production or without token, this falls back to published content.
+      uri: graphqlUri,
+      headers: canPreviewDrafts
+        ? {
+          Authorization: `Bearer ${readToken}`,
+        }
+        : undefined,
+      fetchOptions: canPreviewDrafts
+        ? { cache: 'no-store' }
+        : { next: { revalidate: 3600 } },
     }),
   });
 });

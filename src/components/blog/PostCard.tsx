@@ -36,7 +36,7 @@ export const PostCard = ({ post }: PostCardProps) => {
           </Heading>
         </Link>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-1">
           <DateText date={post.publishedAt} />
           <TagList tags={post.tags} />
         </div>

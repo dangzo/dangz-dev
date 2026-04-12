@@ -1,5 +1,5 @@
 import type { PostWithTags } from '@/types/Post.types';
-import { query } from '@/api/apollo-client';
+import { getClient } from '@/api/apollo-client';
 import { gql } from '@apollo/client';
 
 export const POST_LIST_QUERY = ({ limit = 12, offset = 0 }: {limit?: number, offset?: number}) => {
@@ -76,14 +76,16 @@ const POST_SLUGS_QUERY = gql`
 `;
 
 export async function getPostSlugs(): Promise<{ slug: { current: string } }[]> {
-  const { data } = await query<{ allPost: { slug: { current: string } }[] }>({
+  const client = getClient();
+  const { data } = await client.query<{ allPost: { slug: { current: string } }[] }>({
     query: POST_SLUGS_QUERY,
   });
   return data?.allPost ?? [];
 }
 
 export async function getPostList() {
-  const { data } = await query<{ allPost: PostWithTags[] }>({
+  const client = getClient();
+  const { data } = await client.query<{ allPost: PostWithTags[] }>({
     query: POST_LIST_QUERY({ limit: 12, offset: 0 }),
   });
 
@@ -91,7 +93,8 @@ export async function getPostList() {
 }
 
 export async function getPostBySlug(slug: string): Promise<PostWithTags | undefined> {
-  const { data } = await query<{ allPost: PostWithTags[] }>({
+  const client = getClient();
+  const { data } = await client.query<{ allPost: PostWithTags[] }>({
     query: POSTS_BY_SLUG_QUERY({ slug })
   });
   return data?.allPost?.[0];
