@@ -1,5 +1,5 @@
 import type { PostTags, TagWithCount } from '@/types/Tag.types';
-import { query } from '@/api/apollo-client';
+import { getClient } from '@/api/apollo-client';
 import { gql } from '@apollo/client';
 
 const TAGS_WITH_COUNT_QUERY = gql`
@@ -22,7 +22,8 @@ const TAGS_WITH_COUNT_QUERY = gql`
 `;
 
 export async function getTagsWithCount() {
-  const { data } = await query<{ allTag: TagWithCount[], allPost: PostTags[] }>({
+  const client = getClient();
+  const { data } = await client.query<{ allTag: TagWithCount[], allPost: PostTags[] }>({
     query: TAGS_WITH_COUNT_QUERY
   });
   const { allTag: tags, allPost: postTags } = data ?? {};
