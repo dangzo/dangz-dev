@@ -24,6 +24,27 @@ type SearchCorpusEntry = {
 
 const normalize = (value: string) => value.trim().toLowerCase();
 
+const toUniqueTagLabels = (
+  tags: Array<{ name?: string; slug?: { current?: string } }> | undefined,
+) => {
+  const seen = new Set<string>();
+
+  return (tags ?? []).flatMap((tag) => {
+    const label = tag.name?.trim() || tag.slug?.current?.trim() || '';
+    if (!label) {
+      return [];
+    }
+
+    const normalized = label.toLowerCase();
+    if (seen.has(normalized)) {
+      return [];
+    }
+
+    seen.add(normalized);
+    return [label];
+  });
+};
+
 const getSearchCorpus = unstable_cache(
   async (): Promise<SearchCorpusEntry[]> => {
     const posts = await getSearchablePosts();
@@ -33,15 +54,7 @@ const getSearchCorpus = unstable_cache(
         const title = post.title ?? '';
         const slug = post.slug?.current ?? '';
         const excerpt = post.excerpt ?? '';
-        const tags = Array.from(
-          new Set(
-            (post.tags ?? []).flatMap((tag) =>
-              [tag.name, tag.slug?.current].filter(
-                (value): value is string => typeof value === 'string' && value.length > 0,
-              ),
-            ),
-          ),
-        );
+        const tags = toUniqueTagLabels(post.tags);
 
         return {
           id: post._id,
@@ -56,7 +69,7 @@ const getSearchCorpus = unstable_cache(
       })
       .filter((post) => post.slug.length > 0);
   },
-  ['search-corpus'],
+  ['search-corpus-v2'],
   { revalidate: 3600 },
 );
 

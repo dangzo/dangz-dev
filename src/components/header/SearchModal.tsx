@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { createPortal } from 'react-dom';
-import type { RefObject } from 'react';
+import { Fragment } from 'react';
+import type { ReactNode, RefObject } from 'react';
 import styles from './SearchModal.module.css';
 
 export type SearchHit = {
@@ -22,6 +23,43 @@ type SearchModalProps = {
   inputRef: RefObject<HTMLInputElement | null>;
   onQueryChange: (value: string) => void;
   onClose: () => void;
+};
+
+const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const highlightText = (text: string, query: string): ReactNode => {
+  const terms = Array.from(
+    new Set(
+      query
+        .trim()
+        .toLowerCase()
+        .split(/\s+/)
+        .filter((term) => term.length >= 2),
+    ),
+  );
+
+  if (!text || terms.length === 0) {
+    return text;
+  }
+
+  const pattern = new RegExp(`(${terms.map(escapeRegex).join('|')})`, 'gi');
+  const parts = text.split(pattern);
+
+  return parts.map((part, index) => {
+    const isMatch = terms.includes(part.toLowerCase());
+    if (!isMatch) {
+      return <Fragment key={`${part}-${index}`}>{part}</Fragment>;
+    }
+
+    return (
+      <mark
+        key={`${part}-${index}`}
+        className="rounded-sm bg-primary-100 px-0.5 text-main-light dark:bg-primary-900/55 dark:text-main-dark"
+      >
+        {part}
+      </mark>
+    );
+  });
 };
 
 const SearchModal = ({
@@ -112,16 +150,16 @@ const SearchModal = ({
                     className={`block rounded-xl border border-border-light/70 dark:border-border-dark/70 px-4 py-3 transition-colors hover:border-primary-500/60 hover:bg-gray-100 dark:hover:border-primary-400/60 dark:hover:bg-gray-900 ${styles.resultCard}`}
                   >
                     <p className="font-semibold text-main-light dark:text-main-dark">
-                      {result.title || 'Untitled post'}
+                      {highlightText(result.title || 'Untitled post', query)}
                     </p>
                     {result.excerpt ? (
                       <p className="mt-1 text-sm text-main-light/85 dark:text-main-dark/80 line-clamp-2">
-                        {result.excerpt}
+                        {highlightText(result.excerpt, query)}
                       </p>
                     ) : null}
                     {result.tags.length > 0 ? (
                       <p className="mt-2 text-xs text-primary-500 dark:text-primary-400">
-                        {result.tags.slice(0, 4).join(' • ')}
+                        {result.tags.join(' • ')}
                       </p>
                     ) : null}
                   </Link>
