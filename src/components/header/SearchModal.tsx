@@ -159,7 +159,12 @@ const SearchModal = ({
                     ) : null}
                     {result.tags.length > 0 ? (
                       <p className="mt-2 text-xs text-primary-500 dark:text-primary-400">
-                        {result.tags.join(' • ')}
+                        {result.tags.map((tag, index) => (
+                          <Fragment key={`${tag}-${index}`}>
+                            {index > 0 ? ' • ' : null}
+                            {highlightText(tag, query)}
+                          </Fragment>
+                        ))}
                       </p>
                     ) : null}
                   </Link>
