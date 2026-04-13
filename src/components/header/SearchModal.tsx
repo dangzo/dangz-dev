@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { createPortal } from 'react-dom';
 import type { RefObject } from 'react';
-import styles from './SearchButton.module.css';
+import styles from './SearchModal.module.css';
 
 export type SearchHit = {
   id: string;
@@ -71,7 +71,7 @@ const SearchModal = ({
               ref={inputRef}
               value={query}
               onChange={(event) => onQueryChange(event.target.value)}
-              placeholder="Search titles, tags, excerpts..."
+              placeholder="Search titles, tags, content..."
               className="w-full bg-transparent text-base text-main-light dark:text-main-dark outline-none placeholder:text-main-light/60 dark:placeholder:text-main-dark/50"
             />
 

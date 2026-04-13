@@ -10,6 +10,7 @@ const SearchButton = () => {
   const [results, setResults] = useState<SearchHit[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const latestRequestIdRef = useRef(0);
 
   useEffect(() => {
     setIsMounted(true);
@@ -39,18 +40,32 @@ const SearchButton = () => {
 
   useEffect(() => {
     if (!isOpen) {
+      latestRequestIdRef.current += 1;
+      setIsLoading(false);
       return;
     }
 
     const trimmedQuery = query.trim();
     if (trimmedQuery.length < 2) {
+      latestRequestIdRef.current += 1;
       setResults([]);
       setIsLoading(false);
       return;
     }
 
     const controller = new AbortController();
+    const requestId = latestRequestIdRef.current + 1;
+    latestRequestIdRef.current = requestId;
+
+    const isCurrentRequest = () => {
+      return latestRequestIdRef.current === requestId && !controller.signal.aborted;
+    };
+
     const timeout = window.setTimeout(async () => {
+      if (!isCurrentRequest()) {
+        return;
+      }
+
       setIsLoading(true);
 
       try {
@@ -62,17 +77,33 @@ const SearchButton = () => {
           },
         );
 
+        if (!isCurrentRequest()) {
+          return;
+        }
+
         if (!response.ok) {
-          setResults([]);
+          if (isCurrentRequest()) {
+            setResults([]);
+          }
           return;
         }
 
         const data = (await response.json()) as { results?: SearchHit[] };
-        setResults(data.results ?? []);
-      } catch {
-        setResults([]);
+        if (isCurrentRequest()) {
+          setResults(data.results ?? []);
+        }
+      } catch (error) {
+        if (controller.signal.aborted || !isCurrentRequest()) {
+          return;
+        }
+
+        if (!(error instanceof DOMException && error.name === 'AbortError')) {
+          setResults([]);
+        }
       } finally {
-        setIsLoading(false);
+        if (isCurrentRequest()) {
+          setIsLoading(false);
+        }
       }
     }, 180);
 
@@ -83,7 +114,11 @@ const SearchButton = () => {
   }, [query, isOpen]);
 
   const closePopover = () => {
+    latestRequestIdRef.current += 1;
     setIsOpen(false);
+    setQuery('');
+    setResults([]);
+    setIsLoading(false);
   };
 
   return (
