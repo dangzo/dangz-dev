@@ -23,7 +23,7 @@ const SearchButton = () => {
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        setIsOpen(false);
+        closePopover();
       }
     };
 
