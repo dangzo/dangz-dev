@@ -91,16 +91,13 @@ const Header = () => {
     <header
       className="bg-transparent backdrop-blur-sm py-4 mb-4 sm:mb-0 sm:py-8"
     >
-      <div className="flex w-full flex-col-reverse md:flex-row items-stretch md:items-center justify-between gap-4">
+      <div className="flex w-full flex-col-reverse lg:flex-row items-stretch md:items-center justify-between gap-4">
         <Prompt />
 
-        <div className="flex w-full md:w-auto justify-between items-center gap-3">
-          <div className="hidden md:block">
-            <Navigation />
-          </div>
+        <div className="flex w-full md:w-auto justify-between items-center gap-[30px] lg:gap-3">
+          <Navigation className="hidden md:block" />
 
           <ActionBtns />
-
           <HamburgerMenu isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
         </div>
       </div>
