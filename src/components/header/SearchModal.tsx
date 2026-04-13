@@ -1,19 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { createPortal } from 'react-dom';
-import { Fragment, useEffect, useRef, useState } from 'react';
-import type { ReactNode, RefObject } from 'react';
+import { Fragment } from 'react';
+import type { RefObject } from 'react';
 import styles from './SearchModal.module.css';
+import HighlightText from './HighlightText';
+import { type SearchHit } from '@/hooks/useBlogSearch';
+import { useSearchKeyboardNavigation } from '@/hooks/useSearchKeyboardNavigation';
 
-export type SearchHit = {
-  id: string;
-  slug: string;
-  title: string;
-  excerpt: string;
-  tags: string[];
-};
+export type { SearchHit };
 
 type SearchModalProps = {
   isMounted: boolean;
@@ -26,42 +22,6 @@ type SearchModalProps = {
   onClose: () => void;
 };
 
-const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-const highlightText = (text: string, query: string): ReactNode => {
-  const terms = Array.from(
-    new Set(
-      query
-        .trim()
-        .toLowerCase()
-        .split(/\s+/)
-        .filter((term) => term.length >= 2),
-    ),
-  );
-
-  if (!text || terms.length === 0) {
-    return text;
-  }
-
-  const pattern = new RegExp(`(${terms.map(escapeRegex).join('|')})`, 'gi');
-  const parts = text.split(pattern);
-
-  return parts.map((part, index) => {
-    const isMatch = terms.includes(part.toLowerCase());
-    if (!isMatch) {
-      return <Fragment key={`${part}-${index}`}>{part}</Fragment>;
-    }
-
-    return (
-      <mark
-        key={`${part}-${index}`}
-        className="rounded-sm bg-primary-100 px-0.5 text-main-light dark:bg-primary-900/55 dark:text-main-dark"
-      >
-        {part}
-      </mark>
-    );
-  });
-};
 
 const SearchModal = ({
   isMounted,
@@ -73,67 +33,8 @@ const SearchModal = ({
   onQueryChange,
   onClose,
 }: SearchModalProps) => {
-  const router = useRouter();
-  const [activeResultIndex, setActiveResultIndex] = useState(-1);
-  const resultLinkRefs = useRef<Array<HTMLAnchorElement | null>>([]);
-
-  useEffect(() => {
-    if (!isOpen || results.length === 0) {
-      setActiveResultIndex(-1);
-      return;
-    }
-
-    setActiveResultIndex(0);
-  }, [isOpen, query, results]);
-
-  useEffect(() => {
-    if (activeResultIndex < 0) {
-      return;
-    }
-
-    resultLinkRefs.current[activeResultIndex]?.scrollIntoView({ block: 'nearest' });
-  }, [activeResultIndex]);
-
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
-    const onWindowKeyDown = (event: KeyboardEvent) => {
-      if (results.length === 0) {
-        return;
-      }
-
-      if (event.key === 'ArrowDown') {
-        event.preventDefault();
-        setActiveResultIndex((prev) => (prev < 0 ? 0 : (prev + 1) % results.length));
-        return;
-      }
-
-      if (event.key === 'ArrowUp') {
-        event.preventDefault();
-        setActiveResultIndex((prev) => (prev <= 0 ? results.length - 1 : prev - 1));
-        return;
-      }
-
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        const targetIndex = activeResultIndex >= 0 ? activeResultIndex : 0;
-        const selectedResult = results[targetIndex];
-        if (!selectedResult) {
-          return;
-        }
-
-        onClose();
-        router.push(`/blog/${selectedResult.slug}`);
-      }
-    };
-
-    window.addEventListener('keydown', onWindowKeyDown);
-    return () => {
-      window.removeEventListener('keydown', onWindowKeyDown);
-    };
-  }, [activeResultIndex, isOpen, onClose, results, router]);
+  const { activeResultIndex, setActiveResultIndex, resultLinkRefs } =
+    useSearchKeyboardNavigation({ isOpen, results, onClose });
 
   if (!isMounted || !isOpen) {
     return null;
@@ -223,11 +124,11 @@ const SearchModal = ({
                       className={`block rounded-xl border border-border-light/70 dark:border-border-dark/70 px-4 py-3 transition-colors hover:border-primary-500/60 hover:bg-gray-100 dark:hover:border-primary-400/60 dark:hover:bg-gray-900 ${styles.resultCard} ${activeResultIndex === index ? 'border-primary-500/70 bg-gray-100 dark:border-primary-400/70 dark:bg-gray-900' : ''}`}
                     >
                       <p className="font-semibold text-main-light dark:text-main-dark">
-                        {highlightText(result.title || 'Untitled post', query)}
+                        <HighlightText text={result.title || 'Untitled post'} query={query} />
                       </p>
                       {result.excerpt ? (
                         <p className="mt-1 text-sm text-main-light/85 dark:text-main-dark/80 line-clamp-2">
-                          {highlightText(result.excerpt, query)}
+                          <HighlightText text={result.excerpt} query={query} />
                         </p>
                       ) : null}
                       {result.tags.length > 0 ? (
@@ -235,7 +136,7 @@ const SearchModal = ({
                           {result.tags.map((tag, index) => (
                             <Fragment key={`${tag}-${index}`}>
                               {index > 0 ? ' • ' : null}
-                              {highlightText(tag, query)}
+                              <HighlightText text={tag} query={query} />
                             </Fragment>
                           ))}
                         </p>

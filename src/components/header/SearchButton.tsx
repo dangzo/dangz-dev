@@ -1,125 +1,17 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import SearchModal, { type SearchHit } from './SearchModal';
+import { useEffect, useState } from 'react';
+import SearchModal from './SearchModal';
+import { useBlogSearch } from '@/hooks/useBlogSearch';
 
 const SearchButton = () => {
   const [isMounted, setIsMounted] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchHit[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const latestRequestIdRef = useRef(0);
+  const { isOpen, query, results, isLoading, inputRef, openSearch, closeSearch, setQuery } =
+    useBlogSearch();
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
-
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        closePopover();
-      }
-    };
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    window.addEventListener('keydown', onKeyDown);
-    requestAnimationFrame(() => inputRef.current?.focus());
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener('keydown', onKeyDown);
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (!isOpen) {
-      latestRequestIdRef.current += 1;
-      setIsLoading(false);
-      return;
-    }
-
-    const trimmedQuery = query.trim();
-    if (trimmedQuery.length < 2) {
-      latestRequestIdRef.current += 1;
-      setResults([]);
-      setIsLoading(false);
-      return;
-    }
-
-    const controller = new AbortController();
-    const requestId = latestRequestIdRef.current + 1;
-    latestRequestIdRef.current = requestId;
-
-    const isCurrentRequest = () => {
-      return latestRequestIdRef.current === requestId && !controller.signal.aborted;
-    };
-
-    const timeout = window.setTimeout(async () => {
-      if (!isCurrentRequest()) {
-        return;
-      }
-
-      setIsLoading(true);
-
-      try {
-        const response = await fetch(
-          `/api/search?q=${encodeURIComponent(trimmedQuery)}`,
-          {
-            signal: controller.signal,
-            cache: 'no-store',
-          },
-        );
-
-        if (!isCurrentRequest()) {
-          return;
-        }
-
-        if (!response.ok) {
-          if (isCurrentRequest()) {
-            setResults([]);
-          }
-          return;
-        }
-
-        const data = (await response.json()) as { results?: SearchHit[] };
-        if (isCurrentRequest()) {
-          setResults(data.results ?? []);
-        }
-      } catch (error) {
-        if (controller.signal.aborted || !isCurrentRequest()) {
-          return;
-        }
-
-        if (!(error instanceof DOMException && error.name === 'AbortError')) {
-          setResults([]);
-        }
-      } finally {
-        if (isCurrentRequest()) {
-          setIsLoading(false);
-        }
-      }
-    }, 180);
-
-    return () => {
-      controller.abort();
-      window.clearTimeout(timeout);
-    };
-  }, [query, isOpen]);
-
-  const closePopover = () => {
-    latestRequestIdRef.current += 1;
-    setIsOpen(false);
-    setQuery('');
-    setResults([]);
-    setIsLoading(false);
-  };
 
   return (
     <>
@@ -129,7 +21,7 @@ const SearchButton = () => {
         aria-haspopup="dialog"
         aria-expanded={isOpen}
         className="cursor-pointer"
-        onClick={() => setIsOpen(true)}
+        onClick={openSearch}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -154,7 +46,7 @@ const SearchButton = () => {
         isLoading={isLoading}
         inputRef={inputRef}
         onQueryChange={setQuery}
-        onClose={closePopover}
+        onClose={closeSearch}
       />
     </>
   );
