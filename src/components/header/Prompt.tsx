@@ -10,10 +10,13 @@ const Prompt = () => {
   const pathname = usePathname();
   const fullPath = `~${pathname}`;
   const segments = pathname.split('/').filter(Boolean);
+  const charCount = segments.length === 0 ? 1 : fullPath.length;
+  const caretDelaySeconds = Math.min(charCount * 0.02, 0.8);
 
   const typewriterStyle: CSSProperties = {
-    '--chars': segments.length === 0 ? 1 : fullPath.length
-  } as CSSProperties & { '--chars': number };
+    '--chars': charCount,
+    '--caret-delay': `${caretDelaySeconds}s`
+  } as CSSProperties & { '--chars': number; '--caret-delay': string };
 
   const buildHref = useCallback((index: number) => {
     if (index === -1) return '/';

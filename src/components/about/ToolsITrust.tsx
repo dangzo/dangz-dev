@@ -33,7 +33,12 @@ function ToolsITrust() {
                       bg-white text-primary-700 dark:bg-neutral-100 dark:text-primary-200
                     "
                   >
-                    {tool.icon({ height: 38, width: 38 })}
+                    {
+                      tool.icon({
+                        width: '80%',
+                        height: '80%',
+                      })
+                    }
                   </span>
 
                   <Text size="small" className="mb-0! font-medium text-main-light dark:text-main-dark">

@@ -15,22 +15,47 @@ export default function PortableText({ value }: PortableTextProps) {
     block: {
       h1: ({ children }: { children?: React.ReactNode }) => {
         const id = getHeadingId(getNodeText(children));
-        return <Heading as="h1" id={id}>{children}</Heading>;
+        return (
+          <Heading as="h1" id={id}>{children}</Heading>
+        );
       },
 
       h2: ({ children }: { children?: React.ReactNode }) => {
         const id = getHeadingId(getNodeText(children));
-        return <Heading as="h2" id={id}>{children}</Heading>;
+        return (
+          <Heading
+            as="h2"
+            id={id}
+            className="border-t border-border-light dark:border-border-dark pt-8 mt-12!"
+          >
+            {children}
+          </Heading>
+        );
       },
 
       h3: ({ children }: { children?: React.ReactNode }) => {
         const id = getHeadingId(getNodeText(children));
-        return <Heading as="h3" id={id}>{children}</Heading>;
+        return (
+          <Heading
+            as="h3"
+            id={id}
+            className="border-t border-border-light dark:border-border-dark pt-6"
+          >
+            {children}
+          </Heading>
+        );
       },
 
       h4: ({ children }: { children?: React.ReactNode }) => {
         const id = getHeadingId(getNodeText(children));
-        return <Heading as="h4" id={id}>{children}</Heading>;
+        return (
+          <Heading
+            as="h4"
+            id={id}
+          >
+            {children}
+          </Heading>
+        );
       },
 
       normal: ({ children }: { children?: React.ReactNode }) => <Text>{children}</Text>,

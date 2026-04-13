@@ -2,6 +2,8 @@ import TagChip from '@/components/ui/TagChip';
 import Skeleton from 'react-loading-skeleton';
 import { getTagsWithCount } from '@/api/queries/tags';
 
+const TOP_TAGS_COUNT = 7;
+
 const TopTagsSkeleton = () => {
   return (
     <>
@@ -23,7 +25,7 @@ async function TopTags() {
   const topTags = tagsWithCount
     ?.sort((a, b) => (b.postCount - a.postCount) || (a.name ?? '').localeCompare(b.name ?? ''))
     ?.filter(tag => tag.postCount > 0)
-    ?.slice(0, 5);
+    ?.slice(0, TOP_TAGS_COUNT);
 
   if (!topTags || topTags.length === 0) {
     return (
