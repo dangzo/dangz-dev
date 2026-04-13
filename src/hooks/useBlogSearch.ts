@@ -48,21 +48,16 @@ export function useBlogSearch() {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', onKeyDown);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) {
-      latestRequestIdRef.current += 1;
-      setIsLoading(false);
       return;
     }
 
     const trimmedQuery = query.trim();
     if (trimmedQuery.length < 2) {
-      latestRequestIdRef.current += 1;
-      setResults([]);
-      setIsLoading(false);
       return;
     }
 
@@ -114,9 +109,7 @@ export function useBlogSearch() {
           setResults([]);
         }
       } finally {
-        if (isCurrentRequest()) {
-          setIsLoading(false);
-        }
+        setIsLoading(false);
       }
     }, 180);
 

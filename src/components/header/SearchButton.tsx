@@ -1,17 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import SearchModal from './SearchModal';
 import { useBlogSearch } from '@/hooks/useBlogSearch';
 
 const SearchButton = () => {
-  const [isMounted, setIsMounted] = useState(false);
   const { isOpen, query, results, isLoading, inputRef, openSearch, closeSearch, setQuery } =
     useBlogSearch();
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   return (
     <>
@@ -39,7 +33,6 @@ const SearchButton = () => {
         </svg>
       </button>
       <SearchModal
-        isMounted={isMounted}
         isOpen={isOpen}
         query={query}
         results={results}

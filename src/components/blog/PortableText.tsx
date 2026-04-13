@@ -53,7 +53,7 @@ export default function PortableText({ value }: PortableTextProps) {
             as="h4"
             id={id}
           >
-              {children}
+            {children}
           </Heading>
         );
       },

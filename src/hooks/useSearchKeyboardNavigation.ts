@@ -18,23 +18,16 @@ export function useSearchKeyboardNavigation({
   const router = useRouter();
   const [activeResultIndex, setActiveResultIndex] = useState(-1);
   const resultLinkRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+  const safeActiveResultIndex =
+    activeResultIndex >= 0 && activeResultIndex < results.length ? activeResultIndex : -1;
 
   useEffect(() => {
-    if (!isOpen || results.length === 0) {
-      setActiveResultIndex(-1);
+    if (safeActiveResultIndex < 0) {
       return;
     }
 
-    setActiveResultIndex(0);
-  }, [isOpen, results]);
-
-  useEffect(() => {
-    if (activeResultIndex < 0) {
-      return;
-    }
-
-    resultLinkRefs.current[activeResultIndex]?.scrollIntoView({ block: 'nearest' });
-  }, [activeResultIndex]);
+    resultLinkRefs.current[safeActiveResultIndex]?.scrollIntoView({ block: 'nearest' });
+  }, [safeActiveResultIndex]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -60,7 +53,7 @@ export function useSearchKeyboardNavigation({
 
       if (event.key === 'Enter') {
         event.preventDefault();
-        const targetIndex = activeResultIndex >= 0 ? activeResultIndex : 0;
+        const targetIndex = safeActiveResultIndex >= 0 ? safeActiveResultIndex : 0;
         const selectedResult = results[targetIndex];
         if (!selectedResult) {
           return;
@@ -75,10 +68,10 @@ export function useSearchKeyboardNavigation({
     return () => {
       window.removeEventListener('keydown', onWindowKeyDown);
     };
-  }, [activeResultIndex, isOpen, onClose, results, router]);
+  }, [isOpen, onClose, results, router, safeActiveResultIndex]);
 
   return {
-    activeResultIndex,
+    activeResultIndex: safeActiveResultIndex,
     setActiveResultIndex,
     resultLinkRefs,
   };

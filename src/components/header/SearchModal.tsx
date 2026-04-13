@@ -12,7 +12,6 @@ import { useSearchKeyboardNavigation } from '@/hooks/useSearchKeyboardNavigation
 export type { SearchHit };
 
 type SearchModalProps = {
-  isMounted: boolean;
   isOpen: boolean;
   query: string;
   results: SearchHit[];
@@ -22,9 +21,7 @@ type SearchModalProps = {
   onClose: () => void;
 };
 
-
 const SearchModal = ({
-  isMounted,
   isOpen,
   query,
   results,
@@ -36,7 +33,7 @@ const SearchModal = ({
   const { activeResultIndex, setActiveResultIndex, resultLinkRefs } =
     useSearchKeyboardNavigation({ isOpen, results, onClose });
 
-  if (!isMounted || !isOpen) {
+  if (!isOpen) {
     return null;
   }
 
@@ -88,65 +85,77 @@ const SearchModal = ({
         </div>
 
         <div className={`max-h-[58vh] overflow-y-auto px-4 py-3 sm:px-6 sm:py-4 ${styles.resultsSurface}`}>
-          {query.trim().length < 2 ? (
-            <p className="text-sm text-main-light dark:text-main-dark/80">
+          {query.trim().length < 2
+            ? (
+              <p className="text-sm text-main-light dark:text-main-dark/80">
               Type at least 2 characters to search posts.
-            </p>
-          ) : null}
-
-          {query.trim().length >= 2 && isLoading ? (
-            <p className="text-sm text-main-light dark:text-main-dark/80">Searching...</p>
-          ) : null}
-
-          {query.trim().length >= 2 && !isLoading && results.length === 0 ? (
-            <p className="text-sm text-main-light dark:text-main-dark/80">
-              No results found for "{query.trim()}".
-            </p>
-          ) : null}
-
-          {!isLoading && results.length > 0 ? (
-            <>
-              <p className="mb-4 text-xs text-main-light/70 dark:text-main-dark/60">
-                Tip: Use keyboard [Arrow Keys] to move between results, [Enter] to open.
               </p>
-              <ul className="space-y-3">
-                {results.map((result, index) => (
-                  <li key={result.id}>
-                    <Link
-                      href={`/blog/${result.slug}`}
-                      onClick={onClose}
-                      ref={(element) => {
-                        resultLinkRefs.current[index] = element;
-                      }}
-                      onMouseEnter={() => {
-                        setActiveResultIndex(index);
-                      }}
-                      className={`block rounded-xl border border-border-light/70 dark:border-border-dark/70 px-4 py-3 transition-colors hover:border-primary-500/60 hover:bg-gray-100 dark:hover:border-primary-400/60 dark:hover:bg-gray-900 ${styles.resultCard} ${activeResultIndex === index ? 'border-primary-500/70 bg-gray-100 dark:border-primary-400/70 dark:bg-gray-900' : ''}`}
-                    >
-                      <p className="font-semibold text-main-light dark:text-main-dark">
-                        <HighlightText text={result.title || 'Untitled post'} query={query} />
-                      </p>
-                      {result.excerpt ? (
-                        <p className="mt-1 text-sm text-main-light/85 dark:text-main-dark/80 line-clamp-2">
-                          <HighlightText text={result.excerpt} query={query} />
+            )
+            : null}
+
+          {query.trim().length >= 2 && isLoading
+            ? (
+              <p className="text-sm text-main-light dark:text-main-dark/80">Searching...</p>
+            )
+            : null}
+
+          {query.trim().length >= 2 && !isLoading && results.length === 0
+            ? (
+              <p className="text-sm text-main-light dark:text-main-dark/80">
+              No results found for "{query.trim()}".
+              </p>
+            )
+            : null}
+
+          {!isLoading && results.length > 0
+            ? (
+              <>
+                <p className="mb-4 text-xs text-main-light/70 dark:text-main-dark/60">
+                Tip: Use keyboard [Arrow Keys] to move between results, [Enter] to open
+                </p>
+                <ul className="space-y-3">
+                  {results.map((result, index) => (
+                    <li key={result.id}>
+                      <Link
+                        href={`/blog/${result.slug}`}
+                        onClick={onClose}
+                        ref={(element) => {
+                          resultLinkRefs.current[index] = element;
+                        }}
+                        onMouseEnter={() => {
+                          setActiveResultIndex(index);
+                        }}
+                        className={`block rounded-xl border border-border-light/70 dark:border-border-dark/70 px-4 py-3 transition-colors hover:border-primary-500/60 hover:bg-gray-100 dark:hover:border-primary-400/60 dark:hover:bg-gray-900 ${styles.resultCard} ${activeResultIndex === index ? 'border-primary-500/70 bg-gray-100 dark:border-primary-400/70 dark:bg-gray-900' : ''}`}
+                      >
+                        <p className="font-semibold text-main-light dark:text-main-dark">
+                          <HighlightText text={result.title || 'Untitled post'} query={query} />
                         </p>
-                      ) : null}
-                      {result.tags.length > 0 ? (
-                        <p className="mt-2 text-xs text-primary-500 dark:text-primary-400">
-                          {result.tags.map((tag, index) => (
-                            <Fragment key={`${tag}-${index}`}>
-                              {index > 0 ? ' • ' : null}
-                              <HighlightText text={tag} query={query} />
-                            </Fragment>
-                          ))}
-                        </p>
-                      ) : null}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </>
-          ) : null}
+                        {result.excerpt
+                          ? (
+                            <p className="mt-1 text-sm text-main-light/85 dark:text-main-dark/80 line-clamp-2">
+                              <HighlightText text={result.excerpt} query={query} />
+                            </p>
+                          )
+                          : null}
+                        {result.tags.length > 0
+                          ? (
+                            <p className="mt-2 text-xs text-primary-500 dark:text-primary-400">
+                              {result.tags.map((tag, index) => (
+                                <Fragment key={`${tag}-${index}`}>
+                                  {index > 0 ? ' • ' : null}
+                                  <HighlightText text={tag} query={query} />
+                                </Fragment>
+                              ))}
+                            </p>
+                          )
+                          : null}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )
+            : null}
         </div>
       </div>
     </div>
