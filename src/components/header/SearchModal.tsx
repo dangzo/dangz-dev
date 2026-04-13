@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { createPortal } from 'react-dom';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import type { ReactNode, RefObject } from 'react';
 import styles from './SearchModal.module.css';
 
@@ -72,6 +73,68 @@ const SearchModal = ({
   onQueryChange,
   onClose,
 }: SearchModalProps) => {
+  const router = useRouter();
+  const [activeResultIndex, setActiveResultIndex] = useState(-1);
+  const resultLinkRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+
+  useEffect(() => {
+    if (!isOpen || results.length === 0) {
+      setActiveResultIndex(-1);
+      return;
+    }
+
+    setActiveResultIndex(0);
+  }, [isOpen, query, results]);
+
+  useEffect(() => {
+    if (activeResultIndex < 0) {
+      return;
+    }
+
+    resultLinkRefs.current[activeResultIndex]?.scrollIntoView({ block: 'nearest' });
+  }, [activeResultIndex]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const onWindowKeyDown = (event: KeyboardEvent) => {
+      if (results.length === 0) {
+        return;
+      }
+
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        setActiveResultIndex((prev) => (prev < 0 ? 0 : (prev + 1) % results.length));
+        return;
+      }
+
+      if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        setActiveResultIndex((prev) => (prev <= 0 ? results.length - 1 : prev - 1));
+        return;
+      }
+
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        const targetIndex = activeResultIndex >= 0 ? activeResultIndex : 0;
+        const selectedResult = results[targetIndex];
+        if (!selectedResult) {
+          return;
+        }
+
+        onClose();
+        router.push(`/blog/${selectedResult.slug}`);
+      }
+    };
+
+    window.addEventListener('keydown', onWindowKeyDown);
+    return () => {
+      window.removeEventListener('keydown', onWindowKeyDown);
+    };
+  }, [activeResultIndex, isOpen, onClose, results, router]);
+
   if (!isMounted || !isOpen) {
     return null;
   }
@@ -142,12 +205,18 @@ const SearchModal = ({
 
           {!isLoading && results.length > 0 ? (
             <ul className="space-y-3">
-              {results.map((result) => (
+              {results.map((result, index) => (
                 <li key={result.id}>
                   <Link
                     href={`/blog/${result.slug}`}
                     onClick={onClose}
-                    className={`block rounded-xl border border-border-light/70 dark:border-border-dark/70 px-4 py-3 transition-colors hover:border-primary-500/60 hover:bg-gray-100 dark:hover:border-primary-400/60 dark:hover:bg-gray-900 ${styles.resultCard}`}
+                    ref={(element) => {
+                      resultLinkRefs.current[index] = element;
+                    }}
+                    onMouseEnter={() => {
+                      setActiveResultIndex(index);
+                    }}
+                    className={`block rounded-xl border border-border-light/70 dark:border-border-dark/70 px-4 py-3 transition-colors hover:border-primary-500/60 hover:bg-gray-100 dark:hover:border-primary-400/60 dark:hover:bg-gray-900 ${styles.resultCard} ${activeResultIndex === index ? 'border-primary-500/70 bg-gray-100 dark:border-primary-400/70 dark:bg-gray-900' : ''}`}
                   >
                     <p className="font-semibold text-main-light dark:text-main-dark">
                       {highlightText(result.title || 'Untitled post', query)}
