@@ -1,7 +1,7 @@
 'use client';
 
 import SearchModal from './SearchModal';
-import { useBlogSearch } from '@/hooks/useBlogSearch';
+import { useBlogSearch } from '@/features/blog/hooks/useBlogSearch';
 
 const SearchButton = () => {
   const { isOpen, query, results, isLoading, inputRef, openSearch, closeSearch, setQuery } =

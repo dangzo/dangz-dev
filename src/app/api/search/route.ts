@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { unstable_cache } from 'next/cache';
-import { getSearchablePosts } from '@/api/queries/posts';
+import { getSearchablePosts } from '@/features/blog/api/queries/posts';
 
 type SearchResult = {
   id: string;

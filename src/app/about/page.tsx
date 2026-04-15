@@ -4,7 +4,7 @@ import {
   ToolsITrust,
   IntroTextAndCTAs,
   MyJourneySoFar,  
-} from '@/components/about';
+} from '@/features/about/components';
 
 export const metadata: Metadata = {
   title: 'About',

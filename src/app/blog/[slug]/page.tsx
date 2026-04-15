@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation';
 import { Img, Text } from '@/components/ui';
-import { PortableText } from '@/components/blog';
-import { getPostBySlug, getPostSlugs } from '@/api/queries/posts';
-import getPostMetadata from '@/api/getPostMetadata';
+import { PortableText } from '@/features/blog/components';
+import { getPostBySlug, getPostSlugs } from '@/features/blog/api/queries/posts';
+import getPostMetadata from '@/features/blog/api/getPostMetadata';
 
 interface PostPageProps {
   params: Promise<{ slug: string }>;

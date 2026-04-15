@@ -1,4 +1,4 @@
-import { createHeadingIdFactory } from '@/utils/posts';
+import { createHeadingIdFactory } from '@/features/blog/utils/posts';
 
 type PortableTextSpan = {
   _type?: 'span';

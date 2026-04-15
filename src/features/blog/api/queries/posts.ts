@@ -1,4 +1,4 @@
-import type { PostWithTags } from '@/types/Post.types';
+import type { PostWithTags } from '@/features/blog/types/Post.types';
 import { getClient } from '@/api/apollo-client';
 import { gql } from '@apollo/client';
 

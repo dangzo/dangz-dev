@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import { PostList, PostListSkeleton } from '@/components/blog';
+import { PostList, PostListSkeleton } from '@/features/blog/components';
 import { startCase } from '@/utils/strings';
 
 // eslint-disable-next-line react-refresh/only-export-components
