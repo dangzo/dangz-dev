@@ -10,7 +10,12 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <article>
-      <div className="flex justify-center flex-col items-center text-center gap-4 md:gap-6 mt-[calc(8vh)] md:mt-[calc(18vh)] mb-10 md:mb-20 px-4">
+      <div
+        className="
+          flex justify-center flex-col items-center text-center gap-4 md:gap-6
+          mt-[calc(8vh)] md:mt-[calc(18vh)] mb-10 md:mb-20 px-4 max-w-5xl mx-auto
+        "
+      >
         <Heading as="h1" className="text-4xl md:text-5xl lg:text-7xl">
           Hi, I'm Daniele
         </Heading>

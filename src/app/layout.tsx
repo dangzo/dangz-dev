@@ -38,7 +38,7 @@ export default function RootLayout({
         "
       >
         <ThemeProvider>
-          <div className="mx-auto max-w-5xl px-4 sm:px-6 xl:px-0">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 xl:px-0">
             <Header />
             <main className="min-h-[calc(100vh-300px)] py-2 sm:pt-6 sm:pb-8">
               {children}

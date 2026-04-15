@@ -115,6 +115,7 @@
 
   html {
     font-family: var(--font-ui);
+    data-scroll-behavior: smooth;
     scroll-behavior: smooth;
   }
 
