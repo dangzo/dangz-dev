@@ -1,4 +1,4 @@
-export { default as IntroTextAndCTAs } from './IntroTextAndCTAs';
-export { default as ToolsITrust } from './ToolsITrust';
-export { default as MyJourneySoFar } from './MyJourneySoFar';
-export { default as BeyondTheStack } from './BeyondTheStack';
+export { IntroTextAndCTAs } from '@/features/about/components';
+export { ToolsITrust } from '@/features/about/components';
+export { MyJourneySoFar } from '@/features/about/components';
+export { BeyondTheStack } from '@/features/about/components';

@@ -1,6 +1,6 @@
 import { Heading, Text } from '@/components/ui';
 import { kebabCase } from '@/utils/strings';
-import aboutMeData from '@/data/aboutMeData';
+import aboutMeData from '@/features/about/data/aboutMeData';
 
 const { skills } = aboutMeData;
 

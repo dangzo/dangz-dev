@@ -6,7 +6,7 @@ import { Fragment } from 'react';
 import type { RefObject } from 'react';
 import styles from './SearchModal.module.css';
 import HighlightText from './HighlightText';
-import { type SearchHit } from '@/hooks/useBlogSearch';
+import { type SearchHit } from '@/features/blog/hooks/useBlogSearch';
 import { useSearchKeyboardNavigation } from '@/hooks/useSearchKeyboardNavigation';
 
 export type { SearchHit };

@@ -1,8 +1,8 @@
 import { PortableText as SanityPortableText } from 'next-sanity';
 import { PortableTextBlock } from 'sanity';
-import { createHeadingIdFactory, getNodeText } from '@/utils/posts';
+import { createHeadingIdFactory, getNodeText } from '@/features/blog/utils/posts';
 import { Heading, Text, Img, type ImgProps } from '@/components/ui';
-import CodeBlock, { type CodeBlockProps } from '../ui/CodeBlock';
+import CodeBlock, { type CodeBlockProps } from '@/components/ui/CodeBlock';
 
 interface PortableTextProps {
   value: PortableTextBlock[];

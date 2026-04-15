@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { PostCard, PostCardSkeleton } from './PostCard';
 import type { Tag } from '@/types/sanity.types';
-import { getPostList } from '@/api/queries/posts';
+import { getPostList } from '@/features/blog/api/queries/posts';
 
 interface PostListProps {
   tag?: string;

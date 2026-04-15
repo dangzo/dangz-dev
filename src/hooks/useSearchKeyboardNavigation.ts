@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { SearchHit } from './useBlogSearch';
+import type { SearchHit } from '@/features/blog/hooks/useBlogSearch';
 
 type UseSearchKeyboardNavigationOptions = {
   isOpen: boolean;

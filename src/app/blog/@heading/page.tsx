@@ -1,5 +1,5 @@
 import { Heading } from '@/components/ui';
-import { BlogTagline } from '@/components/blog';
+import { BlogTagline } from '@/features/blog/components';
 
 export default async function HeadingDefault() {
   return (

@@ -1,7 +1,7 @@
 import { DateText, Text, Heading, Link, Img } from '@/components/ui';
 import TagList from './TagList';
 import Skeleton from 'react-loading-skeleton';
-import type { PostWithTags } from '@/types/Post.types';
+import type { PostWithTags } from '@/features/blog/types/Post.types';
 
 interface PostCardProps {
   post: PostWithTags;

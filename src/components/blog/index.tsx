@@ -1,6 +1,6 @@
-export { PostCard } from './PostCard';
-export { default as BlogTagline } from './BlogTagline';
-export { PostList, PostListSkeleton } from './PostList';
-export { default as ReadingTimeText } from './ReadingTimeText';
-export { default as TagList } from './TagList';
-export { default as PortableText } from './PortableText';
+export { PostCard } from '@/features/blog/components';
+export { BlogTagline } from '@/features/blog/components';
+export { PostList, PostListSkeleton } from '@/features/blog/components';
+export { ReadingTimeText } from '@/features/blog/components';
+export { TagList } from '@/features/blog/components';
+export { PortableText } from '@/features/blog/components';

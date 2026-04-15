@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import { Text } from '@/components/ui';
-import usePostInsights, { type PortableTextBlock } from '@/hooks/usePostInsights';
+import usePostInsights, { type PortableTextBlock } from '@/features/blog/hooks/usePostInsights';
 
 interface ReadingTimeTextProps extends React.HTMLAttributes<HTMLElement> {
   date?: string;

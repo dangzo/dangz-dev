@@ -1,5 +1,5 @@
 import { Heading, Text } from '@/components/ui';
-import aboutMeData from '@/data/aboutMeData';
+import aboutMeData from '@/features/about/data/aboutMeData';
 import ResumeDownloadButton from './ResumeDownloadButton';
 
 const { experience } = aboutMeData;
