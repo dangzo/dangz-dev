@@ -25,30 +25,6 @@ const skills = [
     ],
   },
   {
-    label: 'Build Tools, Automation & Workflow',
-    items: [
-      { icon: ({ ...props }) => <Icon icon="vscode" {...props} />, label: 'VS Code' },
-      { icon: ({ ...props }) => <Icon icon="bash" {...props} />, label: 'Bash' },
-      { icon: ({ ...props }) => <Icon icon="devops" {...props} />, label: 'CI/CD pipelines' },
-      { icon: ({ ...props }) => <Icon icon="vite" {...props} />, label: 'Vite' },
-      { icon: ({ ...props }) => <Icon icon="webpack" {...props} />, label: 'Webpack' },
-      { icon: ({ ...props }) => <Icon icon="docker" {...props} />, label: 'Docker' },
-      { icon: ({ ...props }) => <Icon icon="design-components" {...props} />, label: 'Design systems' },
-      { icon: ({ ...props }) => <Icon icon="agile" {...props} />, label: 'Agile workflows' },
-    ],
-  },
-  {
-    label: 'APIs & Data Visualization',
-    items: [
-      { icon: ({ ...props }) => <Icon icon="graphql" {...props} />, label: 'GraphQL' },
-      { icon: ({ ...props }) => <Icon icon="rest" {...props} />, label: 'REST API' },
-      { icon: ({ ...props }) => <Icon icon="react-query" {...props} />, label: 'React Query' },
-      { icon: ({ ...props }) => <Icon icon="highcharts" {...props} />, label: 'Highcharts' },
-      { icon: ({ ...props }) => <Icon icon="aggrid" {...props} />, label: 'AG Grid' },
-      { icon: ({ ...props }) => <Icon icon="swagger" {...props} />, label: 'Swagger, OpenAPI' },
-    ],
-  },
-  {
     label: 'Testing, Monitoring & Quality Assurance',
     items: [
       { icon: ({ ...props }) => <Icon icon="jest" {...props} />, label: 'Jest' },
@@ -69,6 +45,31 @@ const skills = [
       { icon: ({ ...props }) => <Icon icon="remix" {...props} />, label: 'Remix' },
       { icon: ({ ...props }) => <Icon icon="vuetify" {...props} />, label: 'Vuetify' },
       { icon: ({ ...props }) => <Icon icon="storybook" {...props} />, label: 'Storybook' },
+    ],
+  },
+  {
+    label: 'APIs & Data Visualization',
+    items: [
+      { icon: ({ ...props }) => <Icon icon="graphql" {...props} />, label: 'GraphQL' },
+      { icon: ({ ...props }) => <Icon icon="rest" {...props} />, label: 'REST API' },
+      { icon: ({ ...props }) => <Icon icon="react-query" {...props} />, label: 'React Query' },
+      { icon: ({ ...props }) => <Icon icon="highcharts" {...props} />, label: 'Highcharts' },
+      { icon: ({ ...props }) => <Icon icon="aggrid" {...props} />, label: 'AG Grid' },
+      { icon: ({ ...props }) => <Icon icon="swagger" {...props} />, label: 'Swagger, OpenAPI' },
+    ],
+  },
+  {
+    label: 'AI Agents, Automation & Workflow',
+    items: [
+      { icon: ({ ...props }) => <Icon icon="vscode" {...props} />, label: 'VS Code' },
+      { icon: ({ ...props }) => <Icon icon="copilot" {...props} />, label: 'GitHub Copilot' },
+      { icon: ({ ...props }) => <Icon icon="chatgpt" {...props} />, label: 'ChatGPT' },
+      { icon: ({ ...props }) => <Icon icon="devops" {...props} />, label: 'CI/CD pipelines' },
+      { icon: ({ ...props }) => <Icon icon="vite" {...props} />, label: 'Vite' },
+      { icon: ({ ...props }) => <Icon icon="webpack" {...props} />, label: 'Webpack' },
+      { icon: ({ ...props }) => <Icon icon="docker" {...props} />, label: 'Docker' },
+      { icon: ({ ...props }) => <Icon icon="design-components" {...props} />, label: 'Design systems' },
+      { icon: ({ ...props }) => <Icon icon="agile" {...props} />, label: 'Agile workflows' },
     ],
   },
 ];

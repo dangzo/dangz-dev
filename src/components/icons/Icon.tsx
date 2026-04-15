@@ -13,7 +13,6 @@ import XIcon from './socials/XIcon';
 import YoutubeIcon from './socials/YoutubeIcon';
 // Devicons
 import AgGridIcon from './devicons/AgGridIcon';
-import BashIcon from './devicons/BashIcon';
 import DevOpsIcon from './devicons/DevOpsIcon';
 import HighchartsIcon from './devicons/HighchartsIcon';
 import Html5Icon from './devicons/Html5Icon';
@@ -52,6 +51,8 @@ import DesignComponentsIcon from './devicons/DesignComponentsIcon';
 import ScrumIcon from './devicons/ScrumIcon';
 import SwaggerIcon from './devicons/SwaggerIcon';
 import TestingLibraryIcon from './devicons/TestingLibraryIcon';
+import CopilotIcon from './devicons/CopilotIcon';
+import ChatGPTIcon from './devicons/ChatGPTIcon';
 
 const components = {
   // Social icons
@@ -67,7 +68,6 @@ const components = {
   medium: MediumIcon,
 
   // Devicons
-  bash: BashIcon,
   devops: DevOpsIcon,
   redux: ReduxIcon,
   materialui: MaterialUIIcon,
@@ -104,6 +104,8 @@ const components = {
   pinia: PiniaIcon,
   agile: ScrumIcon,
   swagger: SwaggerIcon,
+  copilot: CopilotIcon,
+  chatgpt: ChatGPTIcon,
   'react-query': ReactQueryIcon,
   'design-components': DesignComponentsIcon,
   'testing-library': TestingLibraryIcon,
