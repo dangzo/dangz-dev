@@ -8,7 +8,8 @@ interface PortableTextProps {
   value: PortableTextBlock[];
 }
 
-export default function PortableText({ value }: PortableTextProps) {
+export default async function PortableText({ value }: PortableTextProps) {
+  const blocks = value;
   const getHeadingId = createHeadingIdFactory();
 
   const portableTextComponents = {
@@ -33,13 +34,17 @@ export default function PortableText({ value }: PortableTextProps) {
         );
       },
 
-      h3: ({ children }: { children?: React.ReactNode }) => {
+      h3: ({ children, value: block }: any) => {
         const id = getHeadingId(getNodeText(children));
+        const blockIndex = block?._key ? blocks.findIndex((item) => item._key === block._key) : -1;
+        const previousBlock = blockIndex > 0 ? blocks[blockIndex - 1] : undefined;
+        const isDirectlyBelowH2 = previousBlock?.style === 'h2';
+
         return (
           <Heading
             as="h3"
             id={id}
-            className="border-t border-border-light dark:border-border-dark pt-6"
+            className={isDirectlyBelowH2 ? 'pt-2' : 'border-t border-border-light dark:border-border-dark pt-6'}
           >
             {children}
           </Heading>

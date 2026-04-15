@@ -53,7 +53,7 @@ export const PostCard = ({ post }: PostCardProps) => {
       <Img
         source={post.image}
         alt={post.imageAltText}
-        className="object-cover rounded-md block sm:ml-4 sm:w-38 mb-8 sm:mb-0 grow w-full"
+        className="object-cover rounded-md block sm:ml-4 sm:w-38 mb-8 sm:mb-0 grow w-full h-auto"
         width={600}
         height={400}
         sizes="(min-width: 640px) 152px, 100vw"
