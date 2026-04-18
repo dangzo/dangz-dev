@@ -1,3 +1,4 @@
+import type { ComponentProps } from 'react';
 import { PortableText as SanityPortableText } from 'next-sanity';
 import { PortableTextBlock } from 'sanity';
 import { createHeadingIdFactory, getNodeText } from '@/features/blog/utils/posts';
@@ -8,20 +9,22 @@ interface PortableTextProps {
   value: PortableTextBlock[];
 }
 
-export default async function PortableText({ value }: PortableTextProps) {
+type PortableTextComponents = NonNullable<ComponentProps<typeof SanityPortableText>['components']>;
+
+export default function PortableText({ value }: PortableTextProps) {
   const blocks = value;
   const getHeadingId = createHeadingIdFactory();
 
-  const portableTextComponents = {
+  const portableTextComponents: PortableTextComponents = {
     block: {
-      h1: ({ children }: { children?: React.ReactNode }) => {
+      h1: ({ children }) => {
         const id = getHeadingId(getNodeText(children));
         return (
           <Heading as="h1" id={id}>{children}</Heading>
         );
       },
 
-      h2: ({ children }: { children?: React.ReactNode }) => {
+      h2: ({ children }) => {
         const id = getHeadingId(getNodeText(children));
         return (
           <Heading
@@ -34,7 +37,7 @@ export default async function PortableText({ value }: PortableTextProps) {
         );
       },
 
-      h3: ({ children, value: block }: any) => {
+      h3: ({ children, value: block }) => {
         const id = getHeadingId(getNodeText(children));
         const blockIndex = block?._key ? blocks.findIndex((item) => item._key === block._key) : -1;
         const previousBlock = blockIndex > 0 ? blocks[blockIndex - 1] : undefined;
@@ -51,7 +54,7 @@ export default async function PortableText({ value }: PortableTextProps) {
         );
       },
 
-      h4: ({ children }: { children?: React.ReactNode }) => {
+      h4: ({ children }) => {
         const id = getHeadingId(getNodeText(children));
         return (
           <Heading
@@ -63,29 +66,29 @@ export default async function PortableText({ value }: PortableTextProps) {
         );
       },
 
-      normal: ({ children }: { children?: React.ReactNode }) => <Text>{children}</Text>,
+      normal: ({ children }) => <Text>{children}</Text>,
     },
 
     list: {
-      bullet: ({ children }: { children?: React.ReactNode }) => (
+      bullet: ({ children }) => (
         <ul className="list-disc ml-4 sm:mt-6! sm:mb-10!">{children}</ul>
       ),
-      number: ({ children }: { children?: React.ReactNode }) => (
+      number: ({ children }) => (
         <ol className="list-decimal ml-4 sm:mt-6! sm:mb-10!">{children}</ol>
       ),
     },
 
     listItem: {
-      bullet: ({ children }: { children?: React.ReactNode }) => (
+      bullet: ({ children }) => (
         <li><Text className="mt-0! mb-2! sm:mb-4!">{children}</Text></li>
       ),
-      number: ({ children }: { children?: React.ReactNode }) => (
+      number: ({ children }) => (
         <li><Text className="mt-0! mb-2! sm:mb-4!">{children}</Text></li>
       ),
     },
 
     marks: {
-      inlineCode: ({ children }: { children?: React.ReactNode }) => (
+      inlineCode: ({ children }) => (
         <code
           className="
             rounded px-1 py-0.5 text-[0.8em]!
@@ -98,24 +101,30 @@ export default async function PortableText({ value }: PortableTextProps) {
     },
 
     types: {
-      image: ({ value }: { value: ImgProps }) => {
-        if (!value) {
+      image: ({ value }) => {
+        const imageValue = value as ImgProps['source'] & {
+          alt?: string;
+          width?: number;
+          height?: number;
+        };
+
+        if (!imageValue) {
           return null;
         }
 
         return (
           <Img
-            source={value}
-            alt={value.alt || ' '}
-            width={value.width || 500}
-            height={value.height || 500}
+            source={imageValue}
+            alt={imageValue.alt || ' '}
+            width={imageValue.width || 500}
+            height={imageValue.height || 500}
             className="mx-auto my-6 rounded-md object-cover"
           />
         );
       },
 
-      code: ({ value }: { value: CodeBlockProps['value'] }) => {
-        return <CodeBlock value={value} />;
+      code: ({ value }) => {
+        return <CodeBlock value={value as CodeBlockProps['value']} />;
       },
     },
   };
