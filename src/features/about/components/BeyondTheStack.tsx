@@ -1,11 +1,12 @@
 import { Heading, Text } from '@/components/ui';
-import BeyondTheStackContact from './BeyondTheStackContact';
 
 function BeyondTheStack() {
   return (
-    <section 
+    <section
       className="
-        rounded-2xl border border-primary-300/40 dark:border-primary-500/40 bg-primary-100/40 dark:bg-primary-900/20 p-6 md:p-8
+        mb-8
+        rounded-2xl border border-border-light/70 bg-background-secondary-light/50 p-6
+        dark:border-border-dark/60 dark:bg-background-secondary-dark/30 md:p-8
       "
     >
       <Heading as="h2">
