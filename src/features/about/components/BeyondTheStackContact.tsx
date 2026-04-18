@@ -8,9 +8,13 @@ export default function BeyondTheStackContact() {
   const { sendEvent } = useAnalytics();
 
   return (
-    <Text className="max-w-3xl mb-4">
-      If you&apos;d like to talk frontend architecture, design systems,
-      or product engineering, reach out via&nbsp;
+    <Text
+      className="
+        border-t border-border-light/60 dark:border-border-dark/60
+        mb-4 pt-6 mt-12 max-w-5xl mx-auto inline-block
+      "
+    >
+      If you&apos;d like to talk with me about any things frontend -- reach out via&nbsp;
       <Link
         href={`mailto:${links.email}`}
         type="accent"
