@@ -53,7 +53,6 @@ export default defineConfig([
       'multiline-ternary': ["warn", "always-multiline"],
       'no-multi-spaces': 'error',
       'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0 }],
-      'max-len': ['warn', { code: 100, ignoreComments: true, ignoreStrings: true, ignoreTemplateLiterals: true }],
       'no-undef': 'off',
       'no-unused-vars': 'off', // or "@typescript-eslint/no-unused-vars": "off",
       'unused-imports/no-unused-imports': 'error',

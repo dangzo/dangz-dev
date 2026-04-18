@@ -1,24 +1,25 @@
 import { Heading, Text } from '@/components/ui';
-import BeyondTheStackContact from './BeyondTheStackContact';
 
 function BeyondTheStack() {
   return (
-    <section 
+    <section
       className="
-        rounded-2xl border border-primary-300/40 dark:border-primary-500/40 bg-primary-100/40 dark:bg-primary-900/20 p-6 md:p-8
+        mb-8
+        rounded-2xl border border-border-light/70 bg-background-secondary-light/50 p-6
+        dark:border-border-dark/60 dark:bg-background-secondary-dark/30 md:p-8
       "
     >
       <Heading as="h2">
         Beyond the stack
       </Heading>
 
-      <Text className="max-w-3xl mb-4">
+      <Text className="mb-4">
         I hold a Bachelor in Computer Engineering from the&nbsp;
         <strong>University of Rome "La Sapienza"</strong>, but most of
         what shaped me came from shipping real products with real teams.
       </Text>
 
-      <Text className="max-w-3xl mb-4">
+      <Text className="mb-4">
         My coding journey started when I was still a teenager, wandering school corridors in
         search of books of <strong>Pascal</strong> and <strong>BASIC</strong>, which sooner
         became of <strong>C++</strong>, <strong>JavaScript</strong> and <strong>CSS</strong>.
@@ -27,16 +28,13 @@ function BeyondTheStack() {
       </Text>
 
       <Text className="mt-4 mb-0">
-        In my free time you may find me practicing sport, like tennis, padel, calisthenics, or
-        going for a free run.
+        In my free time there's a good chance you may find me practicing sport (<em>tennis, padel, calisthenics</em>), playing board games with friends, or eating some delicious food (<em>Italian DNA, remember</em>).
       </Text>
 
-      <Text className="max-w-3xl mb-6 mt-6 border-b border-border-light/60 dark:border-border-dark/60 pb-6">
+      <Text className="mb-6 mt-6">
         I'm fluent in <strong>English</strong>, <strong>Spanish</strong>, and&nbsp;
         <strong>Italian</strong>.
       </Text>
-
-      <BeyondTheStackContact />
     </section>
   );
 }
