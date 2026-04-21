@@ -1,4 +1,4 @@
-import { Header, Footer } from '@/components';
+import { Header, Footer } from '@/components/layout';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import ThemeProvider from '@/contexts/ThemeProvider';
 import { baseMetadata } from '@/data/siteMetadata';
