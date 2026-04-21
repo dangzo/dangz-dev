@@ -47,6 +47,9 @@
     "tailwindcss": "^4",
     "typescript": "^6"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "browserslist": {
     "production": [
       "chrome >= 80",
