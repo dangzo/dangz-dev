@@ -1,4 +1,5 @@
 import { Header, Footer } from '@/components/layout';
+import Script from 'next/script';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import ThemeProvider from '@/contexts/ThemeProvider';
 import { baseMetadata } from '@/data/siteMetadata';
@@ -28,6 +29,8 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+        <Script defer src="https://cloud.umami.is/script.js" data-website-id="546ca232-1b93-4b09-862d-8aebf53123d0" />
       </head>
 
       {process.env.NODE_ENV === 'production' && <GoogleAnalytics gaId={process.env.G_ID || ''} />}

@@ -1,31 +1,26 @@
-'use client';
-
 import { links } from '@/data/siteMetadata';
 import Icon from '@/components/icons/Icon';
-import useAnalytics from '@/hooks/useAnalytics';
 
-function SocialIcons() {
-  const { sendEvent } = useAnalytics();
-
+async function SocialIcons() {
   return (
     <div className="mb-3 flex space-x-4">
       <Icon
         icon="mail"
         href={`mailto:${links.email}`}
         size={6}
-        onClick={() => sendEvent({ page: 'footer', category: 'social-icons', value: 'email' })}
+        data-umami-event="Footer Email Click"
       />
       <Icon
         icon="github"
         href={links.github}
         size={6}
-        onClick={() => sendEvent({ page: 'footer', category: 'social-icons', value: 'github' })}
+        data-umami-event="Footer GitHub Click"
       />
       <Icon
         icon="linkedin"
         href={links.linkedin}
         size={6}
-        onClick={() => sendEvent({ page: 'footer', category: 'social-icons', value: 'linkedin' })}
+        data-umami-event="Footer LinkedIn Click"
       />
     </div>
   );

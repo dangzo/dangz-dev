@@ -1,12 +1,7 @@
-'use client';
-
 import { Button, Heading, Text } from '@/components/ui';
-import useAnalytics from '@/hooks/useAnalytics';
 import { links } from '@/data/siteMetadata';
 
-export default function LetsTalkFrontend() {
-  const { sendEvent } = useAnalytics();
-
+async function LetsTalkFrontend() {
   return (
     <section
       className="
@@ -34,7 +29,7 @@ export default function LetsTalkFrontend() {
           to={`mailto:${links.email}`}
           type="primary"
           size="medium"
-          onClick={() => sendEvent({ page: 'about', category: 'lets-talk-frontend', value: 'email' })}
+          data-umami-event="Lets Talk Frontend Email Click"
         >
           Email me
         </Button>
@@ -44,7 +39,7 @@ export default function LetsTalkFrontend() {
           to={links.linkedin}
           type="ghost"
           size="medium"
-          onClick={() => sendEvent({ page: 'about', category: 'lets-talk-frontend', value: 'linkedin' })}
+          data-umami-event="Lets Talk Frontend LinkedIn Click"
         >
           Connect on LinkedIn
         </Button>
@@ -54,7 +49,7 @@ export default function LetsTalkFrontend() {
           to={links.github}
           type="ghost"
           size="medium"
-          onClick={() => sendEvent({ page: 'about', category: 'lets-talk-frontend', value: 'github' })}
+          data-umami-event="Lets Talk Frontend GitHub Click"
         >
           View GitHub
         </Button>
@@ -62,3 +57,5 @@ export default function LetsTalkFrontend() {
     </section>
   );
 }
+
+export default LetsTalkFrontend;
