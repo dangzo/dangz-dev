@@ -1,8 +1,8 @@
 import { Header, Footer } from '@/components/layout';
-import { GoogleAnalytics } from '@next/third-parties/google';
-import ThemeProvider from '@/contexts/ThemeProvider';
 import { baseMetadata } from '@/data/siteMetadata';
 import { geist, geistMono, roboto, robotoSlab } from '@/styles/fonts';
+import Script from 'next/script';
+import ThemeProvider from '@/contexts/ThemeProvider';
 import 'react-loading-skeleton/dist/skeleton.css';
 import '@/styles/tailwind.css';
 
@@ -28,9 +28,11 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-      </head>
 
-      {process.env.NODE_ENV === 'production' && <GoogleAnalytics gaId={process.env.G_ID || ''} />}
+        {process.env.NODE_ENV === 'production' && (
+          <Script defer src="https://cloud.umami.is/script.js" data-website-id="546ca232-1b93-4b09-862d-8aebf53123d0" />
+        )}
+      </head>
 
       <body
         className="antialiased
