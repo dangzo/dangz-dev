@@ -11,6 +11,30 @@ interface PortableTextProps {
 
 type PortableTextComponents = NonNullable<ComponentProps<typeof SanityPortableText>['components']>;
 
+const ALLOWED_INTERNAL_HOSTS = new Set(['localhost', 'dangz.dev', 'www.dangz.dev']);
+
+function isExternalArticleLink(href: string): boolean {
+  if (!href) {
+    return false;
+  }
+
+  if (href.startsWith('/') || href.startsWith('#')) {
+    return false;
+  }
+
+  try {
+    const url = new URL(href);
+
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      return false;
+    }
+
+    return !ALLOWED_INTERNAL_HOSTS.has(url.hostname);
+  } catch {
+    return false;
+  }
+}
+
 export default async function PortableText({ value }: PortableTextProps) {
   const blocks = value;
   const getHeadingId = createHeadingIdFactory();
@@ -88,6 +112,21 @@ export default async function PortableText({ value }: PortableTextProps) {
     },
 
     marks: {
+      link: ({ children, value }) => {
+        const href = typeof value?.href === 'string' ? value.href : '#';
+        const isExternal = isExternalArticleLink(href);
+
+        return (
+          <a
+            href={href}
+            target={isExternal ? '_blank' : undefined}
+            rel={isExternal ? 'noopener noreferrer' : undefined}
+          >
+            {children}
+          </a>
+        );
+      },
+
       inlineCode: ({ children }) => (
         <code
           className="
