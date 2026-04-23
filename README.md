@@ -23,13 +23,26 @@ This project serves as a personal web presence for publishing content and showca
 
 ---
 
+## Monorepo Structure
+
+This project is managed as a **Yarn workspace + Turborepo** monorepo containing two packages:
+
+| Package | Location | Description |
+|---|---|---|
+| `blog` (Next.js app) | `/` (root) | Personal blog and portfolio frontend |
+| `studio` (Sanity Studio) | `studio/` | Sanity content management studio |
+
+A single `yarn install` from the root installs dependencies for both packages. Turborepo orchestrates tasks across them with caching.
+
+---
+
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js `>= 18`
-- Yarn
-- .env file
+- Node.js `>= 22.13`
+- Yarn `>= 1.22.22`
+- `.env` file at the root and `studio/.env` for Sanity Studio env vars
 
 ### Installation
 
@@ -41,21 +54,31 @@ yarn install
 
 ### Run Locally
 
+Start the Next.js app:
+
 ```bash
 yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in the browser.
 
-### Sanity Studio
-
-If the project includes a local Sanity Studio workflow, run:
+Start the Sanity Studio:
 
 ```bash
-yarn sanity
+cd studio && yarn dev
 ```
 
+Open [http://localhost:3333](http://localhost:3333) in the browser.
+
 ### Linting
+
+Lint both packages via Turborepo:
+
+```bash
+yarn turbo run lint
+```
+
+Or lint only the Next.js app:
 
 ```bash
 yarn lint
@@ -69,22 +92,46 @@ yarn lint --fix
 
 ---
 
+## Turborepo
+
+This is a monorepo project managed with [Turborepo](https://turbo.build/), which orchestrates tasks across both the Next.js app and Sanity Studio with intelligent caching.
+
+### Running tasks
+
+| Command | Description |
+|---|---|
+| `yarn ci` | Lints and builds **all packages** via Turbo |
+| `yarn turbo run lint` | Lints all packages |
+| `yarn turbo run build` | Builds all packages |
+| `yarn turbo run lint --filter=studio` | Lints the Sanity Studio only |
+| `yarn turbo run build --filter=studio` | Builds the Sanity Studio only |
+| `yarn turbo run lint --filter=blog` | Lints the Next.js app only |
+| `yarn turbo run build --filter=blog` | Builds the Next.js app only |
+
+Task configuration lives in [`turbo.json`](turbo.json).
+
+---
+
 ## Available Scripts
 
 | Command | Description |
 |---|---|
-| `yarn dev` | Starts the local development server |
-| `yarn build` | Builds the application for production |
-| `yarn start` | Starts the production server |
-| `yarn sanity` | Runs Sanity-related local tooling |
-| `yarn lint` | Checks the codebase for linting issues |
+| `yarn dev` | Starts the Next.js development server |
+| `yarn build` | Builds the Next.js app for production |
+| `yarn start` | Starts the Next.js production server |
+| `yarn lint` | Lints the Next.js app |
+| `yarn ci` | Lints and builds all packages (used in CI) |
+| `yarn turbo` | Runs arbitrary Turbo tasks |
+| `yarn generate-types` | Generates TypeScript types from Sanity schemas and adds them to the Next.js app |
+| `yarn deploy-studio` | Deploys the Sanity Studio |
+| `yarn deploy-graphql` | Deploys GraphQL schemas to Sanity |
 
 ---
 
 ## Project Structure
 
 ```text
-dangz-dev/
+dangz-dev/                         # Yarn workspace root (blog package)
 ├── public/                        # Static assets
 ├── src/
 │   ├── api/                       # API clients (Apollo, Sanity)
@@ -103,12 +150,16 @@ dangz-dev/
 │   ├── styles/                    # Global CSS and font config
 │   ├── types/
 │   └── utils/                     # Utility functions
-├── studio/                        # Sanity Studio
-│   ...
+├── studio/                        # Yarn workspace package — Sanity Studio
+│   ├── schemaTypes/               # Sanity content schema definitions
+│   ├── static/
+│   ├── sanity.config.ts
+│   └── package.json
+├── turbo.json                     # Turborepo task configuration
 ├── next.config.ts
 ├── tailwind.config.ts
 ├── tsconfig.json
-└── package.json
+└── package.json                   # Root workspace manifest
 ```
 
 ---
