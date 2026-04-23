@@ -4,6 +4,7 @@ import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './schemaTypes';
 import { codeInput } from '@sanity/code-input';
 import { graphiQLTool } from 'sanity-plugin-graphiql';
+import { table } from '@sanity/table'
 
 export default defineConfig({
   name: 'default',
@@ -16,9 +17,10 @@ export default defineConfig({
     structureTool(),
     visionTool(),
     codeInput(),
+    table(),
     graphiQLTool({
       apiVersion: process.env.SANITY_STUDIO_API_VERSION || '',
-      url: process.env.SANITY_STUDIO_GRAPHQL_API_URL || '',
+      // url: process.env.SANITY_STUDIO_GRAPHQL_API_URL || '',
       name: 'graphiql',
       title: 'GraphQL',
     }),

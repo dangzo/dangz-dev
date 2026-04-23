@@ -46,6 +46,11 @@ export const postType = defineType({
       name: 'body',
       type: 'array',
       of: [
+        defineArrayMember(
+          {
+            type: 'table',
+          }
+        ),
         defineArrayMember({
           title: 'Block',
           type: 'block',
