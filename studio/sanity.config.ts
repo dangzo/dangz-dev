@@ -4,7 +4,7 @@ import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './schemaTypes';
 import { codeInput } from '@sanity/code-input';
 import { graphiQLTool } from 'sanity-plugin-graphiql';
-import { table } from '@sanity/table'
+import { table } from '@sanity/table';
 
 export default defineConfig({
   name: 'default',

@@ -6060,6 +6060,11 @@ graphql-language-service@5.5.0, graphql-language-service@^5.2.0, graphql-languag
     nullthrows "^1.0.0"
     vscode-languageserver-types "^3.17.1"
 
+graphql@^16.12.0:
+  version "16.13.2"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.13.2.tgz#4d2b73df5796b201f1bc2765f5d7067f689cb55f"
+  integrity sha512-5bJ+nf/UCpAjHM8i06fl7eLyVC9iuNAjm9qzkiu2ZGhM0VscSvS6WDPfAwkdkBuoXGM9FJSbKl6wylMwP9Ktig==
+
 groq-js@^1.19.0:
   version "1.30.0"
   resolved "https://registry.yarnpkg.com/groq-js/-/groq-js-1.30.0.tgz#78c8b8883393602b157a4861e25d46234807cdb0"
