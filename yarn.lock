@@ -3560,7 +3560,7 @@
   resolved "https://registry.yarnpkg.com/@sanity/icons/-/icons-2.11.8.tgz#90a38b7d23b5c9f728a6e7ebdac80c3f76c64c35"
   integrity sha512-C4ViXtk6eyiNTQ5OmxpfmcK6Jw+LLTi9zg9XBUD15DzC4xTHaGW9SVfUa43YtPGs3WC3M0t0K59r0GDjh52HIg==
 
-"@sanity/icons@^3.7.4":
+"@sanity/icons@^3.5.3", "@sanity/icons@^3.7.4":
   version "3.7.4"
   resolved "https://registry.yarnpkg.com/@sanity/icons/-/icons-3.7.4.tgz#e992bc250d99b1b50c756a5f4751641021a646c1"
   integrity sha512-O9MnckiDsphFwlRS8Q3kj3n+JYUZ0UzKRujnSikMZOKI0dayucRe4U2XvxikRhJnFhcEJXW2RkWJoBaCoup9Sw==
@@ -3596,7 +3596,7 @@
     tar-fs "^3.1.2"
     tinyglobby "^0.2.15"
 
-"@sanity/incompatible-plugin@^1.0.4":
+"@sanity/incompatible-plugin@^1.0.4", "@sanity/incompatible-plugin@^1.0.5":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@sanity/incompatible-plugin/-/incompatible-plugin-1.0.5.tgz#cdf50c88a0938906a15ac2eb6cc21cafea898b76"
   integrity sha512-9JGAacbElUPy9Chghd+sllIiM3jAcraZdD65bWYWUVKkghOsf1L/+jFLz1rcAuvrA9o2s7Y+T75BNcXuLwRcvw==
@@ -3793,6 +3793,15 @@
     "@noble/ed25519" "^3.0.1"
     "@noble/hashes" "^2.0.1"
 
+"@sanity/table@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@sanity/table/-/table-2.0.1.tgz#430f17e44f583f95a0ec89c2533dbaaf936d8386"
+  integrity sha512-+zLvXZOdll1a80YYyzWCUeDzQzq9OHsht9I1O13/QmKqcfqgMpgmDKzpw9zgplyq5pwtOH4g+uATAgms/yDQ2w==
+  dependencies:
+    "@sanity/icons" "^3.5.3"
+    "@sanity/incompatible-plugin" "^1.0.5"
+    "@sanity/ui" "^3.1.0"
+
 "@sanity/telemetry@^0.9.0":
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/@sanity/telemetry/-/telemetry-0.9.0.tgz#680104643b93b38727883b79b3470186a708a25c"
@@ -3841,7 +3850,7 @@
     react-refractor "^2.2.0"
     use-effect-event "^2.0.3"
 
-"@sanity/ui@^3.1.11", "@sanity/ui@^3.1.14":
+"@sanity/ui@^3.1.0", "@sanity/ui@^3.1.11", "@sanity/ui@^3.1.14":
   version "3.1.14"
   resolved "https://registry.yarnpkg.com/@sanity/ui/-/ui-3.1.14.tgz#b34478870305337e125ba9f84c81d9ac28fce6aa"
   integrity sha512-wpmjQrxerWM0l5NAziazr7q/aUgJBkFHvkBhImlDCzL4teWYLsblFRujTdBHh9CpbcDDa27InQdOBV+RsFBiuw==
