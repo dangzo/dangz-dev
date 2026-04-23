@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "ci": "yarn lint && yarn build",
     "generate-types": "cd studio && sanity schema extract && sanity typegen generate && mv sanity.types.ts ../src/types/sanity.types.ts",
     "deploy-studio": "cd studio && sanity deploy",
     "deploy-graphql": "cd studio && sanity graphql deploy"
@@ -17,6 +18,7 @@
     "@next/third-parties": "^16.2.2",
     "@sanity/code-input": "^7.0.12",
     "@sanity/image-url": "^2.0.2",
+    "@sanity/table": "^2.0.1",
     "@sanity/vision": "^5.4.0",
     "clsx": "^2.1.1",
     "graphql": "^16.12.0",
