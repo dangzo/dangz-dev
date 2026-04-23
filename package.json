@@ -2,14 +2,20 @@
   "name": "blog",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "yarn@1.22.22",
+  "workspaces": [
+    "studio"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "generate-types": "cd studio && sanity schema extract && sanity typegen generate && mv sanity.types.ts ../src/types/sanity.types.ts",
-    "deploy-studio": "cd studio && sanity deploy",
-    "deploy-graphql": "cd studio && sanity graphql deploy"
+    "turbo": "turbo",
+    "ci": "turbo run lint build",
+    "generate-types": "yarn workspace studio generate-types && mv studio/sanity.types.ts src/types/sanity.types.ts",
+    "deploy-studio": "yarn workspace studio deploy",
+    "deploy-graphql": "yarn workspace studio deploy-graphql"
   },
   "dependencies": {
     "@apollo/client": "^4.0.11",
@@ -17,6 +23,7 @@
     "@next/third-parties": "^16.2.2",
     "@sanity/code-input": "^7.0.12",
     "@sanity/image-url": "^2.0.2",
+    "@sanity/table": "^2.0.1",
     "@sanity/vision": "^5.4.0",
     "clsx": "^2.1.1",
     "graphql": "^16.12.0",
@@ -26,9 +33,12 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-loading-skeleton": "^3.5.0",
+    "react-markdown": "^10.1.0",
     "react-syntax-highlighter": "^16.1.1",
+    "remark-gfm": "^4.0.1",
     "sanity": "^5.4.0",
-    "sanity-plugin-graphiql": "^1.7.1"
+    "sanity-plugin-graphiql": "^1.7.1",
+    "styled-components": "^6.4.1"
   },
   "devDependencies": {
     "@sanity/eslint-config-studio": "^5.0.2",
@@ -45,10 +55,14 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "eslint-plugin-unused-imports": "^4.3.0",
     "tailwindcss": "^4",
+    "turbo": "^2.5.0",
     "typescript": "^6"
   },
+  "resolutions": {
+    "styled-components": "^6.4.1"
+  },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.13.0"
   },
   "browserslist": {
     "production": [

@@ -94,7 +94,7 @@ const Header = () => {
       <div className="flex w-full flex-col-reverse lg:flex-row items-stretch md:items-center justify-between gap-4">
         <Prompt />
 
-        <div className="flex w-full md:w-auto justify-between items-center gap-[30px] lg:gap-3">
+        <div className="flex w-full md:w-auto justify-between items-center gap-7.5 lg:gap-3">
           <Navigation className="hidden md:block" />
 
           <ActionBtns />

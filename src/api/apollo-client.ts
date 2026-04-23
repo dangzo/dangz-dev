@@ -16,7 +16,7 @@ const graphqlUri = canPreviewDrafts
 
 export const { getClient, PreloadQuery } = registerApolloClient(() => {
   if (isDev && !readToken) {
-    // eslint-expect-next-line no-console Warning is intentional here to inform developers about missing token for draft preview in development.
+    // eslint-disable-next-line no-console
     console.warn('Sanity draft preview disabled: set SANITY_API_READ_ONLY_TOKEN in .env');
   }
 

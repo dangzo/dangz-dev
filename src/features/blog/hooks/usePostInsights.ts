@@ -1,15 +1,8 @@
 import { createHeadingIdFactory } from '@/features/blog/utils/posts';
+import type { Post } from '@/types/sanity.types';
 
-type PortableTextSpan = {
-  _type?: 'span';
-  text?: string;
-};
-
-export type PortableTextBlock = {
-  _type?: 'block';
-  style?: string;
-  children?: PortableTextSpan[];
-};
+export type PortableTextBody = NonNullable<Post['body']>;
+export type PortableTextBlock = Extract<PortableTextBody[number], { _type: 'block' }>;
 
 export type TocItem = {
   id: string;
@@ -17,8 +10,12 @@ export type TocItem = {
   level: 2 | 3;
 };
 
+function isPortableTextBlock(block: PortableTextBody[number]): block is PortableTextBlock {
+  return block._type === 'block';
+}
+
 export default function usePostInsights() {
-  function extractTocFromBody(body?: PortableTextBlock[]): TocItem[] {
+  function extractTocFromBody(body?: PortableTextBody): TocItem[] {
     if (!body?.length) {
       return [];
     }
@@ -27,7 +24,7 @@ export default function usePostInsights() {
     const toc: TocItem[] = [];
 
     for (const block of body) {
-      if (block?._type !== 'block') {
+      if (!isPortableTextBlock(block)) {
         continue;
       }
 
@@ -54,13 +51,13 @@ export default function usePostInsights() {
     return toc;
   }
 
-  function getReadingTimeMinutes(body?: PortableTextBlock[]): number {
+  function getReadingTimeMinutes(body?: PortableTextBody): number {
     if (!body?.length) {
       return 1;
     }
 
     const text = body
-      .filter(block => block?._type === 'block')
+      .filter(isPortableTextBlock)
       .map(block => (block.children || []).map(child => child.text || '').join(' '))
       .join(' ')
       .trim();
