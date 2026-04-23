@@ -7,7 +7,9 @@
   "scripts": {
     "dev": "sanity dev",
     "start": "sanity start",
+    "lint": "eslint .",
     "build": "sanity build",
+    "ci": "yarn lint && yarn build",
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy"
   },
