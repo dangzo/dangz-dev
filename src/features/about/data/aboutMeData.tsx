@@ -48,28 +48,41 @@ const skills = [
     ],
   },
   {
-    label: 'APIs & Data Visualization',
+    label: 'Data Visualization',
     items: [
       { icon: ({ ...props }) => <Icon icon="graphql" {...props} />, label: 'GraphQL' },
-      { icon: ({ ...props }) => <Icon icon="rest" {...props} />, label: 'REST API' },
       { icon: ({ ...props }) => <Icon icon="react-query" {...props} />, label: 'React Query' },
       { icon: ({ ...props }) => <Icon icon="highcharts" {...props} />, label: 'Highcharts' },
       { icon: ({ ...props }) => <Icon icon="aggrid" {...props} />, label: 'AG Grid' },
-      { icon: ({ ...props }) => <Icon icon="swagger" {...props} />, label: 'Swagger, OpenAPI' },
     ],
   },
   {
-    label: 'AI Agents, Automation & Workflow',
+    label: 'Tooling & Automation',
     items: [
+      { icon: ({ ...props }) => <Icon icon="rest" {...props} />, label: 'REST API' },
+      { icon: ({ ...props }) => <Icon icon="swagger" {...props} />, label: 'Swagger, OpenAPI' },
       { icon: ({ ...props }) => <Icon icon="vscode" {...props} />, label: 'VS Code' },
-      { icon: ({ ...props }) => <Icon icon="copilot" {...props} />, label: 'GitHub Copilot' },
-      { icon: ({ ...props }) => <Icon icon="chatgpt" {...props} />, label: 'ChatGPT' },
-      { icon: ({ ...props }) => <Icon icon="devops" {...props} />, label: 'CI/CD pipelines' },
+      { icon: ({ ...props }) => <Icon icon="nodejs" {...props} />, label: 'Node.js' },
       { icon: ({ ...props }) => <Icon icon="vite" {...props} />, label: 'Vite' },
       { icon: ({ ...props }) => <Icon icon="webpack" {...props} />, label: 'Webpack' },
       { icon: ({ ...props }) => <Icon icon="docker" {...props} />, label: 'Docker' },
       { icon: ({ ...props }) => <Icon icon="design-components" {...props} />, label: 'Design systems' },
       { icon: ({ ...props }) => <Icon icon="agile" {...props} />, label: 'Agile workflows' },
+    ],
+  },
+  {
+    label: 'Cloud Deployment',
+    items: [
+      { icon: ({ ...props }) => <Icon icon="netlify" {...props} />, label: 'Netlify' },
+      { icon: ({ ...props }) => <Icon icon="vercel" {...props} />, label: 'Vercel' },
+      { icon: ({ ...props }) => <Icon icon="aws" {...props} />, label: 'AWS' },
+    ],
+  },
+  {
+    label: 'Agentic AI',
+    items: [
+      { icon: ({ ...props }) => <Icon icon="copilot" {...props} />, label: 'GitHub Copilot' },
+      { icon: ({ ...props }) => <Icon icon="chatgpt" {...props} />, label: 'ChatGPT' },
     ],
   },
 ];

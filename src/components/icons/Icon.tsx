@@ -47,6 +47,10 @@ import RESTApiIcon from './devicons/RESTApiIcon';
 import ViteIcon from './devicons/ViteIcon';
 import PiniaIcon from './devicons/PiniaIcon';
 import JotaiIcon from './devicons/JotaiIcon';
+import NetlifyIcon from './devicons/NetlifyIcon';
+import VercelIcon from './devicons/VercelIcon';
+import NodeJSIcon from './devicons/NodeJSIcon';
+import AWSIcon from './devicons/AWSIcon';
 import DesignComponentsIcon from './devicons/DesignComponentsIcon';
 import ScrumIcon from './devicons/ScrumIcon';
 import SwaggerIcon from './devicons/SwaggerIcon';
@@ -98,6 +102,10 @@ const components = {
   zustand: ZustandIcon,
   sentry: SentryIcon,
   datadog: DataDogIcon,
+  vercel: VercelIcon,
+  nodejs: NodeJSIcon,
+  aws: AWSIcon,
+  netlify: NetlifyIcon,
   rest: RESTApiIcon,
   vite: ViteIcon,
   jotai: JotaiIcon,
