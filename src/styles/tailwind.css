@@ -138,6 +138,7 @@
     border-radius: var(--radius-sm);
     outline-color: var(--color-primary-500);
   }
+
 }
 
 @layer utilities {
@@ -174,6 +175,11 @@
     }
     & strong {
       color: var(--color-main-light);
+    }
+    & blockquote {
+      font-style: italic;
+      font-weight: inherit;
+      color: inherit;
     }
     :where(.dark, .dark *) & {
       & a:hover {
