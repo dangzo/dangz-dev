@@ -89,7 +89,7 @@ const Header = () => {
 
   return (
     <header
-      className="bg-transparent backdrop-blur-sm py-4 mb-4 sm:mb-0 sm:py-8"
+      className="bg-transparent backdrop-blur-sm py-4 sm:mb-0 sm:py-8 overflow-x-hidden"
     >
       <div className="flex w-full flex-col-reverse lg:flex-row items-stretch md:items-center justify-between gap-4">
         <Prompt />

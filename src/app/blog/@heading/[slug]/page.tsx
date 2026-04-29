@@ -25,9 +25,9 @@ export default async function BlogSlugHeading({ params }: { params: Promise<{ sl
       
       <div className="flex flex-wrap flex-col sm:flex-row sm:items-center gap-x-1 gap-y-1 text-sm md:text-base">
         <div className="flex flex-row items-center gap-x-1">
-          <DateText date={post.publishedAt} className="mb-0!" />
-          <span className="mx-2">&bull;</span>
-          <ReadingTimeText postBody={post.body} className='mb-0!' />
+          <DateText date={post.publishedAt} className="sm:mb-0!" />
+          <span className="mx-2 mb-2 sm:mb-0">&bull;</span>
+          <ReadingTimeText postBody={post.body} className='sm:mb-0!' />
         </div>
 
         <span className="hidden sm:inline mx-2">&bull;</span>
