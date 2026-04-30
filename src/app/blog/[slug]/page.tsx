@@ -34,6 +34,7 @@ export default async function PostPage({
   return (
     <article className="max-w-3xl mx-auto px-3 py-4 sm:px-4 sm:py-6 md:py-8">
       <div className="mb-5 sm:mb-6 md:mb-8 rounded-lg overflow-hidden">
+        {/*** Hero image ***/}
         <Img
           source={post.image}
           alt={post.imageAltText}
@@ -42,6 +43,7 @@ export default async function PostPage({
           height={400}
           fetchPriority="high"
           blurDataURL={lqip}
+          preload
         />
       </div>
 

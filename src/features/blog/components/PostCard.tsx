@@ -5,6 +5,7 @@ import type { PostWithTags } from '@/features/blog/types/Post.types';
 
 interface PostCardProps {
   post: PostWithTags;
+  preload: boolean;
 }
 
 export const PostCardSkeleton = () => {
@@ -23,7 +24,7 @@ export const PostCardSkeleton = () => {
   );
 };
 
-export const PostCard = ({ post }: PostCardProps) => {
+export const PostCard = ({ post, preload }: PostCardProps) => {
   return (
     <article className="flex flex-col-reverse sm:flex-row relative sm:items-center">
       <div className="sm:w-5/7">
@@ -50,6 +51,7 @@ export const PostCard = ({ post }: PostCardProps) => {
         </Link>
       </div>
 
+      {/* priority=true on first two cards adds a <link rel="preload"> in <head>; lazy load the rest */}
       <Img
         source={post.image}
         alt={post.imageAltText}
@@ -57,7 +59,8 @@ export const PostCard = ({ post }: PostCardProps) => {
         width={600}
         height={400}
         sizes="(min-width: 640px) 152px, 100vw"
-        fetchPriority="high"
+        preload={preload}
+        loading={preload ? undefined : 'lazy'}
         blurDataURL={post.image?.asset?.metadata?.lqip}
       />
     </article>
