@@ -4,7 +4,7 @@ const client = createClient({
   projectId: 'wdxhl3tc',
   dataset: 'production',
   apiVersion: '2021-08-31',
-  useCdn: false,
+  useCdn: process.env.NODE_ENV === 'production',
 });
 
 export default client;

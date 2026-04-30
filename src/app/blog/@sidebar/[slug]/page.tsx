@@ -1,6 +1,6 @@
 
 import { notFound } from 'next/navigation';
-import { getPostBySlug } from '@/features/blog/api/queries/posts';
+import { getPostBySlug } from '@/features/blog/api/queries/singlePost';
 import { PostSidebar } from '@/features/blog/components';
 import type { PostWithTags } from '@/features/blog/types/Post.types';
 

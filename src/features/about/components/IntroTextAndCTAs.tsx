@@ -25,7 +25,7 @@ function IntroTextAndCTAs() {
 
       <Text size="large" className="mb-0">
         Today, I work remotely from Santa Cruz de Tenerife (Spain), collaborating with distributed teams,
-        mentoring engineers, and helping products move from idea to production with confidence.
+        mentoring engineers, and helping products move from idea to production with efficiency.
       </Text>
 
       <IntroCTAs />

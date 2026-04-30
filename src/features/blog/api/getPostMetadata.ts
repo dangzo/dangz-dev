@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { siteName } from '@/data/siteMetadata';
-import { getPostBySlug } from '@/features/blog/api/queries/posts';
+import { getPostBySlug } from '@/features/blog/api/queries/singlePost';
 import { urlFor } from '@/utils/image';
 
 async function getPostMetadata(

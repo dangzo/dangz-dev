@@ -1,7 +1,7 @@
 import { DateText, Heading } from '@/components/ui';
 import { ReadingTimeText, TagList } from '@/features/blog/components';
 import { notFound } from 'next/navigation';
-import { getPostBySlug } from '@/features/blog/api/queries/posts';
+import { getPostBySlug } from '@/features/blog/api/queries/singlePost';
 import type { PostWithTags } from '@/features/blog/types/Post.types';
 
 export default async function BlogSlugHeading({ params }: { params: Promise<{ slug?: string }> }) {

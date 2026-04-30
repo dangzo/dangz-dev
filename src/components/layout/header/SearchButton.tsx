@@ -1,7 +1,11 @@
 'use client';
 
-import SearchModal from './SearchModal';
+import dynamic from 'next/dynamic';
 import { useBlogSearch } from '@/features/blog/hooks/useBlogSearch';
+
+const SearchModal = dynamic(() => import('./SearchModal'), {
+  ssr: false,
+});
 
 const SearchButton = () => {
   const { isOpen, query, results, isLoading, inputRef, openSearch, closeSearch, setQuery } =

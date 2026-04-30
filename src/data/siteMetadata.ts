@@ -5,7 +5,7 @@ const defaultPageTitle = 'Daniele Gazzelloni | Frontend Engineering Blog';
 const title = `${siteName} | ${defaultPageTitle}`;
 const description = 'Practical insights on how to build scalable, maintainable, and high-performance frontend web apps in React, Vue and TypeScript.';
 const author = 'Daniele Gazzelloni';
-const siteUrl = 'https://www.dangz.dev';
+const siteUrl = 'https://dangz.dev';
 
 const baseMetadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -86,6 +86,7 @@ export {
   title,
   description,
   siteName,
+  siteUrl,
   baseMetadata,
   links,  
 };
