@@ -19,6 +19,7 @@ export default function TypeImage({ value }: TypeImageProps) {
       alt={value.alt || ' '}
       width={value.width || 500}
       height={value.height || 500}
+      loading='lazy'
       className="mx-auto my-6 rounded-md object-cover"
     />
   );
