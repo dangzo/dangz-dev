@@ -1,15 +1,24 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useBlogSearch } from '@/features/blog/hooks/useBlogSearch';
+import { useState } from 'react';
 
-const SearchModal = dynamic(() => import('./SearchModal'), {
+const SearchModalBridge = dynamic(() => import('./SearchModalBridge'), {
   ssr: false,
 });
 
 const SearchButton = () => {
-  const { isOpen, query, results, isLoading, inputRef, openSearch, closeSearch, setQuery } =
-    useBlogSearch();
+  const [isSearchEnabled, setIsSearchEnabled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [openRequest, setOpenRequest] = useState(0);
+
+  const openSearch = () => {
+    if (!isSearchEnabled) {
+      setIsSearchEnabled(true);
+    }
+
+    setOpenRequest((current) => current + 1);
+  };
 
   return (
     <>
@@ -36,15 +45,10 @@ const SearchButton = () => {
           />
         </svg>
       </button>
-      <SearchModal
-        isOpen={isOpen}
-        query={query}
-        results={results}
-        isLoading={isLoading}
-        inputRef={inputRef}
-        onQueryChange={setQuery}
-        onClose={closeSearch}
-      />
+
+      {isSearchEnabled
+        ? <SearchModalBridge openRequest={openRequest} onOpenChange={setIsOpen} />
+        : null}
     </>
   );
 };
