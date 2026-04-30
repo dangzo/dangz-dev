@@ -1,6 +1,7 @@
 import type { PostWithTags } from '@/features/blog/types/Post.types';
 import { getClient } from '@/api/apollo-client';
 import { gql } from '@apollo/client';
+import { cache } from 'react';
 
 export const POST_LIST_QUERY = ({ limit = 12, offset = 0 }: {limit?: number, offset?: number}) => {
   return gql`
@@ -92,13 +93,13 @@ export async function getPostList() {
   return data?.allPost;
 }
 
-export async function getPostBySlug(slug: string): Promise<PostWithTags | undefined> {
+export const getPostBySlug = cache(async (slug: string): Promise<PostWithTags | undefined> => {
   const client = getClient();
   const { data } = await client.query<{ allPost: PostWithTags[] }>({
     query: POSTS_BY_SLUG_QUERY({ slug })
   });
   return data?.allPost?.[0];
-}
+});
 
 const SEARCHABLE_POSTS_QUERY = gql`
   query SearchablePosts {
