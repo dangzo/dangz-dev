@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { Img, Text } from '@/components/ui';
 import { PortableText } from '@/features/blog/components';
-import { getPostBySlug, getPostSlugs } from '@/features/blog/api/queries/posts';
+import { getPostBySlug, getPostSlugs } from '@/features/blog/api/queries/singlePost';
 import getPostMetadata from '@/features/blog/api/getPostMetadata';
 
 interface PostPageProps {
