@@ -28,7 +28,7 @@ function BeyondTheStack() {
       </Text>
 
       <Text className="mt-4 mb-0">
-        In my free time there's a good chance you may find me practicing sport (<em>tennis, padel, calisthenics</em>), playing board games with friends, or eating some delicious food (<em>Italian DNA, remember</em>).
+        In my free time I like to stay active, practicing sports like tennis, padél, trail running, swimming or calisthenics. I also like taking care of my plants, playing board games with friends, or eating some delicious food (<em>Italian DNA, remember!</em>).
       </Text>
 
       <Text className="mb-6 mt-6">

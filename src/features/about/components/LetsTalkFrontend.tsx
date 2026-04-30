@@ -16,7 +16,7 @@ async function LetsTalkFrontend() {
       </Heading>
 
       <Text className="mb-3 max-w-3xl mx-auto md:mb-5">
-        If you&apos;re working on a frontend product and think I could help, feel free to reach out.
+        If you&apos;re working on a frontend project and think I could help, feel free to reach out.
       </Text>
 
       <Text className="mb-5 md:mb-6 max-w-3xl mx-auto">

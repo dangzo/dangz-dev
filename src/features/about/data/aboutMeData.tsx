@@ -92,19 +92,19 @@ const experience = [
     role: 'Senior Frontend Engineer',
     company: 'Granular Energy',
     period: 'Apr 2023 - Aug 2025',
-    summary: 'I led end-to-end delivery across multiple applications, from architecture to release. I also focused on improving developer experience through refactoring, stronger tests, and mentorship.',
+    summary: 'I led end-to-end delivery across multiple features, from prototyping to release, including SSG work using Nuxt.js and Prismic. I also focused on improving developer experience through refactoring, testing strategies, codebase architecture, and mentorship.',
   },
   {
     role: 'Senior Frontend Developer',
     company: 'Cycloid',
     period: 'Aug 2019 - Apr 2023',
-    summary: 'This was a key chapter in my growth: I shipped complex features, pushed component-driven practices with Storybook, and actively contributed to hiring and team onboarding.',
+    summary: 'This was a key chapter in my growth: Cycloid gave me a lot, and I gave 110% while being there. I shipped complex features, pushed component-driven practices with Storybook, and actively contributed to hiring and team onboarding.',
   },
   {
     role: 'Full-Stack Developer',
     company: 'Saavu',
     period: 'Nov 2018 - Jul 2019',
-    summary: 'Working in a small team taught me speed and ownership. I built core modules across frontend and backend while keeping performance and testing front and center. TDD, clean code and architecture, and close collaboration with the CEO were daily practices that shaped my approach to product engineering.',
+    summary: 'Working in a small team taught me speed and ownership, as well as code quality and having to wear many hats. I built core modules across frontend and backend using different frameworks, TDD, clean code and architecture, and close collaboration with the CEO.',
   },
   {
     role: 'Full-Stack Developer',
