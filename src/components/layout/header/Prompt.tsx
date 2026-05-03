@@ -27,7 +27,7 @@ const Prompt = () => {
   const linkClasses = 'hover:underline hover:underline-offset-4 hover:text-accent-dark';
 
   return (
-    <h1
+    <p
       className="
         relative top-0
         sm:flex w-max [&>span]:font-mono font-semibold
@@ -54,7 +54,7 @@ const Prompt = () => {
         </span>
         <span className={`ml-1 align-middle ${styles['animate-caret']}`}>|</span>
       </span>
-    </h1>
+    </p>
   );
 };
 
