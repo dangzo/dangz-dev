@@ -1,1 +1,1 @@
-export { default } from '@/features/blog/components/PostSidebar';
+export { default } from '@/features/blog/components/sidebars/ToCSidebar';

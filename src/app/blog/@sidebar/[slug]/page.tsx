@@ -1,10 +1,10 @@
 
 import { notFound } from 'next/navigation';
 import { getPostBySlug } from '@/features/blog/api/queries/singlePost';
-import { PostSidebar } from '@/features/blog/components';
+import { ToCSidebar } from '@/features/blog/components';
 import type { PostWithTags } from '@/features/blog/types/Post.types';
 
-export default async function BlogPostSidebar({ params }: { params: Promise<{ slug?: string }> }) {
+export default async function BlogToCSidebar({ params }: { params: Promise<{ slug?: string }> }) {
   const { slug } = await params;
 
   if (!slug) {
@@ -17,5 +17,5 @@ export default async function BlogPostSidebar({ params }: { params: Promise<{ sl
     return notFound();
   }
 
-  return <PostSidebar post={post} />;
+  return <ToCSidebar post={post} />;
 }

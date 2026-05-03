@@ -17,7 +17,7 @@ import {
   TypeImage,
   TypeCode,
   TypeTable,  
-} from '@/features/blog/components/PortableText';
+} from '@/features/blog/components/portable-text';
 
 interface PortableTextProps {
   value: PortableTextBlock[];
