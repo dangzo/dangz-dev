@@ -1,1 +1,1 @@
-export { default } from '@/features/blog/components/TagsSidebar';
+export { default } from '@/features/blog/components/sidebars/TagsSidebar';

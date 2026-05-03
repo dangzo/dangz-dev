@@ -1,5 +1,6 @@
 import { Link, Heading } from '@/components/ui';
 import type { Tag } from '@/types/sanity.types';
+import SidebarMobileToggle from './SidebarMobileToggle';
 
 interface TagsSidebarProps {
   activeSlug?: string;
@@ -18,7 +19,11 @@ async function TagsSidebar({ activeSlug, tags, tagCount }: TagsSidebarProps) {
     ?.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
 
   return (
-    <>
+    <SidebarMobileToggle
+      showLabel="Show All tags"
+      hideLabel="Hide All tags"
+      contentId="tags-sidebar-content"
+    >
       <Link href="/blog" isActive={activeSlug === undefined}>
         <Heading as="h3" className="mb-4 text-2xl font-semibold inline-block">
           All tags
@@ -37,7 +42,7 @@ async function TagsSidebar({ activeSlug, tags, tagCount }: TagsSidebarProps) {
           </li>
         ))}
       </ul>
-    </>
+    </SidebarMobileToggle>
   );
 };
 
