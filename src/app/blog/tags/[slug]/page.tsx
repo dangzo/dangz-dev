@@ -4,6 +4,7 @@ import { PostList } from '@/features/blog/components';
 import { getPostList } from '@/features/blog/api/queries/posts';
 import { startCase } from '@/utils/strings';
 import { notFound } from 'next/navigation';
+import { getTagsWithCount } from '@/features/blog/api/queries/tags';
 
 // Cache-invalidation every 60 minutes
 export const revalidate = 3600;
@@ -17,6 +18,14 @@ export async function generateMetadata(
   return {
     title: `Tag: ${startCase(slug)}`,
   };
+}
+
+// eslint-disable-next-line react-refresh/only-export-components
+export async function generateStaticParams() {
+  const { tags } = await getTagsWithCount();
+  return (tags ?? [])
+    .map(({ slug }) => ({ slug: slug?.current }))
+    .filter((p): p is { slug: string } => p.slug !== undefined);
 }
 
 const TagsPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
