@@ -119,6 +119,7 @@ Task configuration lives in [`turbo.json`](turbo.json).
 | `yarn dev` | Starts the Next.js development server |
 | `yarn build` | Builds the Next.js app for production |
 | `yarn start` | Starts the Next.js production server |
+| `yarn preview` | Builds and starts the Next.js app for previewing production build locally |
 | `yarn lint` | Lints the Next.js app |
 | `yarn ci` | Lints and builds all packages (used in CI) |
 | `yarn turbo` | Runs arbitrary Turbo tasks |

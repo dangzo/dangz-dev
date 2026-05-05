@@ -1,15 +1,25 @@
-import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import { PostList, PostListSkeleton } from '@/features/blog/components';
+import { PostList } from '@/features/blog/components';
+import { getPostList } from '@/features/blog/api/queries/posts';
+import { notFound } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'Blog',
 };
 
-export default function BlogPage() {
+// Cache-invalidation every 60 minutes
+export const revalidate = 3600;
+
+async function BlogPage() {
+  const posts = await getPostList();
+
+  if (!posts?.length) {
+    return notFound();
+  }
+
   return (
-    <Suspense fallback={<PostListSkeleton />}>
-      <PostList />
-    </Suspense>
+    <PostList posts={posts} />
   );
 }
+
+export default BlogPage;
