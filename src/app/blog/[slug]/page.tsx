@@ -8,6 +8,9 @@ interface PostPageProps {
   params: Promise<{ slug: string }>;
 }
 
+// Cache-invalidation every 60 minutes
+export const revalidate = 3600;
+
 // eslint-disable-next-line react-refresh/only-export-components
 export async function generateMetadata({ params }: PostPageProps) {
   return getPostMetadata({ params });
