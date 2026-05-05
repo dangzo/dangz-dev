@@ -2,13 +2,15 @@
 
 import { useSyncExternalStore, useState, useEffect } from 'react';
 import type { CSSProperties } from 'react';
-import { LightAsync as SyntaxHighlighter } from 'react-syntax-highlighter';
-import javascript from 'react-syntax-highlighter/dist/esm/languages/hljs/javascript';
-import typescript from 'react-syntax-highlighter/dist/esm/languages/hljs/typescript';
-import xml from 'react-syntax-highlighter/dist/esm/languages/hljs/xml';
-import bash from 'react-syntax-highlighter/dist/esm/languages/hljs/bash';
-import json from 'react-syntax-highlighter/dist/esm/languages/hljs/json';
-import css from 'react-syntax-highlighter/dist/esm/languages/hljs/css';
+import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import javascript from 'react-syntax-highlighter/dist/esm/languages/prism/javascript';
+import jsx from 'react-syntax-highlighter/dist/esm/languages/prism/jsx';
+import typescript from 'react-syntax-highlighter/dist/esm/languages/prism/typescript';
+import tsx from 'react-syntax-highlighter/dist/esm/languages/prism/tsx';
+import markup from 'react-syntax-highlighter/dist/esm/languages/prism/markup';
+import bash from 'react-syntax-highlighter/dist/esm/languages/prism/bash';
+import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
+import css from 'react-syntax-highlighter/dist/esm/languages/prism/css';
 
 type SyntaxStyle = { [key: string]: CSSProperties };
 
@@ -21,11 +23,13 @@ export interface CodeBlockProps {
 
 SyntaxHighlighter.registerLanguage('javascript', javascript);
 SyntaxHighlighter.registerLanguage('js', javascript);
+SyntaxHighlighter.registerLanguage('jsx', jsx);
 SyntaxHighlighter.registerLanguage('typescript', typescript);
 SyntaxHighlighter.registerLanguage('ts', typescript);
-SyntaxHighlighter.registerLanguage('tsx', typescript);
-SyntaxHighlighter.registerLanguage('html', xml);
-SyntaxHighlighter.registerLanguage('xml', xml);
+SyntaxHighlighter.registerLanguage('tsx', tsx);
+SyntaxHighlighter.registerLanguage('html', markup);
+SyntaxHighlighter.registerLanguage('xml', markup);
+SyntaxHighlighter.registerLanguage('markup', markup);
 SyntaxHighlighter.registerLanguage('bash', bash);
 SyntaxHighlighter.registerLanguage('sh', bash);
 SyntaxHighlighter.registerLanguage('json', json);
@@ -48,31 +52,32 @@ const CodeBlock = ({ value }: CodeBlockProps) => {
 
   useEffect(() => {
     if (theme === 'dark') {
-      import('react-syntax-highlighter/dist/esm/styles/hljs/night-owl').then(
+      import('react-syntax-highlighter/dist/esm/styles/prism/night-owl').then(
         (mod) => setStyle(mod.default)
       );
     } else {
-      import('react-syntax-highlighter/dist/esm/styles/hljs/docco').then(
+      import('react-syntax-highlighter/dist/esm/styles/prism/one-light').then(
         (mod) => setStyle(mod.default)
       );
     }
   }, [theme]);
 
   return (
-    <SyntaxHighlighter
-      showLineNumbers={true}
-      showInlineLineNumbers={true}
-      language={normalizedLanguage}
-      style={style}
-      customStyle={{
-        padding: '1em',
-        marginBottom: '2em',
-        border: theme === 'dark' ? '1px solid #1f2937' : '1px solid #e5e7eb',
-        borderRadius: '0.5em',
-      }}
-    >
-      {code}
-    </SyntaxHighlighter>
+    <div style={{
+      padding: '1em',
+      marginBottom: '2em',
+      border: theme === 'dark' ? '1px solid #1f2937' : '1px solid #e5e7eb',
+      borderRadius: '0.5em',
+    }}>
+      <SyntaxHighlighter
+        showLineNumbers={true}
+        showInlineLineNumbers={true}
+        language={normalizedLanguage}
+        style={style}
+      >
+        {code}
+      </SyntaxHighlighter>
+    </div>
   );
 };
 
