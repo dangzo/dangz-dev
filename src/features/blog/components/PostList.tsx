@@ -1,30 +1,14 @@
-import { notFound } from 'next/navigation';
 import { PostCard, PostCardSkeleton } from './PostCard';
-import type { Tag } from '@/types/sanity.types';
-import { getPostList } from '@/features/blog/api/queries/posts';
+import type { PostWithTags } from '@/features/blog/types/Post.types';
 
 interface PostListProps {
-  tag?: string;
+  posts: PostWithTags[];
 }
 
-export const PostList = async ({ tag }: PostListProps) => {
-  const posts = await getPostList();
-
-  const filteredPosts = tag
-    ? posts?.filter((post) =>
-      post.tags?.some(
-        (t: Tag) => t.slug?.current?.toLowerCase() === tag.toLowerCase(),
-      ),
-    )
-    : posts;
-
-  if (!filteredPosts?.length) {
-    return notFound();
-  }
-
+export const PostList = ({ posts }: PostListProps) => {
   return (
     <ul className="space-y-6">
-      {filteredPosts?.map((post, index) => (
+      {posts?.map((post, index) => (
         <li
           key={post._id}
           className="
