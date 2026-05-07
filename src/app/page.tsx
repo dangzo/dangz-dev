@@ -5,6 +5,9 @@ import TopTags from '@/features/blog/components/TopTags';
 
 export const metadata: Metadata = {
   title: 'Daniele Gazzelloni | Frontend Engineering Blog',
+  alternates: {
+    canonical: '/',
+  },
 };
 
 export default function HomePage() {

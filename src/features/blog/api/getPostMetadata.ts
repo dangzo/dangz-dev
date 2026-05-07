@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { siteName } from '@/data/siteMetadata';
+import { siteName, siteUrl } from '@/data/siteMetadata';
 import { getPostBySlug } from '@/features/blog/api/queries/singlePost';
 import { urlFor } from '@/utils/image';
 
@@ -19,10 +19,13 @@ async function getPostMetadata(
   return {
     title: post.title,
     description: post.excerpt,
+    alternates: {
+      canonical: `/blog/${slug}`,
+    },
     openGraph: {
       title: `${post.title} | ${siteName}`,
       description: post.excerpt,
-      url: `https://www.dangz.dev/blog/${slug}`,
+      url: `${siteUrl}/blog/${slug}`,
       siteName: siteName,
       images: [
         {

@@ -17,6 +17,14 @@ export async function generateMetadata(
 
   return {
     title: `Tag: ${startCase(slug)}`,
+    robots: {
+      index: false,
+      follow: true,
+      googleBot: {
+        index: false,
+        follow: true,
+      },
+    },
   };
 }
 
