@@ -5,6 +5,9 @@ import { notFound } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'Blog',
+  alternates: {
+    canonical: '/blog',
+  },
 };
 
 // Cache-invalidation every 60 minutes

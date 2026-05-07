@@ -9,6 +9,9 @@ import BeyondTheStackContact from '@/features/about/components/LetsTalkFrontend'
 
 export const metadata: Metadata = {
   title: 'About',
+  alternates: {
+    canonical: '/about',
+  },
 };
 
 export default async function AboutPage() {

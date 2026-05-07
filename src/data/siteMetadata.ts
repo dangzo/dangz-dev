@@ -56,9 +56,6 @@ const baseMetadata: Metadata = {
     description,
     images: ['/og-image.png'],
   },
-  alternates: {
-    canonical: siteUrl,
-  },
   robots: {
     index: true,
     follow: true,
