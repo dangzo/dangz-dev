@@ -63,7 +63,16 @@ export const postType = defineType({
             { title: 'Quote', value: 'blockquote' },
             { title: 'Caption', value: 'figcaption' },
           ],
-          lists: [{ title: 'Bullet', value: 'bullet' }],
+          lists: [
+            {
+              title: 'Unordered List',
+              value: 'bullet',
+            },
+            {
+              title: 'Ordered List',
+              value: 'number',
+            },
+          ],
           marks: {
             decorators: [
               { title: 'Strong', value: 'strong' },
