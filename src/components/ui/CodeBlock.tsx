@@ -11,6 +11,8 @@ import markup from 'react-syntax-highlighter/dist/esm/languages/prism/markup';
 import bash from 'react-syntax-highlighter/dist/esm/languages/prism/bash';
 import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
 import css from 'react-syntax-highlighter/dist/esm/languages/prism/css';
+import docker from 'react-syntax-highlighter/dist/esm/languages/prism/docker';
+import nginx from 'react-syntax-highlighter/dist/esm/languages/prism/nginx';
 
 type SyntaxStyle = { [key: string]: CSSProperties };
 
@@ -34,6 +36,8 @@ SyntaxHighlighter.registerLanguage('bash', bash);
 SyntaxHighlighter.registerLanguage('sh', bash);
 SyntaxHighlighter.registerLanguage('json', json);
 SyntaxHighlighter.registerLanguage('css', css);
+SyntaxHighlighter.registerLanguage('docker', docker);
+SyntaxHighlighter.registerLanguage('nginx', nginx);
 
 function subscribe(onStoreChange: () => void) {
   const observer = new MutationObserver(onStoreChange);
@@ -47,12 +51,14 @@ const getServerSnapshot = () => 'light';
 const CodeBlock = ({ value }: CodeBlockProps) => {
   const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [style, setStyle] = useState<SyntaxStyle | undefined>(undefined);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
   const { code, language } = value;
   const normalizedLanguage = language?.toLowerCase() || 'plaintext';
 
   useEffect(() => {
     if (theme === 'dark') {
-      import('react-syntax-highlighter/dist/esm/styles/prism/night-owl').then(
+      import('react-syntax-highlighter/dist/esm/styles/prism/coldark-dark').then(
         (mod) => setStyle(mod.default)
       );
     } else {
@@ -62,13 +68,76 @@ const CodeBlock = ({ value }: CodeBlockProps) => {
     }
   }, [theme]);
 
+  useEffect(() => {
+    if (!isCopied) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setIsCopied(false);
+    }, 1500);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [isCopied]);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setIsCopied(true);
+    } catch {
+      setIsCopied(false);
+    }
+  };
+
   return (
     <div style={{
       padding: '1em',
       marginBottom: '2em',
       border: theme === 'dark' ? '1px solid #1f2937' : '1px solid #e5e7eb',
       borderRadius: '0.5em',
-    }}>
+      position: 'relative',
+    }}
+    onMouseEnter={() => setIsHovered(true)}
+    onMouseLeave={() => setIsHovered(false)}>
+      <button
+        type="button"
+        onClick={handleCopy}
+        aria-label="Copy code"
+        style={{
+          position: 'absolute',
+          top: '2.6em',
+          right: '2em',
+          fontSize: '0.72em',
+          lineHeight: 1,
+          padding: '0.35em 0.55em',
+          borderRadius: '0.35em',
+          border: theme === 'dark' ? '1px solid #374151' : '1px solid #d1d5db',
+          background: theme === 'dark' ? '#111827' : '#ffffff',
+          color: theme === 'dark' ? '#d1d5db' : '#4b5563',
+          cursor: 'pointer',
+          opacity: isHovered ? 1 : 0,
+          pointerEvents: isHovered ? 'auto' : 'none',
+          transition: 'opacity 0.2s ease',
+          zIndex: 2,
+        }}
+      >
+        {isCopied ? 'Copied' : 'Copy'}
+      </button>
+      {normalizedLanguage && normalizedLanguage !== 'plaintext' && (
+        <span style={{
+          position: 'absolute',
+          top: '0.1em',
+          right: '1.3em',
+          fontSize: '0.75em',
+          color: theme === 'dark' ? '#6b7280' : '#9ca3af',
+          userSelect: 'none',
+          zIndex: 1,
+        }}>
+          {normalizedLanguage}
+        </span>
+      )}
       <SyntaxHighlighter
         showLineNumbers={true}
         showInlineLineNumbers={true}

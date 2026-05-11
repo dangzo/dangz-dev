@@ -23,7 +23,7 @@ function BlockH3({ children, getHeadingId, value: block, blocks }: BlockH3Props)
     <Heading
       as="h3"
       id={id}
-      className={isDirectlyBelowH2 ? 'pt-2' : 'border-t border-border-light dark:border-border-dark pt-6'}
+      className={isDirectlyBelowH2 ? 'pt-2' : ''}
     >
       {children}
     </Heading>

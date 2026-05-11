@@ -63,7 +63,16 @@ export const postType = defineType({
             { title: 'Quote', value: 'blockquote' },
             { title: 'Caption', value: 'figcaption' },
           ],
-          lists: [{ title: 'Bullet', value: 'bullet' }],
+          lists: [
+            {
+              title: 'Unordered List',
+              value: 'bullet',
+            },
+            {
+              title: 'Ordered List',
+              value: 'number',
+            },
+          ],
           marks: {
             decorators: [
               { title: 'Strong', value: 'strong' },
@@ -118,6 +127,22 @@ export const postType = defineType({
         }),
         defineArrayMember({
           type: 'code',
+          options: {
+            language: 'typescript',
+            languageAlternatives: [
+              { title: 'Javascript', value: 'javascript'},
+              { title: 'JSX', value: 'jsx'},
+              { title: 'Typescript', value: 'typescript'},
+              { title: 'TSX', value: 'tsx'},
+              { title: 'HTML', value: 'html'},
+              { title: 'XML', value: 'xml'},
+              { title: 'Bash', value: 'bash'},
+              { title: 'JSON', value: 'json'},
+              { title: 'CSS', value: 'css'},
+              { title: 'Docker', value: 'docker'},
+              { title: 'Nginx', value: 'nginx'}
+            ],
+          },
         }),
       ],
     }),
