@@ -56,7 +56,7 @@ const CodeBlock = ({ value }: CodeBlockProps) => {
 
   useEffect(() => {
     if (theme === 'dark') {
-      import('react-syntax-highlighter/dist/esm/styles/prism/night-owl').then(
+      import('react-syntax-highlighter/dist/esm/styles/prism/coldark-dark').then(
         (mod) => setStyle(mod.default)
       );
     } else {
@@ -72,7 +72,21 @@ const CodeBlock = ({ value }: CodeBlockProps) => {
       marginBottom: '2em',
       border: theme === 'dark' ? '1px solid #1f2937' : '1px solid #e5e7eb',
       borderRadius: '0.5em',
+      position: 'relative',
     }}>
+      {normalizedLanguage && normalizedLanguage !== 'plaintext' && (
+        <span style={{
+          position: 'absolute',
+          top: '0.5em',
+          right: '1.25em',
+          fontSize: '0.75em',
+          color: theme === 'dark' ? '#6b7280' : '#9ca3af',
+          userSelect: 'none',
+          zIndex: 1,
+        }}>
+          {normalizedLanguage}
+        </span>
+      )}
       <SyntaxHighlighter
         showLineNumbers={true}
         showInlineLineNumbers={true}
