@@ -39,11 +39,11 @@ export const PostCard = ({ post, preload }: PostCardProps) => {
 
         <div className="flex flex-col gap-1">
           <DateText date={post.publishedAt} />
-          <TagList tags={post.tags} />
+          {post.tags && <TagList tags={post.tags} />}
         </div>
 
         <Text className="my-4">
-          {post.excerpt ?? 'No description available.'}
+          {post.excerpt ? `${post.excerpt}...` : 'No description available.'}
         </Text>
 
         <Link href={`/blog/${post.slug?.current}`} type="accent">
