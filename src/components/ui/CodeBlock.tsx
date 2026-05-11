@@ -11,6 +11,8 @@ import markup from 'react-syntax-highlighter/dist/esm/languages/prism/markup';
 import bash from 'react-syntax-highlighter/dist/esm/languages/prism/bash';
 import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
 import css from 'react-syntax-highlighter/dist/esm/languages/prism/css';
+import docker from 'react-syntax-highlighter/dist/esm/languages/prism/docker';
+import nginx from 'react-syntax-highlighter/dist/esm/languages/prism/nginx';
 
 type SyntaxStyle = { [key: string]: CSSProperties };
 
@@ -34,6 +36,8 @@ SyntaxHighlighter.registerLanguage('bash', bash);
 SyntaxHighlighter.registerLanguage('sh', bash);
 SyntaxHighlighter.registerLanguage('json', json);
 SyntaxHighlighter.registerLanguage('css', css);
+SyntaxHighlighter.registerLanguage('docker', docker);
+SyntaxHighlighter.registerLanguage('nginx', nginx);
 
 function subscribe(onStoreChange: () => void) {
   const observer = new MutationObserver(onStoreChange);
