@@ -14,6 +14,7 @@ const day = String(now.getUTCDate()).padStart(2, '0');
 const monthDay = `${month}${day}`;
 
 let pushNumber = '0';
+
 try {
   const since = `${yearFull}-01-01T00:00:00Z`;
   pushNumber = execSync(`git rev-list --count --since="${since}" HEAD`, {
