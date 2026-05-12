@@ -1,3 +1,7 @@
+'use client';
+
+import { useMemo } from 'react';
+import { usePathname } from 'next/navigation';
 import { Text } from '@/components/ui';
 
 const SUFFIXES = [
@@ -24,12 +28,19 @@ const SUFFIXES = [
   'because clean code doesn\'t write itself.',
 ];
 
-const suffix = SUFFIXES[Math.floor(Math.random() * SUFFIXES.length)];
+const pickRandomSuffix = (pathname: string) => {
+  const entropy = Math.random() + pathname.length / 1000;
+  const index = Math.floor((entropy % 1) * SUFFIXES.length);
+  return SUFFIXES[index];
+};
 
 function BlogTagline({ topic = 'Frontend Engineering' }: { topic?: string }) {
+  const pathname = usePathname();
+  const suffix = useMemo(() => pickRandomSuffix(pathname), [pathname]);
+
   return (
     <Text>
-      All things <em><strong>{topic}</strong></em> — {suffix}
+      All things <em><strong>{topic}</strong></em> — <span suppressHydrationWarning>{suffix}</span>
     </Text>
   );
 }

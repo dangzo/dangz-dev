@@ -1,4 +1,5 @@
 import { author } from '@/data/siteMetadata';
+import { BUILD_SEMVER } from '@/data/buildVersion';
 import SocialIcons from './SocialIcons';
 
 export default async function Footer() {
@@ -8,8 +9,10 @@ export default async function Footer() {
         <SocialIcons />
         <div className="mb-2 flex space-x-2 text-sm text-gray-500 dark:text-gray-400">
           <div>{`© ${new Date().getFullYear()}`}</div>
-          <div>{' • '}</div>
+          <div>&bull;</div>
           <div>{author}</div>
+          <div>&bull;</div>
+          <div>v{BUILD_SEMVER}</div>
         </div>
       </div>
     </footer>

@@ -51,7 +51,6 @@ const getServerSnapshot = () => 'light';
 const CodeBlock = ({ value }: CodeBlockProps) => {
   const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [style, setStyle] = useState<SyntaxStyle | undefined>(undefined);
-  const [isHovered, setIsHovered] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const { code, language } = value;
   const normalizedLanguage = language?.toLowerCase() || 'plaintext';
@@ -91,50 +90,31 @@ const CodeBlock = ({ value }: CodeBlockProps) => {
     }
   };
 
+  const isDark = theme === 'dark';
+  const buttonClasses = `
+    absolute right-8 top-[2.6em] z-20
+    rounded-[0.35em] border px-[0.55em] py-[0.35em] text-[0.72em]
+    leading-none opacity-0 pointer-events-none
+    cursor-pointer
+    transition-opacity duration-200
+    group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto
+    ${isDark ? 'border-gray-700 bg-gray-900 text-gray-300' : 'border-gray-300 bg-white text-gray-600'}
+  `;
+
   return (
-    <div style={{
-      padding: '1em',
-      marginBottom: '2em',
-      border: theme === 'dark' ? '1px solid #1f2937' : '1px solid #e5e7eb',
-      borderRadius: '0.5em',
-      position: 'relative',
-    }}
-    onMouseEnter={() => setIsHovered(true)}
-    onMouseLeave={() => setIsHovered(false)}>
+    <div className={`group relative mb-8 rounded-lg border p-4 ${isDark ? 'border-gray-800' : 'border-gray-200'}`}>
       <button
         type="button"
         onClick={handleCopy}
         aria-label="Copy code"
-        style={{
-          position: 'absolute',
-          top: '2.6em',
-          right: '2em',
-          fontSize: '0.72em',
-          lineHeight: 1,
-          padding: '0.35em 0.55em',
-          borderRadius: '0.35em',
-          border: theme === 'dark' ? '1px solid #374151' : '1px solid #d1d5db',
-          background: theme === 'dark' ? '#111827' : '#ffffff',
-          color: theme === 'dark' ? '#d1d5db' : '#4b5563',
-          cursor: 'pointer',
-          opacity: isHovered ? 1 : 0,
-          pointerEvents: isHovered ? 'auto' : 'none',
-          transition: 'opacity 0.2s ease',
-          zIndex: 2,
-        }}
+        className={buttonClasses}
       >
         {isCopied ? 'Copied' : 'Copy'}
       </button>
       {normalizedLanguage && normalizedLanguage !== 'plaintext' && (
-        <span style={{
-          position: 'absolute',
-          top: '0.1em',
-          right: '1.3em',
-          fontSize: '0.75em',
-          color: theme === 'dark' ? '#6b7280' : '#9ca3af',
-          userSelect: 'none',
-          zIndex: 1,
-        }}>
+        <span
+          className={`absolute right-[1.3em] top-[0.1em] z-10 select-none text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}
+        >
           {normalizedLanguage}
         </span>
       )}

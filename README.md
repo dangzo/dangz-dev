@@ -123,6 +123,7 @@ Task configuration lives in [`turbo.json`](turbo.json).
 | `yarn lint` | Lints the Next.js app |
 | `yarn ci` | Lints and builds all packages (used in CI) |
 | `yarn turbo` | Runs arbitrary Turbo tasks |
+| `yarn generate-build-version` | Generates the footer build semver (`YY.Push.MMDD`) from git history |
 | `yarn generate-types` | Generates TypeScript types from Sanity schemas and adds them to the Next.js app |
 | `yarn deploy-studio` | Deploys the Sanity Studio |
 | `yarn deploy-graphql` | Deploys GraphQL schemas to Sanity |
@@ -171,6 +172,30 @@ The project is deployed on **Vercel**.
 
 - Pushes to **`dev`** trigger preview deployments.
 - Merges to **`main`** trigger production deployments.
+
+---
+
+## Build Version (Footer Semver)
+
+The footer shows an auto-generated build semver in this format:
+
+`YY.Push.MMDD`
+
+Example: `26.50.0512`
+
+- `YY`: last 2 digits of current UTC year
+- `Push`: git commit count since January 1st (UTC) of the current year
+- `MMDD`: current UTC month and day
+
+### How It Is Generated
+
+- Source script: [`scripts/generate-build-version.mjs`](scripts/generate-build-version.mjs)
+- Generated file: [`src/data/buildVersion.ts`](src/data/buildVersion.ts)
+- Automatically runs on:
+	- `yarn dev` (via `predev`)
+	- `yarn build` (via `prebuild`)
+
+This means no `.env` variable is required for versioning in local dev or Vercel builds.
 
 ---
 
