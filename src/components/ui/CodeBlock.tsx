@@ -92,9 +92,10 @@ const CodeBlock = ({ value }: CodeBlockProps) => {
 
   const isDark = theme === 'dark';
   const buttonClasses = `
-    absolute right-8 top-[2.6em] z-2
+    absolute right-8 top-[2.6em] z-20
     rounded-[0.35em] border px-[0.55em] py-[0.35em] text-[0.72em]
     leading-none opacity-0 pointer-events-none
+    cursor-pointer
     transition-opacity duration-200
     group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto
     ${isDark ? 'border-gray-700 bg-gray-900 text-gray-300' : 'border-gray-300 bg-white text-gray-600'}
@@ -112,7 +113,7 @@ const CodeBlock = ({ value }: CodeBlockProps) => {
       </button>
       {normalizedLanguage && normalizedLanguage !== 'plaintext' && (
         <span
-          className={`absolute right-[1.3em] top-[0.1em] z-1 select-none text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}
+          className={`absolute right-[1.3em] top-[0.1em] z-10 select-none text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}
         >
           {normalizedLanguage}
         </span>
