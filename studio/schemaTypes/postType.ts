@@ -130,9 +130,9 @@ export const postType = defineType({
           options: {
             language: 'typescript',
             languageAlternatives: [
-              { title: 'Javascript', value: 'javascript' },
+              { title: 'JavaScript', value: 'javascript' },
               { title: 'JSX', value: 'jsx' },
-              { title: 'Typescript', value: 'typescript' },
+              { title: 'TypeScript', value: 'typescript' },
               { title: 'TSX', value: 'tsx' },
               { title: 'HTML', value: 'html' },
               { title: 'XML', value: 'xml' },
