@@ -25,14 +25,14 @@ This project serves as a personal web presence for publishing content and showca
 
 ## Monorepo Structure
 
-This project is managed as a **Yarn workspace + Turborepo** monorepo containing two packages:
+This project is managed as a **Yarn workspaces** monorepo containing two packages:
 
 | Package | Location | Description |
 |---|---|---|
 | `blog` (Next.js app) | `/` (root) | Personal blog and portfolio frontend |
 | `studio` (Sanity Studio) | `studio/` | Sanity content management studio |
 
-A single `yarn install` from the root installs dependencies for both packages. Turborepo orchestrates tasks across them with caching.
+A single `yarn install` from the root installs dependencies for both packages.
 
 ---
 
@@ -72,10 +72,10 @@ Open [http://localhost:3333](http://localhost:3333) in the browser.
 
 ### Linting
 
-Lint both packages via Turborepo:
+Lint both packages from the root:
 
 ```bash
-yarn turbo run lint
+yarn lint && yarn workspace studio lint
 ```
 
 Or lint only the Next.js app:
@@ -92,27 +92,11 @@ yarn lint --fix
 
 ---
 
-## Turborepo
+## Yarn Workspaces
 
-This is a monorepo project managed with [Turborepo](https://turbo.build/), which orchestrates tasks across both the Next.js app and Sanity Studio with intelligent caching.
+This monorepo is managed with Yarn workspaces. The root `package.json` defines the workspace configuration and shared dependencies. Each package (project root and `studio`) has its own `package.json` for package-specific dependencies and scripts.
 
-### Running tasks
-
-| Command | Description |
-|---|---|
-| `yarn ci` | Lints and builds **all packages** via Turbo |
-| `yarn turbo run lint` | Lints all packages |
-| `yarn turbo run build` | Builds all packages |
-| `yarn turbo run lint --filter=studio` | Lints the Sanity Studio only |
-| `yarn turbo run build --filter=studio` | Builds the Sanity Studio only |
-| `yarn turbo run lint --filter=blog` | Lints the Next.js app only |
-| `yarn turbo run build --filter=blog` | Builds the Next.js app only |
-
-Task configuration lives in [`turbo.json`](turbo.json).
-
----
-
-## Available Scripts
+### Available Scripts
 
 | Command | Description |
 |---|---|
@@ -121,8 +105,9 @@ Task configuration lives in [`turbo.json`](turbo.json).
 | `yarn start` | Starts the Next.js production server |
 | `yarn preview` | Builds and starts the Next.js app for previewing production build locally |
 | `yarn lint` | Lints the Next.js app |
+| `yarn lint-studio` | Lints the Sanity Studio only |
+| `yarn build-studio` | Builds the Sanity Studio only |
 | `yarn ci` | Lints and builds all packages (used in CI) |
-| `yarn turbo` | Runs arbitrary Turbo tasks |
 | `yarn generate-build-version` | Generates the footer build semver (`YY.Push.MMDD`) from git history |
 | `yarn generate-types` | Generates TypeScript types from Sanity schemas and adds them to the Next.js app |
 | `yarn deploy-studio` | Deploys the Sanity Studio |
@@ -157,7 +142,6 @@ dangz-dev/                         # Yarn workspace root (blog package)
 │   ├── static/
 │   ├── sanity.config.ts
 │   └── package.json
-├── turbo.json                     # Turborepo task configuration
 ├── next.config.ts
 ├── tailwind.config.ts
 ├── tsconfig.json

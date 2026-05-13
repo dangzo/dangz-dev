@@ -12,11 +12,12 @@
     "prebuild": "yarn generate-build-version",
     "dev": "next dev",
     "build": "next build",
+    "build-studio": "yarn workspace studio build",
     "start": "next start",
     "preview": "next build && next start",
     "lint": "eslint",
-    "turbo": "turbo",
-    "ci": "turbo run lint build",
+    "lint-studio": "yarn workspace studio lint",
+    "ci": "yarn lint && yarn lint-studio && yarn build && yarn build-studio",
     "generate-types": "yarn workspace studio generate-types && mv studio/sanity.types.ts src/types/sanity.types.ts",
     "deploy-studio": "yarn workspace studio deploy",
     "deploy-graphql": "yarn workspace studio deploy-graphql"
@@ -59,7 +60,6 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "eslint-plugin-unused-imports": "^4.3.0",
     "tailwindcss": "^4",
-    "turbo": "^2.5.0",
     "typescript": "^6"
   },
   "resolutions": {
