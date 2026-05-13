@@ -1,5 +1,3 @@
-import { describe, expect, it } from 'vitest';
-
 import { kebabCase, slugify, startCase } from './strings';
 
 describe('slugify', () => {

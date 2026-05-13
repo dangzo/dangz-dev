@@ -1,5 +1,3 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 const { mockImage } = vi.hoisted(() => ({
   mockImage: vi.fn((source: unknown) => ({ mocked: true, source })),
 }));
