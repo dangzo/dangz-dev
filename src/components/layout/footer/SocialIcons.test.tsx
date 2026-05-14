@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 import { links } from '@/data/siteMetadata';
 import SocialIcons from './SocialIcons';
@@ -17,22 +17,10 @@ describe('SocialIcons', () => {
 
   it('attaches umami event labels for footer analytics', async () => {
     const ui = await SocialIcons();
-    const { container } = render(ui);
+    render(ui);
 
-    const root = container.firstElementChild;
-    expect(root).not.toBeNull();
-    const scope = within(root as HTMLElement);
-    expect(scope.getByRole('link', { name: /mail/i }).querySelector('[data-umami-event]')).toHaveAttribute(
-      'data-umami-event',
-      'Footer Email Click',
-    );
-    expect(scope.getByRole('link', { name: /github/i }).querySelector('[data-umami-event]')).toHaveAttribute(
-      'data-umami-event',
-      'Footer GitHub Click',
-    );
-    expect(scope.getByRole('link', { name: /linkedin/i }).querySelector('[data-umami-event]')).toHaveAttribute(
-      'data-umami-event',
-      'Footer LinkedIn Click',
-    );
+    expect(screen.getByRole('link', { name: /mail/i })).toHaveAttribute('data-umami-event', 'Footer Email Click');
+    expect(screen.getByRole('link', { name: /github/i })).toHaveAttribute('data-umami-event', 'Footer GitHub Click');
+    expect(screen.getByRole('link', { name: /linkedin/i })).toHaveAttribute('data-umami-event', 'Footer LinkedIn Click');
   });
 });

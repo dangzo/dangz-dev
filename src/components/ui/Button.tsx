@@ -5,7 +5,7 @@ import React from 'react';
 export type ButtonType = 'primary' | 'secondary' | 'ghost';
 export type ButtonSize = 'small' | 'medium' | 'large';
 
-interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement> & React.AnchorHTMLAttributes<HTMLAnchorElement>, 'type'> {
+interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement> & React.AnchorHTMLAttributes<HTMLAnchorElement>, 'type' | 'href'> {
   type?: ButtonType;
   size?: ButtonSize;
   to?: string;
@@ -71,6 +71,7 @@ const Button = ({
         download={download}
         target={target ?? (!isInternalRoute ? '_blank' : undefined)}
         rel={resolvedRel}
+        {...rest}
       >
         {children}
       </NextLink>

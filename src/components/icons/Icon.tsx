@@ -124,6 +124,7 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
   icon: keyof typeof components;
   href?: string;
   size?: number;
+  'data-umami-event'?: string;
 };
 
 const IconWrapper = ({ icon, size, ...rest }: React.SVGProps<SVGSVGElement> & {
@@ -140,7 +141,7 @@ const IconWrapper = ({ icon, size, ...rest }: React.SVGProps<SVGSVGElement> & {
   );
 };
 
-const Icon = ({ icon, href, size = 8, className, ...rest }: IconProps) => {
+const Icon = ({ icon, href, size = 8, className, 'data-umami-event': umamiEvent, ...rest }: IconProps) => {
   if (!href) return <IconWrapper icon={icon} size={size} {...rest} />;
 
   return (
@@ -149,6 +150,7 @@ const Icon = ({ icon, href, size = 8, className, ...rest }: IconProps) => {
       target="_blank"
       rel="noopener noreferrer"
       href={href}
+      data-umami-event={umamiEvent}
     >
       <span className="sr-only">{icon}</span>
       <IconWrapper
