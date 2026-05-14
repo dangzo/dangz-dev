@@ -45,7 +45,10 @@ const parseWebhookBody = async <Body>(request: NextRequest, secret: string) => {
   // next-sanity can resolve NextRequest from a nested next installation in CI.
   // Keep NextRequest on the route boundary for ergonomics, and isolate the
   // compatibility cast here where parseBody is called.
-  return parseBody<Body>(request as Parameters<typeof parseBody>[0], secret);
+  return parseBody<Body>(
+    request as unknown as Parameters<typeof parseBody>[0],
+    secret,
+  );
 };
 
 export async function POST(request: NextRequest) {
