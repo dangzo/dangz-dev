@@ -125,7 +125,7 @@ This monorepo is managed with Yarn workspaces. The root `package.json` defines t
 
 ## CI/CD Pipeline
 
-Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-lint-build.yml`](.github/workflows/pr-lint-build.yml)), which runs four jobs:
+Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality-and-build.yml`](.github/workflows/pr-quality-and-build.yml)), which runs four jobs:
 
 ```
 ┌──────────┐  ┌──────────┐  ┌──────────────┐

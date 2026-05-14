@@ -1,5 +1,5 @@
 import { revalidatePath } from 'next/cache';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { parseBody } from 'next-sanity/webhook';
 
 type WebhookSlug = {
@@ -41,7 +41,7 @@ const addPath = (paths: Set<string>, path: string | undefined) => {
   paths.add(normalized.startsWith('/') ? normalized : `/${normalized}`);
 };
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   if (!webhookSecret) {
     return NextResponse.json(
       { ok: false, message: 'Missing SANITY_REVALIDATE_SECRET' },
@@ -49,7 +49,10 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { isValidSignature, body } = await parseBody<WebhookBody>(request, webhookSecret);
+  const { isValidSignature, body } = await parseBody<WebhookBody>(
+    request as Parameters<typeof parseBody>[0],
+    webhookSecret,
+  );
 
   if (!isValidSignature) {
     return NextResponse.json(
