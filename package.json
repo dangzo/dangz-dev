@@ -3,9 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "yarn@1.22.22",
-  "workspaces": [
-    "studio"
-  ],
   "workspaces": {
     "packages": [
       "studio"
@@ -31,10 +28,11 @@
     "test:run": "vitest run",
     "typecheck": "tsc",
     "typecheck-studio": "yarn workspace studio typecheck",
-    "ci:quality": "yarn lint && yarn lint-studio && yarn test:run",
+    "ci:lint": "yarn lint && yarn lint-studio",
+    "ci:test": "yarn test:run",
     "ci:typecheck": "yarn typecheck && yarn typecheck-studio",
     "ci:build": "yarn build && yarn build-studio",
-    "ci": "yarn ci:quality && yarn ci:typecheck && yarn ci:build",
+    "ci": "yarn ci:lint && yarn ci:test && yarn ci:typecheck && yarn ci:build",
     "generate-types": "yarn workspace studio generate-types && mv studio/sanity.types.ts src/types/sanity.types.ts",
     "deploy-studio": "yarn workspace studio deploy",
     "deploy-graphql": "yarn workspace studio deploy-graphql"

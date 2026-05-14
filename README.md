@@ -111,10 +111,11 @@ This monorepo is managed with Yarn workspaces. The root `package.json` defines t
 | `yarn typecheck` | Type-checks the Next.js app |
 | `yarn typecheck-studio` | Type-checks the Sanity Studio only |
 | `yarn build-studio` | Builds the Sanity Studio only |
-| `yarn ci:quality` | Runs lint (both packages) and tests — mirrors the CI quality job |
+| `yarn ci:lint` | Runs lint (both packages) — mirrors the CI lint job |
+| `yarn ci:test` | Runs the test suite — mirrors the CI test job |
 | `yarn ci:typecheck` | Runs type checks across both packages — mirrors the CI typecheck job |
 | `yarn ci:build` | Builds both packages — mirrors the CI build job |
-| `yarn ci` | Runs all CI checks in sequence (`ci:quality` → `ci:typecheck` → `ci:build`) |
+| `yarn ci` | Runs all CI checks in sequence (`ci:lint` → `ci:test` → `ci:typecheck` → `ci:build`) |
 | `yarn generate-build-version` | Generates the footer build semver (`YY.Push.MMDD`) from git history |
 | `yarn generate-types` | Generates TypeScript types from Sanity schemas and adds them to the Next.js app |
 | `yarn deploy-studio` | Deploys the Sanity Studio |
@@ -124,23 +125,25 @@ This monorepo is managed with Yarn workspaces. The root `package.json` defines t
 
 ## CI/CD Pipeline
 
-Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-lint-build.yml`](.github/workflows/pr-lint-build.yml)), which runs three jobs:
+Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-lint-build.yml`](.github/workflows/pr-lint-build.yml)), which runs four jobs:
 
 ```
-┌─────────┐  ┌───────────┐
-│ quality │  │ typecheck │   (run in parallel)
-└────┬────┘  └─────┬─────┘
-     └──────┬───────┘
-         ┌──▼──┐
-         │build│            (runs only if both above pass)
-         └─────┘
+┌──────────┐  ┌──────────┐  ┌──────────────┐
+│  lint    │  │  test    │  │ typecheck    │   (run in parallel)
+└────┬─────┘  └────┬─────┘  └──────┬───────┘
+     └────┬────────┘         ┌──────┘
+          └────────┬─────────┘
+              ┌────┴────┐
+              │  build  │      (runs only if all above pass)
+              └─────────┘
 ```
 
 | Job | Script | What it does |
 |---|---|---|
-| `quality` | `yarn ci:quality` | Lints both packages and runs the test suite |
+| `lint` | `yarn ci:lint` | Lints both packages (`eslint` + Sanity Studio) |
+| `test` | `yarn ci:test` | Runs the test suite (vitest) |
 | `typecheck` | `yarn ci:typecheck` | Type-checks both packages with `tsc` |
-| `build` | `yarn ci:build` | Builds both packages; blocked until `quality` and `typecheck` pass |
+| `build` | `yarn ci:build` | Builds both packages; blocked until all three checks pass |
 
 The workflow runs on pull requests that touch `src/**`, `studio/**`, config files, or the workflow file itself.
 

@@ -20,8 +20,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  quality:
-    name: Lint & Test
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
 
     steps:
@@ -38,8 +38,29 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Run lint and tests
-        run: yarn ci:quality
+      - name: Run lint
+        run: yarn ci:lint
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.13
+          cache: yarn
+          cache-dependency-path: yarn.lock
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run tests
+        run: yarn ci:test
 
   typecheck:
     name: Type Check
@@ -65,7 +86,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [quality, typecheck]
+    needs: [lint, test, typecheck]
 
     steps:
       - name: Check out repository
