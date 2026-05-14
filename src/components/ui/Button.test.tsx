@@ -3,17 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import Button from './Button';
 
-vi.mock('next/link', () => ({
-  default: ({
-    children,
-    href,
-    ...props
-  }: React.PropsWithChildren<{ href: string } & React.AnchorHTMLAttributes<HTMLAnchorElement>>) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
-}));
+vi.mock('next/link', () => import('@/test/mocks/nextLink'));
 
 describe('Button', () => {
   it('renders a native button and invokes onClick when there is no `to` prop', async () => {

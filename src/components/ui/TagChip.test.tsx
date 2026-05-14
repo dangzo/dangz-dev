@@ -2,17 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import TagChip from './TagChip';
 
-vi.mock('next/link', () => ({
-  default: ({
-    children,
-    href,
-    ...props
-  }: React.PropsWithChildren<{ href: string } & React.AnchorHTMLAttributes<HTMLAnchorElement>>) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
-}));
+vi.mock('next/link', () => import('@/test/mocks/nextLink'));
 
 describe('TagChip', () => {
   it('renders a hash-prefixed label linking to the tag slug under /blog/tags', async () => {

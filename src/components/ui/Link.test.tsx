@@ -2,17 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import Link from './Link';
 
-vi.mock('next/link', () => ({
-  default: ({
-    children,
-    href,
-    ...props
-  }: React.PropsWithChildren<{ href: string } & React.AnchorHTMLAttributes<HTMLAnchorElement>>) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
-}));
+vi.mock('next/link', () => import('@/test/mocks/nextLink'));
 
 describe('Link', () => {
   it('renders a span instead of a link when `isActive` is true', () => {

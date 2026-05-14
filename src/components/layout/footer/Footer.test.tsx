@@ -10,17 +10,7 @@ vi.mock('./SocialIcons', () => ({
   },
 }));
 
-vi.mock('next/link', () => ({
-  default: ({
-    children,
-    href,
-    ...props
-  }: React.PropsWithChildren<{ href: string } & React.AnchorHTMLAttributes<HTMLAnchorElement>>) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
-}));
+vi.mock('next/link', () => import('@/test/mocks/nextLink'));
 
 describe('Footer', () => {
   beforeEach(() => {

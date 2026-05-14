@@ -3,17 +3,7 @@ import { render, screen, within } from '@testing-library/react';
 import { links } from '@/data/siteMetadata';
 import SocialIcons from './SocialIcons';
 
-vi.mock('next/link', () => ({
-  default: ({
-    children,
-    href,
-    ...props
-  }: React.PropsWithChildren<{ href: string } & React.AnchorHTMLAttributes<HTMLAnchorElement>>) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
-}));
+vi.mock('next/link', () => import('@/test/mocks/nextLink'));
 
 describe('SocialIcons', () => {
   it('renders mail, GitHub, and LinkedIn links with expected hrefs', async () => {
