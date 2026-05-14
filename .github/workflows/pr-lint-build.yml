@@ -1,4 +1,4 @@
-name: PR Lint and Build
+name: PR Checks
 
 on:
   pull_request:
@@ -20,7 +20,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint-and-build:
+  quality:
+    name: Lint & Test
     runs-on: ubuntu-latest
 
     steps:
@@ -37,5 +38,27 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Run monorepo CI checks
-        run: yarn ci
+      - name: Run lint and tests
+        run: yarn ci:quality
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: quality
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.13
+          cache: yarn
+          cache-dependency-path: yarn.lock
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build projects
+        run: yarn ci:build
