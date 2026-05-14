@@ -28,11 +28,16 @@ describe('Button', () => {
   });
 
   it('renders an external link with safe defaults when `to` is not an app route', () => {
-    render(<Button to="https://example.com/page">Docs</Button>);
+    render(
+      <Button to="https://example.com/page" data-umami-event="Docs Click">
+        Docs
+      </Button>,
+    );
     const link = screen.getByRole('link', { name: 'Docs' });
     expect(link).toHaveAttribute('href', 'https://example.com/page');
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(link).toHaveAttribute('data-umami-event', 'Docs Click');
   });
 
   it('uses explicit target and rel when provided for external targets', () => {

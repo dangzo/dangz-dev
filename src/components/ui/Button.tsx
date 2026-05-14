@@ -71,6 +71,7 @@ const Button = ({
         download={download}
         target={target ?? (!isInternalRoute ? '_blank' : undefined)}
         rel={resolvedRel}
+        {...rest}
       >
         {children}
       </NextLink>
