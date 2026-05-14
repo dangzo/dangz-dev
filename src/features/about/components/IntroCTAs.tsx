@@ -9,7 +9,7 @@ async function IntroCTAs() {
         download
         type="primary"
         size="medium"
-        data-umami-event-about="Download Resume Click"
+        data-umami-event="About Download Resume Click"
       >
         Download my resume
       </Button>
@@ -17,7 +17,7 @@ async function IntroCTAs() {
         to={links.linkedin}
         type="ghost"
         size="medium"
-        data-umami-event-about="Connect LinkedIn Click"
+        data-umami-event="About Connect LinkedIn Click"
       >
         Connect on LinkedIn
       </Button>

@@ -150,7 +150,7 @@ const Icon = ({ icon, href, size = 8, className, 'data-umami-event': umamiEvent,
       target="_blank"
       rel="noopener noreferrer"
       href={href}
-      data-umami-event-socialicon={umamiEvent}
+      data-umami-event={umamiEvent}
     >
       <span className="sr-only">{icon}</span>
       <IconWrapper

@@ -29,7 +29,7 @@ async function LetsTalkFrontend() {
           to={`mailto:${links.email}`}
           type="primary"
           size="medium"
-          data-umami-event-about="Email Click"
+          data-umami-event="AboutEmail Click"
         >
           Email me
         </Button>
@@ -39,7 +39,7 @@ async function LetsTalkFrontend() {
           to={links.linkedin}
           type="ghost"
           size="medium"
-          data-umami-event-about="LinkedIn Click"
+          data-umami-event="AboutLinkedIn Click"
         >
           Connect on LinkedIn
         </Button>
@@ -49,7 +49,7 @@ async function LetsTalkFrontend() {
           to={links.github}
           type="ghost"
           size="medium"
-          data-umami-event-about="GitHub Click"
+          data-umami-event="AboutGitHub Click"
         >
           View GitHub
         </Button>

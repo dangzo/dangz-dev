@@ -8,19 +8,19 @@ async function SocialIcons() {
         icon="mail"
         href={`mailto:${links.email}`}
         size={6}
-        data-umami-event="Email Click"
+        data-umami-event="Footer Email Click"
       />
       <Icon
         icon="github"
         href={links.github}
         size={6}
-        data-umami-event="GitHub Click"
+        data-umami-event="Footer GitHub Click"
       />
       <Icon
         icon="linkedin"
         href={links.linkedin}
         size={6}
-        data-umami-event="LinkedIn Click"
+        data-umami-event="Footer LinkedIn Click"
       />
     </div>
   );

@@ -19,8 +19,8 @@ describe('SocialIcons', () => {
     const ui = await SocialIcons();
     render(ui);
 
-    expect(screen.getByRole('link', { name: /mail/i })).toHaveAttribute('data-umami-event-socialicon', 'Email Click');
-    expect(screen.getByRole('link', { name: /github/i })).toHaveAttribute('data-umami-event-socialicon', 'GitHub Click');
-    expect(screen.getByRole('link', { name: /linkedin/i })).toHaveAttribute('data-umami-event-socialicon', 'LinkedIn Click');
+    expect(screen.getByRole('link', { name: /mail/i })).toHaveAttribute('data-umami-event', 'Footer Email Click');
+    expect(screen.getByRole('link', { name: /github/i })).toHaveAttribute('data-umami-event', 'Footer GitHub Click');
+    expect(screen.getByRole('link', { name: /linkedin/i })).toHaveAttribute('data-umami-event', 'Footer LinkedIn Click');
   });
 });
