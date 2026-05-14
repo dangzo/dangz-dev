@@ -125,24 +125,31 @@ This monorepo is managed with Yarn workspaces. The root `package.json` defines t
 
 ## CI/CD Pipeline
 
-Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality-and-build.yml`](.github/workflows/pr-quality-and-build.yml)), which runs four jobs:
+Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality-and-build.yml`](.github/workflows/pr-quality-and-build.yml)), which runs five jobs:
 
 ```
+             ┌──────────────┐
+             │    setup     │   (install dependencies + cache)
+             └──────┬───────┘
+                    │
+      ┌─────────────┼──────────────┐
+      ▼             ▼              ▼
 ┌──────────┐  ┌──────────┐  ┌──────────────┐
-│  lint    │  │  test    │  │ typecheck    │   (run in parallel)
+│  lint    │  │  test    │  │  typecheck   │   (run in parallel)
 └────┬─────┘  └────┬─────┘  └──────┬───────┘
-     └────┬────────┘         ┌──────┘
-          └────────┬─────────┘
-              ┌────┴────┐
-              │  build  │      (runs only if all above pass)
-              └─────────┘
+     └────┬────────┴───────────────┘
+          ▼
+      ┌─────────┐
+      │  build  │                   (runs only if all above pass)
+      └─────────┘
 ```
 
 | Job | Script | What it does |
 |---|---|---|
-| `lint` | `yarn ci:lint` | Lints both packages (`eslint` + Sanity Studio) |
-| `test` | `yarn ci:test` | Runs the test suite (vitest) |
-| `typecheck` | `yarn ci:typecheck` | Type-checks both packages with `tsc` |
+| `setup` | n/a | Installs dependencies once and stores a lockfile-keyed cache for downstream jobs |
+| `lint` | `yarn ci:lint` | Lints both packages (`eslint` + Sanity Studio), restoring cached dependencies |
+| `test` | `yarn ci:test` | Runs the test suite (vitest), restoring cached dependencies |
+| `typecheck` | `yarn ci:typecheck` | Type-checks both packages with `tsc`, restoring cached dependencies |
 | `build` | `yarn ci:build` | Builds both packages; blocked until all three checks pass |
 
 The workflow runs on pull requests that touch `src/**`, `studio/**`, config files, or the workflow file itself.
