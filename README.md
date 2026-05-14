@@ -75,13 +75,7 @@ Open [http://localhost:3333](http://localhost:3333) in the browser.
 Lint both packages from the root:
 
 ```bash
-yarn lint && yarn workspace studio lint
-```
-
-Or lint only the Next.js app:
-
-```bash
-yarn lint
+yarn lint && yarn lint-studio
 ```
 
 To auto-fix lint issues where supported:
@@ -89,6 +83,16 @@ To auto-fix lint issues where supported:
 ```bash
 yarn lint --fix
 ```
+
+### Type Checking
+
+Type-check both packages from the root:
+
+```bash
+yarn typecheck && yarn typecheck-studio
+```
+
+Note: `yarn typecheck-studio` intentionally excludes `studio/sanity.config.ts` and `studio/sanity.cli.ts` for now due a dependency-type duplication conflict between workspace and hoisted Sanity packages. The rest of Studio `.ts/.tsx` files are still type-checked in CI.
 
 ---
 
@@ -106,12 +110,51 @@ This monorepo is managed with Yarn workspaces. The root `package.json` defines t
 | `yarn preview` | Builds and starts the Next.js app for previewing production build locally |
 | `yarn lint` | Lints the Next.js app |
 | `yarn lint-studio` | Lints the Sanity Studio only |
+| `yarn typecheck` | Type-checks the Next.js app |
+| `yarn typecheck-studio` | Type-checks the Sanity Studio only |
 | `yarn build-studio` | Builds the Sanity Studio only |
-| `yarn ci` | Lints and builds all packages (used in CI) |
+| `yarn ci:lint` | Runs lint (both packages) — mirrors the CI lint job |
+| `yarn ci:test` | Runs the test suite — mirrors the CI test job |
+| `yarn ci:typecheck` | Runs type checks across both packages — mirrors the CI typecheck job |
+| `yarn ci:build` | Builds both packages — mirrors the CI build job |
+| `yarn ci` | Runs all CI checks in sequence (`ci:lint` → `ci:test` → `ci:typecheck` → `ci:build`) |
 | `yarn generate-build-version` | Generates the footer build semver (`YY.Push.MMDD`) from git history |
 | `yarn generate-types` | Generates TypeScript types from Sanity schemas and adds them to the Next.js app |
 | `yarn deploy-studio` | Deploys the Sanity Studio |
 | `yarn deploy-graphql` | Deploys GraphQL schemas to Sanity |
+
+---
+
+## CI/CD Pipeline
+
+Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality-and-build.yml`](.github/workflows/pr-quality-and-build.yml)), which runs five jobs:
+
+```
+             ┌──────────────┐
+             │    setup     │   (install dependencies + cache)
+             └──────┬───────┘
+                    │
+      ┌─────────────┼──────────────┐
+      ▼             ▼              ▼
+┌──────────┐  ┌──────────┐  ┌──────────────┐
+│  lint    │  │  test    │  │  typecheck   │   (run in parallel)
+└────┬─────┘  └────┬─────┘  └──────┬───────┘
+     └────┬────────┴───────────────┘
+          ▼
+      ┌─────────┐
+      │  build  │                   (runs only if all above pass)
+      └─────────┘
+```
+
+| Job | Script | What it does |
+|---|---|---|
+| `setup` | n/a | Installs dependencies once and stores a lockfile-keyed cache for downstream jobs |
+| `lint` | `yarn ci:lint` | Lints both packages (`eslint` + Sanity Studio), restoring cached dependencies |
+| `test` | `yarn ci:test` | Runs the test suite (vitest), restoring cached dependencies |
+| `typecheck` | `yarn ci:typecheck` | Type-checks both packages with `tsc`, restoring cached dependencies |
+| `build` | `yarn ci:build` | Builds both packages; blocked until all three checks pass |
+
+The workflow runs on pull requests that touch `src/**`, `studio/**`, config files, or the workflow file itself.
 
 ---
 

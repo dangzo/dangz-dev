@@ -81,7 +81,7 @@ export type Post = {
           _key: string
         }>
         style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'blockquote' | 'figcaption'
-        listItem?: 'bullet'
+        listItem?: 'bullet' | 'number'
         markDefs?: Array<{
           href?: string
           _type: 'link'

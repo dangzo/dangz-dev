@@ -3,9 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "yarn@1.22.22",
-  "workspaces": [
-    "studio"
-  ],
+  "workspaces": {
+    "packages": [
+      "studio"
+    ],
+    "nohoist": [
+      "**/sanity",
+      "**/@sanity/**",
+      "**/sanity-plugin-graphiql"
+    ]
+  },
   "scripts": {
     "generate-build-version": "node scripts/generate-build-version.mjs",
     "predev": "yarn generate-build-version",
@@ -17,7 +24,15 @@
     "preview": "next build && next start",
     "lint": "eslint",
     "lint-studio": "yarn workspace studio lint",
-    "ci": "yarn lint && yarn lint-studio && yarn build && yarn build-studio",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "typecheck": "tsc",
+    "typecheck-studio": "yarn workspace studio typecheck",
+    "ci:lint": "yarn lint && yarn lint-studio",
+    "ci:test": "yarn test:run",
+    "ci:typecheck": "yarn typecheck && yarn typecheck-studio",
+    "ci:build": "yarn build && yarn build-studio",
+    "ci": "yarn ci:lint && yarn ci:test && yarn ci:typecheck && yarn ci:build",
     "generate-types": "yarn workspace studio generate-types && mv studio/sanity.types.ts src/types/sanity.types.ts",
     "deploy-studio": "yarn workspace studio deploy",
     "deploy-graphql": "yarn workspace studio deploy-graphql"
@@ -50,17 +65,25 @@
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "^0.5.19",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "@types/react-syntax-highlighter": "^15.5.13",
+    "@vitejs/plugin-react": "^6.0.1",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "eslint-plugin-unused-imports": "^4.3.0",
+    "jsdom": "^29.1.1",
     "tailwindcss": "^4",
-    "typescript": "^6"
+    "typescript": "^6",
+    "vite": "^8",
+    "vitest": "^4.1.6"
   },
   "resolutions": {
     "styled-components": "^6.4.1"
