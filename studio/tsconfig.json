@@ -12,6 +12,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": ["schemaTypes"],
+  "exclude": ["node_modules", "sanity.config.ts", "sanity.cli.ts"]
 }

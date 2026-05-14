@@ -6,6 +6,16 @@
   "workspaces": [
     "studio"
   ],
+  "workspaces": {
+    "packages": [
+      "studio"
+    ],
+    "nohoist": [
+      "**/sanity",
+      "**/@sanity/**",
+      "**/sanity-plugin-graphiql"
+    ]
+  },
   "scripts": {
     "generate-build-version": "node scripts/generate-build-version.mjs",
     "predev": "yarn generate-build-version",
