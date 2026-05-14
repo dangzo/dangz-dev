@@ -1,5 +1,5 @@
 import { revalidatePath } from 'next/cache';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { parseBody } from 'next-sanity/webhook';
 
 type WebhookSlug = {
@@ -41,7 +41,14 @@ const addPath = (paths: Set<string>, path: string | undefined) => {
   paths.add(normalized.startsWith('/') ? normalized : `/${normalized}`);
 };
 
-export async function POST(request: Request) {
+const parseWebhookBody = async <Body>(request: NextRequest, secret: string) => {
+  // next-sanity can resolve NextRequest from a nested next installation in CI.
+  // Keep NextRequest on the route boundary for ergonomics, and isolate the
+  // compatibility cast here where parseBody is called.
+  return parseBody<Body>(request as Parameters<typeof parseBody>[0], secret);
+};
+
+export async function POST(request: NextRequest) {
   if (!webhookSecret) {
     return NextResponse.json(
       { ok: false, message: 'Missing SANITY_REVALIDATE_SECRET' },
@@ -49,8 +56,8 @@ export async function POST(request: Request) {
     );
   }
 
-  const { isValidSignature, body } = await parseBody<WebhookBody>(
-    request as Parameters<typeof parseBody>[0],
+  const { isValidSignature, body } = await parseWebhookBody<WebhookBody>(
+    request,
     webhookSecret,
   );
 

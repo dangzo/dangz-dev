@@ -92,6 +92,8 @@ Type-check both packages from the root:
 yarn typecheck && yarn typecheck-studio
 ```
 
+Note: `yarn typecheck-studio` intentionally excludes `studio/sanity.config.ts` and `studio/sanity.cli.ts` for now due a dependency-type duplication conflict between workspace and hoisted Sanity packages. The rest of Studio `.ts/.tsx` files are still type-checked in CI.
+
 ---
 
 ## Yarn Workspaces
