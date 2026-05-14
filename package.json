@@ -19,9 +19,12 @@
     "lint-studio": "yarn workspace studio lint",
     "test": "vitest",
     "test:run": "vitest run",
+    "typecheck": "tsc",
+    "typecheck-studio": "yarn workspace studio typecheck",
     "ci:quality": "yarn lint && yarn lint-studio && yarn test:run",
+    "ci:typecheck": "yarn typecheck && yarn typecheck-studio",
     "ci:build": "yarn build && yarn build-studio",
-    "ci": "yarn ci:quality && yarn ci:build",
+    "ci": "yarn ci:quality && yarn ci:typecheck && yarn ci:build",
     "generate-types": "yarn workspace studio generate-types && mv studio/sanity.types.ts src/types/sanity.types.ts",
     "deploy-studio": "yarn workspace studio deploy",
     "deploy-graphql": "yarn workspace studio deploy-graphql"

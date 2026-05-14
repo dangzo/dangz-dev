@@ -8,6 +8,7 @@
     "dev": "sanity dev",
     "start": "sanity start",
     "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
     "build": "sanity build",
     "ci": "yarn lint && yarn build",
     "deploy": "sanity deploy",
