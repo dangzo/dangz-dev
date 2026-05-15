@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { Text, Button, Heading } from '@/components/ui';
-import TopTags from '@/features/blog/components/TopTags';
+import { TopTags, TopTagsSkeleton } from '@/features/home/components/TopTags';
 
 export const metadata: Metadata = {
   title: 'Daniele Gazzelloni | Frontend Engineering Blog',
@@ -32,7 +32,7 @@ export default function HomePage() {
         </Button>
 
         <div className="flex flex-row items-center gap-2 md:gap-3 mt-6 md:mt-10 flex-wrap justify-center">
-          <Suspense>
+          <Suspense fallback={<TopTagsSkeleton />}>
             <TopTags />
           </Suspense>
         </div>
