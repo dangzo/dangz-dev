@@ -57,6 +57,7 @@ import SwaggerIcon from './devicons/SwaggerIcon';
 import TestingLibraryIcon from './devicons/TestingLibraryIcon';
 import CopilotIcon from './devicons/CopilotIcon';
 import ChatGPTIcon from './devicons/ChatGPTIcon';
+import CursorIcon from './devicons/CursorIcon';
 
 const components = {
   // Social icons
@@ -114,6 +115,7 @@ const components = {
   swagger: SwaggerIcon,
   copilot: CopilotIcon,
   chatgpt: ChatGPTIcon,
+  cursor: CursorIcon,
   'react-query': ReactQueryIcon,
   'design-components': DesignComponentsIcon,
   'testing-library': TestingLibraryIcon,
