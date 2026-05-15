@@ -4,17 +4,17 @@ import { getTagsWithCount } from '@/features/blog/api/queries/tags';
 
 const TOP_TAGS_COUNT = 7;
 
-const TopTagsSkeleton = () => {
+export const TopTagsSkeleton = () => {
   return (
     <>
-      <Skeleton width={120} height={32} />
-      <Skeleton width={120} height={32} />
-      <Skeleton width={120} height={32} />
+      {Array.from({ length: TOP_TAGS_COUNT }).map((_, index) => (
+        <Skeleton key={index} width={200} height={32} />
+      ))}
     </>
   );
 };
 
-async function TopTags() {
+export async function TopTags() {
   const { tags, tagCount } = await getTagsWithCount();
 
   const tagsWithCount = tags?.map(tag => ({
@@ -27,17 +27,9 @@ async function TopTags() {
     ?.filter(tag => tag.postCount > 0)
     ?.slice(0, TOP_TAGS_COUNT);
 
-  if (!topTags || topTags.length === 0) {
-    return (
-      <>
-        <TopTagsSkeleton />
-      </>
-    );
-  }
-
   return (
     <>
-      {topTags.map(tag => (
+      {topTags?.map(tag => (
         <div
           key={tag._id}
           className="
@@ -55,5 +47,3 @@ async function TopTags() {
     </>
   );
 }
-
-export default TopTags;

@@ -83,6 +83,7 @@ const skills = [
     items: [
       { icon: ({ ...props }) => <Icon icon="copilot" {...props} />, label: 'GitHub Copilot' },
       { icon: ({ ...props }) => <Icon icon="chatgpt" {...props} />, label: 'ChatGPT' },
+      { icon: ({ ...props }) => <Icon icon="cursor" {...props} />, label: 'Cursor' },
     ],
   },
 ];
