@@ -1,16 +1,10 @@
 import { clsx } from 'clsx';
 import { Link } from '@/components/ui';
+
 // Social icons
-import FacebookIcon from './socials/FacebookIcon';
 import GithubIcon from './socials/GithubIcon';
-import InstagramIcon from './socials/InstagramIcon';
 import LinkedinIcon from './socials/LinkedinIcon';
 import MailIcon from './socials/MailIcon';
-import MediumIcon from './socials/MediumIcon';
-import ThreadsIcon from './socials/ThreadsIcon';
-import TwitterIcon from './socials/TwitterIcon';
-import XIcon from './socials/XIcon';
-import YoutubeIcon from './socials/YoutubeIcon';
 // Devicons
 import AgGridIcon from './devicons/AgGridIcon';
 import DevOpsIcon from './devicons/DevOpsIcon';
@@ -63,14 +57,7 @@ const components = {
   // Social icons
   mail: MailIcon,
   github: GithubIcon,
-  facebook: FacebookIcon,
-  youtube: YoutubeIcon,
   linkedin: LinkedinIcon,
-  twitter: TwitterIcon,
-  x: XIcon,
-  threads: ThreadsIcon,
-  instagram: InstagramIcon,
-  medium: MediumIcon,
 
   // Devicons
   devops: DevOpsIcon,
