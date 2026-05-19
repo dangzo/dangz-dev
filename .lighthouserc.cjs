@@ -2,7 +2,7 @@ module.exports = {
   ci: {
     collect: {
       numberOfRuns: 3,
-      startServerCommand: 'cd "$(git rev-parse --show-toplevel)" && yarn start',
+      startServerCommand: 'node ../../scripts/lhci-start-server.mjs',
       startServerReadyPattern: 'Ready in',
       startServerReadyTimeout: 60000,
       url: [
