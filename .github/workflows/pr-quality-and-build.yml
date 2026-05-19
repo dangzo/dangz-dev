@@ -234,4 +234,4 @@ jobs:
           path: .
 
       - name: Run Lighthouse CI
-        run: yarn lighthouse
+        run: node scripts/run-lighthouse-ci.mjs
