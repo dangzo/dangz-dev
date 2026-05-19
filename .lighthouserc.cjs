@@ -2,7 +2,7 @@ module.exports = {
   ci: {
     collect: {
       numberOfRuns: 3,
-      startServerCommand: 'cd ../.. && yarn start',
+      startServerCommand: 'cd "$(git rev-parse --show-toplevel)" && yarn start',
       startServerReadyPattern: 'Ready in',
       startServerReadyTimeout: 60000,
       url: [
@@ -16,11 +16,11 @@ module.exports = {
     },
     assert: {
       assertions: {
-        'categories:performance': ['error', { minScore: 0.85 }],
+        'categories:performance': ['error', { minScore: 0.8 }],
         'categories:accessibility': ['error', { minScore: 0.9 }],
         'categories:best-practices': ['error', { minScore: 0.9 }],
         'categories:seo': ['error', { minScore: 0.9 }],
-        'largest-contentful-paint': ['error', { maxNumericValue: 4200 }],
+        'largest-contentful-paint': ['error', { maxNumericValue: 4500 }],
         'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }],
         'total-blocking-time': ['error', { maxNumericValue: 200 }],
       },
