@@ -234,4 +234,4 @@ jobs:
           path: .
 
       - name: Run Lighthouse CI
-        run: yarn ci:lighthouse
+        run: yarn lighthouse
