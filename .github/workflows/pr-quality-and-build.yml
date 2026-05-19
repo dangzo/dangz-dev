@@ -233,30 +233,18 @@ jobs:
           name: next-build
           path: .
 
-      # install Lighthouse CI globally
-      - name: Install Lighthouse CI
-        run: npm install -g @lhci/cli
-
-      #- name: Run Lighthouse CI
-      #  run: node scripts/run-lighthouse-ci.mjs
-
-      - name: Run Lighthouse Collect
-        run: |
-          LHCI_BUILD_CONTEXT__CURRENT_HASH=github-actions \
-          lhci collect --config=.lighthouserc.cjs || true
-
-      - name: Run Lighthouse Upload
-        run: |
-          LHCI_BUILD_CONTEXT__CURRENT_HASH=github-actions \
-          lhci upload --config=.lighthouserc.cjs || true
+      - name: Run Lighthouse CI
+        run: yarn ci:lighthouse
 
       - name: Show report files
-        run: ls -l .lighthouseci
+        run: ls -la .tmp/lighthouse/.lighthouseci || true
 
       - name: Upload Lighthouse Report
         uses: actions/upload-artifact@v4
         with:
           name: lighthouse-report
           path: |
-            .lighthouseci/*.html
-            .lighthouseci/*.json
+            .tmp/lighthouse/.lighthouseci/*.html
+            .tmp/lighthouse/.lighthouseci/*.json
+            .tmp/lighthouse/*.report.html
+            .tmp/lighthouse/*.report.json

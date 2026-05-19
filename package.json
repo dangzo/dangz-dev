@@ -30,7 +30,7 @@
     "lint": "eslint",
     "lint:changed": "node scripts/lint-changed.mjs",
     "lint-studio": "yarn workspace studio lint",
-    "lighthouse": "node scripts/run-lighthouse-ci.mjs",
+    "lighthouse": "yarn lighthouse:clean && cp .lighthouserc.cjs .tmp/lighthouse/.lighthouserc.cjs && cd .tmp/lighthouse && node ../../node_modules/@lhci/cli/src/cli.js autorun --config=.lighthouserc.cjs",
     "lighthouse:clean": "rm -rf .tmp/lighthouse && mkdir -p .tmp/lighthouse",
     "lighthouse:open": "node scripts/lighthouse-generate-index.mjs && xdg-open .tmp/lighthouse/index.html",
     "lighthouse:summary": "node scripts/lighthouse-summary.mjs",
