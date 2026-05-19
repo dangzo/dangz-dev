@@ -118,7 +118,7 @@ This monorepo is managed with Yarn workspaces. The root `package.json` defines t
 | `yarn ci:typecheck` | Runs type checks across both packages — mirrors the CI typecheck job |
 | `yarn ci:build` | Builds both packages — mirrors the CI build job |
 | `yarn ci:lighthouse` | Runs Lighthouse CI against the production build and fails on performance regressions |
-| `yarn ci` | Runs all CI checks in sequence (`ci:lint` → `ci:test` → `ci:typecheck` → `ci:build`) |
+| `yarn ci` | Runs all CI checks in sequence (`ci:lint` → `ci:test` → `ci:typecheck` → `ci:build` → `ci:lighthouse`) |
 | `yarn generate-build-version` | Generates the footer build semver (`YY.Push.MMDD`) from git history |
 | `yarn generate-types` | Generates TypeScript types from Sanity schemas and adds them to the Next.js app |
 | `yarn deploy-studio` | Deploys the Sanity Studio |
