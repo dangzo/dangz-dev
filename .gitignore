@@ -17,6 +17,10 @@
 .next/
 /out/
 
+# lighthouse ci artifacts
+/.lighthouseci/
+/.tmp/
+
 # production
 /build
 /dist

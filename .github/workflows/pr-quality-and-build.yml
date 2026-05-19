@@ -189,3 +189,48 @@ jobs:
 
       - name: Build projects
         run: yarn ci:build
+
+      - name: Upload Next.js build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: next-build
+          path: .next
+          if-no-files-found: error
+
+  lighthouse:
+    name: Lighthouse
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.13
+          cache: yarn
+          cache-dependency-path: yarn.lock
+
+      - name: Restore dependencies cache
+        id: deps-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            node_modules
+            studio/node_modules
+          key: ${{ runner.os }}-node-22.13-yarn-modules-${{ hashFiles('yarn.lock') }}
+
+      - name: Install dependencies (cache miss fallback)
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+
+      - name: Download Next.js build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: next-build
+          path: .
+
+      - name: Run Lighthouse CI
+        run: yarn ci:lighthouse
