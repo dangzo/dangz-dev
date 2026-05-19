@@ -16,6 +16,11 @@ function safeRunGit(args) {
   }
 }
 
+function isGitIgnored(file) {
+  const check = spawnSync('git', ['check-ignore', '-q', file]);
+  return check.status === 0;
+}
+
 function resolveDiffRange() {
   const upstream = safeRunGit(['rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{upstream}']);
   if (upstream) return `${upstream}...HEAD`;
@@ -39,6 +44,7 @@ function getChangedFiles() {
     .map((file) => file.trim())
     .filter(Boolean)
     .filter((file) => lintableExtensions.test(file))
+    .filter((file) => !isGitIgnored(file))
     .filter((file) => fs.existsSync(file));
 }
 
@@ -53,7 +59,7 @@ if (!files.length) {
 
 console.log(`Running ESLint on ${files.length} changed file(s)...`);
 
-const lint = spawnSync('yarn', ['eslint', '--max-warnings=0', ...files], {
+const lint = spawnSync('yarn', ['eslint', '--max-warnings=0', '--no-warn-ignored', ...files], {
   stdio: 'inherit',
 });
 
