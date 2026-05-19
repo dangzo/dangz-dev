@@ -117,6 +117,7 @@ This monorepo is managed with Yarn workspaces. The root `package.json` defines t
 | Command | Description |
 |---|---|
 | `yarn lint` | Lints the Next.js app |
+| `yarn lint:changed` | Lints only staged JS/TS files (useful for quick local checks) |
 | `yarn lint-studio` | Lints the Sanity Studio only |
 | `yarn typecheck` | Type-checks the Next.js app |
 | `yarn typecheck-studio` | Type-checks the Sanity Studio only |
@@ -134,8 +135,7 @@ This monorepo is managed with Yarn workspaces. The root `package.json` defines t
 | `yarn lighthouse` | Runs Lighthouse CI locally against production build URLs, replacing previous local artifacts |
 | `yarn lighthouse:clean` | Deletes and recreates the local Lighthouse artifacts directory (`.tmp/lighthouse`) |
 | `yarn lighthouse:summary` | Prints a grouped summary table (latest run per URL) from local Lighthouse reports |
-| `yarn lighthouse:index` | Generates `.tmp/lighthouse/index.html` with links to all local Lighthouse HTML reports |
-| `yarn lighthouse:open` | Generates the report index and opens it in your default browser |
+| `yarn lighthouse:open` | Generates `.tmp/lighthouse/index.html` and opens it in your default browser |
 
 #### Utility and Deployment Commands
 
