@@ -232,19 +232,14 @@ jobs:
         with:
           name: next-build
           path: .
+        
+      - name: Lighthouse mobile audit
+        run: yarn lhci:mobile
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
-      - name: Run Lighthouse CI
-        run: yarn ci:lighthouse
+      - name: Lighthouse desktop audit
+        run: yarn lhci:desktop
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
-      - name: Show report files
-        run: ls -la .tmp/lighthouse/.lighthouseci || true
-
-      - name: Upload Lighthouse Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: lighthouse-report
-          path: |
-            .tmp/lighthouse/.lighthouseci/*.html
-            .tmp/lighthouse/.lighthouseci/*.json
-            .tmp/lighthouse/*.report.html
-            .tmp/lighthouse/*.report.json

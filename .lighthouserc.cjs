@@ -2,7 +2,7 @@ module.exports = {
   ci: {
     collect: {
       numberOfRuns: 3,
-      startServerCommand: 'yarn --cwd ../.. start',
+      startServerCommand: 'yarn build && yarn start',
       startServerReadyPattern: 'Ready in',
       startServerReadyTimeout: 60000,
       url: [
@@ -26,7 +26,7 @@ module.exports = {
       },
     },
     upload: {
-      target: 'filesystem',
+      target: 'temporary-public-storage',
     },
   },
 };
