@@ -1,0 +1,1 @@
+yarn typecheck && node scripts/lint-changed.mjs --from-upstream
