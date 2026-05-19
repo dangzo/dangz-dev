@@ -131,11 +131,9 @@ This monorepo is managed with Yarn workspaces. The root `package.json` defines t
 
 | Command | Description |
 |---|---|
-| `yarn ci:lighthouse` | Runs Lighthouse CI against the production build, clearing old local artifacts first |
-| `yarn lighthouse` | Runs Lighthouse CI locally against production build URLs, replacing previous local artifacts |
-| `yarn lighthouse:clean` | Deletes and recreates the local Lighthouse artifacts directory (`.tmp/lighthouse`) |
-| `yarn lighthouse:summary` | Prints a grouped summary table (latest run per URL) from local Lighthouse reports |
-| `yarn lighthouse:open` | Generates `.tmp/lighthouse/index.html` and opens it in your default browser |
+| `yarn ci:lighthouse` | Runs the Lighthouse CI entrypoint used by the combined CI script |
+| `yarn lhci:mobile` | Runs Lighthouse CI autorun using the mobile preset |
+| `yarn lhci:desktop` | Runs Lighthouse CI autorun using the desktop preset |
 
 #### Utility and Deployment Commands
 
@@ -157,21 +155,16 @@ Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality
              │    setup     │   (install dependencies + cache)
              └──────┬───────┘
                     │
-      ┌─────────────┼──────────────┐
-      ▼             ▼              ▼
-┌──────────┐  ┌──────────┐  ┌──────────────┐
-│  lint    │  │  test    │  │  typecheck   │   (run in parallel)
-└────┬─────┘  └────┬─────┘  └──────┬───────┘
-     └────┬────────┴───────────────┘
+     ┌─────────────┬─────────────┬──────────────┬──────────────┐
+     ▼             ▼             ▼              ▼
+┌──────────┐  ┌──────────┐  ┌──────────────┐  ┌──────────────┐
+│  lint    │  │  test    │  │  typecheck   │  │  lighthouse  │   (run in parallel)
+└────┬─────┘  └────┬─────┘  └──────┬───────┘  └──────┬───────┘
+     └────┬────────┴───────────────┴──────────────┬──┘
           ▼
       ┌─────────┐
-      │  build  │                   (runs only if all above pass)
+     │  build  │                   (runs only if all above pass)
       └─────────┘
-           │
-           ▼
-      ┌────────────┐
-      │ lighthouse │               (runs against the production build and fails on metric regressions)
-      └────────────┘
 ```
 
 | Job | Script | What it does |
@@ -180,8 +173,8 @@ Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality
 | `lint` | `yarn ci:lint` | Lints both packages (`eslint` + Sanity Studio), restoring cached dependencies |
 | `test` | `yarn ci:test` | Runs the test suite (vitest), restoring cached dependencies |
 | `typecheck` | `yarn ci:typecheck` | Type-checks both packages with `tsc`, restoring cached dependencies |
-| `build` | `yarn ci:build` | Builds both packages; blocked until all three checks pass |
-| `lighthouse` | `yarn ci:lighthouse` | Downloads the built Next.js app and runs Lighthouse CI on the homepage, blog, and about routes |
+| `lighthouse` | `yarn lhci:mobile` + `yarn lhci:desktop` | Runs Lighthouse CI audits for both mobile and desktop, restoring cached dependencies |
+| `build` | `yarn ci:build` | Builds both packages; blocked until lint, test, typecheck, and lighthouse pass |
 
 The workflow runs on pull requests that touch `src/**`, `studio/**`, config files, or the workflow file itself.
 
