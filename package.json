@@ -43,7 +43,7 @@
     "typecheck-studio": "yarn workspace studio typecheck"
   },
   "dependencies": {
-    "@apollo/client": "^4.0.11",
+    "@apollo/client": "^4.1.9",
     "@apollo/client-integration-nextjs": "^0.14.3",
     "@next/third-parties": "^16.2.2",
     "@sanity/code-input": "^7.0.12",
