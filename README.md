@@ -102,23 +102,45 @@ This monorepo is managed with Yarn workspaces. The root `package.json` defines t
 
 ### Available Scripts
 
+#### Core Commands
+
 | Command | Description |
 |---|---|
 | `yarn dev` | Starts the Next.js development server |
 | `yarn build` | Builds the Next.js app for production |
 | `yarn start` | Starts the Next.js production server |
 | `yarn preview` | Builds and starts the Next.js app for previewing production build locally |
+| `yarn build-studio` | Builds the Sanity Studio only |
+
+#### Quality Commands
+
+| Command | Description |
+|---|---|
 | `yarn lint` | Lints the Next.js app |
 | `yarn lint-studio` | Lints the Sanity Studio only |
 | `yarn typecheck` | Type-checks the Next.js app |
 | `yarn typecheck-studio` | Type-checks the Sanity Studio only |
-| `yarn build-studio` | Builds the Sanity Studio only |
 | `yarn ci:lint` | Runs lint (both packages) — mirrors the CI lint job |
 | `yarn ci:test` | Runs the test suite — mirrors the CI test job |
 | `yarn ci:typecheck` | Runs type checks across both packages — mirrors the CI typecheck job |
 | `yarn ci:build` | Builds both packages — mirrors the CI build job |
-| `yarn ci:lighthouse` | Runs Lighthouse CI against the production build and fails on performance regressions |
 | `yarn ci` | Runs all CI checks in sequence (`ci:lint` → `ci:test` → `ci:typecheck` → `ci:build` → `ci:lighthouse`) |
+
+#### Lighthouse Commands
+
+| Command | Description |
+|---|---|
+| `yarn ci:lighthouse` | Runs Lighthouse CI against the production build, clearing old local artifacts first |
+| `yarn lighthouse` | Runs Lighthouse CI locally against production build URLs, replacing previous local artifacts |
+| `yarn lighthouse:clean` | Deletes and recreates the local Lighthouse artifacts directory (`.tmp/lighthouse`) |
+| `yarn lighthouse:summary` | Prints a grouped summary table (latest run per URL) from local Lighthouse reports |
+| `yarn lighthouse:index` | Generates `.tmp/lighthouse/index.html` with links to all local Lighthouse HTML reports |
+| `yarn lighthouse:open` | Generates the report index and opens it in your default browser |
+
+#### Utility and Deployment Commands
+
+| Command | Description |
+|---|---|
 | `yarn generate-build-version` | Generates the footer build semver (`YY.Push.MMDD`) from git history |
 | `yarn generate-types` | Generates TypeScript types from Sanity schemas and adds them to the Next.js app |
 | `yarn deploy-studio` | Deploys the Sanity Studio |
