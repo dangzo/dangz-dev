@@ -35,7 +35,8 @@
     "ci": "yarn ci:lint && yarn ci:test && yarn ci:typecheck && yarn ci:build",
     "generate-types": "yarn workspace studio generate-types && mv studio/sanity.types.ts src/types/sanity.types.ts",
     "deploy-studio": "yarn workspace studio deploy",
-    "deploy-graphql": "yarn workspace studio deploy-graphql"
+    "deploy-graphql": "yarn workspace studio deploy-graphql",
+    "prepare": "husky"
   },
   "dependencies": {
     "@apollo/client": "^4.0.11",
@@ -79,7 +80,9 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "eslint-plugin-unused-imports": "^4.3.0",
+    "husky": "^9.1.7",
     "jsdom": "^29.1.1",
+    "pinst": "^3.0.0",
     "tailwindcss": "^4",
     "typescript": "^6",
     "vite": "^8",

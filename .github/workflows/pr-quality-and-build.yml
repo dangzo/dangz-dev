@@ -1,5 +1,10 @@
 name: PR Checks
 
+# Disables husky pre-commit hooks on the CI
+# https://docs.github.com/en/actions/learn-github-actions/variables
+env:
+  HUSKY: 0
+
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
