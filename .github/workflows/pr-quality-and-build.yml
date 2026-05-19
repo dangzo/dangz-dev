@@ -234,4 +234,4 @@ jobs:
           path: .
 
       - name: Run Lighthouse CI
-        run: mkdir -p .tmp/lighthouse && cp .lighthouserc.cjs .tmp/lighthouse/.lighthouserc.cjs && cd .tmp/lighthouse && yarn exec lhci autorun --config=.lighthouserc.cjs
+        run: yarn lighthouse

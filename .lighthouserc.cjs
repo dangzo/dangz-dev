@@ -2,9 +2,6 @@ module.exports = {
   ci: {
     collect: {
       numberOfRuns: 3,
-      startServerCommand: 'node ../../scripts/lhci-start-server.mjs',
-      startServerReadyPattern: 'Ready in',
-      startServerReadyTimeout: 60000,
       url: [
         'http://127.0.0.1:3000/',
         'http://127.0.0.1:3000/blog',
