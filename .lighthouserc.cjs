@@ -8,6 +8,7 @@ module.exports = {
       url: [
         'http://127.0.0.1:3000/',
         'http://127.0.0.1:3000/blog',
+        'http://127.0.0.1:3000/blog/how-to-structure-a-react-app-in-2026',
         'http://127.0.0.1:3000/about',
       ],
       settings: {
