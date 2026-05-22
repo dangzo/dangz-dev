@@ -12,7 +12,7 @@
  * ---------------------------------------------------------------------------------
  */
 
-export declare const internalGroqTypeReferenceTo: unique symbol;
+export declare const internalGroqTypeReferenceTo: unique symbol
 
 // Source: schema.json
 export type Tag = {
@@ -30,6 +30,18 @@ export type Slug = {
   _type: 'slug'
   current?: string
   source?: string
+}
+
+export type Reaction = {
+  _id: string
+  _type: 'reaction'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
+  slug?: Slug
+  emoji?: string
+  sortOrder?: number
 }
 
 export type SanityImageAssetReference = {
@@ -246,6 +258,7 @@ export type Geopoint = {
 export type AllSanitySchemaTypes =
   | Tag
   | Slug
+  | Reaction
   | SanityImageAssetReference
   | TagReference
   | Post
