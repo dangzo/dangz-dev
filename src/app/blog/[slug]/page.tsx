@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { Img, Text } from '@/components/ui';
-import { PortableText } from '@/features/blog/components';
+import { PortableText, Reactions } from '@/features/blog/components';
 import { getPostBySlug, getPostSlugs } from '@/features/blog/api/queries/singlePost';
 import getPostMetadata from '@/features/blog/api/getPostMetadata';
 
@@ -52,7 +52,12 @@ export default async function PostPage({
 
       {/* Body Content */}
       {post.body && post.body.length > 0
-        ? <PortableText value={post.body} />
+        ? (
+          <>
+            <PortableText value={post.body} />
+            <Reactions postId={post._id} />
+          </>
+        )
         : <Text>No content available for this post.</Text>
       }
     </article>

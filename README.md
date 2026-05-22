@@ -29,7 +29,7 @@ This project is managed as a **Yarn workspaces** monorepo containing two package
 
 | Package | Location | Description |
 |---|---|---|
-| `blog` (Next.js app) | `/` (root) | Personal blog and portfolio frontend |
+| `blog` (Next.js app) | `/` | Personal blog and portfolio frontend |
 | `studio` (Sanity Studio) | `studio/` | Sanity content management studio |
 
 A single `yarn install` from the root installs dependencies for both packages.
@@ -210,6 +210,7 @@ dangz-dev/                         # Yarn workspace root (blog package)
 ├── next.config.ts
 ├── tailwind.config.ts
 ├── tsconfig.json
+├── ...
 └── package.json                   # Root workspace manifest
 ```
 
@@ -219,7 +220,7 @@ dangz-dev/                         # Yarn workspace root (blog package)
 
 The project is deployed on **Vercel**.
 
-- Pushes to **`dev`** trigger preview deployments.
+- ~~Pushes to **`dev`** trigger preview deployments.~~ 
 - Merges to **`main`** trigger production deployments.
 
 ---

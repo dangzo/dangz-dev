@@ -15,6 +15,31 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type PostReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'post'
+}
+
+export type ReactionReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'reaction'
+}
+
+export type PostReactionCount = {
+  _id: string
+  _type: 'postReactionCount'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  post?: PostReference
+  reaction?: ReactionReference
+  count?: number
+}
+
 export type Tag = {
   _id: string
   _type: 'tag'
@@ -30,6 +55,19 @@ export type Slug = {
   _type: 'slug'
   current?: string
   source?: string
+}
+
+export type Reaction = {
+  _id: string
+  _type: 'reaction'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
+  slug?: Slug
+  emoji?: string
+  sortOrder?: number
+  count?: number
 }
 
 export type SanityImageAssetReference = {
@@ -244,8 +282,12 @@ export type Geopoint = {
 }
 
 export type AllSanitySchemaTypes =
+  | PostReference
+  | ReactionReference
+  | PostReactionCount
   | Tag
   | Slug
+  | Reaction
   | SanityImageAssetReference
   | TagReference
   | Post

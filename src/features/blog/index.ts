@@ -2,10 +2,12 @@ export * as blogComponents from './components';
 export * from './components';
 
 export * from './hooks/useBlogSearch';
+export * from './hooks/useReactions';
 export { default as usePostInsights } from './hooks/usePostInsights';
 export * from './hooks/usePostInsights';
 
 export * from './api/queries/posts';
+export * from './api/queries/reactions';
 export * from './api/queries/tags';
 export { default as getPostMetadata } from './api/getPostMetadata';
 

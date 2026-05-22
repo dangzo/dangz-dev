@@ -62,8 +62,7 @@
     "react-syntax-highlighter": "^16.1.1",
     "remark-gfm": "^4.0.1",
     "sanity": "^5.4.0",
-    "sanity-plugin-graphiql": "^1.7.1",
-    "styled-components": "^6.4.1"
+    "sanity-plugin-graphiql": "^1.7.1"
   },
   "devDependencies": {
     "@lhci/cli": "^0.15.1",
