@@ -1,6 +1,5 @@
 import { getClient } from '@/api/apollo-client';
 import { gql } from '@apollo/client';
-import { cache } from 'react';
 
 export interface ReactionWithEmoji {
   _id: string;
@@ -40,7 +39,7 @@ const REACTIONS_FOR_POST_QUERY = gql`
   }
 `;
 
-export const getReactionsForPost = cache(async (postId: string): Promise<ReactionWithEmoji[]> => {
+export async function getReactionsForPost(postId: string): Promise<ReactionWithEmoji[]> {
   const client = getClient();
   const { data } = await client.query<{
     allReaction: ReactionWithEmoji[];
@@ -64,7 +63,7 @@ export const getReactionsForPost = cache(async (postId: string): Promise<Reactio
     ...reaction,
     count: countsByReactionId.get(reaction._id) ?? 0,
   }));
-});
+}
 
 const createPostReactionCountDocumentId = (postId: string, reactionId: string) => {
   const safePostId = postId.replace(/[^a-zA-Z0-9_-]/g, '_');
