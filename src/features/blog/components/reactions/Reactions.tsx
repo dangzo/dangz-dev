@@ -1,5 +1,6 @@
-import { Emoji, Heading } from '@/components/ui';
+import { Heading } from '@/components/ui';
 import { getReactions } from '@/features/blog/api/queries/reactions';
+import EmojiBtn from './EmojiBtn';
 
 const Reactions = async () => {
   const reactions = await getReactions();
@@ -9,7 +10,10 @@ const Reactions = async () => {
   }
 
   return (
-    <div className="mt-14 sm:mt-20 flex flex-wrap items-center gap-3 justify-center" aria-label="Reactions">
+    <div
+      className="mt-14 sm:mt-20 flex flex-wrap items-center gap-3 justify-center border-t border-secondary-light/30 dark:border-secondary-dark/50 pt-8"
+      aria-label="Reactions"
+    >
       <Heading as="h6" className="text-lg font-semibold text-center w-full mb-4">
         How do you find this article?
       </Heading>
@@ -20,14 +24,8 @@ const Reactions = async () => {
         }
 
         return (
-          <div key={reaction._id} className="flex flex-col items-center gap-2 min-w-16">
-            <button
-              type="button"
-              className="inline-flex items-center justify-center rounded-full border border-secondary-light/50 px-3 py-1 text-xl transition-colors hover:bg-secondary-light/10 dark:border-secondary-dark/40 dark:hover:bg-secondary-dark/20 cursor-pointer"
-              aria-label={reaction.name}
-            >
-              <Emoji emoji={reaction.emoji} label={reaction.name} />
-            </button>
+          <div key={reaction._id} className="flex flex-col items-center gap-0 min-w-16 sm:min-w-20">
+            <EmojiBtn emoji={reaction.emoji} name={reaction.name} />
             <span className="text-xs text-secondary-light dark:text-secondary-dark text-center leading-tight">
               {reaction.name}
             </span>
