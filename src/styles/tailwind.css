@@ -226,3 +226,31 @@
     opacity: 0;
   }
 }
+
+@keyframes emoji-bounce-two {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  18% {
+    transform: translateY(-54%) scale(1.08);
+  }
+  36% {
+    transform: translateY(0) scale(0.96);
+  }
+  56% {
+    transform: translateY(-12%) scale(1.04);
+  }
+  72% {
+    transform: translateY(0) scale(0.99);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@layer utilities {
+  .emoji-bounce-two {
+    animation: emoji-bounce-two 700ms linear 1 both;
+    transform-origin: center bottom;
+  }
+}

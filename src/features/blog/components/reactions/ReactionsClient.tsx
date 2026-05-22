@@ -71,7 +71,7 @@ const ReactionsClient = ({ postId, reactions }: ReactionsClientProps) => {
               emoji={reaction.emoji}
               name={reaction.name}
               onClick={() => handleReactionClick(reaction._id)}
-              disabled={Boolean(pendingIds[reaction._id])}
+              isPending={Boolean(pendingIds[reaction._id])}
             />
             <span className="text-xs text-secondary-light dark:text-secondary-dark text-center leading-tight">
               {reaction.name}

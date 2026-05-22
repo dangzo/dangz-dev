@@ -30,9 +30,12 @@ describe('EmojiBtn', () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
-  it('respects disabled state', () => {
-    render(<EmojiBtn emoji="🔥" name="Fire" disabled />);
+  it('shows pending animation state without disabling the button', () => {
+    render(<EmojiBtn emoji="🔥" name="Fire" isPending />);
 
-    expect(screen.getByRole('button', { name: 'Fire' })).toBeDisabled();
+    const button = screen.getByRole('button', { name: 'Fire' });
+    expect(button).toHaveAttribute('aria-busy', 'true');
+    expect(button).toHaveClass('emoji-bounce-two');
+    expect(button).not.toBeDisabled();
   });
 });
