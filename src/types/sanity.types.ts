@@ -67,7 +67,6 @@ export type Reaction = {
   slug?: Slug
   emoji?: string
   sortOrder?: number
-  count?: number
 }
 
 export type SanityImageAssetReference = {

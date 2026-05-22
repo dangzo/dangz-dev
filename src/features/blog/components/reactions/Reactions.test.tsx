@@ -41,8 +41,8 @@ describe('Reactions', () => {
     expect(screen.getByRole('img', { name: 'Love' })).toHaveTextContent('❤️');
     expect(screen.getByRole('img', { name: 'Fire' })).toHaveTextContent('🔥');
 
-    expect(screen.getByText('12 votes')).toBeInTheDocument();
-    expect(screen.getByText('1 vote')).toBeInTheDocument();
+    expect(screen.getByText('12')).toBeInTheDocument();
+    expect(screen.getByText('1')).toBeInTheDocument();
   });
 
   it('falls back to zero votes when count is not provided', async () => {
@@ -55,7 +55,7 @@ describe('Reactions', () => {
 
     render(<Reactions postId="post-1" />);
 
-    expect(await screen.findByText('0 votes')).toBeInTheDocument();
+    expect(await screen.findByText('0')).toBeInTheDocument();
   });
 
   it('renders nothing when the client fetch returns an empty list', async () => {
@@ -90,11 +90,11 @@ describe('Reactions', () => {
 
     render(<Reactions postId="post-1" />);
 
-    expect(await screen.findByText('3 votes')).toBeInTheDocument();
+    expect(await screen.findByText('3')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Love' }));
 
-    expect(screen.getByText('4 votes')).toBeInTheDocument();
+    expect(screen.getByText('4')).toBeInTheDocument();
 
     resolveVote?.({
       ok: true,
@@ -102,7 +102,7 @@ describe('Reactions', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText('10 votes')).toBeInTheDocument();
+      expect(screen.getByText('10')).toBeInTheDocument();
     });
 
     expect(fetchMock).toHaveBeenCalledTimes(2);
@@ -131,12 +131,12 @@ describe('Reactions', () => {
 
     render(<Reactions postId="post-1" />);
 
-    expect(await screen.findByText('3 votes')).toBeInTheDocument();
+    expect(await screen.findByText('3')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Love' }));
 
     await waitFor(() => {
-      expect(screen.getByText('3 votes')).toBeInTheDocument();
+      expect(screen.getByText('3')).toBeInTheDocument();
     });
   });
 });

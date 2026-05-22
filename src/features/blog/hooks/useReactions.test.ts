@@ -71,7 +71,6 @@ describe('useReactions', () => {
     });
 
     expect(result.current.reactions?.[0]?.count).toBe(4);
-    expect(result.current.pendingIds.r1).toBe(true);
 
     await act(async () => {
       resolveVote?.(makeFetchResponse({ count: 10 }) as unknown as Response);

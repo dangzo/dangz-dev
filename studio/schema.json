@@ -271,13 +271,6 @@
           "type": "number"
         },
         "optional": true
-      },
-      "count": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "number"
-        },
-        "optional": true
       }
     }
   },
