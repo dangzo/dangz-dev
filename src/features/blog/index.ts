@@ -6,6 +6,7 @@ export { default as usePostInsights } from './hooks/usePostInsights';
 export * from './hooks/usePostInsights';
 
 export * from './api/queries/posts';
+export * from './api/queries/reactions';
 export * from './api/queries/tags';
 export { default as getPostMetadata } from './api/getPostMetadata';
 

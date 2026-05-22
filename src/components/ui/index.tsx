@@ -1,5 +1,6 @@
 export { default as Button } from './Button';
 export { default as DateText } from './DateText';
+export { default as Emoji } from './Emoji';
 export { default as Heading } from './Heading';
 export { default as Link } from './Link';
 export { default as Img, type ImgProps } from './Img';
