@@ -32,6 +32,14 @@ export const reactionType = defineType({
       initialValue: 0,
       validation: (rule) => rule.required().integer().min(0),
     }),
+    defineField({
+      name: 'count',
+      title: 'Count',
+      type: 'number',
+      initialValue: 0,
+      description: 'Total number of votes recorded for this reaction.',
+      validation: (rule) => rule.required().integer().min(0),
+    }),
   ],
   preview: {
     select: {

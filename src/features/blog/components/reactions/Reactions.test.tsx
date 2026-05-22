@@ -7,10 +7,10 @@ vi.mock('@/features/blog/api/queries/reactions', () => ({
 }));
 
 describe('Reactions', () => {
-  it('renders heading, emoji buttons, and names from the query result', async () => {
+  it('renders heading, emoji buttons, names, and counters from the query result', async () => {
     vi.mocked(getReactions).mockResolvedValue([
-      { _id: '1', name: 'Love', emoji: '❤️', sortOrder: 0 },
-      { _id: '2', name: 'Fire', emoji: '🔥', sortOrder: 1 },
+      { _id: '1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 12 },
+      { _id: '2', name: 'Fire', emoji: '🔥', sortOrder: 1, count: 1 },
     ]);
 
     render(await Reactions());
@@ -25,6 +25,19 @@ describe('Reactions', () => {
 
     expect(screen.getByRole('img', { name: 'Love' })).toHaveTextContent('❤️');
     expect(screen.getByRole('img', { name: 'Fire' })).toHaveTextContent('🔥');
+
+    expect(screen.getByText('12 votes')).toBeInTheDocument();
+    expect(screen.getByText('1 vote')).toBeInTheDocument();
+  });
+
+  it('falls back to zero votes when count is not provided', async () => {
+    vi.mocked(getReactions).mockResolvedValue([
+      { _id: '1', name: 'Love', emoji: '❤️', sortOrder: 0 },
+    ]);
+
+    render(await Reactions());
+
+    expect(screen.getByText('0 votes')).toBeInTheDocument();
   });
 
   it('renders nothing when the query returns an empty list', async () => {

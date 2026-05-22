@@ -18,7 +18,6 @@ import {
   TypeCode,
   TypeTable,  
 } from '@/features/blog/components/portable-text';
-import { Reactions } from '@/features/blog/components';
 
 interface PortableTextProps {
   value: PortableTextBlock[];
@@ -64,7 +63,6 @@ export default async function PortableText({ value }: PortableTextProps) {
   return (
     <div className="prose prose-sm sm:prose-base dark:prose-invert max-w-none font-body wrap-break-words">
       <SanityPortableText value={value} components={portableTextComponents} />
-      <Reactions />
     </div>
   );
 }
