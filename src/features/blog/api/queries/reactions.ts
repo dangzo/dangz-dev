@@ -48,6 +48,13 @@ export async function getReactionsForPost(postId: string): Promise<ReactionWithE
     query: REACTIONS_FOR_POST_QUERY,
     variables: { postId },
     fetchPolicy: 'no-cache',
+    context: {
+      // Avoid Next.js fetch revalidation cache leaking build-time counts into API responses.
+      fetchOptions: {
+        cache: 'no-store',
+        next: { revalidate: 0 },
+      },
+    },
   });
 
   const countsByReactionId = new Map<string, number>();
