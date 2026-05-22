@@ -1,19 +1,19 @@
 import { render, screen } from '@testing-library/react';
-import { getReactions } from '@/features/blog/api/queries/reactions';
+import { getReactionsForPost } from '@/features/blog/api/queries/reactions';
 import Reactions from './Reactions';
 
 vi.mock('@/features/blog/api/queries/reactions', () => ({
-  getReactions: vi.fn(),
+  getReactionsForPost: vi.fn(),
 }));
 
 describe('Reactions', () => {
   it('renders heading, emoji buttons, names, and counters from the query result', async () => {
-    vi.mocked(getReactions).mockResolvedValue([
+    vi.mocked(getReactionsForPost).mockResolvedValue([
       { _id: '1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 12 },
       { _id: '2', name: 'Fire', emoji: '🔥', sortOrder: 1, count: 1 },
     ]);
 
-    render(await Reactions());
+    render(await Reactions({ postId: 'post-1' }));
 
     expect(screen.getByRole('heading', { name: 'How do you find this article?' })).toBeInTheDocument();
 
@@ -31,19 +31,19 @@ describe('Reactions', () => {
   });
 
   it('falls back to zero votes when count is not provided', async () => {
-    vi.mocked(getReactions).mockResolvedValue([
+    vi.mocked(getReactionsForPost).mockResolvedValue([
       { _id: '1', name: 'Love', emoji: '❤️', sortOrder: 0 },
     ]);
 
-    render(await Reactions());
+    render(await Reactions({ postId: 'post-1' }));
 
     expect(screen.getByText('0 votes')).toBeInTheDocument();
   });
 
   it('renders nothing when the query returns an empty list', async () => {
-    vi.mocked(getReactions).mockResolvedValue([]);
+    vi.mocked(getReactionsForPost).mockResolvedValue([]);
 
-    const { container } = render(await Reactions());
+    const { container } = render(await Reactions({ postId: 'post-1' }));
 
     expect(container).toBeEmptyDOMElement();
     expect(screen.queryByRole('heading', { name: 'How do you find this article?' })).not.toBeInTheDocument();

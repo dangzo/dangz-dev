@@ -4,9 +4,14 @@ import { incrementReactionCount } from '@/features/blog/api/queries/reactions';
 export async function POST(request: Request) {
   try {
     const body = await request.json() as {
+      postId?: string;
       reactionId?: string;
       currentCount?: number;
     };
+
+    if (!body.postId || typeof body.postId !== 'string') {
+      return NextResponse.json({ error: 'postId is required.' }, { status: 400 });
+    }
 
     if (!body.reactionId || typeof body.reactionId !== 'string') {
       return NextResponse.json({ error: 'reactionId is required.' }, { status: 400 });
@@ -16,10 +21,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'currentCount must be a non-negative number.' }, { status: 400 });
     }
 
-    const count = await incrementReactionCount(body.reactionId, body.currentCount);
+    const count = await incrementReactionCount(body.postId, body.reactionId, body.currentCount);
     return NextResponse.json({ count });
-  } catch (error) {
-    console.error('Error updating reaction count:', error);
+  } catch {
     return NextResponse.json({ error: 'Unable to update reaction count.' }, { status: 500 });
   }
 }

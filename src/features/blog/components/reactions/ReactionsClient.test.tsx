@@ -19,6 +19,7 @@ describe('ReactionsClient', () => {
 
     render(
       <ReactionsClient
+        postId="post-1"
         reactions={[
           { _id: 'r1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 3 },
         ]}
@@ -44,6 +45,9 @@ describe('ReactionsClient', () => {
     expect(fetchMock).toHaveBeenCalledWith('/api/reactions', expect.objectContaining({
       method: 'POST',
     }));
+    expect(fetchMock).toHaveBeenCalledWith('/api/reactions', expect.objectContaining({
+      body: expect.stringContaining('"postId":"post-1"'),
+    }));
 
   });
 
@@ -57,6 +61,7 @@ describe('ReactionsClient', () => {
 
     render(
       <ReactionsClient
+        postId="post-1"
         reactions={[
           { _id: 'r1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 3 },
         ]}

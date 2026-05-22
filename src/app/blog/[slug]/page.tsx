@@ -55,7 +55,7 @@ export default async function PostPage({
         ? (
           <>
             <PortableText value={post.body} />
-            <Reactions />
+            <Reactions postId={post._id} />
           </>
         )
         : <Text>No content available for this post.</Text>

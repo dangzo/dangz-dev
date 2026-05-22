@@ -1,9 +1,13 @@
 import { Heading } from '@/components/ui';
-import { getReactions } from '@/features/blog/api/queries/reactions';
+import { getReactionsForPost } from '@/features/blog/api/queries/reactions';
 import ReactionsClient from './ReactionsClient';
 
-const Reactions = async () => {
-  const reactions = await getReactions();
+interface ReactionsProps {
+  postId: string;
+}
+
+const Reactions = async ({ postId }: ReactionsProps) => {
+  const reactions = await getReactionsForPost(postId);
 
   if (reactions.length === 0) {
     return null;
@@ -18,7 +22,7 @@ const Reactions = async () => {
         How do you find this article?
       </Heading>
       
-      <ReactionsClient reactions={reactions} />
+      <ReactionsClient postId={postId} reactions={reactions} />
     </div>
   );
 };

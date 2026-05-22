@@ -5,10 +5,11 @@ import type { ReactionWithEmoji } from '@/features/blog/api/queries/reactions';
 import EmojiBtn from './EmojiBtn';
 
 interface ReactionsClientProps {
+  postId: string;
   reactions: ReactionWithEmoji[];
 }
 
-const ReactionsClient = ({ reactions }: ReactionsClientProps) => {
+const ReactionsClient = ({ postId, reactions }: ReactionsClientProps) => {
   const initialCounts = useMemo(
     () => Object.fromEntries(reactions.map((reaction) => [reaction._id, reaction.count ?? 0])),
     [reactions],
@@ -34,6 +35,7 @@ const ReactionsClient = ({ reactions }: ReactionsClientProps) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          postId,
           reactionId,
           currentCount,
         }),
