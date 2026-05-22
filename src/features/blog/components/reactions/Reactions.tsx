@@ -64,7 +64,7 @@ const Reactions = ({ postId }: ReactionsProps) => {
           const count = reaction.count ?? 0;
 
           return (
-            <div key={reaction._id} className="flex flex-col items-center gap-0 min-w-16 sm:min-w-20">
+            <div key={reaction._id} className="flex flex-col items-center gap-1 min-w-16 sm:min-w-20">
               <EmojiBtn
                 emoji={reaction.emoji}
                 name={reaction.name}
@@ -75,7 +75,7 @@ const Reactions = ({ postId }: ReactionsProps) => {
                 {reaction.name}
               </span>
               <span className="text-[11px] text-secondary-light/80 dark:text-secondary-dark/80 text-center leading-tight tabular-nums">
-                {count} {count === 1 ? 'vote' : 'votes'}
+                {count}
               </span>
             </div>
           );
