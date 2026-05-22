@@ -8,31 +8,50 @@ afterEach(() => {
 });
 
 describe('ReactionsClient', () => {
-  it('optimistically increments and then syncs with API response count', async () => {
-    const user = userEvent.setup();
-    let resolveFetch: ((value: { ok: boolean; json: () => Promise<{ count: number }> }) => void) | undefined;
-    const fetchPromise = new Promise<{ ok: boolean; json: () => Promise<{ count: number }> }>((resolve) => {
-      resolveFetch = resolve;
+  it('fetches reactions on mount and renders them', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        reactions: [
+          { _id: 'r1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 3 },
+        ],
+      }),
     });
-    const fetchMock = vi.fn().mockReturnValue(fetchPromise);
     vi.stubGlobal('fetch', fetchMock);
 
-    render(
-      <ReactionsClient
-        postId="post-1"
-        reactions={[
-          { _id: 'r1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 3 },
-        ]}
-      />,
-    );
+    render(<ReactionsClient postId="post-1" />);
 
-    expect(screen.getByText('3 votes')).toBeInTheDocument();
+    expect(await screen.findByText('3 votes')).toBeInTheDocument();
+    expect(fetchMock).toHaveBeenCalledWith('/api/reactions?postId=post-1', expect.objectContaining({
+      cache: 'no-store',
+    }));
+  });
+
+  it('optimistically increments and then syncs with API response count', async () => {
+    const user = userEvent.setup();
+    let resolveVote: ((value: { ok: boolean; json: () => Promise<{ count: number }> }) => void) | undefined;
+    const votePromise = new Promise<{ ok: boolean; json: () => Promise<{ count: number }> }>((resolve) => {
+      resolveVote = resolve;
+    });
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          reactions: [{ _id: 'r1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 3 }],
+        }),
+      })
+      .mockReturnValueOnce(votePromise);
+    vi.stubGlobal('fetch', fetchMock);
+
+    render(<ReactionsClient postId="post-1" />);
+
+    expect(await screen.findByText('3 votes')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Love' }));
 
     expect(screen.getByText('4 votes')).toBeInTheDocument();
 
-    resolveFetch?.({
+    resolveVote?.({
       ok: true,
       json: async () => ({ count: 10 }),
     });
@@ -41,7 +60,7 @@ describe('ReactionsClient', () => {
       expect(screen.getByText('10 votes')).toBeInTheDocument();
     });
 
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(fetchMock).toHaveBeenCalledWith('/api/reactions', expect.objectContaining({
       method: 'POST',
     }));
@@ -53,20 +72,22 @@ describe('ReactionsClient', () => {
 
   it('rolls back optimistic count when the API request fails', async () => {
     const user = userEvent.setup();
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: false,
-      json: async () => ({ error: 'fail' }),
-    });
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          reactions: [{ _id: 'r1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 3 }],
+        }),
+      })
+      .mockResolvedValueOnce({
+        ok: false,
+        json: async () => ({ error: 'fail' }),
+      });
     vi.stubGlobal('fetch', fetchMock);
 
-    render(
-      <ReactionsClient
-        postId="post-1"
-        reactions={[
-          { _id: 'r1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 3 },
-        ]}
-      />,
-    );
+    render(<ReactionsClient postId="post-1" />);
+
+    expect(await screen.findByText('3 votes')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Love' }));
 

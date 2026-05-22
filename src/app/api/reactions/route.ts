@@ -1,5 +1,25 @@
 import { NextResponse } from 'next/server';
-import { incrementReactionCount } from '@/features/blog/api/queries/reactions';
+import { getReactionsForPost, incrementReactionCount } from '@/features/blog/api/queries/reactions';
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const postId = searchParams.get('postId');
+
+  if (!postId) {
+    return NextResponse.json({ error: 'postId is required.' }, { status: 400 });
+  }
+
+  try {
+    const reactions = await getReactionsForPost(postId);
+    return NextResponse.json({ reactions }, {
+      headers: {
+        'Cache-Control': 'no-store',
+      },
+    });
+  } catch {
+    return NextResponse.json({ error: 'Unable to fetch reactions.' }, { status: 500 });
+  }
+}
 
 export async function POST(request: Request) {
   try {
