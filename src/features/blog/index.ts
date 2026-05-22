@@ -2,6 +2,7 @@ export * as blogComponents from './components';
 export * from './components';
 
 export * from './hooks/useBlogSearch';
+export * from './hooks/useReactions';
 export { default as usePostInsights } from './hooks/usePostInsights';
 export * from './hooks/usePostInsights';
 
