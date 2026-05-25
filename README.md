@@ -105,13 +105,13 @@ The layers are intentionally separated so unit tests stay fast and deterministic
 
 #### Unit Tests (Vitest)
 
-- **Command:** `yarn test` (watch) or `yarn ci:test` (single run)
+- **Command:** `yarn test:unit` (single run)
 - **Runtime:** `jsdom`
 - **Scope:** component tests, hooks, utility functions, API helpers
 - **Location:** `src/**/*.test.ts(x)` and `src/**/*.spec.ts(x)`
 - **Config:** [`vitest.config.ts`](vitest.config.ts)
 
-Vitest explicitly excludes e2e specs under `src/tests/e2e/**`, so `yarn test` does **not** execute Playwright tests.
+Vitest explicitly excludes e2e specs under `src/tests/e2e/**`, so `yarn test:unit` does **not** execute Playwright tests.
 
 #### End-to-End Tests (Playwright)
 
@@ -148,17 +148,17 @@ This monorepo is managed with Yarn workspaces. The root `package.json` defines t
 | `yarn lint` | Lints the Next.js app |
 | `yarn lint:changed` | Lints only staged JS/TS files (useful for quick local checks) |
 | `yarn lint-studio` | Lints the Sanity Studio only |
-| `yarn test` | Runs unit tests in watch mode (Vitest) |
-| `yarn ci:test` | Runs unit tests once (Vitest run mode) |
+| `yarn test:unit` | Runs unit tests once (Vitest run mode) |
 | `yarn test:e2e` | Runs end-to-end tests (Playwright) |
 | `yarn test:e2e:headed` | Runs e2e tests in headed browser mode |
 | `yarn test:e2e:ui` | Opens Playwright UI mode for interactive debugging |
 | `yarn typecheck` | Type-checks the Next.js app |
 | `yarn typecheck-studio` | Type-checks the Sanity Studio only |
 | `yarn ci:lint` | Runs lint (both packages) — mirrors the CI lint job |
+| `yarn ci:test` | Runs full test suite (`test:unit` + `test:e2e`) |
 | `yarn ci:typecheck` | Runs type checks across both packages — mirrors the CI typecheck job |
 | `yarn ci:build` | Builds both packages — mirrors the CI build job |
-| `yarn ci` | Runs all CI checks in sequence (`ci:lint` → `ci:test` → `ci:typecheck` → `ci:build` → `ci:lighthouse`) |
+| `yarn ci` | Runs all CI checks in sequence (`ci:lint` → `ci:test` → `ci:typecheck` → `ci:lighthouse` → `ci:build`) |
 
 #### Lighthouse Commands
 
@@ -204,7 +204,7 @@ Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality
 |---|---|---|
 | `setup` | n/a | Installs dependencies once and stores a lockfile-keyed cache for downstream jobs |
 | `lint` | `yarn ci:lint` | Lints both packages (`eslint` + Sanity Studio), restoring cached dependencies |
-| `test-unit` | `yarn ci:test` | Runs unit/component tests (Vitest), restoring cached dependencies |
+| `test-unit` | `yarn ci:test` | Runs the full test suite (`test:unit` + `test:e2e`), restoring cached dependencies |
 | `test-e2e` | `yarn test:e2e` | Runs Playwright e2e specs after installing Chromium |
 | `typecheck` | `yarn ci:typecheck` | Type-checks both packages with `tsc`, restoring cached dependencies |
 | `lighthouse` | `yarn lhci:mobile` + `yarn lhci:desktop` | Runs Lighthouse CI audits for both mobile and desktop, restoring cached dependencies |
