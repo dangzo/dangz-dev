@@ -94,8 +94,8 @@ jobs:
       - name: Run lint
         run: yarn ci:lint
 
-  test:
-    name: Test
+  test-unit:
+    name: Test (Unit)
     runs-on: ubuntu-latest
     needs: setup
 
@@ -123,8 +123,59 @@ jobs:
         if: steps.deps-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
-      - name: Run tests
+      - name: Run unit tests
         run: yarn ci:test
+
+  test-e2e:
+    name: Test (E2E)
+    runs-on: ubuntu-latest
+    needs: setup
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.13
+          cache: yarn
+          cache-dependency-path: yarn.lock
+
+      - name: Restore dependencies cache
+        id: deps-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            node_modules
+            studio/node_modules
+          key: ${{ runner.os }}-node-22.13-yarn-modules-${{ hashFiles('yarn.lock') }}
+
+      - name: Install dependencies (cache miss fallback)
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+
+      - name: Install Playwright browser
+        run: yarn playwright install --with-deps chromium
+
+      - name: Run e2e tests
+        run: yarn test:e2e
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
+          if-no-files-found: ignore
+
+      - name: Upload Playwright test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: test-results
+          if-no-files-found: ignore
 
   typecheck:
     name: Type Check
@@ -200,7 +251,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [lint, test, typecheck, lighthouse]
+    needs: [lint, test-unit, test-e2e, typecheck, lighthouse]
 
     steps:
       - name: Check out repository
