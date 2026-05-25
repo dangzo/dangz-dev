@@ -21,7 +21,7 @@
 /out/
 
 # lighthouse ci artifacts
-/.lighthouseci/
+/.lighthouseci
 /.tmp/
 
 # production
