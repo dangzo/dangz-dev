@@ -204,7 +204,7 @@ Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality
 |---|---|---|
 | `setup` | n/a | Installs dependencies once and stores a lockfile-keyed cache for downstream jobs |
 | `lint` | `yarn ci:lint` | Lints both packages (`eslint` + Sanity Studio), restoring cached dependencies |
-| `test-unit` | `yarn ci:test` | Runs the full test suite (`test:unit` + `test:e2e`), restoring cached dependencies |
+| `test-unit` | `yarn test:unit` | Runs Vitest unit/component tests (Vitest run mode), restoring cached dependencies |
 | `test-e2e` | `yarn test:e2e` | Runs Playwright e2e specs after installing Chromium |
 | `typecheck` | `yarn ci:typecheck` | Type-checks both packages with `tsc`, restoring cached dependencies |
 | `lighthouse` | `yarn lhci:mobile` + `yarn lhci:desktop` | Runs Lighthouse CI audits for both mobile and desktop, restoring cached dependencies |
