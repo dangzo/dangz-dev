@@ -8,7 +8,7 @@ vi.mock('next/navigation', () => ({
   usePathname: () => mockPathname(),
 }));
 
-vi.mock('next/link', () => import('@/test/mocks/nextLink'));
+vi.mock('next/link', () => import('@/tests/unit/mocks/nextLink'));
 
 describe('Prompt', () => {
   beforeEach(() => {

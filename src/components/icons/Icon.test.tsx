@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import Icon from './Icon';
 
-vi.mock('next/link', () => import('@/test/mocks/nextLink'));
+vi.mock('next/link', () => import('@/tests/unit/mocks/nextLink'));
 
 describe('Icon', () => {
   it('renders only the SVG icon when href is not provided', () => {

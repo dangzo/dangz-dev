@@ -20,7 +20,7 @@
     "ci:build": "yarn build && yarn build-studio",
     "ci:lighthouse": "yarn lighthouse",
     "ci:lint": "yarn lint && yarn lint-studio",
-    "ci:test": "yarn test:run",
+    "ci:test": "yarn test run",
     "ci:typecheck": "yarn typecheck && yarn typecheck-studio",
     "deploy-graphql": "yarn workspace studio deploy-graphql",
     "deploy-studio": "yarn workspace studio deploy",
@@ -41,7 +41,6 @@
     "preview": "next build && next start",
     "start": "next start",
     "test": "vitest",
-    "test:run": "vitest run",
     "typecheck": "tsc",
     "typecheck-studio": "yarn workspace studio typecheck"
   },

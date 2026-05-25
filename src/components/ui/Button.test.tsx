@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import Button from './Button';
 
-vi.mock('next/link', () => import('@/test/mocks/nextLink'));
+vi.mock('next/link', () => import('@/tests/unit/mocks/nextLink'));
 
 describe('Button', () => {
   it('renders a native button and invokes onClick when there is no `to` prop', async () => {

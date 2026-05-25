@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import Link from './Link';
 
-vi.mock('next/link', () => import('@/test/mocks/nextLink'));
+vi.mock('next/link', () => import('@/tests/unit/mocks/nextLink'));
 
 describe('Link', () => {
   it('renders a span instead of a link when `isActive` is true', () => {
