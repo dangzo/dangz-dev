@@ -1,10 +1,14 @@
 import { expect, test } from '@playwright/test';
 
-const ARTICLE_PATH = '/blog/building-a-real-time-chat-app-with-websockets-in-5-hours';
-
 test.describe('Blog Article Page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(ARTICLE_PATH);
+    await page.goto('/blog');
+
+    const firstArticleLink = page.locator('section article a:has(h3)').first();
+    await expect(firstArticleLink).toBeVisible();
+
+    await firstArticleLink.click();
+    await expect(page).toHaveURL(/\/blog\/.+/);
   });
 
   test('heading and article metadata are visible', async ({ page }) => {
