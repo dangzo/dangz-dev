@@ -94,6 +94,35 @@ yarn typecheck && yarn typecheck-studio
 
 Note: `yarn typecheck-studio` intentionally excludes `studio/sanity.config.ts` and `studio/sanity.cli.ts` for now due a dependency-type duplication conflict between workspace and hoisted Sanity packages. The rest of Studio `.ts/.tsx` files are still type-checked in CI.
 
+### Testing Strategy
+
+This project uses a two-layer testing approach:
+
+- **Unit/component tests** with **Vitest + Testing Library**
+- **End-to-end tests** with **Playwright**
+
+The layers are intentionally separated so unit tests stay fast and deterministic, while e2e tests validate full user flows in a real browser.
+
+#### Unit Tests (Vitest)
+
+- **Command:** `yarn test` (watch) or `yarn ci:test` (single run)
+- **Runtime:** `jsdom`
+- **Scope:** component tests, hooks, utility functions, API helpers
+- **Location:** `src/**/*.test.ts(x)` and `src/**/*.spec.ts(x)`
+- **Config:** [`vitest.config.ts`](vitest.config.ts)
+
+Vitest explicitly excludes e2e specs under `src/tests/e2e/**`, so `yarn test` does **not** execute Playwright tests.
+
+#### End-to-End Tests (Playwright)
+
+- **Command:** `yarn test:e2e`
+- **Variants:** `yarn test:e2e:headed`, `yarn test:e2e:ui`
+- **Scope:** route-level user journeys and integration behavior (home, blog, article, about, global UI)
+- **Location:** `src/tests/e2e/`
+- **Config:** [`playwright.config.ts`](playwright.config.ts)
+
+Playwright starts the app server automatically via the configured `webServer` command and runs against `http://127.0.0.1:3000` by default.
+
 ---
 
 ## Yarn Workspaces
@@ -119,10 +148,14 @@ This monorepo is managed with Yarn workspaces. The root `package.json` defines t
 | `yarn lint` | Lints the Next.js app |
 | `yarn lint:changed` | Lints only staged JS/TS files (useful for quick local checks) |
 | `yarn lint-studio` | Lints the Sanity Studio only |
+| `yarn test` | Runs unit tests in watch mode (Vitest) |
+| `yarn ci:test` | Runs unit tests once (Vitest run mode) |
+| `yarn test:e2e` | Runs end-to-end tests (Playwright) |
+| `yarn test:e2e:headed` | Runs e2e tests in headed browser mode |
+| `yarn test:e2e:ui` | Opens Playwright UI mode for interactive debugging |
 | `yarn typecheck` | Type-checks the Next.js app |
 | `yarn typecheck-studio` | Type-checks the Sanity Studio only |
 | `yarn ci:lint` | Runs lint (both packages) — mirrors the CI lint job |
-| `yarn ci:test` | Runs the test suite — mirrors the CI test job |
 | `yarn ci:typecheck` | Runs type checks across both packages — mirrors the CI typecheck job |
 | `yarn ci:build` | Builds both packages — mirrors the CI build job |
 | `yarn ci` | Runs all CI checks in sequence (`ci:lint` → `ci:test` → `ci:typecheck` → `ci:build` → `ci:lighthouse`) |
@@ -148,19 +181,19 @@ This monorepo is managed with Yarn workspaces. The root `package.json` defines t
 
 ## CI/CD Pipeline
 
-Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality-and-build.yml`](.github/workflows/pr-quality-and-build.yml)), which runs six jobs:
+Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality-and-build.yml`](.github/workflows/pr-quality-and-build.yml)), which runs seven jobs:
 
 ```
              ┌──────────────┐
              │    setup     │   (install dependencies + cache)
              └──────┬───────┘
                     │
-     ┌─────────────┬─────────────┬──────────────┬──────────────┐
-     ▼             ▼             ▼              ▼
-┌──────────┐  ┌──────────┐  ┌──────────────┐  ┌──────────────┐
-│  lint    │  │  test    │  │  typecheck   │  │  lighthouse  │   (run in parallel)
-└────┬─────┘  └────┬─────┘  └──────┬───────┘  └──────┬───────┘
-     └────┬────────┴───────────────┴──────────────┬──┘
+     ┌─────────────┬─────────────┬──────────────┬──────────────┬──────────────┐
+     ▼             ▼             ▼              ▼              ▼
+┌──────────┐  ┌─────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+│  lint    │  │  test-unit  │  │   test-e2e   │  │  typecheck   │  │  lighthouse  │   (run in parallel)
+└────┬─────┘  └──────┬──────┘  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘
+     └────┬──────────┴───────────────┴──────────────┴──────────────┬──────┘
           ▼
       ┌─────────┐
      │  build  │                   (runs only if all above pass)
@@ -171,10 +204,11 @@ Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality
 |---|---|---|
 | `setup` | n/a | Installs dependencies once and stores a lockfile-keyed cache for downstream jobs |
 | `lint` | `yarn ci:lint` | Lints both packages (`eslint` + Sanity Studio), restoring cached dependencies |
-| `test` | `yarn ci:test` | Runs the test suite (vitest), restoring cached dependencies |
+| `test-unit` | `yarn ci:test` | Runs unit/component tests (Vitest), restoring cached dependencies |
+| `test-e2e` | `yarn test:e2e` | Runs Playwright e2e specs after installing Chromium |
 | `typecheck` | `yarn ci:typecheck` | Type-checks both packages with `tsc`, restoring cached dependencies |
 | `lighthouse` | `yarn lhci:mobile` + `yarn lhci:desktop` | Runs Lighthouse CI audits for both mobile and desktop, restoring cached dependencies |
-| `build` | `yarn ci:build` | Builds both packages; blocked until lint, test, typecheck, and lighthouse pass |
+| `build` | `yarn ci:build` | Builds both packages; blocked until lint, test-unit, test-e2e, typecheck, and lighthouse pass |
 
 The workflow runs on pull requests that touch `src/**`, `studio/**`, config files, or the workflow file itself.
 
