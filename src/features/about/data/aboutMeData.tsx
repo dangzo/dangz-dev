@@ -31,6 +31,7 @@ const skills = [
       { icon: ({ ...props }) => <Icon icon="vitest" {...props} />, label: 'Vitest' },
       { icon: ({ ...props }) => <Icon icon="testing-library" {...props} />, label: 'Testing Library' },
       { icon: ({ ...props }) => <Icon icon="cypress" {...props} />, label: 'Cypress' },
+      { icon: ({ ...props }) => <Icon icon="playwright" {...props} />, label: 'Playwright' },
       { icon: ({ ...props }) => <Icon icon="sentry" {...props} />, label: 'Sentry' },
       { icon: ({ ...props }) => <Icon icon="datadog" {...props} />, label: 'DataDog' },
     ],
