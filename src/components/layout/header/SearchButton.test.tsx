@@ -10,7 +10,7 @@ vi.mock('next/dynamic', async () => {
   };
 });
 
-vi.mock('next/link', () => import('@/test/mocks/nextLink'));
+vi.mock('next/link', () => import('@/tests/unit/mocks/nextLink'));
 
 const push = vi.fn();
 

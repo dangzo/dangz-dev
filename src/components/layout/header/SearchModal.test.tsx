@@ -8,7 +8,7 @@ beforeAll(() => {
   window.HTMLElement.prototype.scrollIntoView = vi.fn();
 });
 
-vi.mock('next/link', () => import('@/test/mocks/nextLink'));
+vi.mock('next/link', () => import('@/tests/unit/mocks/nextLink'));
 
 const push = vi.fn();
 

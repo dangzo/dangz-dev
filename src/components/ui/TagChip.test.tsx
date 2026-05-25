@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import TagChip from './TagChip';
 
-vi.mock('next/link', () => import('@/test/mocks/nextLink'));
+vi.mock('next/link', () => import('@/tests/unit/mocks/nextLink'));
 
 describe('TagChip', () => {
   it('renders a hash-prefixed label linking to the tag slug under /blog/tags', async () => {

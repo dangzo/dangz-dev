@@ -10,7 +10,7 @@ vi.mock('./SocialIcons', () => ({
   },
 }));
 
-vi.mock('next/link', () => import('@/test/mocks/nextLink'));
+vi.mock('next/link', () => import('@/tests/unit/mocks/nextLink'));
 
 describe('Footer', () => {
   beforeEach(() => {

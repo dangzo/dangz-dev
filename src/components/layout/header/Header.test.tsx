@@ -51,7 +51,7 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ push }),
 }));
 
-vi.mock('next/link', () => import('@/test/mocks/nextLink'));
+vi.mock('next/link', () => import('@/tests/unit/mocks/nextLink'));
 
 describe('Header', () => {
   beforeEach(() => {

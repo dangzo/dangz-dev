@@ -12,13 +12,16 @@
 
 # testing
 /coverage
+/playwright-report
+/test-results
+/blob-report
 
 # next.js
 .next/
 /out/
 
 # lighthouse ci artifacts
-/.lighthouseci/
+/.lighthouseci
 /.tmp/
 
 # production

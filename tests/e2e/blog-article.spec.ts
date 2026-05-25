@@ -1,0 +1,50 @@
+import { expect, test } from '@playwright/test';
+
+const ARTICLE_PATH = '/blog/building-a-real-time-chat-app-with-websockets-in-5-hours';
+
+test.describe('Blog Article Page', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(ARTICLE_PATH);
+  });
+
+  test('heading and article metadata are visible', async ({ page }) => {
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+
+    const headingArea = page.locator('article').first();
+    await expect(headingArea.locator('time')).toBeVisible();
+    await expect(headingArea.getByText(/min read/i)).toBeVisible();
+    await expect(headingArea.locator('a[href^="/blog/tags/"]').first()).toBeVisible();
+  });
+
+  test('table of contents section provides anchor navigation', async ({ page }) => {
+    const tocSection = page.locator('aside').filter({ hasText: /table of contents/i }).first();
+
+    await expect(tocSection.getByRole('heading', { name: /table of contents/i })).toBeVisible();
+    await expect(tocSection.locator('a[href^="#"]').first()).toBeVisible();
+
+    const tocLinks = tocSection.locator('a[href^="#"]');
+    await expect.poll(() => tocLinks.count()).toBeGreaterThan(0);
+
+    const backToBlogLink = tocSection.getByRole('link', { name: /back to all posts/i });
+    await expect(backToBlogLink).toBeVisible();
+    await expect(backToBlogLink).toHaveAttribute('href', '/blog');
+  });
+
+  test('hero and inline images are rendered', async ({ page }) => {
+    await expect(page.locator('article > div img').first()).toBeVisible();
+
+    const articleImages = page.locator('main article img');
+    await expect(articleImages.first()).toBeVisible();
+    await expect.poll(() => articleImages.count()).toBeGreaterThan(1);
+  });
+
+  test('code blocks and rich content are rendered', async ({ page }) => {
+    await expect(page.getByRole('button', { name: /copy code/i }).first()).toBeVisible();
+    await expect(page.locator('main article pre').first()).toBeVisible();
+    await expect(page.locator('main article h2').first()).toBeVisible();
+    await expect(page.locator('main article p').first()).toBeVisible();
+
+    const paragraphCount = page.locator('main article p');
+    await expect.poll(() => paragraphCount.count()).toBeGreaterThan(3);
+  });
+});

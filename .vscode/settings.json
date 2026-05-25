@@ -1,5 +1,7 @@
 {
   "chat.tools.terminal.autoApprove": {
-    "yarn add": true
+    "yarn add": true,
+    "yarn test:e2e": true,
+    "yarn playwright": true
   }
 }
