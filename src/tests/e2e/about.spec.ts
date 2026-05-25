@@ -19,7 +19,7 @@ test.describe('About Page', () => {
 
     const resumeBtn = introSection.getByRole('link', { name: /download my resume/i });
     await expect(resumeBtn).toBeVisible();
-    await expect(resumeBtn).toHaveAttribute('href', /Daniele-Gazzelloni-Resume-2026\.pdf$/);
+    await expect(resumeBtn).toHaveAttribute('href', /Daniele-Gazzelloni-Resume-\d{4}\.pdf$/);
     await expect(resumeBtn).toHaveAttribute('download', '');
 
     const connectLinkedInBtn = introSection.getByRole('link', { name: /connect on linkedin/i });
