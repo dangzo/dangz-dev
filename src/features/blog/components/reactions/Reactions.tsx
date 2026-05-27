@@ -68,6 +68,7 @@ const Reactions = ({ postId }: ReactionsProps) => {
               <EmojiBtn
                 emoji={reaction.emoji}
                 name={reaction.name}
+                data-umami-event={`Reaction ${reaction.name} Click`}
                 onClick={() => reactToPost(reaction._id)}
                 isPending={Boolean(pendingIds[reaction._id])}
               />
