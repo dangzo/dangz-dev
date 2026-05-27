@@ -1,9 +1,10 @@
+import type { ButtonHTMLAttributes } from 'react';
+
 import { Emoji } from '@/components/ui';
 
-interface EmojiBtnProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface EmojiBtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   emoji: string;
   name: string;
-  onClick?: () => void;
   isPending?: boolean;
 }
 
