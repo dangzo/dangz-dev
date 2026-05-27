@@ -33,7 +33,7 @@
     "@sanity/eslint-config-studio": "^5.0.2",
     "@types/react": "^19.1",
     "eslint": "^9.28",
-    "typescript": "^5.8"
+    "typescript": "^6.0"
   },
   "prettier": {
     "semi": false,
