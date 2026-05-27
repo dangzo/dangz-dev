@@ -139,4 +139,58 @@ describe('Reactions', () => {
       expect(screen.getByText('3')).toBeInTheDocument();
     });
   });
+
+  it('does not allow multiple votes while a request is pending', async () => {
+    const user = userEvent.setup();
+    let resolveVote: ((value: { ok: boolean; json: () => Promise<{ count: number }> }) => void) | undefined;
+    const votePromise = new Promise<{ ok: boolean; json: () => Promise<{ count: number }> }>((resolve) => {
+      resolveVote = resolve;
+    });
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          reactions: [{ _id: 'r1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 3 }],
+        }),
+      })
+      .mockReturnValueOnce(votePromise);
+    vi.stubGlobal('fetch', fetchMock);
+
+    render(<Reactions postId="post-1" />);
+
+    expect(await screen.findByText('3')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Love' }));
+
+    expect(screen.getByText('4')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Love' }));
+
+    expect(screen.getByText('4')).toBeInTheDocument();
+
+    resolveVote?.({
+      ok: true,
+      json: async () => ({ count: 10 }),
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('10')).toBeInTheDocument();
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('does render umami data attributes on emoji buttons', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        reactions: [{ _id: '1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 12 }],
+      }),
+    }));
+
+    render(<Reactions postId="post-1" />);
+
+    const loveButton = await screen.findByRole('button', { name: 'Love' });
+    expect(loveButton).toHaveAttribute('data-umami-event', 'Reaction Love Click');
+  });
 });

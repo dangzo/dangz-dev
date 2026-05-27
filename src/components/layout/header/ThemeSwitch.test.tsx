@@ -87,6 +87,16 @@ describe('ThemeSwitch', () => {
     expect(themeMock.setTheme).toHaveBeenCalledWith('light');
   });
 
+  it('requests light mode when system theme resolves to dark', async () => {
+    const user = userEvent.setup();
+    themeMock.setSession('system', 'dark');
+    render(<ThemeSwitch />);
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Theme switcher' }).querySelector('path[d^="M17.293"]')).toBeInTheDocument());
+
+    await user.click(screen.getByRole('button', { name: 'Theme switcher' }));
+    expect(themeMock.setTheme).toHaveBeenCalledWith('light');
+  });
+
   it('favors the moon layer when resolved theme is dark', async () => {
     themeMock.setSession('dark');
     const { container } = render(<ThemeSwitch />);

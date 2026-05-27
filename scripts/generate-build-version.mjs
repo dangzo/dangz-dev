@@ -6,6 +6,13 @@ import { fileURLToPath } from 'node:url';
 const rootDir = join(dirname(fileURLToPath(import.meta.url)), '..');
 const outputFile = join(rootDir, 'src/data/buildVersion.ts');
 
+const shouldGenerate = Boolean(process.env.CI) || process.env.FORCE_GENERATE_BUILD_VERSION === '1';
+
+if (!shouldGenerate) {
+  console.log('Skipping build version generation outside CI. Set FORCE_GENERATE_BUILD_VERSION=1 to force.');
+  process.exit(0);
+}
+
 const now = new Date();
 const yearFull = now.getUTCFullYear();
 const yearTwo = String(yearFull).slice(-2);

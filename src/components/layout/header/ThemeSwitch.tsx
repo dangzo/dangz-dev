@@ -40,16 +40,18 @@ const ThemeSwitch = () => {
     queueMicrotask(() => setMounted(true));
   }, []);
 
-  const handleClick = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
-  };
+  const isDark = resolvedTheme === 'dark'
+    || (resolvedTheme === undefined && theme === undefined && mounted && document.documentElement.classList.contains('dark'));
 
-  const isDark = resolvedTheme === 'dark';
+  const handleClick = () => {
+    setTheme(isDark ? 'light' : 'dark');
+  };
 
   return (
     <button
       type="button"
       aria-label="Theme switcher"
+      aria-pressed={isDark}
       className="cursor-pointer hover:text-primary-500 dark:hover:text-primary-400 flex items-center justify-center relative w-8 h-6"
       onClick={handleClick}
     >

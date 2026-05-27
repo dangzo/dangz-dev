@@ -29,6 +29,7 @@ import ReactQueryIcon from './devicons/ReactQueryIcon';
 import JestIcon from './devicons/JestIcon';
 import VitestIcon from './devicons/VitestIcon';
 import CypressIcon from './devicons/CypressIcon';
+import PlaywrightIcon from './devicons/PlaywrightIcon';
 import TailwindCSSIcon from './devicons/TailwindCSSIcon';
 import SassIcon from './devicons/SassIcon';
 import FigmaIcon from './devicons/FigmaIcon';
@@ -81,6 +82,7 @@ const components = {
   jest: JestIcon,
   vitest: VitestIcon,
   cypress: CypressIcon,
+  playwright: PlaywrightIcon,
   tailwindcss: TailwindCSSIcon,
   sass: SassIcon,
   figma: FigmaIcon,
