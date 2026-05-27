@@ -27,14 +27,19 @@ test.describe('Global UI', () => {
 
   test('theme switch toggles document class', async ({ page }) => {
     const html = page.locator('html');
+    const themeSwitch = page.getByRole('button', { name: /theme switcher/i });
 
     const isDarkBefore = await page.evaluate(() => document.documentElement.classList.contains('dark'));
+    const expectedTheme = isDarkBefore ? 'light' : 'dark';
 
-    await page.getByRole('button', { name: /theme switcher/i }).click();
+    await expect(themeSwitch).toBeVisible();
+    await themeSwitch.click();
+
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('theme'))).toBe(expectedTheme);
 
     await expect
       .poll(() => page.evaluate(() => document.documentElement.classList.contains('dark')))
-      .not.toBe(isDarkBefore);
+      .toBe(!isDarkBefore);
 
     await expect(html).toBeVisible();
   });

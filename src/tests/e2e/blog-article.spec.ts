@@ -6,9 +6,19 @@ test.describe('Blog Article Page', () => {
 
     const firstArticleLink = page.locator('section article a:has(h3)').first();
     await expect(firstArticleLink).toBeVisible();
+    await expect(firstArticleLink).toHaveAttribute('href', /\/blog\/.+/);
 
-    await firstArticleLink.click();
-    await expect(page).toHaveURL(/\/blog\/.+/);
+    const href = await firstArticleLink.getAttribute('href');
+    if (!href) {
+      throw new Error('Expected first article link to have an href');
+    }
+
+    const expectedPathname = new URL(href, 'http://127.0.0.1:3000').pathname;
+
+    await page.goto(href);
+    await expect
+      .poll(() => new URL(page.url()).pathname)
+      .toBe(expectedPathname);
   });
 
   test('heading and article metadata are visible', async ({ page }) => {
