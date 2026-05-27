@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 const rootDir = join(dirname(fileURLToPath(import.meta.url)), '..');
 const outputFile = join(rootDir, 'src/data/buildVersion.ts');
 
-const shouldGenerate = process.env.CI === 'true' || process.env.FORCE_GENERATE_BUILD_VERSION === '1';
+const shouldGenerate = Boolean(process.env.CI) || process.env.FORCE_GENERATE_BUILD_VERSION === '1';
 
 if (!shouldGenerate) {
   console.log('Skipping build version generation outside CI. Set FORCE_GENERATE_BUILD_VERSION=1 to force.');
