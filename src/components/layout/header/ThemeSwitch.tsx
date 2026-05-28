@@ -40,8 +40,10 @@ const ThemeSwitch = () => {
     queueMicrotask(() => setMounted(true));
   }, []);
 
-  const isDark = resolvedTheme === 'dark'
-    || (resolvedTheme === undefined && theme === undefined && mounted && document.documentElement.classList.contains('dark'));
+  const isDark = mounted && (
+    resolvedTheme === 'dark'
+    || (resolvedTheme === undefined && theme === undefined && document.documentElement.classList.contains('dark'))
+  );
 
   const handleClick = () => {
     setTheme(isDark ? 'light' : 'dark');
