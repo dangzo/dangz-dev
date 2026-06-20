@@ -135,7 +135,9 @@ const IconWrapper = ({ icon, size, ...rest }: React.SVGProps<SVGSVGElement> & {
 };
 
 const Icon = ({ icon, href, size = 8, className, 'data-umami-event': umamiEvent, ...rest }: IconProps) => {
-  if (!href) return <IconWrapper icon={icon} size={size} {...rest} />;
+  if (!href) {
+    return <IconWrapper icon={icon} size={size} {...rest} />;
+  }
 
   return (
     <Link

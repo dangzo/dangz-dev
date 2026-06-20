@@ -19,7 +19,10 @@ const Prompt = () => {
   } as CSSProperties & { '--chars': number; '--caret-delay': string };
 
   const buildHref = useCallback((index: number) => {
-    if (index === -1) return '/';
+    if (index === -1) {
+      return '/';
+    }
+
     return '/' + segments.slice(0, index + 1).join('/');
   }, [segments]);
 

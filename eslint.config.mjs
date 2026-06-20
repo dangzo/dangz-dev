@@ -48,6 +48,7 @@ export default defineConfig([
       'react-hooks/exhaustive-deps': 'warn',
       'react/no-unescaped-entities': 'off',
       //
+      'curly': ['warn'],
       'object-curly-newline': 'warn',
       'object-curly-spacing': ['warn', 'always'],
       'multiline-ternary': ["warn", "always-multiline"],
