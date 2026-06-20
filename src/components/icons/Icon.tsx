@@ -53,6 +53,7 @@ import TestingLibraryIcon from './devicons/TestingLibraryIcon';
 import CopilotIcon from './devicons/CopilotIcon';
 import ChatGPTIcon from './devicons/ChatGPTIcon';
 import CursorIcon from './devicons/CursorIcon';
+import CodexIcon from './devicons/CodexIcon';
 
 const components = {
   // Social icons
@@ -105,6 +106,7 @@ const components = {
   copilot: CopilotIcon,
   chatgpt: ChatGPTIcon,
   cursor: CursorIcon,
+  codex: CodexIcon,
   'react-query': ReactQueryIcon,
   'design-components': DesignComponentsIcon,
   'testing-library': TestingLibraryIcon,
@@ -133,7 +135,9 @@ const IconWrapper = ({ icon, size, ...rest }: React.SVGProps<SVGSVGElement> & {
 };
 
 const Icon = ({ icon, href, size = 8, className, 'data-umami-event': umamiEvent, ...rest }: IconProps) => {
-  if (!href) return <IconWrapper icon={icon} size={size} {...rest} />;
+  if (!href) {
+    return <IconWrapper icon={icon} size={size} {...rest} />;
+  }
 
   return (
     <Link

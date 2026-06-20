@@ -90,8 +90,12 @@ const scorePost = ({
   const lowerExcerpt = excerpt.toLowerCase();
   const lowerTags = tags.map((tag) => tag.toLowerCase());
 
-  if (lowerTitle.includes(query)) score += 6;
-  if (lowerExcerpt.includes(query)) score += 4;
+  if (lowerTitle.includes(query)) {
+    score += 6;
+  }
+  if (lowerExcerpt.includes(query)) {
+    score += 4;
+  }
 
   const tagHits = lowerTags.filter((tag) => tag.includes(query)).length;
   score += tagHits * 3;

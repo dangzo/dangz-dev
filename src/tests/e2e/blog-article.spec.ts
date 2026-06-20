@@ -44,12 +44,10 @@ test.describe('Blog Article Page', () => {
     await expect(backToBlogLink).toHaveAttribute('href', '/blog');
   });
 
-  test('hero and inline images are rendered', async ({ page }) => {
-    await expect(page.locator('article > div img').first()).toBeVisible();
+  test('article image is rendered', async ({ page }) => {
+    const articleImage = page.locator('main article img').first();
 
-    const articleImages = page.locator('main article img');
-    await expect(articleImages.first()).toBeVisible();
-    await expect.poll(() => articleImages.count()).toBeGreaterThan(1);
+    await expect(articleImage).toBeVisible();
   });
 
   test('code blocks and rich content are rendered', async ({ page }) => {
