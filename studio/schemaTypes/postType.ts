@@ -140,7 +140,8 @@ export const postType = defineType({
               { title: 'JSON', value: 'json' },
               { title: 'CSS', value: 'css' },
               { title: 'Docker', value: 'docker' },
-              { title: 'Nginx', value: 'nginx' }
+              { title: 'Nginx', value: 'nginx' },
+              { title: 'Vue', value: 'vue' }
             ],
           },
         }),

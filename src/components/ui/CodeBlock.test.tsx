@@ -65,6 +65,21 @@ describe('CodeBlock', () => {
     expect(await screen.findByText('bash')).toBeInTheDocument();
   });
 
+  it('normalizes Vue aliases to vue and falls back to markup highlighting', async () => {
+    render(
+      <CodeBlock
+        value={{
+          code: '<template><div>Hello</div></template>',
+          language: 'Vue3',
+        }}
+      />,
+    );
+
+    const highlighter = await screen.findByTestId('syntax-highlighter');
+    expect(highlighter).toHaveAttribute('data-language', 'markup');
+    expect(await screen.findByText('vue')).toBeInTheDocument();
+  });
+
   it('does not show a language label for plaintext', async () => {
     render(
       <CodeBlock

@@ -39,6 +39,13 @@ SyntaxHighlighter.registerLanguage('css', css);
 SyntaxHighlighter.registerLanguage('docker', docker);
 SyntaxHighlighter.registerLanguage('nginx', nginx);
 
+const languageAliases: Record<string, string> = {
+  vue2: 'vue',
+  vue3: 'vue',
+  'vue-sfc': 'vue',
+  sfc: 'vue',
+};
+
 function subscribe(onStoreChange: () => void) {
   const observer = new MutationObserver(onStoreChange);
   observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
@@ -53,7 +60,9 @@ const CodeBlock = ({ value }: CodeBlockProps) => {
   const [style, setStyle] = useState<SyntaxStyle | undefined>(undefined);
   const [isCopied, setIsCopied] = useState(false);
   const { code, language } = value;
-  const normalizedLanguage = language?.toLowerCase() || 'plaintext';
+  const rawLanguage = language?.toLowerCase() || 'plaintext';
+  const normalizedLanguage = languageAliases[rawLanguage] || rawLanguage;
+  const highlighterLanguage = normalizedLanguage === 'vue' ? 'markup' : normalizedLanguage;
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -121,7 +130,7 @@ const CodeBlock = ({ value }: CodeBlockProps) => {
       <SyntaxHighlighter
         showLineNumbers={true}
         showInlineLineNumbers={true}
-        language={normalizedLanguage}
+        language={highlighterLanguage}
         style={style}
       >
         {code}
