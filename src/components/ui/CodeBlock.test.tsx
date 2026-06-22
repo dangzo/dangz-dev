@@ -3,29 +3,10 @@ import userEvent from '@testing-library/user-event';
 
 import CodeBlock from './CodeBlock';
 
-vi.mock('react-syntax-highlighter', () => {
-  const PrismAsyncLight = ({
-    children,
-    language,
-  }: {
-    children: React.ReactNode;
-    language?: string;
-  }) => (
-    <pre data-testid="syntax-highlighter" data-language={language}>
-      {children}
-    </pre>
-  );
-  PrismAsyncLight.registerLanguage = vi.fn();
-  return { PrismAsyncLight };
-});
-
-vi.mock('react-syntax-highlighter/dist/esm/styles/prism/one-light', () => ({
-  default: { comment: { color: '#999' } },
-}));
-
-vi.mock('react-syntax-highlighter/dist/esm/styles/prism/coldark-dark', () => ({
-  default: { comment: { color: '#666' } },
-}));
+const sampleHighlightedHtml = {
+  light: '<pre class="shiki"><code><span class="line">const x = 1;</span></code></pre>',
+  dark: '<pre class="shiki"><code><span class="line">const x = 1; // dark</span></code></pre>',
+};
 
 describe('CodeBlock', () => {
   beforeEach(() => {
@@ -43,13 +24,13 @@ describe('CodeBlock', () => {
         value={{
           code: 'const x = 1;',
           language: 'typescript',
+          highlightedHtml: sampleHighlightedHtml,
         }}
       />,
     );
 
     const highlighter = await screen.findByTestId('syntax-highlighter');
     expect(highlighter).toHaveTextContent('const x = 1;');
-    expect(highlighter).toHaveAttribute('data-language', 'typescript');
   });
 
   it('shows the normalized language label when it is not plaintext', async () => {
@@ -57,7 +38,8 @@ describe('CodeBlock', () => {
       <CodeBlock
         value={{
           code: 'echo hi',
-          language: 'Bash',
+          language: 'bash',
+          highlightedHtml: sampleHighlightedHtml,
         }}
       />,
     );
@@ -65,18 +47,18 @@ describe('CodeBlock', () => {
     expect(await screen.findByText('bash')).toBeInTheDocument();
   });
 
-  it('normalizes Vue aliases to vue and falls back to markup highlighting', async () => {
+  it('shows vue label when language is vue', async () => {
     render(
       <CodeBlock
         value={{
           code: '<template><div>Hello</div></template>',
-          language: 'Vue3',
+          language: 'vue',
+          highlightedHtml: sampleHighlightedHtml,
         }}
       />,
     );
 
-    const highlighter = await screen.findByTestId('syntax-highlighter');
-    expect(highlighter).toHaveAttribute('data-language', 'markup');
+    await screen.findByTestId('syntax-highlighter');
     expect(await screen.findByText('vue')).toBeInTheDocument();
   });
 
@@ -86,6 +68,7 @@ describe('CodeBlock', () => {
         value={{
           code: 'plain',
           language: 'plaintext',
+          highlightedHtml: sampleHighlightedHtml,
         }}
       />,
     );
@@ -104,6 +87,7 @@ describe('CodeBlock', () => {
         value={{
           code: 'copy me',
           language: 'js',
+          highlightedHtml: sampleHighlightedHtml,
         }}
       />,
     );
@@ -132,11 +116,13 @@ describe('CodeBlock', () => {
         value={{
           code: 'dark',
           language: 'json',
+          highlightedHtml: sampleHighlightedHtml,
         }}
       />,
     );
 
     const root = (await screen.findByTestId('syntax-highlighter')).parentElement;
     expect(root?.className).toContain('border-gray-800');
+    expect(screen.getByTestId('syntax-highlighter')).toHaveTextContent('const x = 1; // dark');
   });
 });

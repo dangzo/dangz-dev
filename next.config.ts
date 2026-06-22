@@ -6,7 +6,6 @@ const nextConfig: NextConfig = {
     optimizePackageImports: [
       'clsx',
       '@sanity/image-url',
-      'react-syntax-highlighter',
       '@next/third-parties',
     ],
   },
