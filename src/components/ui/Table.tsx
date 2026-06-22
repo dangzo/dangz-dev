@@ -17,7 +17,7 @@ const Table = ({ value }: TableProps) => {
   const { rows } = value;
   
   return (
-    <div className="my-8 overflow-x-auto">
+    <div className="overflow-x-auto">
       <table
         className="
           min-w-full border-collapse border
