@@ -47,7 +47,7 @@
   "dependencies": {
     "@apollo/client": "^4.0.11",
     "@apollo/client-integration-nextjs": "^0.14.3",
-    "@next/third-parties": "^16.2.2",
+    "@next/third-parties": "^16.2.7",
     "@sanity/code-input": "^7.0.12",
     "@sanity/image-url": "^2.0.2",
     "@sanity/table": "^3.1.3",

@@ -2626,7 +2626,7 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-16.2.9.tgz#6e36f17dd615c52761691b7f5be1d9d161abed2a"
   integrity sha512-qr2VL3Ce5QrwgO2yh1ujSBawrimjVKX8FGF/cOynmdYKJY0BdHpGVNIRK1tqONB10Vkm25Ub1BD2bkjWs4+96w==
 
-"@next/third-parties@^16.2.2":
+"@next/third-parties@^16.2.7":
   version "16.2.9"
   resolved "https://registry.yarnpkg.com/@next/third-parties/-/third-parties-16.2.9.tgz#830f4cbe91799424cedeafe828e6a9793653a846"
   integrity sha512-JZPGQRN8eQs2WMfBXOf6Zjrma+JIN0KyA24MvmIa3bUI4BwTaJ1UlxmYVc5ri6l30LQ8fPv6Kmx20447hCltrg==
@@ -12032,7 +12032,7 @@ style-value-types@5.0.0:
     hey-listen "^1.0.8"
     tslib "^2.1.0"
 
-styled-components@^6.4.2:
+styled-components@^6.4.1, styled-components@^6.4.2:
   version "6.4.2"
   resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-6.4.2.tgz#2e92f7b8a1e49f5791c80c864eddf215dd1046c6"
   integrity sha512-xZBhBJsMtGqb+aKcwKgaT+BtuFums9VynX2JRvXJGTx5UfZzN12rk5r4nVdhXYvRw+hE7yiYxVrOqJZaK2+Txg==
