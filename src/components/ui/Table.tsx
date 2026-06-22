@@ -20,7 +20,7 @@ const Table = ({ value }: TableProps) => {
     <div className="my-8 overflow-x-auto">
       <table
         className="
-          min-w-full border-collapse border mb-10
+          min-w-full border-collapse border
           border-gray-300 bg-neutral-50/50 
           dark:border-gray-700 dark:bg-neutral-800/10
         "
