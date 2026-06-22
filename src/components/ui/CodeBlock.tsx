@@ -1,50 +1,17 @@
 'use client';
 
 import { useSyncExternalStore, useState, useEffect } from 'react';
-import type { CSSProperties } from 'react';
-import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import javascript from 'react-syntax-highlighter/dist/esm/languages/prism/javascript';
-import jsx from 'react-syntax-highlighter/dist/esm/languages/prism/jsx';
-import typescript from 'react-syntax-highlighter/dist/esm/languages/prism/typescript';
-import tsx from 'react-syntax-highlighter/dist/esm/languages/prism/tsx';
-import markup from 'react-syntax-highlighter/dist/esm/languages/prism/markup';
-import bash from 'react-syntax-highlighter/dist/esm/languages/prism/bash';
-import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
-import css from 'react-syntax-highlighter/dist/esm/languages/prism/css';
-import docker from 'react-syntax-highlighter/dist/esm/languages/prism/docker';
-import nginx from 'react-syntax-highlighter/dist/esm/languages/prism/nginx';
-
-type SyntaxStyle = { [key: string]: CSSProperties };
 
 export interface CodeBlockProps {
   value: {
-    code: string
-    language: string
-  }
+    code: string;
+    language: string;
+    highlightedHtml: {
+      light: string;
+      dark: string;
+    };
+  };
 }
-
-SyntaxHighlighter.registerLanguage('javascript', javascript);
-SyntaxHighlighter.registerLanguage('js', javascript);
-SyntaxHighlighter.registerLanguage('jsx', jsx);
-SyntaxHighlighter.registerLanguage('typescript', typescript);
-SyntaxHighlighter.registerLanguage('ts', typescript);
-SyntaxHighlighter.registerLanguage('tsx', tsx);
-SyntaxHighlighter.registerLanguage('html', markup);
-SyntaxHighlighter.registerLanguage('xml', markup);
-SyntaxHighlighter.registerLanguage('markup', markup);
-SyntaxHighlighter.registerLanguage('bash', bash);
-SyntaxHighlighter.registerLanguage('sh', bash);
-SyntaxHighlighter.registerLanguage('json', json);
-SyntaxHighlighter.registerLanguage('css', css);
-SyntaxHighlighter.registerLanguage('docker', docker);
-SyntaxHighlighter.registerLanguage('nginx', nginx);
-
-const languageAliases: Record<string, string> = {
-  vue2: 'vue',
-  vue3: 'vue',
-  'vue-sfc': 'vue',
-  sfc: 'vue',
-};
 
 function subscribe(onStoreChange: () => void) {
   const observer = new MutationObserver(onStoreChange);
@@ -57,24 +24,9 @@ const getServerSnapshot = () => 'light';
 
 const CodeBlock = ({ value }: CodeBlockProps) => {
   const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-  const [style, setStyle] = useState<SyntaxStyle | undefined>(undefined);
   const [isCopied, setIsCopied] = useState(false);
-  const { code, language } = value;
-  const rawLanguage = language?.toLowerCase() || 'plaintext';
-  const normalizedLanguage = languageAliases[rawLanguage] || rawLanguage;
-  const highlighterLanguage = normalizedLanguage === 'vue' ? 'markup' : normalizedLanguage;
-
-  useEffect(() => {
-    if (theme === 'dark') {
-      import('react-syntax-highlighter/dist/esm/styles/prism/coldark-dark').then(
-        (mod) => setStyle(mod.default)
-      );
-    } else {
-      import('react-syntax-highlighter/dist/esm/styles/prism/one-light').then(
-        (mod) => setStyle(mod.default)
-      );
-    }
-  }, [theme]);
+  const { code, language, highlightedHtml } = value;
+  const htmlContent = theme === 'dark' ? highlightedHtml.dark : highlightedHtml.light;
 
   useEffect(() => {
     if (!isCopied) {
@@ -120,21 +72,54 @@ const CodeBlock = ({ value }: CodeBlockProps) => {
       >
         {isCopied ? 'Copied' : 'Copy'}
       </button>
-      {normalizedLanguage && normalizedLanguage !== 'plaintext' && (
+      {language && language !== 'plaintext' && (
         <span
           className={`absolute right-[1.3em] top-[0.1em] z-10 select-none text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}
         >
-          {normalizedLanguage}
+          {language}
         </span>
       )}
-      <SyntaxHighlighter
-        showLineNumbers={true}
-        showInlineLineNumbers={true}
-        language={highlighterLanguage}
-        style={style}
-      >
-        {code}
-      </SyntaxHighlighter>
+      <div
+        data-testid="syntax-highlighter"
+        className="code-block-shiki"
+        dangerouslySetInnerHTML={{ __html: htmlContent }}
+      />
+
+      <style jsx global>{`
+          .code-block-shiki .shiki {
+            margin: 0;
+            overflow-x: auto;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.65;
+          }
+
+          .code-block-shiki .shiki code {
+            counter-reset: line;
+            display: block;
+            white-space: normal;
+          }
+
+          .code-block-shiki .shiki code .line {
+            display: block;
+            min-height: 1.5em;
+            padding-left: 3rem;
+            position: relative;
+            white-space: pre;
+          }
+
+          .code-block-shiki .shiki code .line::before {
+            color: rgb(148 163 184 / 0.85);
+            content: counter(line);
+            counter-increment: line;
+            font-size: 0.78em;
+            left: 0;
+            position: absolute;
+            text-align: right;
+            width: 2.1rem;
+          }
+        `}</style>
     </div>
   );
 };
