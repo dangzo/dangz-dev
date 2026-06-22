@@ -13,7 +13,7 @@ export default function ToCSidebar({ post }: ToCSidebarProps) {
   const toc = extractTocFromBody(post.body);
 
   return (
-    <div className="space-y-12 sm:sticky sm:top-12">
+    <div className="space-y-12 sm:sticky sm:top-12 sm:max-h-[calc(100dvh-4rem)] sm:overflow-y-auto sm:pr-2">
       <section>
         <SidebarMobileToggle
           showLabel="Show Table of Contents"

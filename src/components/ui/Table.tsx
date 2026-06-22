@@ -17,10 +17,10 @@ const Table = ({ value }: TableProps) => {
   const { rows } = value;
   
   return (
-    <div className="overflow-x-auto my-8">
+    <div className="overflow-x-auto">
       <table
         className="
-          min-w-full border-collapse border 
+          min-w-full border-collapse border
           border-gray-300 bg-neutral-50/50 
           dark:border-gray-700 dark:bg-neutral-800/10
         "
