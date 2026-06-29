@@ -6,7 +6,7 @@ const { experience } = aboutMeData;
 
 function MyJourneySoFar() {
   return (
-    <section className="mb-8 sm:mb-16 md:mb-20">
+    <div className="mb-8 sm:mb-16 md:mb-20">
       <Heading as="h2" className="mb-6 sm:mb-0!">
         My journey so far
       </Heading>
@@ -36,7 +36,7 @@ function MyJourneySoFar() {
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 }
 

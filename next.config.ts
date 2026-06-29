@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
       'clsx',
       '@sanity/image-url',
       '@next/third-parties',
+      '@apollo/client',
+      'next-sanity',
     ],
   },
   images: {
