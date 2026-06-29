@@ -68,6 +68,7 @@ const Button = ({
       <NextLink
         className={classNames}
         href={to}
+        prefetch={false}
         download={download}
         target={target ?? (!isInternalRoute ? '_blank' : undefined)}
         rel={resolvedRel}
