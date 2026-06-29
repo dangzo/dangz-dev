@@ -2,7 +2,7 @@ import { Heading, Text } from '@/components/ui';
 
 function BeyondTheStack() {
   return (
-    <section
+    <div
       className="
         mb-8
         rounded-2xl border border-border-light/70 bg-background-secondary-light/50 p-6
@@ -35,7 +35,7 @@ function BeyondTheStack() {
         I'm fluent in <strong>English</strong>, <strong>Spanish</strong>, and&nbsp;
         <strong>Italian</strong>.
       </Text>
-    </section>
+    </div>
   );
 }
 

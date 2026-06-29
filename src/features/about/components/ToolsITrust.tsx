@@ -6,7 +6,7 @@ const { skills } = aboutMeData;
 
 function ToolsITrust() {
   return (
-    <section className="mb-8 sm:mb-16 md:mb-20">
+    <div className="mb-8 sm:mb-16 md:mb-20">
       <Heading as="h2">
         Tools I trust
       </Heading>
@@ -50,7 +50,7 @@ function ToolsITrust() {
           </li>
         ))}
       </ul>
-    </section>
+    </div>
   );
 }
 

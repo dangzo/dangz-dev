@@ -3,7 +3,7 @@ import { links } from '@/data/siteMetadata';
 
 async function LetsTalkFrontend() {
   return (
-    <section
+    <div
       className="
         text-center
         mt-10 rounded-2xl border border-border-light/70 bg-primary-50/90 p-6
@@ -54,7 +54,7 @@ async function LetsTalkFrontend() {
           View GitHub
         </Button>
       </div>
-    </section>
+    </div>
   );
 }
 

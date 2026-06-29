@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { Img, Text } from '@/components/ui';
-import { PortableText, Reactions } from '@/features/blog/components';
+import { PortableText } from '@/features/blog/components';
+import ReactionsClient from '@/features/blog/components/reactions/ReactionsClient';
 import { getPostBySlug, getPostSlugs } from '@/features/blog/api/queries/singlePost';
 import getPostMetadata from '@/features/blog/api/getPostMetadata';
 
@@ -36,26 +37,31 @@ export default async function PostPage({
 
   return (
     <article className="max-w-3xl mx-auto px-3 py-4 sm:px-4 sm:py-6 md:py-8">
-      <div className="mb-5 sm:mb-6 md:mb-8 rounded-lg overflow-hidden">
-        {/*** Hero image ***/}
-        <Img
-          source={post.image}
-          alt={post.imageAltText}
-          className="w-full h-auto object-cover"
-          width={700}
-          height={400}
-          fetchPriority="high"
-          blurDataURL={lqip}
-          preload
-        />
-      </div>
+      {post.image
+        ? (
+          <div className="mb-5 sm:mb-6 md:mb-8 rounded-lg overflow-hidden">
+            <Img
+              source={post.image}
+              alt={post.imageAltText}
+              className="w-full h-auto object-cover"
+              width={700}
+              height={400}
+              sizes="(max-width: 640px) calc(100vw - 1.5rem), (max-width: 768px) calc(100vw - 2rem), 700px"
+              fetchPriority="high"
+              quality={72}
+              blurDataURL={lqip}
+              preload
+            />
+          </div>
+        )
+        : null}
 
       {/* Body Content */}
       {post.body && post.body.length > 0
         ? (
           <>
             <PortableText value={post.body} />
-            <Reactions postId={post._id} />
+            <ReactionsClient postId={post._id} />
           </>
         )
         : <Text>No content available for this post.</Text>
