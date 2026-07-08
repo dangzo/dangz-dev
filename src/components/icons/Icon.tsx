@@ -54,6 +54,7 @@ import CopilotIcon from './devicons/CopilotIcon';
 import ChatGPTIcon from './devicons/ChatGPTIcon';
 import CursorIcon from './devicons/CursorIcon';
 import CodexIcon from './devicons/CodexIcon';
+import ClaudeCodeIcon from './devicons/ClaudeCodeIcon';
 
 const components = {
   // Social icons
@@ -107,6 +108,7 @@ const components = {
   chatgpt: ChatGPTIcon,
   cursor: CursorIcon,
   codex: CodexIcon,
+  'claude-code': ClaudeCodeIcon,
   'react-query': ReactQueryIcon,
   'design-components': DesignComponentsIcon,
   'testing-library': TestingLibraryIcon,
