@@ -8,3 +8,6 @@
 - No single-line returns, always use braces
 - Prefer separated blocks of code by empty lines
 - Prefer TailwindCSS over CSS modules
+
+## Adding entries in About page
+- Ask me for SVGs

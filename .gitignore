@@ -76,3 +76,5 @@ next-env.d.ts
 /studio/.DS_Store
 /studio/*.log
 /studio/*.tsbuildinfo
+
+.claude
