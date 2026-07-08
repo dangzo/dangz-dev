@@ -10,4 +10,4 @@
 - Prefer TailwindCSS over CSS modules
 
 ## Adding entries in About page
-- Ask me for SVGs
+- If you need a new SVG icon for an About entry, ask the dev running the agent for the SVG (or reuse an existing icon) before adding a new devicon component.
