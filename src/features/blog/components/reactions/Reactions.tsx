@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { Heading } from '@/components/ui';
 import { useReactions } from '@/features/blog/hooks/useReactions';
 import Skeleton from 'react-loading-skeleton';
@@ -9,64 +8,11 @@ import EmojiBtn from './EmojiBtn';
 
 export interface ReactionsProps {
   postId: string;
-  variant?: 'default' | 'compact';
 }
 
 const skeletonKeys = ['one', 'two', 'three', 'four', 'five'] as const;
 
-const variantStyles = {
-  default: {
-    containerClassName: 'mt-14 sm:mt-20 flex flex-col items-center gap-3',
-    reactionsClassName: 'w-full flex flex-wrap items-center gap-3 justify-center border-t border-secondary-light/30 dark:border-secondary-dark/50 pt-8',
-    itemClassName: 'flex flex-col items-center gap-1 min-w-16 sm:min-w-20',
-    countClassName: 'text-[11px] text-secondary-light/80 dark:text-secondary-dark/80 text-center leading-tight tabular-nums',
-    labelClassName: 'text-xs text-secondary-light dark:text-secondary-dark text-center leading-tight',
-    buttonSize: 'default' as const,
-    showHeading: true,
-    showLabel: true,
-    showScrollToTop: true,
-  },
-  compact: {
-    containerClassName: '',
-    reactionsClassName: 'flex w-full flex-wrap items-center w-auto justify-start gap-1.5',
-    itemClassName: 'flex items-center gap-1 rounded-full px-1.5 py-0.5',
-    countClassName: 'text-[12px] text-secondary-light/70 dark:text-secondary-dark/70 leading-none tabular-nums',
-    labelClassName: '',
-    buttonSize: 'compact' as const,
-    showHeading: false,
-    showLabel: false,
-    showScrollToTop: false,
-  },
-} satisfies Record<NonNullable<ReactionsProps['variant']>, {
-  containerClassName: string;
-  reactionsClassName: string;
-  itemClassName: string;
-  countClassName: string;
-  labelClassName: string;
-  buttonSize: 'default' | 'compact';
-  showHeading: boolean;
-  showLabel: boolean;
-  showScrollToTop: boolean;
-}>;
-
-const ReactionsSkeleton = ({ variant = 'default' }: Pick<ReactionsProps, 'variant'>) => {
-  const styles = variantStyles[variant];
-
-  if (variant === 'compact') {
-    return (
-      <div
-        className={styles.containerClassName}
-        aria-label="Reactions loading"
-      >
-        <div className={styles.reactionsClassName} data-testid="reactions-skeleton">
-          {skeletonKeys.map((key) => (
-            <Skeleton key={key} width={32} height={22} borderRadius={9999} />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
+const ReactionsSkeleton = () => {
   return (
     <div
       className="mt-14 sm:mt-20 flex flex-col items-center gap-3"
@@ -91,53 +37,11 @@ const ReactionsSkeleton = ({ variant = 'default' }: Pick<ReactionsProps, 'varian
   );
 };
 
-interface AddReactionButtonProps {
-  isExpanded: boolean;
-  onToggle: () => void;
-  countClassName: string;
-}
-
-const AddReactionButton = ({ isExpanded, onToggle, countClassName }: Readonly<AddReactionButtonProps>) => {
-  const actionLabel = isExpanded ? 'Hide extra reactions' : 'Add reaction';
-
-  return (
-    <button
-      type="button"
-      className="flex items-center gap-1 rounded-full px-1.5 py-0.5 text-accent-light dark:text-accent-dark bg-accent-light/10 dark:bg-accent-dark/10 transition-colors duration-200 ease-out hover:bg-accent-light/20 dark:hover:bg-accent-dark/20"
-      onClick={onToggle}
-      aria-pressed={isExpanded}
-      aria-label={actionLabel}
-      title={actionLabel}
-    >
-      <span className="relative inline-flex items-center justify-center rounded-full px-1 py-0 leading-none">
-        <span className="text-sm sm:text-xl">♡</span>
-        <span className="absolute -right-1 -top-1 inline-flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-accent-light dark:bg-accent-dark px-1 text-[9px] font-semibold leading-none text-white dark:text-main-dark">
-          +
-        </span>
-      </span>
-      <span className={countClassName}>
-        {isExpanded ? 'Hide' : 'Add'}
-      </span>
-    </button>
-  );
-};
-
-const Reactions = ({ postId, variant = 'default' }: ReactionsProps) => {
+const Reactions = ({ postId }: ReactionsProps) => {
   const { reactions, pendingIds, reactToPost } = useReactions(postId);
-  const [showCompactZeroCountReactions, setShowCompactZeroCountReactions] = useState(false);
-  const styles = variantStyles[variant];
-  const hiddenCompactReactionCount = variant === 'compact'
-    ? (reactions?.filter((reaction) => {
-      if (!reaction.emoji || !reaction.name) {
-        return false;
-      }
-
-      return (reaction.count ?? 0) === 0;
-    }).length ?? 0)
-    : 0;
 
   if (reactions === null) {
-    return <ReactionsSkeleton variant={variant} />;
+    return <ReactionsSkeleton />;
   }
 
   if (reactions.length === 0) {
@@ -145,76 +49,33 @@ const Reactions = ({ postId, variant = 'default' }: ReactionsProps) => {
   }
 
   return (
-    <div
-      className={styles.containerClassName}
-      aria-label="Reactions"
-    >
-      {styles.showScrollToTop ? <ScrollToTop /> : null}
-      <div className={styles.reactionsClassName}>
-        {styles.showHeading
-          ? (
-            <Heading as="h6" className="text-lg font-semibold text-center w-full mb-4">
-              How do you find this article?
-            </Heading>
-          )
-          : null}
-
-        {variant === 'compact' && hiddenCompactReactionCount > 0
-          ? (
-            <AddReactionButton
-              isExpanded={showCompactZeroCountReactions}
-              onToggle={() => setShowCompactZeroCountReactions((prev) => !prev)}
-              countClassName={styles.countClassName}
-            />
-          )
-          : null}
-
+    <div className="mt-14 sm:mt-20 flex flex-col items-center gap-3" aria-label="Reactions">
+      <ScrollToTop />
+      <div className="w-full flex flex-wrap items-center gap-3 justify-center border-t border-secondary-light/30 dark:border-secondary-dark/50 pt-8">
+        <Heading as="h6" className="text-lg font-semibold text-center w-full mb-4">
+          How do you find this article?
+        </Heading>
         {reactions.map((reaction) => {
           if (!reaction.emoji || !reaction.name) {
             return null;
           }
 
           const count = reaction.count ?? 0;
-          const isCompactZeroCountReaction = variant === 'compact' && count === 0;
-          const isCompactZeroCountHidden = isCompactZeroCountReaction && !showCompactZeroCountReactions;
-          const compactVisibilityClasses = isCompactZeroCountReaction
-            ? [
-              'overflow-hidden transition-[opacity,max-width,margin,padding] duration-200 ease-out',
-              isCompactZeroCountHidden
-                ? 'absolute -z-10 opacity-0 max-w-0 max-h-0 pointer-events-none !px-0 !py-0 !mx-0'
-                : 'relative opacity-100 max-w-24 sm:max-w-28',
-            ].join(' ')
-            : '';
-
-          const buttonTitle = variant === 'compact'
-            ? `${reaction.name}`
-            : undefined;
 
           return (
-            <div
-              key={reaction._id}
-              className={[styles.itemClassName, compactVisibilityClasses].join(' ')}
-              aria-hidden={isCompactZeroCountHidden}
-            >
+            <div key={reaction._id} className="flex flex-col items-center gap-1 min-w-16 sm:min-w-20">
               <EmojiBtn
                 emoji={reaction.emoji}
                 name={reaction.name}
-                title={buttonTitle}
                 data-umami-event={`Reaction ${reaction.name} Click`}
                 onClick={() => reactToPost(reaction._id)}
                 isPending={pendingIds[reaction._id] ?? false}
-                size={styles.buttonSize}
-                disabled={isCompactZeroCountHidden}
-                tabIndex={isCompactZeroCountHidden ? -1 : undefined}
+                size="default"
               />
-              {styles.showLabel
-                ? (
-                  <span className={styles.labelClassName}>
-                    {reaction.name}
-                  </span>
-                )
-                : null}
-              <span className={styles.countClassName}>
+              <span className="text-xs text-secondary-light dark:text-secondary-dark text-center leading-tight">
+                {reaction.name}
+              </span>
+              <span className="text-[11px] text-secondary-light/80 dark:text-secondary-dark/80 text-center leading-tight tabular-nums">
                 {count}
               </span>
             </div>
