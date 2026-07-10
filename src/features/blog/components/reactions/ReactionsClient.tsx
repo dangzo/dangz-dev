@@ -1,10 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-
-interface ReactionsClientProps {
-  postId: string;
-}
+import { type ReactionsProps } from './Reactions';
 
 const Reactions = dynamic(
   () => import('./Reactions'),
@@ -14,6 +11,10 @@ const Reactions = dynamic(
   },
 );
 
-export default function ReactionsClient({ postId }: ReactionsClientProps) {
-  return <Reactions postId={postId} />;
+export default function ReactionsClient({ postId, variant = 'default' }: Readonly<ReactionsProps>) {
+  return (
+    <div className="mb-2">
+      <Reactions postId={postId} variant={variant} />
+    </div>
+  );
 }

@@ -6,11 +6,66 @@ import Skeleton from 'react-loading-skeleton';
 import ScrollToTop from '@/features/blog/components/ScrollToTop';
 import EmojiBtn from './EmojiBtn';
 
-interface ReactionsProps {
+export interface ReactionsProps {
   postId: string;
+  variant?: 'default' | 'compact';
 }
 
-const ReactionsSkeleton = () => {
+const skeletonKeys = ['one', 'two', 'three', 'four', 'five'] as const;
+
+const variantStyles = {
+  default: {
+    containerClassName: 'mt-14 sm:mt-20 flex flex-col items-center gap-3',
+    reactionsClassName: 'w-full flex flex-wrap items-center gap-3 justify-center border-t border-secondary-light/30 dark:border-secondary-dark/50 pt-8',
+    itemClassName: 'flex flex-col items-center gap-1 min-w-16 sm:min-w-20',
+    countClassName: 'text-[11px] text-secondary-light/80 dark:text-secondary-dark/80 text-center leading-tight tabular-nums',
+    labelClassName: 'text-xs text-secondary-light dark:text-secondary-dark text-center leading-tight',
+    buttonSize: 'default' as const,
+    showHeading: true,
+    showLabel: true,
+    showScrollToTop: true,
+  },
+  compact: {
+    containerClassName: 'mt-2 ml-[-12px]',
+    reactionsClassName: 'flex w-full flex-wrap items-center w-auto justify-start gap-1.5',
+    itemClassName: 'flex items-center gap-1 rounded-full px-1.5 py-0.5',
+    countClassName: 'text-[12px] text-secondary-light/70 dark:text-secondary-dark/70 leading-none tabular-nums',
+    labelClassName: '',
+    buttonSize: 'compact' as const,
+    showHeading: false,
+    showLabel: false,
+    showScrollToTop: false,
+  },
+} satisfies Record<NonNullable<ReactionsProps['variant']>, {
+  containerClassName: string;
+  reactionsClassName: string;
+  itemClassName: string;
+  countClassName: string;
+  labelClassName: string;
+  buttonSize: 'default' | 'compact';
+  showHeading: boolean;
+  showLabel: boolean;
+  showScrollToTop: boolean;
+}>;
+
+const ReactionsSkeleton = ({ variant = 'default' }: Pick<ReactionsProps, 'variant'>) => {
+  const styles = variantStyles[variant];
+
+  if (variant === 'compact') {
+    return (
+      <div
+        className={styles.containerClassName}
+        aria-label="Reactions loading"
+      >
+        <div className={styles.reactionsClassName} data-testid="reactions-skeleton">
+          {skeletonKeys.map((key) => (
+            <Skeleton key={key} width={32} height={22} borderRadius={9999} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className="mt-14 sm:mt-20 flex flex-col items-center gap-3"
@@ -23,8 +78,8 @@ const ReactionsSkeleton = () => {
       >
         <Skeleton width={250} height={18} className="mb-4" />
         <div className="flex flex-wrap items-center gap-3 justify-center">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <div key={index} className="flex flex-col items-center min-w-16 sm:min-w-20">
+          {skeletonKeys.map((key) => (
+            <div key={key} className="flex flex-col items-center min-w-16 sm:min-w-20">
               <Skeleton circle width={44} height={44} className="mb-2" />
               <Skeleton width={48} height={16} />
             </div>
@@ -35,11 +90,12 @@ const ReactionsSkeleton = () => {
   );
 };
 
-const Reactions = ({ postId }: ReactionsProps) => {
+const Reactions = ({ postId, variant = 'default' }: ReactionsProps) => {
   const { reactions, pendingIds, reactToPost } = useReactions(postId);
+  const styles = variantStyles[variant];
 
   if (reactions === null) {
-    return <ReactionsSkeleton />;
+    return <ReactionsSkeleton variant={variant} />;
   }
 
   if (reactions.length === 0) {
@@ -48,14 +104,18 @@ const Reactions = ({ postId }: ReactionsProps) => {
 
   return (
     <div
-      className="mt-14 sm:mt-20 flex flex-col items-center gap-3"
+      className={styles.containerClassName}
       aria-label="Reactions"
     >
-      <ScrollToTop />
-      <div className="w-full flex flex-wrap items-center gap-3 justify-center border-t border-secondary-light/30 dark:border-secondary-dark/50 pt-8">
-        <Heading as="h6" className="text-lg font-semibold text-center w-full mb-4">
-          How do you find this article?
-        </Heading>
+      {styles.showScrollToTop ? <ScrollToTop /> : null}
+      <div className={styles.reactionsClassName}>
+        {styles.showHeading
+          ? (
+            <Heading as="h6" className="text-lg font-semibold text-center w-full mb-4">
+              How do you find this article?
+            </Heading>
+          )
+          : null}
         {reactions.map((reaction) => {
           if (!reaction.emoji || !reaction.name) {
             return null;
@@ -64,18 +124,23 @@ const Reactions = ({ postId }: ReactionsProps) => {
           const count = reaction.count ?? 0;
 
           return (
-            <div key={reaction._id} className="flex flex-col items-center gap-1 min-w-16 sm:min-w-20">
+            <div key={reaction._id} className={styles.itemClassName}>
               <EmojiBtn
                 emoji={reaction.emoji}
                 name={reaction.name}
                 data-umami-event={`Reaction ${reaction.name} Click`}
                 onClick={() => reactToPost(reaction._id)}
-                isPending={Boolean(pendingIds[reaction._id])}
+                isPending={pendingIds[reaction._id] ?? false}
+                size={styles.buttonSize}
               />
-              <span className="text-xs text-secondary-light dark:text-secondary-dark text-center leading-tight">
-                {reaction.name}
-              </span>
-              <span className="text-[11px] text-secondary-light/80 dark:text-secondary-dark/80 text-center leading-tight tabular-nums">
+              {styles.showLabel
+                ? (
+                  <span className={styles.labelClassName}>
+                    {reaction.name}
+                  </span>
+                )
+                : null}
+              <span className={styles.countClassName}>
                 {count}
               </span>
             </div>
