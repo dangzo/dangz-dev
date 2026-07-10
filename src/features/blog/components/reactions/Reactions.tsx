@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Heading } from '@/components/ui';
 import { useReactions } from '@/features/blog/hooks/useReactions';
 import Skeleton from 'react-loading-skeleton';
@@ -92,7 +93,17 @@ const ReactionsSkeleton = ({ variant = 'default' }: Pick<ReactionsProps, 'varian
 
 const Reactions = ({ postId, variant = 'default' }: ReactionsProps) => {
   const { reactions, pendingIds, reactToPost } = useReactions(postId);
+  const [showCompactZeroCountReactions, setShowCompactZeroCountReactions] = useState(false);
   const styles = variantStyles[variant];
+  const hiddenCompactReactionCount = variant === 'compact'
+    ? (reactions?.filter((reaction) => {
+      if (!reaction.emoji || !reaction.name) {
+        return false;
+      }
+
+      return (reaction.count ?? 0) === 0;
+    }).length ?? 0)
+    : 0;
 
   if (reactions === null) {
     return <ReactionsSkeleton variant={variant} />;
@@ -116,16 +127,40 @@ const Reactions = ({ postId, variant = 'default' }: ReactionsProps) => {
             </Heading>
           )
           : null}
+
+        {variant === 'compact' && hiddenCompactReactionCount > 0
+          ? (
+            <button
+              type="button"
+              className="flex items-center gap-1 rounded-full px-1.5 py-0.5 text-accent-light dark:text-accent-dark bg-accent-light/10 dark:bg-accent-dark/10 transition-colors duration-200 ease-out hover:bg-accent-light/20 dark:hover:bg-accent-dark/20"
+              onClick={() => setShowCompactZeroCountReactions((prev) => !prev)}
+              aria-pressed={showCompactZeroCountReactions}
+              aria-label={showCompactZeroCountReactions ? 'Hide extra reactions' : 'Add reaction'}
+              title={showCompactZeroCountReactions ? 'Hide extra reactions' : 'Add reaction'}
+            >
+              <span className="relative inline-flex items-center justify-center rounded-full px-1 py-0 leading-none">
+                <span className="text-sm sm:text-xl">♡</span>
+                <span className="absolute -right-1 -top-1 inline-flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-accent-light dark:bg-accent-dark px-1 text-[9px] font-semibold leading-none text-white dark:text-main-dark">
+                  +
+                </span>
+              </span>
+              <span className={styles.countClassName}>
+                {showCompactZeroCountReactions ? 'Hide' : 'Add'}
+              </span>
+            </button>
+          )
+          : null}
         {reactions.map((reaction) => {
           if (!reaction.emoji || !reaction.name) {
             return null;
           }
 
-          if (variant === 'compact' && reaction.count === 0) {
+          const count = reaction.count ?? 0;
+
+          if (variant === 'compact' && count === 0 && !showCompactZeroCountReactions) {
             return null;
           }
 
-          const count = reaction.count ?? 0;
           const buttonTitle = variant === 'compact'
             ? `${reaction.name}`
             : undefined;
