@@ -88,23 +88,23 @@ export async function getPostList() {
   return allPosts.map((post) => {
     const postReactionCounts = countsByPostId.get(post._id) ?? [];
 
-    const reactions = postReactionCounts
-      .map((item) => {
+    const reactions = postReactionCounts.reduce<PostReactionSummaryItem[]>((acc, item) => {
         const reaction = reactionsById.get(item.reactionId);
 
         if (!reaction) {
-          return null;
+          return acc;
         }
 
-        return {
+        acc.push({
           _id: reaction._id,
           name: reaction.name,
           emoji: reaction.emoji,
           sortOrder: reaction.sortOrder,
           count: item.count,
-        } satisfies PostReactionSummaryItem;
-      })
-      .filter((reaction): reaction is PostReactionSummaryItem => reaction !== null)
+        });
+
+        return acc;
+      }, [])
       .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 
     return {
