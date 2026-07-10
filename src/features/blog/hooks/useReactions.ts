@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import type { ReactionWithEmoji } from '@/features/blog/api/queries/reactions';
 
-type ReactionsSubscriber = (reactions: ReactionWithEmoji[]) => void;
+type ReactionsSubscriber = () => void;
 
 const reactionsStore = new Map<string, ReactionWithEmoji[]>();
 const reactionsSubscribers = new Map<string, Set<ReactionsSubscriber>>();
@@ -17,7 +17,7 @@ function broadcastReactions(postId: string, reactions: ReactionWithEmoji[]) {
   }
 
   subscribers.forEach((subscriber) => {
-    subscriber(reactions);
+    subscriber();
   });
 }
 
@@ -40,19 +40,15 @@ function subscribeToReactions(postId: string, subscriber: ReactionsSubscriber) {
 }
 
 export function useReactions(postId: string) {
-  const [reactions, setReactions] = useState<ReactionWithEmoji[] | null>(null);
+  const reactions = useSyncExternalStore(
+    (onStoreChange) => subscribeToReactions(postId, onStoreChange),
+    () => reactionsStore.get(postId) ?? null,
+    () => reactionsStore.get(postId) ?? null,
+  );
   const [pendingIds, setPendingIds] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     let isActive = true;
-
-    setReactions(reactionsStore.get(postId) ?? null);
-
-    const unsubscribe = subscribeToReactions(postId, (nextReactions) => {
-      if (isActive) {
-        setReactions(nextReactions);
-      }
-    });
 
     const loadReactions = async () => {
       try {
@@ -81,7 +77,6 @@ export function useReactions(postId: string) {
 
     return () => {
       isActive = false;
-      unsubscribe();
     };
   }, [postId]);
 
