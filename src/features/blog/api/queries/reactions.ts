@@ -17,6 +17,11 @@ interface PostReactionCountDocument {
   };
 }
 
+interface ReactionsForPostQueryResult {
+  allReaction: ReactionWithEmoji[];
+  allPostReactionCount: PostReactionCountDocument[];
+}
+
 interface MutationResultDocument {
   count?: number;
 }
@@ -41,7 +46,7 @@ const REACTIONS_FOR_POST_QUERY = gql`
 
 export async function getReactionsForPost(postId: string): Promise<ReactionWithEmoji[]> {
   const client = getClient();
-  const { data } = await client.query({
+  const { data } = await client.query<ReactionsForPostQueryResult>({
     query: REACTIONS_FOR_POST_QUERY,
     variables: { postId },
     fetchPolicy: 'no-cache',
@@ -54,13 +59,8 @@ export async function getReactionsForPost(postId: string): Promise<ReactionWithE
     },
   });
 
-  const typedData = data as {
-    allReaction: ReactionWithEmoji[];
-    allPostReactionCount: PostReactionCountDocument[];
-  };
-
   const countsByReactionId = new Map<string, number>();
-  for (const item of typedData?.allPostReactionCount ?? []) {
+  for (const item of data?.allPostReactionCount ?? []) {
     const reactionId = item.reaction?._id;
     if (!reactionId) {
       continue;
@@ -68,7 +68,7 @@ export async function getReactionsForPost(postId: string): Promise<ReactionWithE
     countsByReactionId.set(reactionId, item.count ?? 0);
   }
 
-  return (typedData?.allReaction ?? []).map((reaction) => ({
+  return (data?.allReaction ?? []).map((reaction) => ({
     ...reaction,
     count: countsByReactionId.get(reaction._id) ?? 0,
   }));

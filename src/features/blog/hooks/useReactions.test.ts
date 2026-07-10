@@ -221,4 +221,53 @@ describe('useReactions', () => {
       body: expect.stringContaining('"currentCount":3'),
     }));
   });
+
+  it('clears the cached reactions when the last hook instance unmounts', async () => {
+    let resolveSecondFetch: ((value: Response) => void) | undefined;
+    const secondFetchPromise = new Promise<Response>((resolve) => {
+      resolveSecondFetch = resolve;
+    });
+
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(
+        makeFetchResponse({
+          reactions: [
+            { _id: 'r1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 5 },
+          ],
+        }) as unknown as Response,
+      )
+      .mockReturnValueOnce(secondFetchPromise);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const firstRender = renderHook(() => useReactions('post-1'));
+
+    await waitFor(() => {
+      expect(firstRender.result.current.reactions?.[0]?.count).toBe(5);
+    });
+
+    firstRender.unmount();
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    const secondRender = renderHook(() => useReactions('post-1'));
+
+    expect(secondRender.result.current.reactions).toBeNull();
+
+    await act(async () => {
+      resolveSecondFetch?.(makeFetchResponse({
+        reactions: [
+          { _id: 'r1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 8 },
+        ],
+      }) as unknown as Response);
+      await Promise.resolve();
+    });
+
+    await waitFor(() => {
+      expect(secondRender.result.current.reactions?.[0]?.count).toBe(8);
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
 });

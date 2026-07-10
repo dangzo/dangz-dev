@@ -1,8 +1,18 @@
 import type { PostWithTags, PostReactionSummaryItem } from '@/features/blog/types/Post.types';
 import { getClient } from '@/api/apollo-client';
-import { gql } from '@apollo/client';
+import { gql, type TypedDocumentNode } from '@apollo/client';
 
-export const POST_LIST_QUERY = ({ limit = 12, offset = 0 }: {limit?: number, offset?: number}) => {
+interface PostListQueryResult {
+  allPost: PostWithTags[];
+  allReaction: Array<Pick<PostReactionSummaryItem, '_id' | 'name' | 'emoji' | 'sortOrder'>>;
+  allPostReactionCount: Array<{
+    count?: number;
+    post?: { _id?: string };
+    reaction?: { _id?: string };
+  }>;
+}
+
+export const POST_LIST_QUERY = ({ limit = 12, offset = 0 }: {limit?: number, offset?: number}): TypedDocumentNode<PostListQueryResult> => {
   return gql`
     query AllPosts {
       allPost(sort: [{ publishedAt: DESC }], limit: ${limit}, offset: ${offset}) {
@@ -55,19 +65,9 @@ export async function getPostList() {
     query: POST_LIST_QUERY({ limit: 12, offset: 0 }),
   });
 
-  const typedData = data as {
-    allPost: PostWithTags[];
-    allReaction: Array<Pick<PostReactionSummaryItem, '_id' | 'name' | 'emoji' | 'sortOrder'>>;
-    allPostReactionCount: Array<{
-      count?: number;
-      post?: { _id?: string };
-      reaction?: { _id?: string };
-    }>;
-  };
-
-  const allPosts = typedData?.allPost ?? [];
-  const allReactions = typedData?.allReaction ?? [];
-  const allReactionCounts = typedData?.allPostReactionCount ?? [];
+  const allPosts = data?.allPost ?? [];
+  const allReactions = data?.allReaction ?? [];
+  const allReactionCounts = data?.allPostReactionCount ?? [];
 
   const reactionsById = new Map(allReactions.map((reaction) => [reaction._id, reaction]));
 

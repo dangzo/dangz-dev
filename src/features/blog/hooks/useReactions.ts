@@ -7,6 +7,17 @@ type ReactionsSubscriber = () => void;
 
 const reactionsStore = new Map<string, ReactionWithEmoji[]>();
 const reactionsSubscribers = new Map<string, Set<ReactionsSubscriber>>();
+const reactionsCleanupTimers = new Map<string, ReturnType<typeof setTimeout>>();
+
+function cancelReactionsCleanup(postId: string) {
+  const cleanupTimer = reactionsCleanupTimers.get(postId);
+  if (cleanupTimer === undefined) {
+    return;
+  }
+
+  clearTimeout(cleanupTimer);
+  reactionsCleanupTimers.delete(postId);
+}
 
 function broadcastReactions(postId: string, reactions: ReactionWithEmoji[]) {
   reactionsStore.set(postId, reactions);
@@ -22,6 +33,8 @@ function broadcastReactions(postId: string, reactions: ReactionWithEmoji[]) {
 }
 
 function subscribeToReactions(postId: string, subscriber: ReactionsSubscriber) {
+  cancelReactionsCleanup(postId);
+
   const subscribers = reactionsSubscribers.get(postId) ?? new Set<ReactionsSubscriber>();
   subscribers.add(subscriber);
   reactionsSubscribers.set(postId, subscribers);
@@ -35,6 +48,17 @@ function subscribeToReactions(postId: string, subscriber: ReactionsSubscriber) {
     currentSubscribers.delete(subscriber);
     if (currentSubscribers.size === 0) {
       reactionsSubscribers.delete(postId);
+      cancelReactionsCleanup(postId);
+
+      const cleanupTimer = setTimeout(() => {
+        if (!reactionsSubscribers.has(postId)) {
+          reactionsStore.delete(postId);
+        }
+
+        reactionsCleanupTimers.delete(postId);
+      }, 0);
+
+      reactionsCleanupTimers.set(postId, cleanupTimer);
     }
   };
 }
