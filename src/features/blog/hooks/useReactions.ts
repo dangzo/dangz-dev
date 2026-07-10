@@ -85,11 +85,12 @@ export function useReactions(postId: string) {
       return;
     }
 
-    const currentCount = reactions?.find((reaction) => reaction._id === reactionId)?.count ?? 0;
+    const currentReactions = reactionsStore.get(postId) ?? reactions;
+    const currentCount = currentReactions?.find((reaction) => reaction._id === reactionId)?.count ?? 0;
     const optimisticCount = currentCount + 1;
 
     setPendingIds((prev) => ({ ...prev, [reactionId]: true }));
-    const optimisticReactions = reactions?.map((reaction) => (
+    const optimisticReactions = currentReactions?.map((reaction) => (
       reaction._id === reactionId
         ? { ...reaction, count: optimisticCount }
         : reaction

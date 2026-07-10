@@ -170,4 +170,55 @@ describe('useReactions', () => {
       expect(second.current.reactions?.[0]?.count).toBe(7);
     });
   });
+
+  it('uses the shared store snapshot for back-to-back reactions', async () => {
+    const firstVotePromise = new Promise<Response>(() => {});
+    const secondVotePromise = new Promise<Response>(() => {});
+
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(
+        makeFetchResponse({
+          reactions: [
+            { _id: 'r1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 2 },
+          ],
+        }) as unknown as Response,
+      )
+      .mockResolvedValueOnce(
+        makeFetchResponse({
+          reactions: [
+            { _id: 'r1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 2 },
+          ],
+        }) as unknown as Response,
+      )
+      .mockReturnValueOnce(firstVotePromise)
+      .mockReturnValueOnce(secondVotePromise);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const { result: first } = renderHook(() => useReactions('post-1'));
+    const { result: second } = renderHook(() => useReactions('post-1'));
+
+    await waitFor(() => {
+      expect(first.current.reactions?.[0]?.count).toBe(2);
+      expect(second.current.reactions?.[0]?.count).toBe(2);
+    });
+
+    await act(async () => {
+      void first.current.reactToPost('r1');
+      void second.current.reactToPost('r1');
+      await Promise.resolve();
+    });
+
+    expect(first.current.reactions?.[0]?.count).toBe(4);
+    expect(second.current.reactions?.[0]?.count).toBe(4);
+
+    expect(fetchMock).toHaveBeenNthCalledWith(3, '/api/reactions', expect.objectContaining({
+      method: 'POST',
+      body: expect.stringContaining('"currentCount":2'),
+    }));
+
+    expect(fetchMock).toHaveBeenNthCalledWith(4, '/api/reactions', expect.objectContaining({
+      method: 'POST',
+      body: expect.stringContaining('"currentCount":3'),
+    }));
+  });
 });
