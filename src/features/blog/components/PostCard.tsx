@@ -42,7 +42,7 @@ export const PostCard = ({ post, preload }: PostCardProps) => {
         </Link>
 
         <div className="flex flex-col gap-1">
-          <div className="flex flex-row items-center gap-x-1">
+          <div className="flex flex-row items-center gap-x-1 mb-1">
             <DateText date={post.publishedAt} className="mb-0!" />
             {hasVisibleReactions
               ? <span className="mx-2 mb-0">&bull;</span>
