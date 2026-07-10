@@ -30,8 +30,8 @@ export const PostCard = ({ post, preload }: PostCardProps) => {
   const postHref = `/blog/${post.slug?.current}`;
 
   return (
-    <article className="flex flex-col-reverse sm:flex-row relative sm:items-center">
-      <div className="sm:w-5/7">
+    <article className="flex flex-col-reverse md:flex-row relative md:items-center">
+      <div className="md:w-5/7">
         <Link
           href={postHref}
           className="text-2xl font-semibold"
@@ -65,7 +65,7 @@ export const PostCard = ({ post, preload }: PostCardProps) => {
       <Img
         source={post.image}
         alt={post.imageAltText}
-        className="object-cover rounded-md block sm:ml-4 sm:w-38 mb-8 sm:mb-0 grow w-full h-auto"
+        className="object-cover rounded-md block md:ml-4 md:w-38 mb-8 md:mb-0 grow w-full h-auto"
         width={600}
         height={400}
         sizes="(min-width: 640px) 152px, 100vw"
