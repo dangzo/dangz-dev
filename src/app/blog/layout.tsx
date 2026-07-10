@@ -13,7 +13,7 @@ export default async function BlogLayout({ children, heading, sidebar }: Readonl
         <section className="min-w-0 flex-1 p-0 md:p-4">
           {children}
         </section>
-        <aside className="border-border-light/70 pt-6 pb-0 px-2 w-full md:mt-0 md:border-t-0 md:pt-8 md:py-4 md:mb-8 md:min-h-72 md:shrink-0 min-w-45 md:max-w-[256px]">
+        <aside className="border-border-light/70 pt-6 pb-0 px-2 w-full md:mt-0 md:border-t-0 md:pt-8 md:py-4 md:mb-8 md:min-h-72 md:shrink-0 min-w-45 md:w-75">
           {sidebar}
         </aside>
       </div>

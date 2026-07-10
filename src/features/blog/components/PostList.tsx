@@ -13,7 +13,7 @@ export const PostList = ({ posts }: PostListProps) => {
           key={post._id}
           className="
             relative dark:bg-background-secondary-darks border-b
-            px-0 py-6 my-3 sm:mb-3 md:py-4 md:mt-0 md:px-4
+            px-0 py-6 my-3 sm:mb-3 md:py-4 md:mt-0 md:pr-4
           "
         >
           <PostCard key={post._id} post={post} preload={index < 2}/>
