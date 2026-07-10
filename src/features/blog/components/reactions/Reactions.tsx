@@ -175,17 +175,27 @@ const Reactions = ({ postId, variant = 'default' }: ReactionsProps) => {
           }
 
           const count = reaction.count ?? 0;
-
-          if (variant === 'compact' && count === 0 && !showCompactZeroCountReactions) {
-            return null;
-          }
+          const isCompactZeroCountReaction = variant === 'compact' && count === 0;
+          const isCompactZeroCountHidden = isCompactZeroCountReaction && !showCompactZeroCountReactions;
+          const compactVisibilityClasses = isCompactZeroCountReaction
+            ? [
+              'overflow-hidden transition-[opacity,max-width,margin,padding] duration-200 ease-out',
+              isCompactZeroCountHidden
+                ? 'absolute -z-10 opacity-0 max-w-0 max-h-0 pointer-events-none !px-0 !py-0 !mx-0'
+                : 'relative opacity-100 max-w-24 sm:max-w-28',
+            ].join(' ')
+            : '';
 
           const buttonTitle = variant === 'compact'
             ? `${reaction.name}`
             : undefined;
 
           return (
-            <div key={reaction._id} className={styles.itemClassName}>
+            <div
+              key={reaction._id}
+              className={[styles.itemClassName, compactVisibilityClasses].join(' ')}
+              aria-hidden={isCompactZeroCountHidden}
+            >
               <EmojiBtn
                 emoji={reaction.emoji}
                 name={reaction.name}
@@ -194,6 +204,8 @@ const Reactions = ({ postId, variant = 'default' }: ReactionsProps) => {
                 onClick={() => reactToPost(reaction._id)}
                 isPending={pendingIds[reaction._id] ?? false}
                 size={styles.buttonSize}
+                disabled={isCompactZeroCountHidden}
+                tabIndex={isCompactZeroCountHidden ? -1 : undefined}
               />
               {styles.showLabel
                 ? (
