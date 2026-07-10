@@ -27,7 +27,7 @@ const variantStyles = {
     showScrollToTop: true,
   },
   compact: {
-    containerClassName: 'mt-2 ml-[-12px]',
+    containerClassName: '',
     reactionsClassName: 'flex w-full flex-wrap items-center w-auto justify-start gap-1.5',
     itemClassName: 'flex items-center gap-1 rounded-full px-1.5 py-0.5',
     countClassName: 'text-[12px] text-secondary-light/70 dark:text-secondary-dark/70 leading-none tabular-nums',
@@ -91,6 +91,37 @@ const ReactionsSkeleton = ({ variant = 'default' }: Pick<ReactionsProps, 'varian
   );
 };
 
+interface AddReactionButtonProps {
+  isExpanded: boolean;
+  onToggle: () => void;
+  countClassName: string;
+}
+
+const AddReactionButton = ({ isExpanded, onToggle, countClassName }: Readonly<AddReactionButtonProps>) => {
+  const actionLabel = isExpanded ? 'Hide extra reactions' : 'Add reaction';
+
+  return (
+    <button
+      type="button"
+      className="flex items-center gap-1 rounded-full px-1.5 py-0.5 text-accent-light dark:text-accent-dark bg-accent-light/10 dark:bg-accent-dark/10 transition-colors duration-200 ease-out hover:bg-accent-light/20 dark:hover:bg-accent-dark/20"
+      onClick={onToggle}
+      aria-pressed={isExpanded}
+      aria-label={actionLabel}
+      title={actionLabel}
+    >
+      <span className="relative inline-flex items-center justify-center rounded-full px-1 py-0 leading-none">
+        <span className="text-sm sm:text-xl">♡</span>
+        <span className="absolute -right-1 -top-1 inline-flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-accent-light dark:bg-accent-dark px-1 text-[9px] font-semibold leading-none text-white dark:text-main-dark">
+          +
+        </span>
+      </span>
+      <span className={countClassName}>
+        {isExpanded ? 'Hide' : 'Add'}
+      </span>
+    </button>
+  );
+};
+
 const Reactions = ({ postId, variant = 'default' }: ReactionsProps) => {
   const { reactions, pendingIds, reactToPost } = useReactions(postId);
   const [showCompactZeroCountReactions, setShowCompactZeroCountReactions] = useState(false);
@@ -130,26 +161,14 @@ const Reactions = ({ postId, variant = 'default' }: ReactionsProps) => {
 
         {variant === 'compact' && hiddenCompactReactionCount > 0
           ? (
-            <button
-              type="button"
-              className="flex items-center gap-1 rounded-full px-1.5 py-0.5 text-accent-light dark:text-accent-dark bg-accent-light/10 dark:bg-accent-dark/10 transition-colors duration-200 ease-out hover:bg-accent-light/20 dark:hover:bg-accent-dark/20"
-              onClick={() => setShowCompactZeroCountReactions((prev) => !prev)}
-              aria-pressed={showCompactZeroCountReactions}
-              aria-label={showCompactZeroCountReactions ? 'Hide extra reactions' : 'Add reaction'}
-              title={showCompactZeroCountReactions ? 'Hide extra reactions' : 'Add reaction'}
-            >
-              <span className="relative inline-flex items-center justify-center rounded-full px-1 py-0 leading-none">
-                <span className="text-sm sm:text-xl">♡</span>
-                <span className="absolute -right-1 -top-1 inline-flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-accent-light dark:bg-accent-dark px-1 text-[9px] font-semibold leading-none text-white dark:text-main-dark">
-                  +
-                </span>
-              </span>
-              <span className={styles.countClassName}>
-                {showCompactZeroCountReactions ? 'Hide' : 'Add'}
-              </span>
-            </button>
+            <AddReactionButton
+              isExpanded={showCompactZeroCountReactions}
+              onToggle={() => setShowCompactZeroCountReactions((prev) => !prev)}
+              countClassName={styles.countClassName}
+            />
           )
           : null}
+
         {reactions.map((reaction) => {
           if (!reaction.emoji || !reaction.name) {
             return null;
