@@ -222,6 +222,84 @@ describe('useReactions', () => {
     }));
   });
 
+  it('does not allow stale fetch responses to overwrite newer optimistic shared state', async () => {
+    const postId = 'post-stale-guard';
+
+    let resolveFirstFetch: ((value: Response) => void) | undefined;
+    let resolveSecondFetch: ((value: Response) => void) | undefined;
+    let resolveVote: ((value: Response) => void) | undefined;
+
+    const firstFetchPromise = new Promise<Response>((resolve) => {
+      resolveFirstFetch = resolve;
+    });
+    const secondFetchPromise = new Promise<Response>((resolve) => {
+      resolveSecondFetch = resolve;
+    });
+    const votePromise = new Promise<Response>((resolve) => {
+      resolveVote = resolve;
+    });
+
+    const fetchMock = vi.fn()
+      .mockReturnValueOnce(firstFetchPromise)
+      .mockReturnValueOnce(secondFetchPromise)
+      .mockReturnValueOnce(votePromise);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const { result: first } = renderHook(() => useReactions(postId));
+    const { result: second } = renderHook(() => useReactions(postId));
+
+    await act(async () => {
+      resolveSecondFetch?.(makeFetchResponse({
+        reactions: [
+          { _id: 'r1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 2 },
+        ],
+      }) as unknown as Response);
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    await waitFor(() => {
+      expect(first.current.reactions?.[0]?.count).toBe(2);
+      expect(second.current.reactions?.[0]?.count).toBe(2);
+    });
+
+    await act(async () => {
+      void first.current.reactToPost('r1');
+      await Promise.resolve();
+    });
+
+    await waitFor(() => {
+      expect(first.current.reactions?.[0]?.count).toBe(3);
+      expect(second.current.reactions?.[0]?.count).toBe(3);
+    });
+
+    await act(async () => {
+      resolveFirstFetch?.(makeFetchResponse({
+        reactions: [
+          { _id: 'r1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 2 },
+        ],
+      }) as unknown as Response);
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    await waitFor(() => {
+      expect(first.current.reactions?.[0]?.count).toBe(3);
+      expect(second.current.reactions?.[0]?.count).toBe(3);
+    });
+
+    await act(async () => {
+      resolveVote?.(makeFetchResponse({ count: 7 }) as unknown as Response);
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    await waitFor(() => {
+      expect(first.current.reactions?.[0]?.count).toBe(7);
+      expect(second.current.reactions?.[0]?.count).toBe(7);
+    });
+  });
+
   it('clears the cached reactions when the last hook instance unmounts', async () => {
     let resolveSecondFetch: ((value: Response) => void) | undefined;
     const secondFetchPromise = new Promise<Response>((resolve) => {

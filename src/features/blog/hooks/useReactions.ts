@@ -8,6 +8,27 @@ type ReactionsSubscriber = () => void;
 const reactionsStore = new Map<string, ReactionWithEmoji[]>();
 const reactionsSubscribers = new Map<string, Set<ReactionsSubscriber>>();
 const reactionsCleanupTimers = new Map<string, ReturnType<typeof setTimeout>>();
+const reactionsMutationVersions = new Map<string, number>();
+const reactionsFetchRequestIds = new Map<string, number>();
+
+function getMutationVersion(postId: string): number {
+  return reactionsMutationVersions.get(postId) ?? 0;
+}
+
+function markMutation(postId: string): void {
+  const nextVersion = getMutationVersion(postId) + 1;
+  reactionsMutationVersions.set(postId, nextVersion);
+}
+
+function createFetchRequest(postId: string): number {
+  const nextRequestId = (reactionsFetchRequestIds.get(postId) ?? 0) + 1;
+  reactionsFetchRequestIds.set(postId, nextRequestId);
+  return nextRequestId;
+}
+
+function isLatestFetchRequest(postId: string, requestId: number): boolean {
+  return reactionsFetchRequestIds.get(postId) === requestId;
+}
 
 function cancelReactionsCleanup(postId: string) {
   const cleanupTimer = reactionsCleanupTimers.get(postId);
@@ -32,6 +53,11 @@ function broadcastReactions(postId: string, reactions: ReactionWithEmoji[]) {
   });
 }
 
+function broadcastReactionsMutation(postId: string, reactions: ReactionWithEmoji[]) {
+  markMutation(postId);
+  broadcastReactions(postId, reactions);
+}
+
 function subscribeToReactions(postId: string, subscriber: ReactionsSubscriber) {
   cancelReactionsCleanup(postId);
 
@@ -53,6 +79,8 @@ function subscribeToReactions(postId: string, subscriber: ReactionsSubscriber) {
       const cleanupTimer = setTimeout(() => {
         if (!reactionsSubscribers.has(postId)) {
           reactionsStore.delete(postId);
+          reactionsMutationVersions.delete(postId);
+          reactionsFetchRequestIds.delete(postId);
         }
 
         reactionsCleanupTimers.delete(postId);
@@ -73,6 +101,8 @@ export function useReactions(postId: string) {
 
   useEffect(() => {
     let isActive = true;
+    const requestId = createFetchRequest(postId);
+    const mutationVersionAtRequest = getMutationVersion(postId);
 
     const loadReactions = async () => {
       try {
@@ -85,11 +115,19 @@ export function useReactions(postId: string) {
         }
 
         const payload = await response.json() as { reactions?: ReactionWithEmoji[] };
-        if (isActive) {
+        const canApplyFetchedState = isActive
+          && isLatestFetchRequest(postId, requestId)
+          && getMutationVersion(postId) === mutationVersionAtRequest;
+
+        if (canApplyFetchedState) {
           broadcastReactions(postId, payload.reactions ?? []);
         }
       } catch {
-        if (isActive) {
+        const canApplyFallbackState = isActive
+          && isLatestFetchRequest(postId, requestId)
+          && getMutationVersion(postId) === mutationVersionAtRequest;
+
+        if (canApplyFallbackState) {
           if (!reactionsStore.has(postId)) {
             broadcastReactions(postId, []);
           }
@@ -121,7 +159,7 @@ export function useReactions(postId: string) {
     ));
 
     if (optimisticReactions) {
-      broadcastReactions(postId, optimisticReactions);
+      broadcastReactionsMutation(postId, optimisticReactions);
     }
 
     try {
@@ -150,7 +188,7 @@ export function useReactions(postId: string) {
         ));
 
         if (syncedReactions) {
-          broadcastReactions(postId, syncedReactions);
+          broadcastReactionsMutation(postId, syncedReactions);
         }
       }
     } catch {
@@ -161,7 +199,7 @@ export function useReactions(postId: string) {
       ));
 
       if (rolledBackReactions) {
-        broadcastReactions(postId, rolledBackReactions);
+        broadcastReactionsMutation(postId, rolledBackReactions);
       }
     } finally {
       setPendingIds((prev) => ({ ...prev, [reactionId]: false }));
