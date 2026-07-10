@@ -121,6 +121,10 @@ const Reactions = ({ postId, variant = 'default' }: ReactionsProps) => {
             return null;
           }
 
+          if (variant === 'compact' && reaction.count === 0) {
+            return null;
+          }
+
           const count = reaction.count ?? 0;
 
           return (
