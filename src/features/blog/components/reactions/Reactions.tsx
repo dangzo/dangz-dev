@@ -126,12 +126,16 @@ const Reactions = ({ postId, variant = 'default' }: ReactionsProps) => {
           }
 
           const count = reaction.count ?? 0;
+          const buttonTitle = variant === 'compact'
+            ? `${reaction.name}`
+            : undefined;
 
           return (
             <div key={reaction._id} className={styles.itemClassName}>
               <EmojiBtn
                 emoji={reaction.emoji}
                 name={reaction.name}
+                title={buttonTitle}
                 data-umami-event={`Reaction ${reaction.name} Click`}
                 onClick={() => reactToPost(reaction._id)}
                 isPending={pendingIds[reaction._id] ?? false}
