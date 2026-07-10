@@ -23,9 +23,7 @@ export async function generateStaticParams() {
   return posts.map(({ slug }) => ({ slug: slug.current }));
 }
 
-export default async function PostPage({
-  params,
-}: PostPageProps) {
+export default async function PostPage({ params, }: Readonly<PostPageProps>) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
 
@@ -36,7 +34,7 @@ export default async function PostPage({
   const lqip = post.image?.asset?.metadata?.lqip;
 
   return (
-    <article className="max-w-3xl mx-auto px-3 py-4 sm:px-4 sm:py-6 md:py-8">
+    <article className="mx-auto pr-3 py-4 sm:pr-4 sm:py-6 md:py-8">
       {post.image
         ? (
           <div className="mb-5 sm:mb-6 md:mb-8 rounded-lg overflow-hidden">

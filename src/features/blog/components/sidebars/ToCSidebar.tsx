@@ -8,7 +8,7 @@ interface ToCSidebarProps {
   post: PostWithTags;
 }
 
-export default function ToCSidebar({ post }: ToCSidebarProps) {
+export default function ToCSidebar({ post }: Readonly<ToCSidebarProps>) {
   const { extractTocFromBody } = usePostInsights();
   const toc = extractTocFromBody(post.body);
 
