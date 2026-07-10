@@ -8,7 +8,7 @@ interface TagsSidebarProps {
   tagCount?: (slug?: string) => number;
 }
 
-async function TagsSidebar({ activeSlug, tags, tagCount }: TagsSidebarProps) {
+async function TagsSidebar({ activeSlug, tags, tagCount }: Readonly<TagsSidebarProps>) {
   const tagsWithPostCount = tags?.map(tag => ({
     ...tag,
     postCount: tagCount?.(tag.slug?.current) ?? 0,

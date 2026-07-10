@@ -25,14 +25,14 @@ export default function SidebarMobileToggle({
         onClick={() => setIsOpen(prev => !prev)}
         aria-expanded={isOpen}
         aria-controls={contentId}
-        className="mb-4 inline-flex items-center gap-2 rounded border border-border-light px-3 py-1.5 text-sm font-semibold text-main-light dark:border-border-dark dark:text-main-dark sm:hidden"
+        className="mb-4 inline-flex items-center gap-2 rounded border border-border-light px-3 py-1.5 text-sm font-semibold text-main-light dark:border-border-dark dark:text-main-dark md:hidden"
       >
         {isOpen ? hideLabel : showLabel}
       </button>
 
       <div
         id={contentId}
-        className={clsx('sm:block', {
+        className={clsx('md:block', {
           block: isOpen,
           hidden: !isOpen,
         })}
