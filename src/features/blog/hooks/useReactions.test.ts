@@ -116,4 +116,58 @@ describe('useReactions', () => {
     expect(result.current.reactions?.[0]?.count).toBe(3);
     expect(result.current.pendingIds.r1).toBe(false);
   });
+
+  it('keeps multiple hook instances in sync for the same post', async () => {
+    let resolveVote: ((value: Response) => void) | undefined;
+    const votePromise = new Promise<Response>((resolve) => {
+      resolveVote = resolve;
+    });
+
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(
+        makeFetchResponse({
+          reactions: [
+            { _id: 'r1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 2 },
+          ],
+        }) as unknown as Response,
+      )
+      .mockResolvedValueOnce(
+        makeFetchResponse({
+          reactions: [
+            { _id: 'r1', name: 'Love', emoji: '❤️', sortOrder: 0, count: 2 },
+          ],
+        }) as unknown as Response,
+      )
+      .mockReturnValueOnce(votePromise);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const { result: first } = renderHook(() => useReactions('post-1'));
+    const { result: second } = renderHook(() => useReactions('post-1'));
+
+    await waitFor(() => {
+      expect(first.current.reactions?.[0]?.count).toBe(2);
+      expect(second.current.reactions?.[0]?.count).toBe(2);
+    });
+
+    await act(async () => {
+      void first.current.reactToPost('r1');
+      await Promise.resolve();
+    });
+
+    await waitFor(() => {
+      expect(first.current.reactions?.[0]?.count).toBe(3);
+      expect(second.current.reactions?.[0]?.count).toBe(3);
+    });
+
+    await act(async () => {
+      resolveVote?.(makeFetchResponse({ count: 7 }) as unknown as Response);
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    await waitFor(() => {
+      expect(first.current.reactions?.[0]?.count).toBe(7);
+      expect(second.current.reactions?.[0]?.count).toBe(7);
+    });
+  });
 });
