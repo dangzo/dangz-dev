@@ -133,6 +133,7 @@ export type Post = {
         media?: unknown
         hotspot?: SanityImageHotspot
         crop?: SanityImageCrop
+        caption?: string
         alt?: string
         height?: number
         width?: number
