@@ -25,7 +25,7 @@ export default function TypeImage({ value }: Readonly<TypeImageProps>) {
         className="mx-auto rounded-md object-cover"
       />
 
-      <figcaption className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+      <figcaption className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400 italic font-semibold">
         {value.caption}
       </figcaption>
     </figure>
