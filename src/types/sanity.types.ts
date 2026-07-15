@@ -12,7 +12,7 @@
  * ---------------------------------------------------------------------------------
  */
 
-export declare const internalGroqTypeReferenceTo: unique symbol;
+export declare const internalGroqTypeReferenceTo: unique symbol
 
 // Source: schema.json
 export type PostReference = {
@@ -133,6 +133,7 @@ export type Post = {
         media?: unknown
         hotspot?: SanityImageHotspot
         crop?: SanityImageCrop
+        caption?: string
         alt?: string
         height?: number
         width?: number
