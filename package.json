@@ -62,7 +62,7 @@
     "react-loading-skeleton": "^3.5.0",
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1",
-    "sanity": "^6.1.0",
+    "sanity": "^6.5.0",
     "sanity-plugin-graphiql": "^1.7.1",
     "shiki": "^4.2.0"
   },
