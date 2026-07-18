@@ -68,7 +68,7 @@ export const PostCard = ({ post, preload }: PostCardProps) => {
         className="object-cover rounded-md block md:ml-4 md:w-38 mb-8 md:mb-0 grow w-full h-auto"
         width={930}
         height={665}
-        sizes="(min-width: 640px) 152px, 100vw"
+        sizes="(min-width: 768px) 152px, 100vw"
         preload={preload}
         loading={preload ? undefined : 'lazy'}
         blurDataURL={post.image?.asset?.metadata?.lqip}

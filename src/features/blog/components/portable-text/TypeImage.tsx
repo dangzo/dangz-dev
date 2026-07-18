@@ -18,8 +18,15 @@ export default function TypeImage({ value }: Readonly<TypeImageProps>) {
   }
 
   const hasCaption = typeof value.caption === 'string' && value.caption.trim().length > 0;
-  const width = Math.min(value.width || MAX_IMAGE_WIDTH, MAX_IMAGE_WIDTH);
-  const height = Math.min(value.height || MAX_IMAGE_HEIGHT, MAX_IMAGE_HEIGHT);
+  
+  // Scale both dimensions by the same factor to preserve aspect ratio
+  const w = value.width || MAX_IMAGE_WIDTH;
+  const h = value.height || MAX_IMAGE_HEIGHT;
+  const widthScale = Math.min(1, MAX_IMAGE_WIDTH / w);
+  const heightScale = Math.min(1, MAX_IMAGE_HEIGHT / h);
+  const scale = Math.min(widthScale, heightScale);
+  const width = Math.round(w * scale);
+  const height = Math.round(h * scale);
 
   return (
     <figure className="my-6">
