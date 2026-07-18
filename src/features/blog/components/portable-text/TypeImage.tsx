@@ -18,7 +18,7 @@ export default function TypeImage({ value }: Readonly<TypeImageProps>) {
   }
 
   const hasCaption = typeof value.caption === 'string' && value.caption.trim().length > 0;
-  
+
   // Scale both dimensions by the same factor to preserve aspect ratio
   const w = value.width || MAX_IMAGE_WIDTH;
   const h = value.height || MAX_IMAGE_HEIGHT;

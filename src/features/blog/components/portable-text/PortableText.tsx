@@ -16,7 +16,7 @@ import {
   MarkLink,
   TypeImage,
   TypeCode,
-  TypeTable,  
+  TypeTable,
 } from '@/features/blog/components/portable-text';
 
 interface PortableTextProps {
