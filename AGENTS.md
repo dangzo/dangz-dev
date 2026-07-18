@@ -6,7 +6,8 @@
 - Prefer clean and readable code over clever code
 - No single-line returns, always use braces
 - Prefer separated blocks of code by empty lines
-- Prefer TailwindCSS over CSS modules
+- Prefer TailwindCSS over CSS modules and inline styles.
+- Comment your code when it is not obvious what it does. If you find yourself writing a comment to explain what the code does, consider refactoring the code to make it more readable instead.
 
 ## Components
 - Prefer functional components over class components
