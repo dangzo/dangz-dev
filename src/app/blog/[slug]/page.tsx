@@ -42,9 +42,9 @@ export default async function PostPage({ params, }: Readonly<PostPageProps>) {
               source={post.image}
               alt={post.imageAltText}
               className="w-full h-auto object-cover"
-              width={700}
-              height={400}
-              sizes="(max-width: 640px) calc(100vw - 1.5rem), (max-width: 768px) calc(100vw - 2rem), 700px"
+              width={930}
+              height={665}
+              sizes="(max-width: 640px) calc(100vw - 1.5rem), (max-width: 768px) calc(100vw - 2rem), 930px"
               fetchPriority="high"
               quality={72}
               blurDataURL={lqip}
