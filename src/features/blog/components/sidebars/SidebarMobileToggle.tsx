@@ -9,6 +9,7 @@ interface SidebarMobileToggleProps {
   showLabel?: string;
   hideLabel?: string;
   contentId?: string;
+  defaultOpen?: boolean;
 }
 
 interface SidebarMobileContextValue {
@@ -47,8 +48,9 @@ export default function SidebarMobileToggle({
   showLabel = 'Show content',
   hideLabel = 'Hide content',
   contentId = 'mobile-toggle-content',
+  defaultOpen = false,
 }: SidebarMobileToggleProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(defaultOpen);
 
   const close = () => {
     setIsOpen(false);
