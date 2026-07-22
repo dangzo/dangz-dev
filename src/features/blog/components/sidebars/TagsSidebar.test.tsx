@@ -1,20 +1,35 @@
 import { render, screen } from '@testing-library/react';
 
+import type { Tag } from '@/types/sanity.types';
 import TagsSidebar from './TagsSidebar';
 
 vi.mock('next/link', () => import('@/tests/unit/mocks/nextLink'));
+
+const reactTag: Tag = {
+  _id: 'tag-1',
+  _type: 'tag',
+  _createdAt: '',
+  _updatedAt: '',
+  _rev: '',
+  name: 'React',
+  slug: { _type: 'slug', current: 'react' },
+};
+
+const nextTag: Tag = {
+  _id: 'tag-2',
+  _type: 'tag',
+  _createdAt: '',
+  _updatedAt: '',
+  _rev: '',
+  name: 'Next',
+  slug: { _type: 'slug', current: 'next' },
+};
 
 describe('TagsSidebar', () => {
   it('renders the tags content inside a styled mobile toggle card with a header', () => {
     render(
       <TagsSidebar
-        tags={[
-          {
-            _id: 'tag-1',
-            name: 'React',
-            slug: { _key: 'react', current: 'react' },
-          },
-        ] as any}
+        tags={[reactTag]}
         tagCount={() => 1}
       />,
     );
@@ -33,18 +48,7 @@ describe('TagsSidebar', () => {
     render(
       <TagsSidebar
         activeSlug="react"
-        tags={[
-          {
-            _id: 'tag-1',
-            name: 'React',
-            slug: { _key: 'react', current: 'react' },
-          },
-          {
-            _id: 'tag-2',
-            name: 'Next',
-            slug: { _key: 'next', current: 'next' },
-          },
-        ] as any}
+        tags={[reactTag, nextTag]}
         tagCount={() => 1}
       />,
     );

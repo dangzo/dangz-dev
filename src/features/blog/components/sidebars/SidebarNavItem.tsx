@@ -26,7 +26,7 @@ const activeAlwaysClasses =
 const activeDesktopClasses =
   'border-transparent text-secondary-light dark:text-secondary-dark md:border-primary-500 md:bg-primary-50/50 md:font-semibold md:text-primary-600 md:dark:bg-primary-950/30 md:dark:text-primary-400';
 
-export function sidebarNavItemClasses({
+function sidebarNavItemClasses({
   isActive = false,
   activeMode = 'always',
   className,

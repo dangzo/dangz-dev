@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import type { TocItem } from '@/features/blog/hooks/usePostInsights';
-import { useSidebarMobileClose } from './SidebarMobileToggle';
+import { useSidebarMobileClose } from './SidebarMobileContext';
 import SidebarNav from './SidebarNav';
 import SidebarNavItem from './SidebarNavItem';
 

@@ -8,6 +8,8 @@
 - Prefer separated blocks of code by empty lines
 - Prefer TailwindCSS over CSS modules and inline styles.
 - Comment your code when it is not obvious what it does. If you find yourself writing a comment to explain what the code does, consider refactoring the code to make it more readable instead.
+- Typing: Prefer `Readonly<T>` over `T` when possible.
+- Typing: avoid using `any` type. If you need to use `any`, explain why you need to use it and how you are using it.
 
 ## Components
 - Prefer functional components over class components

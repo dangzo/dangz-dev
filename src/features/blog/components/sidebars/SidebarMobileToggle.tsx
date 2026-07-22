@@ -1,7 +1,8 @@
 'use client';
 
-import { createContext, useContext, useState } from 'react';
+import { useState } from 'react';
 import clsx from 'clsx';
+import { SidebarMobileContext } from './SidebarMobileContext';
 
 interface SidebarMobileToggleProps {
   children: React.ReactNode;
@@ -12,18 +13,7 @@ interface SidebarMobileToggleProps {
   defaultOpen?: boolean;
 }
 
-interface SidebarMobileContextValue {
-  close: () => void;
-  isOpen: boolean;
-}
-
-const SidebarMobileContext = createContext<SidebarMobileContextValue | null>(null);
-
-export function useSidebarMobileClose() {
-  return useContext(SidebarMobileContext)?.close;
-}
-
-function ChevronIcon({ isOpen }: { isOpen: boolean }) {
+function ChevronIcon({ isOpen }: Readonly<{ isOpen: boolean }>) {
   return (
     <svg
       aria-hidden="true"
@@ -49,7 +39,7 @@ export default function SidebarMobileToggle({
   hideLabel = 'Hide content',
   contentId = 'mobile-toggle-content',
   defaultOpen = false,
-}: SidebarMobileToggleProps) {
+}: Readonly<SidebarMobileToggleProps>) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   const close = () => {
