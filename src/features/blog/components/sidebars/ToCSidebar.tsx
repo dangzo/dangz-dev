@@ -29,12 +29,12 @@ export default function ToCSidebar({ post }: Readonly<ToCSidebarProps>) {
       )}
     >
       <SidebarMobileToggle
-        showLabel="Show Table of Contents"
-        hideLabel="Hide Table of Contents"
+        showLabel="Show Table of Content"
+        hideLabel="Hide Table of Content"
         contentId="post-toc-content"
         header={(
           <SidebarHeader
-            title="On this page"
+            title="Table of Content"
             count={toc.length}
             singular="section"
             plural="sections"

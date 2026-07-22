@@ -23,12 +23,13 @@ export default function TagsSidebar({ activeSlug, tags, tagCount }: Readonly<Tag
     ?? [];
 
   const hasActiveTag = Boolean(activeSlug);
+  const totalPostCount = tagCount?.() ?? 0;
 
   return (
     <SidebarPanel>
       <SidebarMobileToggle
-        showLabel="Show All Tags"
-        hideLabel="Hide All Tags"
+        showLabel="Show all tags"
+        hideLabel="Hide all tags"
         contentId="tags-sidebar-content"
         defaultOpen={hasActiveTag}
         header={(
@@ -47,7 +48,7 @@ export default function TagsSidebar({ activeSlug, tags, tagCount }: Readonly<Tag
             activeMode="always"
             className="font-semibold uppercase tracking-wide"
           >
-            All posts
+            All posts ({totalPostCount})
           </SidebarNavItem>
 
           {sortedTagsWithCount.map(tag => (

@@ -23,6 +23,8 @@ describe('TagsSidebar', () => {
     const card = button.closest('section');
 
     expect(screen.getAllByRole('heading', { name: 'All tags' }).length).toBeGreaterThan(0);
+    expect(button).toHaveTextContent('Show all tags');
+    expect(screen.getByText('All posts (1)')).toBeInTheDocument();
     expect(card?.className).toContain('rounded-xl');
     expect(button.className).toContain('rounded-lg');
   });

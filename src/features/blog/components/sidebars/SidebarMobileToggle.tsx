@@ -74,28 +74,12 @@ export default function SidebarMobileToggle({
           onClick={toggle}
           aria-expanded={isOpen}
           aria-controls={contentId}
-          className={clsx(
-            'flex w-full items-center gap-3 text-left transition-colors md:hidden',
-            header
-              ? 'rounded-lg px-1 py-2 active:bg-background-main-light/80 dark:active:bg-background-main-dark/50'
-              : 'mb-4 rounded-lg border border-border-light bg-background-main-light px-4 py-3 dark:border-border-dark dark:bg-background-main-dark',
-          )}
+          className="mb-0 flex w-full items-center gap-3 rounded-lg px-1 py-2 text-left transition-colors active:bg-background-main-light/80 md:hidden dark:active:bg-background-main-dark/50"
         >
-          {header
-            ? (
-              <>
-                <div className="min-w-0 flex-1">{header}</div>
-                <ChevronIcon isOpen={isOpen} />
-              </>
-            )
-            : (
-              <>
-                <span className="flex-1 text-sm font-semibold text-main-light dark:text-main-dark">
-                  {isOpen ? hideLabel : showLabel}
-                </span>
-                <ChevronIcon isOpen={isOpen} />
-              </>
-            )}
+          <span className="min-w-0 flex-1 text-sm font-semibold text-main-light dark:text-main-dark">
+            {isOpen ? hideLabel : showLabel}
+          </span>
+          <ChevronIcon isOpen={isOpen} />
         </button>
 
         <div

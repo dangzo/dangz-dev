@@ -29,6 +29,10 @@ export async function getTagsWithCount() {
   const { allTag: tags, allPost: postTags } = data ?? {};
 
   const tagCount = (slug?: string) => {
+    if (!slug) {
+      return postTags?.length ?? 0;
+    }
+
     return postTags?.filter(pt => pt?.tags?.some(t => t.slug?.current === slug)).length ?? 0;
   };
 
