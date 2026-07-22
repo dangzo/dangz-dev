@@ -8,11 +8,11 @@ interface ToCSidebarProps {
   post: PostWithTags;
 }
 
-function ToCHeader({ sectionCount }: { sectionCount: number }) {
+function ToCHeader({ sectionCount }: Readonly<{ sectionCount: number }>) {
   return (
     <>
       <Heading as="h3" className="mb-1! text-lg font-semibold">
-        On this page
+        Table of Content
       </Heading>
 
       {sectionCount > 0 && (
