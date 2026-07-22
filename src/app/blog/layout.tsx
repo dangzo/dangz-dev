@@ -9,13 +9,13 @@ export default async function BlogLayout({ children, heading, sidebar }: Readonl
     <article>
       {heading}
 
-      <div className="flex flex-col-reverse md:flex-row mt-6 mb-0 md:mb-8 border-t border-border-light dark:border-border-dark">
+      <div className="mt-6 mb-0 flex flex-col border-t border-border-light md:mb-8 md:flex-row dark:border-border-dark">
+        <aside className="w-full min-w-45 border-border-light/70 px-3 pt-6 pb-0 md:mb-8 md:mt-0 md:min-h-72 md:w-75 md:shrink-0 md:border-t-0 md:px-2 md:py-4 md:pt-8">
+          {sidebar}
+        </aside>
         <section className="min-w-0 flex-1 p-0 md:p-4">
           {children}
         </section>
-        <aside className="border-border-light/70 pt-6 pb-0 px-2 w-full md:mt-0 md:border-t-0 md:pt-8 md:py-4 md:mb-8 md:min-h-72 md:shrink-0 min-w-45 md:w-75">
-          {sidebar}
-        </aside>
       </div>
     </article>
   );

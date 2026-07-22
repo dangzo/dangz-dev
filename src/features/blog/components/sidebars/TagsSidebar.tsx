@@ -1,6 +1,9 @@
-import { Link, Heading } from '@/components/ui';
 import type { Tag } from '@/types/sanity.types';
+import SidebarHeader from './SidebarHeader';
 import SidebarMobileToggle from './SidebarMobileToggle';
+import SidebarNav from './SidebarNav';
+import SidebarNavItem from './SidebarNavItem';
+import SidebarPanel from './SidebarPanel';
 
 interface TagsSidebarProps {
   activeSlug?: string;
@@ -8,7 +11,7 @@ interface TagsSidebarProps {
   tagCount?: (slug?: string) => number;
 }
 
-async function TagsSidebar({ activeSlug, tags, tagCount }: Readonly<TagsSidebarProps>) {
+export default function TagsSidebar({ activeSlug, tags, tagCount }: Readonly<TagsSidebarProps>) {
   const tagsWithPostCount = tags?.map(tag => ({
     ...tag,
     postCount: tagCount?.(tag.slug?.current) ?? 0,
@@ -16,34 +19,51 @@ async function TagsSidebar({ activeSlug, tags, tagCount }: Readonly<TagsSidebarP
 
   const sortedTagsWithCount = tagsWithPostCount
     ?.filter(tag => tag.postCount > 0)
-    ?.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
+    ?.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''))
+    ?? [];
+
+  const hasActiveTag = Boolean(activeSlug);
+  const totalPostCount = tagCount?.() ?? 0;
 
   return (
-    <SidebarMobileToggle
-      showLabel="Show All tags"
-      hideLabel="Hide All tags"
-      contentId="tags-sidebar-content"
-    >
-      <Link href="/blog" isActive={activeSlug === undefined}>
-        <Heading as="h3" className="mb-4 text-2xl font-semibold inline-block">
-          All tags
-        </Heading>
-      </Link>
+    <SidebarPanel>
+      <SidebarMobileToggle
+        showLabel="Show all tags"
+        hideLabel="Hide all tags"
+        contentId="tags-sidebar-content"
+        defaultOpen={hasActiveTag}
+        header={(
+          <SidebarHeader
+            title="All tags"
+            count={sortedTagsWithCount.length}
+            singular="tag"
+            plural="tags"
+          />
+        )}
+      >
+        <SidebarNav label="Tags">
+          <SidebarNavItem
+            href="/blog"
+            isActive={!hasActiveTag}
+            activeMode="always"
+            className="font-semibold uppercase tracking-wide"
+          >
+            All posts ({totalPostCount})
+          </SidebarNavItem>
 
-      <ul className="pl-4 list-none space-y-2 sm:space-y-3 text-secondary-light dark:text-secondary-dark">
-        {sortedTagsWithCount?.map(tag => (
-          <li key={tag._id}>
-            <Link
-              className="font-semibold tracking-wide uppercase text-sm!"
-              type="primary"
+          {sortedTagsWithCount.map(tag => (
+            <SidebarNavItem
+              key={tag._id}
+              href={`/blog/tags/${tag.slug?.current}`}
               isActive={activeSlug === tag.slug?.current}
-              href={`/blog/tags/${tag.slug?.current}`}>{tag.name?.toUpperCase()} ({tag.postCount})
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </SidebarMobileToggle>
+              activeMode="always"
+              className="font-semibold uppercase tracking-wide"
+            >
+              {tag.name?.toUpperCase()} ({tag.postCount})
+            </SidebarNavItem>
+          ))}
+        </SidebarNav>
+      </SidebarMobileToggle>
+    </SidebarPanel>
   );
-};
-
-export default TagsSidebar;
+}
