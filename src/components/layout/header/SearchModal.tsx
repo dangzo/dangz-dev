@@ -8,6 +8,7 @@ import styles from './SearchModal.module.css';
 import HighlightText from './HighlightText';
 import { type SearchHit } from '@/features/blog/hooks/useBlogSearch';
 import { useSearchKeyboardNavigation } from '@/hooks/useSearchKeyboardNavigation';
+import { getSearchShortcutLabel } from './getSearchShortcutLabel';
 
 export type { SearchHit };
 
@@ -74,13 +75,21 @@ const SearchModal = ({
               className="w-full bg-transparent text-base text-main-light dark:text-main-dark outline-none placeholder:text-main-light/60 dark:placeholder:text-main-dark/50"
             />
 
-            <button
-              type="button"
-              onClick={onClose}
-              className="text-sm font-medium text-main-light dark:text-main-dark hover:text-primary-500 dark:hover:text-primary-400"
-            >
-              Esc
-            </button>
+            <div className="flex shrink-0 items-center gap-2">
+              <span
+                aria-hidden="true"
+                className="hidden lg:inline text-sm font-medium text-main-light/70 dark:text-main-dark/60"
+              >
+                {getSearchShortcutLabel()}
+              </span>
+              <button
+                type="button"
+                onClick={onClose}
+                className="hidden lg:inline text-sm font-medium text-main-light dark:text-main-dark hover:text-primary-500 dark:hover:text-primary-400"
+              >
+                Esc
+              </button>
+            </div>
           </div>
         </div>
 
