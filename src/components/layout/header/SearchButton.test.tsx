@@ -42,11 +42,13 @@ describe('SearchButton', () => {
     expect(button).toHaveAttribute('aria-keyshortcuts', 'Control+K Meta+K');
   });
 
-  it('shows a keyboard shortcut hint under the search button', async () => {
+  it('shows a desktop-only keyboard shortcut hint under the search button', async () => {
     render(<SearchButton />);
 
     await waitFor(() => {
-      expect(screen.getByText(/^(Ctrl\+K|⌘K)$/)).toBeInTheDocument();
+      const hint = screen.getByText(/^(Ctrl\+K|⌘K)$/);
+      expect(hint).toBeInTheDocument();
+      expect(hint).toHaveClass('hidden', 'lg:inline');
     });
   });
 
