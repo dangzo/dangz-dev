@@ -87,7 +87,9 @@ describe('SearchModal', () => {
         onClose={onClose}
       />,
     );
-    await user.click(screen.getByRole('button', { name: 'Esc' }));
+    const escControl = screen.getByRole('button', { name: 'Esc', hidden: true });
+    expect(escControl).toHaveClass('hidden', 'lg:inline');
+    await user.click(escControl);
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 

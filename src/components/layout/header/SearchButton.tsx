@@ -90,7 +90,7 @@ const SearchButton = () => {
         </button>
         <span
           aria-hidden="true"
-          className="text-[10px] leading-none font-medium text-main-light/60 dark:text-main-dark/50"
+          className="hidden lg:inline text-[10px] leading-none font-medium text-main-light/60 dark:text-main-dark/50"
         >
           {shortcutLabel}
         </span>
