@@ -6,10 +6,15 @@ import { useBlogSearch } from '@/features/blog/hooks/useBlogSearch';
 
 type SearchModalBridgeProps = {
   openRequest: number;
+  closeRequest: number;
   onOpenChange: (isOpen: boolean) => void;
 };
 
-const SearchModalBridge = ({ openRequest, onOpenChange }: SearchModalBridgeProps) => {
+const SearchModalBridge = ({
+  openRequest,
+  closeRequest,
+  onOpenChange,
+}: SearchModalBridgeProps) => {
   const {
     isOpen,
     query,
@@ -21,6 +26,7 @@ const SearchModalBridge = ({ openRequest, onOpenChange }: SearchModalBridgeProps
     setQuery,
   } = useBlogSearch();
   const lastHandledOpenRequest = useRef(0);
+  const lastHandledCloseRequest = useRef(0);
 
   useEffect(() => {
     if (openRequest > lastHandledOpenRequest.current) {
@@ -28,6 +34,13 @@ const SearchModalBridge = ({ openRequest, onOpenChange }: SearchModalBridgeProps
       openSearch();
     }
   }, [openRequest, openSearch]);
+
+  useEffect(() => {
+    if (closeRequest > lastHandledCloseRequest.current) {
+      lastHandledCloseRequest.current = closeRequest;
+      closeSearch();
+    }
+  }, [closeRequest, closeSearch]);
 
   useEffect(() => {
     onOpenChange(isOpen);

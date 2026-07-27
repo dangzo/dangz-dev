@@ -80,4 +80,48 @@ describe('SearchButton', () => {
     });
     expect(button).toHaveAttribute('aria-expanded', 'true');
   });
+
+  it('opens the search dialog with Ctrl+K', async () => {
+    const user = userEvent.setup();
+    render(<SearchButton />);
+    const button = screen.getByRole('button', { name: 'Search' });
+
+    await user.keyboard('{Control>}k{/Control}');
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog', { name: 'Search posts' })).toBeInTheDocument();
+    });
+    expect(button).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('opens the search dialog with Meta+K', async () => {
+    const user = userEvent.setup();
+    render(<SearchButton />);
+    const button = screen.getByRole('button', { name: 'Search' });
+
+    await user.keyboard('{Meta>}k{/Meta}');
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog', { name: 'Search posts' })).toBeInTheDocument();
+    });
+    expect(button).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('toggles the search dialog closed with a second Ctrl+K', async () => {
+    const user = userEvent.setup();
+    render(<SearchButton />);
+    const button = screen.getByRole('button', { name: 'Search' });
+
+    await user.keyboard('{Control>}k{/Control}');
+    await waitFor(() => {
+      expect(screen.getByRole('dialog', { name: 'Search posts' })).toBeInTheDocument();
+      expect(button).toHaveAttribute('aria-expanded', 'true');
+    });
+
+    await user.keyboard('{Control>}k{/Control}');
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog', { name: 'Search posts' })).not.toBeInTheDocument();
+    });
+    expect(button).toHaveAttribute('aria-expanded', 'false');
+  });
 });
