@@ -1,19 +1,29 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import { getSearchShortcutLabel } from './getSearchShortcutLabel';
 
 const SearchModalBridge = dynamic(() => import('./SearchModalBridge'), {
   ssr: false,
 });
 
+const subscribeToNothing = () => {
+  return () => {
+    // Shortcut label is derived from the platform and does not change at runtime.
+  };
+};
+
 const SearchButton = () => {
   const [isSearchEnabled, setIsSearchEnabled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [openRequest, setOpenRequest] = useState(0);
   const [closeRequest, setCloseRequest] = useState(0);
-  const [shortcutLabel, setShortcutLabel] = useState('Ctrl+K');
+  const shortcutLabel = useSyncExternalStore(
+    subscribeToNothing,
+    getSearchShortcutLabel,
+    () => 'Ctrl+K',
+  );
 
   const openSearch = () => {
     if (!isSearchEnabled) {
@@ -22,10 +32,6 @@ const SearchButton = () => {
 
     setOpenRequest((current) => current + 1);
   };
-
-  useEffect(() => {
-    setShortcutLabel(getSearchShortcutLabel());
-  }, []);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
