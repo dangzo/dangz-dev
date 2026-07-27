@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const SearchModalBridge = dynamic(() => import('./SearchModalBridge'), {
   ssr: false,
@@ -11,6 +11,7 @@ const SearchButton = () => {
   const [isSearchEnabled, setIsSearchEnabled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [openRequest, setOpenRequest] = useState(0);
+  const [closeRequest, setCloseRequest] = useState(0);
 
   const openSearch = () => {
     if (!isSearchEnabled) {
@@ -20,6 +21,33 @@ const SearchButton = () => {
     setOpenRequest((current) => current + 1);
   };
 
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key.toLowerCase() !== 'k') {
+        return;
+      }
+
+      if (!event.metaKey && !event.ctrlKey) {
+        return;
+      }
+
+      event.preventDefault();
+
+      if (isOpen) {
+        setCloseRequest((current) => current + 1);
+        return;
+      }
+
+      setIsSearchEnabled(true);
+      setOpenRequest((current) => current + 1);
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [isOpen]);
   return (
     <>
       <button
@@ -47,7 +75,13 @@ const SearchButton = () => {
       </button>
 
       {isSearchEnabled
-        ? <SearchModalBridge openRequest={openRequest} onOpenChange={setIsOpen} />
+        ? (
+          <SearchModalBridge
+            openRequest={openRequest}
+            closeRequest={closeRequest}
+            onOpenChange={setIsOpen}
+          />
+        )
         : null}
     </>
   );
