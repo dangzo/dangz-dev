@@ -39,6 +39,15 @@ describe('SearchButton', () => {
     const button = screen.getByRole('button', { name: 'Search' });
     expect(button).toHaveAttribute('aria-haspopup', 'dialog');
     expect(button).toHaveAttribute('aria-expanded', 'false');
+    expect(button).toHaveAttribute('aria-keyshortcuts', 'Control+K Meta+K');
+  });
+
+  it('shows a keyboard shortcut hint under the search button', async () => {
+    render(<SearchButton />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/^(Ctrl\+K|⌘K)$/)).toBeInTheDocument();
+    });
   });
 
   it('opens the search dialog and sets aria-expanded after the bridge handles the request', async () => {

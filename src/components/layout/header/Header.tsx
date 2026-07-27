@@ -41,7 +41,7 @@ const Navigation = ({ onNavigate, className = '' }: NavigationProps) => {
 const ActionBtns = () => {
   return (
     <div
-      className="flex flex-row gap-2 md:gap-4 border border-dashed px-2 py-1.5 md:px-4 md:py-2 rounded-md dark:border-border-dark border-border-light"
+      className="flex flex-row items-start gap-2 md:gap-4 border border-dashed px-2 py-1.5 md:px-4 md:py-2 rounded-md dark:border-border-dark border-border-light"
     >
       <SearchButton />
       <ThemeSwitch />
