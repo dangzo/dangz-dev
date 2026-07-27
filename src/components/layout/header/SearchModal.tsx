@@ -8,19 +8,9 @@ import styles from './SearchModal.module.css';
 import HighlightText from './HighlightText';
 import { type SearchHit } from '@/features/blog/hooks/useBlogSearch';
 import { useSearchKeyboardNavigation } from '@/hooks/useSearchKeyboardNavigation';
+import { getSearchShortcutLabel } from './getSearchShortcutLabel';
 
 export type { SearchHit };
-
-const getSearchShortcutLabel = () => {
-  if (typeof navigator === 'undefined') {
-    return 'Ctrl+K';
-  }
-
-  const platform = navigator.platform || '';
-  const isApplePlatform = /Mac|iPhone|iPod|iPad/i.test(platform);
-
-  return isApplePlatform ? '⌘K' : 'Ctrl+K';
-};
 
 type SearchModalProps = {
   isOpen: boolean;
