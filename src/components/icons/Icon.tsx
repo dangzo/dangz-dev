@@ -51,9 +51,7 @@ import ScrumIcon from './devicons/ScrumIcon';
 import SwaggerIcon from './devicons/SwaggerIcon';
 import TestingLibraryIcon from './devicons/TestingLibraryIcon';
 import CopilotIcon from './devicons/CopilotIcon';
-import ChatGPTIcon from './devicons/ChatGPTIcon';
 import CursorIcon from './devicons/CursorIcon';
-import CodexIcon from './devicons/CodexIcon';
 import ClaudeCodeIcon from './devicons/ClaudeCodeIcon';
 
 const components = {
@@ -105,9 +103,7 @@ const components = {
   agile: ScrumIcon,
   swagger: SwaggerIcon,
   copilot: CopilotIcon,
-  chatgpt: ChatGPTIcon,
   cursor: CursorIcon,
-  codex: CodexIcon,
   'claude-code': ClaudeCodeIcon,
   'react-query': ReactQueryIcon,
   'design-components': DesignComponentsIcon,

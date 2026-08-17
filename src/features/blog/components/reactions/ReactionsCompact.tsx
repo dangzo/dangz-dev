@@ -35,7 +35,7 @@ const AddReactionButton = ({ isExpanded, onToggle }: Readonly<AddReactionButtonP
   return (
     <button
       type="button"
-      className="flex items-center gap-1 rounded-full px-1.5 py-0.5 text-accent-light dark:text-accent-dark bg-accent-light/10 dark:bg-accent-dark/10 transition-colors duration-200 ease-out hover:bg-accent-light/20 dark:hover:bg-accent-dark/20"
+      className="flex items-center gap-1 rounded-full px-1.5 py-0.5 text-accent-light dark:text-accent-dark bg-accent-light/10 dark:bg-accent-dark/10 transition-colors duration-200 ease-out hover:bg-accent-light/20 dark:hover:bg-accent-dark/20 cursor-pointer"
       onClick={onToggle}
       aria-pressed={isExpanded}
       aria-label={actionLabel}

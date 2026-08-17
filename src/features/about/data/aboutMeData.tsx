@@ -67,6 +67,7 @@ const skills = [
       { icon: ({ ...props }) => <Icon icon="vite" {...props} />, label: 'Vite' },
       { icon: ({ ...props }) => <Icon icon="webpack" {...props} />, label: 'Webpack' },
       { icon: ({ ...props }) => <Icon icon="docker" {...props} />, label: 'Docker' },
+      { icon: ({ ...props }) => <Icon icon="github" {...props} />, label: 'GitHub Actions' },
       { icon: ({ ...props }) => <Icon icon="design-components" {...props} />, label: 'Design systems' },
       { icon: ({ ...props }) => <Icon icon="agile" {...props} />, label: 'Agile workflows' },
     ],
@@ -80,13 +81,11 @@ const skills = [
     ],
   },
   {
-    label: 'Agentic AI',
+    label: 'AI-Assisted Development',
     items: [
       { icon: ({ ...props }) => <Icon icon="claude-code" {...props} />, label: 'Claude Code' },
       { icon: ({ ...props }) => <Icon icon="copilot" {...props} />, label: 'GitHub Copilot' },
       { icon: ({ ...props }) => <Icon icon="cursor" {...props} />, label: 'Cursor' },
-      { icon: ({ ...props }) => <Icon icon="chatgpt" {...props} />, label: 'ChatGPT' },
-      { icon: ({ ...props }) => <Icon icon="codex" {...props} />, label: 'Codex' },
     ],
   },
 ];
@@ -94,21 +93,33 @@ const skills = [
 const experience = [
   {
     role: 'Senior Frontend Engineer',
+    company: 'Cycloid',
+    period: 'Jul 2026 - present',
+    summary: 'I returned to Cycloid to support a strategic transition between their legacy platform and its next-generation rebuild, bringing back historical product context from my earlier years there. I balanced critical work for enterprise customers on the existing platform with contributing to the new AI-assisted, specification-driven platform, working with Vue 3, Nuxt, TypeScript, Claude Code and Cursor.',
+  },
+  {
+    role: 'Independent Software Engineer',
+    company: 'dangz.dev',
+    period: 'Oct 2025 - Jun 2026',
+    summary: 'Between contracts, I built complex React and Next.js applications to deepen my expertise in the modern React ecosystem, including the App Router, headless CMS integrations and modern state/data patterns. I also started this blog to write about frontend architecture and scalable UI engineering, and sharpened my AI-assisted development workflow with Claude Code and Cursor.',
+  },
+  {
+    role: 'Senior Frontend Engineer',
     company: 'Granular Energy',
     period: 'Apr 2023 - Aug 2025',
-    summary: 'I led end-to-end delivery across multiple features, from prototyping to release, including SSG work using Nuxt.js and Prismic. I also focused on improving developer experience through refactoring, testing strategies, codebase architecture, and mentorship.',
+    summary: 'I led the frontend work of multiple features end-to-end, from prototyping to release, including internal tooling and SSG work using Nuxt.js and Prismic. I also focused on improving developer experience through refactoring, testing strategies, codebase architecture, and mentorship.',
   },
   {
     role: 'Senior Frontend Developer',
     company: 'Cycloid',
     period: 'Aug 2019 - Apr 2023',
-    summary: 'This was a key chapter in my growth: Cycloid gave me a lot, and I gave 110% while being there. I shipped complex features, pushed component-driven practices with Storybook, and actively contributed to hiring and team onboarding.',
+    summary: 'This was a key chapter in my growth, as it\'s where I effectively started thinking and moving like a senior engineer. I shipped complex features, developing component-driven designs with Storybook and helping with codebase architecture. I also actively contributed to hiring, product management and onboarding.',
   },
   {
     role: 'Full-Stack Developer',
     company: 'Saavu',
     period: 'Nov 2018 - Jul 2019',
-    summary: 'Working in a small team taught me speed and ownership, as well as code quality and having to wear many hats. I built core modules across frontend and backend using different frameworks, TDD, clean code and architecture, and close collaboration with the CEO.',
+    summary: 'Working in a small team where code quality mattered taught me speed, versatility and ownership. I built core modules across frontend and backend using different frameworks, TDD, clean code and architecture, and close collaboration with the CEO.',
   },
   {
     role: 'Full-Stack Developer',
@@ -117,16 +128,10 @@ const experience = [
     summary: 'I owned the full lifecycle of web and mobile products, from shipping new features to maintaining production systems and supporting marketing websites. I helped them build their main product - a hybrid mobile/desktop reviews generation app.',
   },
   {
-    role: 'Freelance JavaScript Developer',
-    company: 'Upwork',
-    period: 'Jan 2015 - Nov 2015',
-    summary: 'Freelancing sharpened my adaptability. I worked with different industries and stacks, delivering React frontends, full-stack features on Node.js, and custom WordPress work.',
-  },
-  {
     role: 'Earlier Roles',
     company: '(condensed)',
     period: '2013 - 2015',
-    summary: 'Backend and game development roles using Node.js, RabbitMQ, Oracle and Postgres DBs, C#, Unity, and TypeScript. Delivered enterprise modules, internal tools, and a Microsoft-compatible 3D educational game.',
+    summary: 'Freelancing sharpened my adaptability. I worked with different industries and stacks, delivering React frontends, full-stack features on Node.js, and custom WordPress work. I also developed a Microsoft PC game using TypeScript, C# and Unity 3D.',
   },
 ];
 
