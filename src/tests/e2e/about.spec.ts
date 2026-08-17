@@ -36,7 +36,7 @@ test.describe('About Page', () => {
     await expect(toolsSection.getByRole('heading', { level: 4, name: /frameworks & languages/i })).toBeVisible();
     await expect(toolsSection.getByRole('heading', { level: 4, name: /testing, monitoring & quality assurance/i })).toBeVisible();
     await expect(toolsSection.getByRole('heading', { level: 4, name: /cloud deployment/i })).toBeVisible();
-    await expect(toolsSection.getByRole('heading', { level: 4, name: /agentic ai/i })).toBeVisible();
+    await expect(toolsSection.getByRole('heading', { level: 4, name: /ai-assisted development/i })).toBeVisible();
 
     await expect(toolsSection.getByText('Next.js')).toBeVisible();
     await expect(toolsSection.getByText('Cypress')).toBeVisible();
