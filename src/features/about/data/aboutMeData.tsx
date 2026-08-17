@@ -93,6 +93,18 @@ const skills = [
 const experience = [
   {
     role: 'Senior Frontend Engineer',
+    company: 'Cycloid',
+    period: 'Jul 2026 - present',
+    summary: 'I returned to Cycloid to support a strategic transition between their legacy platform and its next-generation rebuild, bringing back historical product context from my earlier years there. I balanced critical work for enterprise customers on the existing platform with contributing to the new AI-assisted, specification-driven platform, working with Vue 3, Nuxt, TypeScript, Claude Code and Cursor.',
+  },
+  {
+    role: 'Independent Software Engineer',
+    company: 'dangz.dev',
+    period: 'Oct 2025 - Jun 2026',
+    summary: 'Between contracts, I built complex React and Next.js applications to deepen my expertise in the modern React ecosystem, including the App Router, headless CMS integrations and modern state/data patterns. I also started this blog to write about frontend architecture and scalable UI engineering, and sharpened my AI-assisted development workflow with Claude Code and Cursor.',
+  },
+  {
+    role: 'Senior Frontend Engineer',
     company: 'Granular Energy',
     period: 'Apr 2023 - Aug 2025',
     summary: 'I led the frontend work of multiple features end-to-end, from prototyping to release, including internal tooling and SSG work using Nuxt.js and Prismic. I also focused on improving developer experience through refactoring, testing strategies, codebase architecture, and mentorship.',

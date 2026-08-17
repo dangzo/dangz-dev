@@ -57,15 +57,15 @@ test.describe('About Page', () => {
     await expect(resumeBtn).toBeVisible();
     await expect(resumeBtn).toHaveAttribute('href', /Daniele-Gazzelloni-Resume-2026\.pdf$/);
 
-    await expect(journeySection.getByRole('heading', { level: 3, name: /senior frontend engineer/i })).toBeVisible();
+    await expect(journeySection.getByRole('heading', { level: 3, name: /senior frontend engineer/i }).first()).toBeVisible();
     await expect(journeySection.getByRole('heading', { level: 3, name: /senior frontend developer/i })).toBeVisible();
-    await expect(journeySection.getByRole('heading', { level: 3, name: /freelance javascript developer/i })).toBeVisible();
+    await expect(journeySection.getByRole('heading', { level: 3, name: /earlier roles/i })).toBeVisible();
 
     await expect(journeySection.getByText(/apr 2023 - aug 2025/i)).toBeVisible();
-    await expect(journeySection.getByRole('heading', { level: 3, name: /cycloid/i })).toBeVisible();
-    await expect(journeySection.getByRole('heading', { level: 3, name: /upwork/i })).toBeVisible();
+    await expect(journeySection.getByRole('heading', { level: 3, name: /cycloid/i }).first()).toBeVisible();
+    await expect(journeySection.getByRole('heading', { level: 3, name: /dangz\.dev/i })).toBeVisible();
 
-    await expect(journeySection.getByRole('heading', { level: 3 })).toHaveCount(6);
+    await expect(journeySection.getByRole('heading', { level: 3 })).toHaveCount(7);
   });
 
   test('beyond the stack section', async ({ page }) => {
