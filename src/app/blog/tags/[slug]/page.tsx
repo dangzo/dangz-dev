@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import type { Tag } from '@/types/sanity.types';
 import { PostList } from '@/features/blog/components';
 import { getPostList } from '@/features/blog/api/queries/posts';
+import { getTotalPages } from '@/features/blog/utils/pagination';
 import { startCase } from '@/utils/strings';
 import { notFound } from 'next/navigation';
 import { getTagsWithCount } from '@/features/blog/api/queries/tags';
@@ -39,22 +39,19 @@ export async function generateStaticParams() {
 const TagsPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug: tag } = await params;
 
-  const posts = await getPostList();
+  const [posts, { tagCount }] = await Promise.all([
+    getPostList({ page: 1, tagSlug: tag }),
+    getTagsWithCount(),
+  ]);
 
-  const filteredPosts = tag
-    ? posts?.filter((post) =>
-      post.tags?.some(
-        (t: Tag) => t.slug?.current?.toLowerCase() === tag.toLowerCase(),
-      ),
-    )
-    : posts;
-
-  if (!filteredPosts?.length) {
+  if (!posts?.length) {
     return notFound();
   }
 
+  const totalPages = getTotalPages(tagCount(tag));
+
   return (
-    <PostList posts={filteredPosts} />
+    <PostList posts={posts} pagination={{ currentPage: 1, totalPages, basePath: `/blog/tags/${tag}` }} />
   );
 };
 
