@@ -1,6 +1,7 @@
 import type { PostWithTags, PostReactionSummaryItem } from '@/features/blog/types/Post.types';
 import { getClient } from '@/api/apollo-client';
 import { gql, type TypedDocumentNode } from '@apollo/client';
+import { PAGE_SIZE } from '@/features/blog/utils/pagination';
 
 interface PostListQueryResult {
   allPost: PostWithTags[];
@@ -12,10 +13,16 @@ interface PostListQueryResult {
   }>;
 }
 
-export const POST_LIST_QUERY = ({ limit = 12, offset = 0 }: {limit?: number, offset?: number}): TypedDocumentNode<PostListQueryResult> => {
+export const POST_LIST_QUERY = ({ limit, offset }: {limit?: number, offset?: number} = {}): TypedDocumentNode<PostListQueryResult> => {
+  // Sanity's auto-generated GraphQL PostFilter has no field for the `tags`
+  // reference array, so tag filtering can't be pushed into `where` here —
+  // omitting limit/offset fetches every post, which callers filter/paginate
+  // in JS (see getPostList's tagSlug branch).
+  const pagination = typeof limit === 'number' ? `, limit: ${limit}, offset: ${offset ?? 0}` : '';
+
   return gql`
     query AllPosts {
-      allPost(sort: [{ publishedAt: DESC }], limit: ${limit}, offset: ${offset}) {
+      allPost(sort: [{ publishedAt: DESC }]${pagination}) {
         _id
         title
         slug {
@@ -59,15 +66,35 @@ export const POST_LIST_QUERY = ({ limit = 12, offset = 0 }: {limit?: number, off
   `;
 };
 
-export async function getPostList() {
+interface GetPostListParams {
+  page?: number;
+  pageSize?: number;
+  tagSlug?: string;
+}
+
+export async function getPostList({ page = 1, pageSize = PAGE_SIZE, tagSlug }: GetPostListParams = {}) {
+  const safePage = Number.isInteger(page) && page > 0 ? page : 1;
+  const safePageSize = Number.isInteger(pageSize) && pageSize > 0 ? pageSize : PAGE_SIZE;
+  const offset = (safePage - 1) * safePageSize;
+
   const client = getClient();
   const { data } = await client.query({
-    query: POST_LIST_QUERY({ limit: 12, offset: 0 }),
+    // Tag filtering happens in JS below, so a filtered page needs the full
+    // unbounded set rather than a single limit/offset slice.
+    query: tagSlug
+      ? POST_LIST_QUERY()
+      : POST_LIST_QUERY({ limit: safePageSize, offset }),
   });
 
-  const allPosts = data?.allPost ?? [];
+  let allPosts = data?.allPost ?? [];
   const allReactions = data?.allReaction ?? [];
   const allReactionCounts = data?.allPostReactionCount ?? [];
+
+  if (tagSlug) {
+    allPosts = allPosts
+      .filter((post) => post.tags?.some((tag) => tag.slug?.current === tagSlug))
+      .slice(offset, offset + safePageSize);
+  }
 
   const reactionsById = new Map(allReactions.map((reaction) => [reaction._id, reaction]));
 
