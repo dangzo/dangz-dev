@@ -1,1 +1,1 @@
-export { default } from '../../page';
+export { default } from '@/app/blog/@heading/tags/[slug]/page';
