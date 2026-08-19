@@ -30,7 +30,11 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 
         {process.env.NODE_ENV === 'production' && (
-          <Script defer src="https://cloud.umami.is/script.js" data-website-id="546ca232-1b93-4b09-862d-8aebf53123d0" />
+          <Script
+            strategy="lazyOnload"
+            src="https://cloud.umami.is/script.js"
+            data-website-id="546ca232-1b93-4b09-862d-8aebf53123d0"
+          />
         )}
       </head>
 
