@@ -4,7 +4,7 @@ import {
   LetsTalkFrontend,
   ToolsITrust,
   IntroTextAndCTAs,
-  MyJourneySoFar,  
+  MyJourneySoFar,
 } from '@/features/about/components';
 
 export const metadata: Metadata = {
@@ -14,10 +14,10 @@ export const metadata: Metadata = {
   },
 };
 
-const deferredSectionStyle = {
+const deferredSectionStyle = (heightPx: number) => ({
   contentVisibility: 'auto',
-  containIntrinsicSize: '1px 900px',
-} as const;
+  containIntrinsicSize: `1px ${heightPx}px`,
+}) as const;
 
 export default function AboutPage() {
   return (
@@ -25,19 +25,19 @@ export default function AboutPage() {
       <div className="mx-auto flex flex-col">
         <IntroTextAndCTAs />
 
-        <section style={deferredSectionStyle}>
+        <section style={deferredSectionStyle(1900)}>
           <ToolsITrust />
         </section>
 
-        <section style={deferredSectionStyle}>
+        <section style={deferredSectionStyle(1400)}>
           <MyJourneySoFar />
         </section>
 
-        <section style={deferredSectionStyle}>
+        <section style={deferredSectionStyle(420)}>
           <BeyondTheStack />
         </section>
 
-        <section style={deferredSectionStyle}>
+        <section style={deferredSectionStyle(400)}>
           <LetsTalkFrontend />
         </section>
       </div>

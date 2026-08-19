@@ -33,12 +33,17 @@ function ToolsITrust() {
                       bg-white text-primary-700 dark:bg-neutral-100 dark:text-primary-200
                     "
                   >
-                    {
-                      tool.icon({
-                        width: '80%',
-                        height: '80%',
-                      })
-                    }
+                    {/* Native img: keeps logos out of HTML/JS and uses browser lazy-load. */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      alt=""
+                      src={`/icons/${tool.icon}.svg`}
+                      loading="lazy"
+                      decoding="async"
+                      width={48}
+                      height={48}
+                      className="h-[80%] w-[80%]"
+                    />
                   </span>
 
                   <Text size="small" className="mb-0! font-medium text-main-light dark:text-main-dark">
