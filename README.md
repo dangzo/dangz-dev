@@ -181,34 +181,52 @@ This monorepo is managed with Yarn workspaces. The root `package.json` defines t
 
 ## CI/CD Pipeline
 
-Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality-and-build.yml`](.github/workflows/pr-quality-and-build.yml)), which runs seven jobs:
+Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality-and-build.yml`](.github/workflows/pr-quality-and-build.yml)), which runs eight jobs:
 
 ```
              ┌──────────────┐
-             │    setup     │   (install dependencies + cache)
+             │     gate     │   (read PR labels)
+             └──────┬───────┘
+                    │
+             ┌──────────────┐
+             │    setup     │   (install dependencies + cache; skipped if skip-ci)
              └──────┬───────┘
                     │
      ┌─────────────┬─────────────┬──────────────┬──────────────┬──────────────┐
      ▼             ▼             ▼              ▼              ▼
 ┌──────────┐  ┌─────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-│  lint    │  │  test-unit  │  │   test-e2e   │  │  typecheck   │  │  lighthouse  │   (run in parallel)
-└────┬─────┘  └──────┬──────┘  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘
-     └────┬──────────┴───────────────┴──────────────┴──────────────┬──────┘
+│  lint    │  │  test-unit  │  │   test-e2e   │  │  typecheck   │  │  lighthouse  │   (parallel; lighthouse skipped if skip-lighthouse)
+└────┬─────┘  └──────┬──────┘  └──────┬───────┘  └──────┬───────┘  └──────────────┘
+     └────┬──────────┴───────────────┴──────────────┘
           ▼
       ┌─────────┐
-     │  build  │                   (runs only if all above pass)
+     │  build  │                   (runs if quality jobs pass; does not wait on lighthouse)
       └─────────┘
 ```
 
 | Job | Script | What it does |
 |---|---|---|
+| `gate` | n/a | Reads PR labels and exposes skip flags for downstream jobs |
 | `setup` | n/a | Installs dependencies once and stores a lockfile-keyed cache for downstream jobs |
 | `lint` | `yarn ci:lint` | Lints both packages (`eslint` + Sanity Studio), restoring cached dependencies |
 | `test-unit` | `yarn test:unit` | Runs Vitest unit/component tests (Vitest run mode), restoring cached dependencies |
 | `test-e2e` | `yarn test:e2e` | Runs Playwright e2e specs after installing Chromium |
 | `typecheck` | `yarn ci:typecheck` | Type-checks both packages with `tsc`, restoring cached dependencies |
 | `lighthouse` | `yarn lhci:mobile` + `yarn lhci:desktop` | Runs Lighthouse CI audits for both mobile and desktop, restoring cached dependencies |
-| `build` | `yarn ci:build` | Builds both packages; blocked until lint, test-unit, test-e2e, typecheck, and lighthouse pass |
+| `build` | `yarn ci:build` | Builds both packages; blocked until lint, test-unit, test-e2e, and typecheck pass |
+
+### Skip labels
+
+Apply these labels **before** opening the PR, or add/remove them afterward (the workflow re-runs on `skip-ci` / `skip-lighthouse` label changes):
+
+| Label | Effect |
+|---|---|
+| `skip-ci` | Skips every check after `gate` (setup, lint, tests, typecheck, Lighthouse, and build) |
+| `skip-lighthouse` | Skips only the Lighthouse job; quality jobs and build still run |
+
+`dependencies` is a classification label only — it does not skip CI. Dependabot PRs get `skip-lighthouse` by default (see [`.github/dependabot.yml`](.github/dependabot.yml)); remove that label on a given PR to force a full Lighthouse run.
+
+Do not use `[skip ci]` in commit messages: GitHub skips the whole workflow and required checks stay pending.
 
 The workflow runs on pull requests that touch `src/**`, `studio/**`, config files, or the workflow file itself.
 
