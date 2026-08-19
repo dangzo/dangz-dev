@@ -1,4 +1,5 @@
 import { getClient } from '@/api/apollo-client';
+import { PAGE_SIZE } from '@/features/blog/utils/pagination';
 import { getPostList, POST_LIST_QUERY } from './posts';
 
 vi.mock('@/api/apollo-client', () => ({
@@ -62,7 +63,7 @@ describe('getPostList', () => {
     await getPostList({ page: -1, pageSize: 0 });
 
     const calledQuery = queryMock.mock.calls[0][0].query;
-    expect(queryBody(calledQuery)).toContain('limit: 12');
+    expect(queryBody(calledQuery)).toContain(`limit: ${PAGE_SIZE}`);
     expect(queryBody(calledQuery)).toContain('offset: 0');
   });
 
