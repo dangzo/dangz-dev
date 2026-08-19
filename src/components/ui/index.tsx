@@ -3,6 +3,7 @@ export { default as DateText } from './DateText';
 export { default as Emoji } from './Emoji';
 export { default as Heading } from './Heading';
 export { default as Link } from './Link';
+export { default as Pagination } from './Pagination';
 export { default as Img, type ImgProps } from './Img';
 export { default as Table } from './Table';
 export { default as Text } from './Text';
