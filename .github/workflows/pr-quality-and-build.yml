@@ -7,7 +7,7 @@ env:
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+    types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
     paths:
       - 'src/**'
       - 'public/**'
@@ -22,13 +22,34 @@ on:
 
 concurrency:
   group: pr-quality-and-build-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  # Cancel in-progress runs on push/reopen, and when skip labels are added or removed.
+  # Unrelated labels must not cancel a running check.
+  cancel-in-progress: ${{ github.event.action != 'labeled' && github.event.action != 'unlabeled' || contains(fromJSON('["skip-ci","skip-lighthouse"]'), github.event.label.name) }}
 
 jobs:
+  gate:
+    name: Label gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    # Ignore labeled/unlabeled events that are not skip-ci or skip-lighthouse.
+    if: ${{ github.event.action != 'labeled' && github.event.action != 'unlabeled' || contains(fromJSON('["skip-ci","skip-lighthouse"]'), github.event.label.name) }}
+    outputs:
+      skip_ci: ${{ steps.labels.outputs.skip_ci }}
+      skip_lighthouse: ${{ steps.labels.outputs.skip_lighthouse }}
+
+    steps:
+      - id: labels
+        name: Read skip labels
+        run: |
+          echo "skip_ci=${{ contains(github.event.pull_request.labels.*.name, 'skip-ci') }}" >> "$GITHUB_OUTPUT"
+          echo "skip_lighthouse=${{ contains(github.event.pull_request.labels.*.name, 'skip-lighthouse') }}" >> "$GITHUB_OUTPUT"
+
   setup:
     name: Setup Dependencies
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    needs: gate
+    if: ${{ needs.gate.outputs.skip_ci != 'true' }}
 
     steps:
       - name: Check out repository
@@ -218,7 +239,8 @@ jobs:
     name: Lighthouse
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    needs: setup
+    needs: [gate, setup]
+    if: ${{ needs.gate.outputs.skip_ci != 'true' && needs.gate.outputs.skip_lighthouse != 'true' }}
 
     steps:
       - name: Check out repository
@@ -258,7 +280,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    needs: [lint, test-unit, test-e2e, typecheck, lighthouse]
+    needs: [lint, test-unit, test-e2e, typecheck]
 
     steps:
       - name: Check out repository
