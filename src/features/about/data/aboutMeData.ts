@@ -141,7 +141,7 @@ const skills: ReadonlyArray<{
 
 const experience = [
   {
-    role: 'Senior Frontend Engineer',
+    role: 'Senior AI Frontend Engineer',
     company: 'Cycloid',
     period: 'Jul 2026 - present',
     summary: 'I returned to Cycloid to support a strategic transition between their legacy platform and its next-generation rebuild, bringing back historical product context from my earlier years there. I balanced critical work for enterprise customers on the existing platform with contributing to the new AI-assisted, specification-driven platform, working with Vue 3, Nuxt, TypeScript, Claude Code and Cursor.',
