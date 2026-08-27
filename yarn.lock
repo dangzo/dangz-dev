@@ -11786,12 +11786,11 @@ simple-wcswidth@^1.1.2:
   resolved "https://registry.yarnpkg.com/simple-wcswidth/-/simple-wcswidth-1.1.2.tgz#66722f37629d5203f9b47c5477b1225b85d6525b"
   integrity sha512-j7piyCjAeTDSjzTSQ7DokZtMNwNlEAyxqSZeCS+CXH7fJ4jx3FuJ/mTW3mE+6JLs4VJBbcll0Kjn+KXI5t21Iw==
 
-skills@^1.5.9:
-  version "1.5.23"
-  resolved "https://registry.yarnpkg.com/skills/-/skills-1.5.23.tgz#a79d25c0a8a8c9112d5771161bb51fabef8e4a35"
-  integrity sha512-+hMNBSi35yfX0sKD+ZcRm9y5or7u313OdkcvrRvJAsAzGCaA8wRTu2OmVdN0KRbk9ybqKby5dijkn6OVvNTUmw==
+skills@1.5.18, skills@^1.5.9:
+  version "1.5.18"
+  resolved "https://registry.yarnpkg.com/skills/-/skills-1.5.18.tgz#a4a182dc3ae9256435e8686d958ec9fff6ccd46f"
+  integrity sha512-WwQuqIhmS2nrn1H3HAbE2tGe7e2npc1cwMcucMKqmkBdqzm7nxzcZBTqXiHjUKhpalQLE/nNPtEdcx3QYX4TTw==
   dependencies:
-    tar "^7.5.20"
     yaml "^2.8.3"
 
 slash@^3.0.0:
@@ -12219,7 +12218,7 @@ tar-stream@^3.1.5, tar-stream@^3.1.7, tar-stream@^3.2.0:
     fast-fifo "^1.2.0"
     streamx "^2.15.0"
 
-tar@^7.5.18, tar@^7.5.2, tar@^7.5.20:
+tar@^7.5.18, tar@^7.5.2:
   version "7.5.22"
   resolved "https://registry.yarnpkg.com/tar/-/tar-7.5.22.tgz#a696f998136e71487dc3f869a85bba2c67971ba9"
   integrity sha512-MFO/QzvtAOmJbkhOaCTvbGcFN9L9b+JunIsDwaKljSOdcLMea3NJ1k9Usz/rjdfSXTq4dfzfeS7W4p4YOAAHeA==

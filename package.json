@@ -98,7 +98,8 @@
   "resolutions": {
     "styled-components": "^6.4.1",
     "prismjs": "^1.30.0",
-    "smol-toml": "^1.6.1"
+    "smol-toml": "^1.6.1",
+    "skills": "1.5.18"
   },
   "engines": {
     "node": ">=22.13.0"
