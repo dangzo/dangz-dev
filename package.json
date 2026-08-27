@@ -96,7 +96,9 @@
     "vitest": "^4.1.10"
   },
   "resolutions": {
-    "styled-components": "^6.4.1"
+    "styled-components": "^6.4.1",
+    "prismjs": "^1.30.0",
+    "smol-toml": "^1.6.1"
   },
   "engines": {
     "node": ">=22.13.0"
