@@ -116,12 +116,14 @@ Vitest explicitly excludes e2e specs under `src/tests/e2e/**`, so `yarn test:uni
 #### End-to-End Tests (Playwright)
 
 - **Command:** `yarn test:e2e`
-- **Variants:** `yarn test:e2e:headed`, `yarn test:e2e:ui`
+- **Variants:** `yarn test:e2e:headed`, `yarn test:e2e:ui`, `yarn test:e2e:visual`
 - **Scope:** route-level user journeys and integration behavior (home, blog, article, about, global UI)
 - **Location:** `src/tests/e2e/`
 - **Config:** [`playwright.config.ts`](playwright.config.ts)
 
-Playwright starts the app server automatically via the configured `webServer` command and runs against `http://127.0.0.1:3000` by default.
+Playwright starts an isolated app server automatically via the configured `webServer` command and runs against `http://127.0.0.1:3100` by default.
+
+Visual regression tests run the Home, About, blog list, article, and tag-list pages against deterministic E2E CMS fixtures at desktop and mobile Chromium viewports. Their committed baselines live in `src/tests/e2e/__screenshots__/`. Review all image diffs as UI changes; after intentionally changing a layout, regenerate them with `yarn test:e2e:visual:update` and commit the updated PNGs.
 
 ---
 
@@ -152,6 +154,8 @@ This monorepo is managed with Yarn workspaces. The root `package.json` defines t
 | `yarn test:e2e` | Runs end-to-end tests (Playwright) |
 | `yarn test:e2e:headed` | Runs e2e tests in headed browser mode |
 | `yarn test:e2e:ui` | Opens Playwright UI mode for interactive debugging |
+| `yarn test:e2e:visual` | Runs desktop and mobile visual regression tests |
+| `yarn test:e2e:visual:update` | Regenerates approved visual baselines |
 | `yarn typecheck` | Type-checks the Next.js app |
 | `yarn typecheck-studio` | Type-checks the Sanity Studio only |
 | `yarn ci:lint` | Runs lint (both packages) — mirrors the CI lint job |

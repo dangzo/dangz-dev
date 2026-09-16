@@ -6,10 +6,13 @@ import { fileURLToPath } from 'node:url';
 const rootDir = join(dirname(fileURLToPath(import.meta.url)), '..');
 const outputFile = join(rootDir, 'src/data/buildVersion.ts');
 
-const shouldGenerate = Boolean(process.env.CI) || process.env.FORCE_GENERATE_BUILD_VERSION === '1';
+const shouldGenerate = (
+  process.env.FORCE_GENERATE_BUILD_VERSION === '1'
+  || (Boolean(process.env.CI) && process.env.E2E_FIXTURES !== 'true')
+);
 
 if (!shouldGenerate) {
-  console.log('Skipping build version generation outside CI. Set FORCE_GENERATE_BUILD_VERSION=1 to force.');
+  console.log('Skipping build version generation outside CI or while using E2E fixtures. Set FORCE_GENERATE_BUILD_VERSION=1 to force.');
   process.exit(0);
 }
 

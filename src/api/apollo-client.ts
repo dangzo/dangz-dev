@@ -8,11 +8,14 @@ import {
 const isDev = process.env.NODE_ENV === 'development';
 const readToken = process.env.SANITY_API_READ_ONLY_TOKEN;
 const canPreviewDrafts = isDev && Boolean(readToken);
+const usesE2EFixtures = process.env.E2E_FIXTURES === 'true';
 
 const graphqlBaseUrl = 'https://wdxhl3tc.api.sanity.io/v2023-08-01/graphql/production/default';
-const graphqlUri = canPreviewDrafts
-  ? `${graphqlBaseUrl}?perspective=previewDrafts`
-  : graphqlBaseUrl;
+const graphqlUri = usesE2EFixtures
+  ? process.env.E2E_FIXTURES_URL ?? 'http://127.0.0.1:3100/api/e2e/sanity'
+  : canPreviewDrafts
+    ? `${graphqlBaseUrl}?perspective=previewDrafts`
+    : graphqlBaseUrl;
 
 export const { getClient, PreloadQuery } = registerApolloClient(() => {
   if (isDev && !readToken) {
@@ -24,7 +27,7 @@ export const { getClient, PreloadQuery } = registerApolloClient(() => {
     cache: new InMemoryCache(),
     defaultOptions: {
       query: {
-        fetchPolicy: canPreviewDrafts ? 'no-cache' : 'cache-first',
+        fetchPolicy: canPreviewDrafts || usesE2EFixtures ? 'no-cache' : 'cache-first',
       },
     },
     link: new HttpLink({
@@ -36,7 +39,7 @@ export const { getClient, PreloadQuery } = registerApolloClient(() => {
           Authorization: `Bearer ${readToken}`,
         }
         : undefined,
-      fetchOptions: canPreviewDrafts
+      fetchOptions: canPreviewDrafts || usesE2EFixtures
         ? { cache: 'no-store' }
         : { next: { revalidate: 3600 } },
     }),
