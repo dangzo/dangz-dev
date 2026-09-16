@@ -40,7 +40,7 @@ A single `yarn install` from the root installs dependencies for both packages.
 
 ### Prerequisites
 
-- Node.js `>= 22.13`
+- Node.js `>= 24.15`
 - Yarn `>= 1.22.22`
 - `.env` file at the root and `studio/.env` for Sanity Studio env vars
 
