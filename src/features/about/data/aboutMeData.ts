@@ -43,6 +43,7 @@ export type ToolIconKey =
   | 'vercel'
   | 'aws'
   | 'claude-code'
+  | 'codex'
   | 'copilot'
   | 'cursor';
 
@@ -133,8 +134,9 @@ const skills: ReadonlyArray<{
     label: 'AI-Assisted Development',
     items: [
       { icon: 'claude-code', label: 'Claude Code' },
-      { icon: 'copilot', label: 'GitHub Copilot' },
       { icon: 'cursor', label: 'Cursor' },
+      { icon: 'codex', label: 'Codex' },
+      { icon: 'copilot', label: 'GitHub Copilot' },
     ],
   },
 ];
