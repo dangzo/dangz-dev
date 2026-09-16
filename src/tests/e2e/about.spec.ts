@@ -41,7 +41,18 @@ test.describe('About Page', () => {
     await expect(toolsSection.getByText('Next.js')).toBeVisible();
     await expect(toolsSection.getByText('Cypress')).toBeVisible();
     await expect(toolsSection.getByText('Vercel')).toBeVisible();
-    await expect(toolsSection.getByText('GitHub Copilot')).toBeVisible();
+    await expect(toolsSection.getByText('Codex', { exact: true })).toBeVisible();
+
+    const aiAssistedDevelopmentTools = toolsSection
+      .getByRole('heading', { level: 4, name: /ai-assisted development/i })
+      .locator('xpath=following-sibling::ul');
+
+    await expect(aiAssistedDevelopmentTools.getByRole('listitem')).toHaveText([
+      'Claude Code',
+      'Cursor',
+      'Codex',
+      'GitHub Copilot',
+    ]);
 
     await expect(toolsSection.getByRole('heading', { level: 4 })).toHaveCount(8);
   });
