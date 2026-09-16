@@ -1,0 +1,8 @@
+main > article > p > span {
+  font-size: 0;
+}
+
+main > article > p > span::after {
+  content: 'visual regression fixtures';
+  font-size: 1rem;
+}

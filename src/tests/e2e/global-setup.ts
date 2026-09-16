@@ -1,4 +1,19 @@
-import { chromium, type FullConfig } from '@playwright/test';
+import { chromium, type FullConfig, type Page } from '@playwright/test';
+
+async function visitUntilRendered(url: string, selector: string, page: Page) {
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    await page.goto(url);
+
+    try {
+      await page.locator(selector).first().waitFor({ timeout: 10 * 1000 });
+      return;
+    } catch {
+      await page.waitForTimeout(500);
+    }
+  }
+
+  throw new Error(`Route did not render after warm-up: ${url}`);
+}
 
 /**
  * Turbopack's dev server compiles routes on demand. When Playwright's parallel
@@ -8,7 +23,7 @@ import { chromium, type FullConfig } from '@playwright/test';
  * they're already compiled and cached.
  */
 async function globalSetup(config: FullConfig) {
-  const baseURL = config.projects[0]?.use?.baseURL ?? 'http://127.0.0.1:3000';
+  const baseURL = config.projects[0]?.use?.baseURL ?? 'http://127.0.0.1:3100';
   const browser = await chromium.launch();
   const page = await browser.newPage();
 
@@ -22,7 +37,18 @@ async function globalSetup(config: FullConfig) {
     .getAttribute('href');
 
   if (firstArticleHref) {
-    await page.goto(`${baseURL}${firstArticleHref}`);
+    await visitUntilRendered(`${baseURL}${firstArticleHref}`, 'main article img', page);
+  }
+
+  await page.goto(`${baseURL}/blog`);
+
+  const firstTagHref = await page
+    .locator('aside a[href^="/blog/tags/"]')
+    .first()
+    .getAttribute('href');
+
+  if (firstTagHref) {
+    await visitUntilRendered(`${baseURL}${firstTagHref}`, 'section article', page);
   }
 
   await browser.close();
