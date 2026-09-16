@@ -14,6 +14,7 @@ export default defineConfig([
   globalIgnores([
     // Default ignores of eslint-config-next:
     '**/.next/',
+    '**/.next-e2e/',
     '**/.vercel',
     '**/next-env.d.ts',
     '**/node_modules',

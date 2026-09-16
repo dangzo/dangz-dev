@@ -23,7 +23,7 @@ function MyJourneySoFar() {
           >
             <Heading as="h3">
               <span className="block sm:inline">{item.role}</span>
-              <span className="hidden sm:inline"> - </span>
+              <span className="hidden sm:inline">&nbsp;-&nbsp;</span>
               <span className="block sm:inline text-primary-600 dark:text-primary-400">{item.company}</span>
             </Heading>
             <Text

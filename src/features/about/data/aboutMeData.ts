@@ -144,7 +144,7 @@ const experience = [
     role: 'Senior Software Engineer (Frontend)',
     company: 'Cycloid',
     period: 'Jul 2026 - present',
-    summary: 'I returned to Cycloid to support the end-to-end evolution of its products, contributing across infrastructure, backend and frontend while providing continuous technical, UI/UX and product judgment. I balanced critical enterprise customer work on the legacy platform with the development of its AI-assisted, specification-driven next-generation platform using Vue 3, Nuxt 4, TypeScript and Claude Code.',
+    summary: 'I returned to Cycloid to support the end-to-end evolution of its products, contributing across infrastructure, backend and frontend while providing continuous technical, UI/UX and product judgment. I balanced critical enterprise customer work on the legacy platform with the development of its AI-assisted, specification-driven next-generation platform using Vue 3, Nuxt 4, TypeScript and agentic tools like Cursor and Claude Code.',
   },
   {
     role: 'Independent Software Engineer',
