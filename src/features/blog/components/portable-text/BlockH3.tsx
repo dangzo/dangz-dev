@@ -3,6 +3,7 @@ import { PortableTextBlock } from 'sanity';
 import { Heading } from '@/components/ui';
 import { getNodeText } from '@/features/blog/utils/posts';
 import clsx from 'clsx';
+import HeadingAnchor from './HeadingAnchor';
 
 interface BlockH3Props {
   children: ReactNode;
@@ -25,10 +26,12 @@ function BlockH3({ children, getHeadingId, value: block, blocks }: Readonly<Bloc
       as="h3"
       id={id}
       className={clsx({
+        'group': true,
         'pt-2': isDirectlyBelowH2,
       })}
     >
       {children}
+      <HeadingAnchor id={id} />
     </Heading>
   );
 }
