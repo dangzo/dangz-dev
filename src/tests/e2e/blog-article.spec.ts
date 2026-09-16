@@ -59,4 +59,15 @@ test.describe('Blog Article Page', () => {
     const paragraphCount = page.locator('main article p');
     await expect.poll(() => paragraphCount.count()).toBeGreaterThan(3);
   });
+
+  test('section headings provide copy-link controls', async ({ page }) => {
+    const sectionHeading = page.locator('main article h2').first();
+
+    await expect(sectionHeading).toBeVisible();
+    await sectionHeading.hover();
+
+    const copyLinkButton = sectionHeading.getByRole('button', { name: 'Copy link to this section' });
+    await expect(copyLinkButton).toBeVisible();
+    await expect(sectionHeading).toHaveAttribute('id', /.+/);
+  });
 });

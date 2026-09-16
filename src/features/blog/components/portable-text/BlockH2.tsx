@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { Heading } from '@/components/ui';
 import { getNodeText } from '@/features/blog/utils/posts';
+import HeadingAnchor from './HeadingAnchor';
 
 interface BlockH2Props {
   children: ReactNode;
@@ -14,9 +15,10 @@ function BlockH2({ children, getHeadingId }: BlockH2Props) {
     <Heading
       as="h2"
       id={id}
-      className="border-t border-border-light dark:border-border-dark pt-8 mt-12!"
+      className="group border-t border-border-light dark:border-border-dark pt-8 mt-12!"
     >
       {children}
+      <HeadingAnchor id={id} />
     </Heading>
   );
 }
