@@ -6,3 +6,29 @@ main > article > p > span::after {
   content: 'visual regression fixtures';
   font-size: 1rem;
 }
+
+main article > div > a:last-of-type,
+a[aria-label='ScrollToTop'],
+aside a[href='/blog'] {
+  font-size: 0;
+}
+
+main article > div > a:last-of-type::after {
+  content: 'Read more';
+  font-size: 1rem;
+}
+
+a[aria-label='ScrollToTop']::after {
+  content: 'ScrollToTop';
+  font-size: 0.875rem;
+}
+
+aside a[href='/blog']::after {
+  content: 'Back to all posts';
+  font-size: 0.875rem;
+}
+
+span[role='img'],
+a[aria-label$='reactions - open post'] span[aria-hidden='true'] {
+  visibility: hidden;
+}
