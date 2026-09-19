@@ -32,9 +32,9 @@ const Prompt = () => {
   return (
     <p
       className="
-        hidden mb:block
+        hidden
         relative top-0
-        sm:flex w-max [&>span]:font-mono font-semibold
+        md:flex w-max [&>span]:font-mono font-semibold
         text-sm md:text-md mt-0
         [text-shadow:0_0_5px_rgba(150,150,150,0.3)]
         dark:[text-shadow:0_0_5px_rgba(255,255,255,0.3)]
