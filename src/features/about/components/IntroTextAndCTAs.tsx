@@ -5,13 +5,13 @@ const devYears = new Date().getFullYear() - 2013;
 
 function IntroTextAndCTAs() {
   return (
-    <section className="max-w-3xl mx-auto mb-16 md:mb-55">
+    <section className="max-w-3xl mx-auto mb-10 md:mb-14">
       <Heading as="h1" className="mb-6">
         <span className="block text-3xl md:text-4xl lg:text-6xl leading-loose">
           Hi, I'm Daniele.
         </span>
         <span className="block text-xl md:text-2xl lg:text-4xl">
-          I craft frontend solutions that help teams ship and products scale.
+          I build frontend solutions that help teams ship and products scale.
         </span>
       </Heading>
 

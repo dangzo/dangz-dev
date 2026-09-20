@@ -62,6 +62,7 @@ test.describe('Visual regression', () => {
       await expect(page).toHaveScreenshot(route.name, {
         animations: 'disabled',
         fullPage: true,
+        maxDiffPixelRatio: 0.001,
       });
     });
   }

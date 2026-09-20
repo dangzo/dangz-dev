@@ -16,6 +16,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${geist.variable} ${geistMono.variable} ${roboto.variable} ${robotoSlab.variable} antialiased`}
       suppressHydrationWarning
     >
@@ -44,9 +45,10 @@ export default function RootLayout({
         "
       >
         <ThemeProvider>
+          <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-80 focus:rounded-lg focus:bg-primary-700 focus:px-5 focus:py-3 focus:text-white">Skip to content</a>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 xl:px-0">
             <Header />
-            <main className="min-h-[calc(100vh-300px)] py-2 sm:pt-6 sm:pb-8">
+            <main id="main-content" tabIndex={-1} className="min-h-[calc(100vh-300px)] py-2 sm:pt-6 sm:pb-8">
               {children}
             </main>
           </div>

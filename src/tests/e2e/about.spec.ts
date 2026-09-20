@@ -11,7 +11,7 @@ test.describe('About Page', () => {
     }).first();
 
     await expect(introSection.getByRole('heading', { level: 1, name: /hi, i'm daniele/i })).toBeVisible();
-    await expect(introSection.getByText(/craft frontend solutions that help teams ship and products scale/i)).toBeVisible();
+    await expect(introSection.getByText(/build frontend solutions that help teams ship and products scale/i)).toBeVisible();
     await expect(introSection.getByText(/over the last/i)).toBeVisible();
     await expect(introSection.getByText(/react/i)).toBeVisible();
     await expect(introSection.getByText(/vue/i)).toBeVisible();
@@ -25,6 +25,13 @@ test.describe('About Page', () => {
     const connectLinkedInBtn = introSection.getByRole('link', { name: /connect on linkedin/i });
     await expect(connectLinkedInBtn).toBeVisible();
     await expect(connectLinkedInBtn).toHaveAttribute('href', /linkedin\.com/i);
+  });
+
+  test('mobile section shortcuts bring the destination into view', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.getByRole('navigation', { name: 'About sections' }).getByRole('link', { name: 'Get in touch' }).click();
+    await expect(page).toHaveURL(/#contact$/);
+    await expect(page.locator('#contact').getByRole('link', { name: 'Email me' })).toBeInViewport();
   });
 
   test('tools i trust section', async ({ page }) => {
