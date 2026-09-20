@@ -63,14 +63,14 @@ const SearchButton = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center gap-0.5">
+      <div className="flex items-center">
         <button
           type="button"
           aria-label="Search"
           aria-haspopup="dialog"
           aria-expanded={isOpen}
           aria-keyshortcuts="Control+K Meta+K"
-          className="cursor-pointer"
+          className="flex h-11 w-11 cursor-pointer items-center justify-center gap-2 rounded-md lg:w-auto lg:px-3"
           onClick={openSearch}
         >
           <svg
@@ -79,7 +79,7 @@ const SearchButton = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="hover:text-primary-500 dark:hover:text-primary-400 h-6 w-6 text-main-light dark:text-main-dark"
+            className="h-5 w-5 text-main-light hover:text-primary-500 dark:text-main-dark dark:hover:text-primary-400"
           >
             <path
               strokeLinecap="round"
@@ -87,13 +87,13 @@ const SearchButton = () => {
               d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
             />
           </svg>
+          <span
+            aria-hidden="true"
+            className="hidden text-[10px] font-medium leading-none text-main-light/60 dark:text-main-dark/50 lg:inline"
+          >
+            {shortcutLabel}
+          </span>
         </button>
-        <span
-          aria-hidden="true"
-          className="hidden lg:inline text-[10px] leading-none font-medium text-main-light/60 dark:text-main-dark/50"
-        >
-          {shortcutLabel}
-        </span>
       </div>
 
       {isSearchEnabled

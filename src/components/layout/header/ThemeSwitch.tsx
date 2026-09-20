@@ -54,7 +54,7 @@ const ThemeSwitch = () => {
       type="button"
       aria-label="Theme switcher"
       aria-pressed={isDark}
-      className="cursor-pointer hover:text-primary-500 dark:hover:text-primary-400 flex items-center justify-center relative w-8 h-6"
+      className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-md hover:text-primary-500 dark:hover:text-primary-400 [&_svg]:h-5 [&_svg]:w-5"
       onClick={handleClick}
     >
       {mounted

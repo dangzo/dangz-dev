@@ -14,30 +14,32 @@ export const metadata: Metadata = {
   },
 };
 
-const deferredSectionStyle = (heightPx: number) => ({
-  contentVisibility: 'auto',
-  containIntrinsicSize: `1px ${heightPx}px`,
-}) as const;
-
 export default function AboutPage() {
   return (
     <article className="sm:py-4 md:py-12">
       <div className="mx-auto flex flex-col">
         <IntroTextAndCTAs />
 
-        <section style={deferredSectionStyle(1900)}>
-          <ToolsITrust />
-        </section>
+        <nav aria-label="About sections" className="mb-12 flex flex-wrap justify-center gap-x-6 gap-y-3 border-y border-border-light py-5 text-sm font-medium dark:border-border-dark">
+          <a href="#journey" className="py-2 hover:text-accent-light dark:hover:text-accent-dark">Experience</a>
+          <a href="#beyond" className="py-2 hover:text-accent-light dark:hover:text-accent-dark">Beyond the stack</a>
+          <a href="#tools" className="py-2 hover:text-accent-light dark:hover:text-accent-dark">Tools I trust</a>
+          <a href="#contact" className="py-2 hover:text-accent-light dark:hover:text-accent-dark">Get in touch</a>
+        </nav>
 
-        <section style={deferredSectionStyle(1400)}>
+        <section id="journey" className="scroll-mt-8">
           <MyJourneySoFar />
         </section>
 
-        <section style={deferredSectionStyle(420)}>
+        <section id="beyond" className="scroll-mt-8">
           <BeyondTheStack />
         </section>
 
-        <section style={deferredSectionStyle(400)}>
+        <section id="tools" className="scroll-mt-8">
+          <ToolsITrust />
+        </section>
+
+        <section id="contact" className="scroll-mt-8">
           <LetsTalkFrontend />
         </section>
       </div>

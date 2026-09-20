@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import headerNavLinks from '@/data/headerNavLinks';
 import SearchButton from './SearchButton';
 import ThemeSwitch from './ThemeSwitch';
@@ -12,9 +13,11 @@ type NavigationProps = {
   className?: string;
 };
 
-const Navigation = ({ onNavigate, className = '' }: NavigationProps) => {
+const Navigation = ({ onNavigate, className = '' }: Readonly<NavigationProps>) => {
+  const pathname = usePathname();
+
   return (
-    <nav className={className}>
+    <nav aria-label="Main navigation" className={className}>
       <ul className="flex flex-col md:flex-row gap-4">
         {headerNavLinks.map((link) => (
           <li key={link.title}>
@@ -24,11 +27,12 @@ const Navigation = ({ onNavigate, className = '' }: NavigationProps) => {
                 text-main-light hover:text-gray-900 dark:text-main-dark dark:hover:text-white
               "
               href={link.href}
+              aria-current={(link.href === '/' ? pathname === '/' : pathname === link.href || pathname.startsWith(`${link.href}/`)) ? 'page' : undefined}
               onClick={onNavigate}
             >
               <span className="relative z-10">
                 {link.title}
-                <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-primary-500 transition-all duration-200 ease-out group-hover:w-full dark:bg-primary-400"/>
+                <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-primary-500 transition-all duration-200 ease-out group-hover:w-full group-aria-[current=page]:w-full dark:bg-primary-400"/>
               </span>
             </Link>
           </li>
@@ -41,7 +45,7 @@ const Navigation = ({ onNavigate, className = '' }: NavigationProps) => {
 const ActionBtns = () => {
   return (
     <div
-      className="flex flex-row items-start gap-2 md:gap-4 border border-dashed px-2 py-1.5 md:px-4 md:py-2 rounded-md dark:border-border-dark border-border-light"
+      className="flex items-center"
     >
       <SearchButton />
       <ThemeSwitch />
@@ -59,7 +63,7 @@ const HamburgerMenu = ({ isMenuOpen, toggleMenu }: {
       aria-expanded={isMenuOpen}
       aria-controls="mobile-nav-menu"
       onClick={toggleMenu}
-      className="md:hidden rounded-md border border-dashed px-3 py-2 dark:border-border-dark border-border-light text-gray-700 dark:text-gray-200 hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
+      className="flex h-11 w-11 items-center justify-center rounded-md text-gray-700 transition-colors hover:text-primary-500 dark:text-gray-200 dark:hover:text-primary-400 md:hidden"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -89,21 +93,33 @@ const Header = () => {
 
   return (
     <header
-      className="bg-transparent backdrop-blur-sm py-4 sm:mb-0 sm:py-8 overflow-x-hidden"
+      className="border-b border-border-light bg-transparent py-4 dark:border-border-dark sm:mb-0 sm:py-6"
     >
-      <div className="flex w-full flex-col-reverse lg:flex-row items-stretch md:items-center justify-between gap-4">
-        <Prompt />
+      <div className="flex w-full items-center justify-between gap-4">
+        <Link href="/" className="shrink-0 font-mono font-bold text-accent-light dark:text-accent-dark md:hidden">dangz.dev</Link>
+        <div className="hidden min-w-0 flex-1 overflow-x-auto py-1 md:block">
+          <Prompt />
+        </div>
 
-        <div className="flex w-full md:w-auto justify-between items-center gap-7.5 lg:gap-3">
+        <div className="ml-auto flex shrink-0 items-center gap-5">
           <Navigation className="hidden md:block" />
 
-          <ActionBtns />
-          <HamburgerMenu isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
+          <div className="flex items-center rounded-lg border border-border-light px-1 dark:border-border-dark">
+            <ActionBtns />
+            <HamburgerMenu isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
+          </div>
         </div>
       </div>
 
       <div
         id="mobile-nav-menu"
+        inert={!isMenuOpen}
+        onKeyDown={(event) => {
+          if (event.key === 'Escape') {
+            closeMenu();
+            document.querySelector<HTMLButtonElement>('[aria-controls="mobile-nav-menu"]')?.focus();
+          }
+        }}
         className={`md:hidden overflow-hidden transition-all duration-200 ease-out ${isMenuOpen ? 'max-h-64 opacity-100 mt-4' : 'max-h-0 opacity-0 mt-0'}`}
       >
         <Navigation

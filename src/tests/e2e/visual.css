@@ -32,3 +32,7 @@ span[role='img'],
 a[aria-label$='reactions - open post'] span[aria-hidden='true'] {
   visibility: hidden;
 }
+
+body:has(aside[aria-label='About this space']) span[aria-hidden='true'] {
+  visibility: hidden;
+}
