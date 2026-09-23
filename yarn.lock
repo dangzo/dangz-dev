@@ -7857,10 +7857,10 @@ groq@3.88.1-typegen-experimental.0:
   resolved "https://registry.yarnpkg.com/groq/-/groq-3.88.1-typegen-experimental.0.tgz#62970237ba5224953194f881a799ba810369df9b"
   integrity sha512-6TZD6H1y3P7zk0BQharjFa7BOivV9nFL6KKVZbRZRH0yOSSyu2xHglTO48b1/2mCEdYoBQpvE7rjCDUf6XmQYQ==
 
-groq@^6.0.0, groq@^6.9.2:
-  version "6.11.0"
-  resolved "https://registry.yarnpkg.com/groq/-/groq-6.11.0.tgz#cb41dbc56e55c4b70809c69cdbadb7a3cab765e9"
-  integrity sha512-fSGUDtPxmbrdeI7PaoVLkxMElXreqqaYCwnA9NQFGpZ+UWV5QI2QAFSPZrZv5e52hAk2sf/yaZd6cmpQCSowuQ==
+groq@^6.0.0, groq@^6.11.0:
+  version "6.16.0"
+  resolved "https://registry.yarnpkg.com/groq/-/groq-6.16.0.tgz#fafebc8b5e2bbbf37cc9ed150cfe606c5be26988"
+  integrity sha512-JEDbocK5tBEV2NGg/UpQ1FCyHM6SNVpp8aBkuR9S7NNKU866AHq3CAoY7R3zGYwrYKPVVMxd78Usd2zBh6qQhA==
 
 gunzip-maybe@^1.4.2:
   version "1.4.2"
@@ -10096,10 +10096,10 @@ netmask@^2.0.2:
   resolved "https://registry.yarnpkg.com/netmask/-/netmask-2.1.1.tgz#80043d265b53aa521b3bd01e8fcdf353f9e1e81e"
   integrity sha512-eonl3sLUha+S1GzTPxychyhnUzKyeQkZ7jLjKrBagJgPla13F+uQ71HgpFefyHgqrjEbCPkDArxYsjY8/+gLKA==
 
-next-sanity@^13.1.1:
-  version "13.3.3"
-  resolved "https://registry.yarnpkg.com/next-sanity/-/next-sanity-13.3.3.tgz#e304f04be972dca1c00c6b40b5029cdedf0871d3"
-  integrity sha512-rz6rsUN8oxmDURumaB5gkSCU9WL/hU6ufoodglo2031gPtGuftwhD/xY5cPWCvnbNS3Y4F61ej8HXIZm4vsJIw==
+next-sanity@^13.3.4:
+  version "13.3.4"
+  resolved "https://registry.yarnpkg.com/next-sanity/-/next-sanity-13.3.4.tgz#e1c0095c7a1576cfa41c9ebf052ec3f9d6fc39eb"
+  integrity sha512-aT7Tq03tXkrjKWYKNUc/nPUrG9UR5GznP/GyQg5Y0InGCpw8EAvdoqolEZ071rOFcFZ9tolZkcS3HHLkNsbeuA==
   dependencies:
     "@portabletext/react" "^7.0.1"
     "@sanity/client" "^7.26.2"
@@ -10107,7 +10107,7 @@ next-sanity@^13.1.1:
     "@sanity/preview-url-secret" "^4.1.4"
     "@sanity/visual-editing" "^6.0.4"
     "@sanity/webhook" "^4.0.4"
-    groq "^6.9.2"
+    groq "^6.11.0"
     history "^5.3.0"
 
 next-themes@^0.4.6:
