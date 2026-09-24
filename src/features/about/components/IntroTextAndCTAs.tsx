@@ -17,10 +17,10 @@ function IntroTextAndCTAs() {
 
       <Text size="large">
         Over the last { devYears } years, I&apos;ve moved from freelance and full-stack work into
-        senior frontend roles, helping teams build reliable products with&nbsp;
-        <strong className="text-accent-dark">React</strong>,&nbsp;
-        <strong className="text-accent-dark">Vue</strong> and&nbsp;
-        <strong className="text-accent-dark">TypeScript</strong>.
+        senior frontend roles, helping teams build reliable products with
+        <strong className="text-accent-dark">&nbsp;React</strong>
+        <strong className="text-accent-dark">&nbsp;Vue</strong> and
+        <strong className="text-accent-dark">&nbsp;TypeScript</strong>.
       </Text>
 
       <Text size="large" className="mb-0">
