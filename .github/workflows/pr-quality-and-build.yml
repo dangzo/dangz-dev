@@ -12,13 +12,8 @@ on:
       - 'src/**'
       - 'public/**'
       - 'studio/**'
-      - '*.json'
-      - '*.js'
-      - '*.ts'
-      - '*.mjs'
-      - '*.cjs'
       - '.github/workflows/pr-quality-and-build.yml'
-      - 'yarn.lock'
+      - '*.*'
 
 concurrency:
   group: pr-quality-and-build-${{ github.event.pull_request.number || github.ref }}
