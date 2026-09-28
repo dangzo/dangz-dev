@@ -129,7 +129,7 @@ Visual regression tests run the Home, About, blog list, article, and tag-list pa
 
 ## Yarn Workspaces
 
-This monorepo is managed with Yarn workspaces. The root `package.json` defines the workspace configuration and shared dependencies. Each package (project root and `studio`) has its own `package.json` for package-specific dependencies and scripts.
+This monorepo is managed with Yarn workspaces, and the root `package.json` defines the workspace configuration and shared dependencies. Each package (project root and `studio`) has its own `package.json` for package-specific dependencies and scripts.
 
 ### Available Scripts
 
