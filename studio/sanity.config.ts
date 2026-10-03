@@ -5,6 +5,7 @@ import { schemaTypes } from './schemaTypes';
 import { codeInput } from '@sanity/code-input';
 import { graphiQLTool } from 'sanity-plugin-graphiql';
 import { table } from '@sanity/table';
+import { TagPostsView } from './components/TagPostsView';
 
 export default defineConfig({
   name: 'default',
@@ -14,7 +15,18 @@ export default defineConfig({
   dataset: process.env.SANITY_STUDIO_DATASET || '',
 
   plugins: [
-    structureTool(),
+    structureTool({
+      defaultDocumentNode: (S, { schemaType }) => {
+        if (schemaType === 'tag') {
+          return S.document().views([
+            S.view.form(),
+            S.view.component(TagPostsView).title('Blog posts'),
+          ]);
+        }
+
+        return S.document().views([S.view.form()]);
+      },
+    }),
     visionTool(),
     codeInput(),
     table(),
