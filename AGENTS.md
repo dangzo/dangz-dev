@@ -1,24 +1,21 @@
 # AGENTS.md
 
-## Code style
-- TypeScript strict mode
-- Double quotes for HTML properties, single quotes TypeScript / JavaScript
-- Prefer clean and readable code over clever code
-- No single-line returns, always use braces
-- Prefer separated blocks of code by empty lines
-- Prefer TailwindCSS over CSS modules and inline styles.
-- Comment your code when it is not obvious what it does. If you find yourself writing a comment to explain what the code does, consider refactoring the code to make it more readable instead.
-- Typing: Prefer `Readonly<T>` over `T` when possible, especially for props.
-- Typing: avoid using `any` type. If you need to use `any`, explain why you need to use it and how you are using it.
+## Read on demand
 
-## Components
-- Prefer functional components over class components
-- Evaluate if a component should be a client component or server component. If it needs to use state, effects, or browser APIs, it should be a client component. Otherwise, it can be a server component.
-- When refactoring components evaluate if they can be split into smaller components to improve readability and maintainability.
-- When creating new components from a refactor of an existing component, evaluate if the component should live inside the same file or in a separate file. If the component is only used by the parent component, it can live inside the same file. If it is used by multiple components or should be visible externally, even for architectural reasons, it should live in a separate file.
+- Read [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) when locating code or changing routing, data flow, or UI structure.
+- Read [docs/WORKFLOW.md](docs/WORKFLOW.md) when running checks or changing schemas, queries, or generated files.
+- Read only task-relevant sections; update guidance when documented behavior changes.
 
-## Adding entries in About page
-- If you need a new SVG icon for an About entry, ask the dev running the agent for the SVG (or reuse an existing icon) before adding a new devicon component.
+## Rules
+
+- Write readable, strict TypeScript; prefer `Readonly<T>`, especially for props. Avoid `any`; explain necessary uses.
+- Use single quotes in JS/TS, double quotes in JSX/HTML attributes, two-space indentation, and semicolons.
+- Use braces and multiline return statements; separate logical blocks with blank lines.
+- Refactor unclear code before commenting; comment non-obvious reasoning.
+- Use functional components. Default to server components; use client components for state, effects, event handlers, or browser APIs.
+- Split components for readability; colocate private helpers and extract shared or architecturally public components.
+- Prefer Tailwind utilities over CSS modules and inline styles; reuse existing UI primitives and theme tokens.
+- Reuse About icons from `public/icons/`; ask the developer for an SVG before adding a new icon.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
