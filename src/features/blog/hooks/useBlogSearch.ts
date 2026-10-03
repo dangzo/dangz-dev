@@ -1,13 +1,14 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import type { TopicSummary } from '@/features/blog/types/Topic.types';
 
 export type SearchHit = {
   id: string;
   slug: string;
   title: string;
   excerpt: string;
-  tags: string[];
+  primaryTopic: TopicSummary | null;
 };
 
 export function useBlogSearch() {

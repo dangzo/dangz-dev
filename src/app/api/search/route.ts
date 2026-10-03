@@ -1,138 +1,108 @@
 import { NextResponse } from 'next/server';
 import { unstable_cache } from 'next/cache';
+import {
+  CMS_CONTENT_CACHE_TAG,
+  SEARCH_CORPUS_CACHE_TAG,
+  isDraftPreviewEnabled,
+  usesPrimaryTopicModel,
+} from '@/api/apollo-client';
 import { getSearchablePosts } from '@/features/blog/api/queries/search';
+import type { TopicSummary } from '@/features/blog/types/Topic.types';
 
-type SearchResult = {
+export type SearchResult = Readonly<{
   id: string;
   slug: string;
   title: string;
   excerpt: string;
-  tags: string[];
+  primaryTopic: TopicSummary | null;
+  // Older browser bundles still read tags.length after a frontend deployment.
+  tags: readonly string[];
   score: number;
-};
+}>;
 
-type SearchCorpusEntry = {
-  id: string;
-  slug: string;
-  title: string;
-  excerpt: string;
-  tags: string[];
+type SearchCorpusEntry = Omit<SearchResult, 'score' | 'tags'> & Readonly<{
   searchableTitle: string;
   searchableExcerpt: string;
-  searchableTags: string[];
-};
+  searchableTopic: string;
+  searchableKeywords: readonly string[];
+}>;
 
 const normalize = (value: string) => value.trim().toLowerCase();
 
-const toUniqueTagLabels = (
-  tags: Array<{ name?: string; slug?: { current?: string } }> | undefined,
-) => {
-  const seen = new Set<string>();
+const buildSearchCorpus = async (publishedOnly: boolean): Promise<SearchCorpusEntry[]> => {
+  const posts = await getSearchablePosts({ publishedOnly });
 
-  return (tags ?? []).flatMap((tag) => {
-    const label = tag.name?.trim() || tag.slug?.current?.trim() || '';
-    if (!label) {
-      return [];
-    }
+  return posts.map((post) => {
+    const title = post.title ?? '';
+    const slug = post.slug?.current ?? '';
+    const excerpt = post.excerpt ?? '';
+    const primaryTopic = post.primaryTopic ?? null;
 
-    const normalized = label.toLowerCase();
-    if (seen.has(normalized)) {
-      return [];
-    }
-
-    seen.add(normalized);
-    return [label];
-  });
+    return {
+      id: post._id,
+      slug,
+      title,
+      excerpt,
+      primaryTopic,
+      searchableTitle: normalize(title),
+      searchableExcerpt: normalize(excerpt),
+      searchableTopic: normalize(primaryTopic?.displayName ?? ''),
+      searchableKeywords: (post.keywords ?? []).map(normalize),
+    };
+  }).filter((post) => post.slug.length > 0);
 };
 
-const getSearchCorpus = unstable_cache(
-  async (): Promise<SearchCorpusEntry[]> => {
-    const posts = await getSearchablePosts();
+const getPublishedSearchCorpus = (model: string) => {
+  return unstable_cache(
+    async () => buildSearchCorpus(true),
+    ['search-corpus-v3', model],
+    { revalidate: 3600, tags: [CMS_CONTENT_CACHE_TAG, SEARCH_CORPUS_CACHE_TAG] },
+  )();
+};
 
-    return posts
-      .map((post) => {
-        const title = post.title ?? '';
-        const slug = post.slug?.current ?? '';
-        const excerpt = post.excerpt ?? '';
-        const tags = toUniqueTagLabels(post.tags);
-
-        return {
-          id: post._id,
-          slug,
-          title,
-          excerpt,
-          tags,
-          searchableTitle: title.toLowerCase(),
-          searchableExcerpt: excerpt.toLowerCase(),
-          searchableTags: tags.map((tag) => tag.toLowerCase()),
-        };
-      })
-      .filter((post) => post.slug.length > 0);
-  },
-  ['search-corpus-v2'],
-  { revalidate: 3600 },
-);
-
-const scorePost = ({
-  query,
-  title,
-  excerpt,
-  tags,
-}: {
-  query: string;
-  title: string;
-  excerpt: string;
-  tags: string[];
-}) => {
+const scorePost = (post: SearchCorpusEntry, query: string) => {
   let score = 0;
 
-  const lowerTitle = title.toLowerCase();
-  const lowerExcerpt = excerpt.toLowerCase();
-  const lowerTags = tags.map((tag) => tag.toLowerCase());
-
-  if (lowerTitle.includes(query)) {
+  if (post.searchableTitle.includes(query)) {
     score += 6;
   }
-  if (lowerExcerpt.includes(query)) {
+
+  if (post.searchableExcerpt.includes(query)) {
     score += 4;
   }
 
-  const tagHits = lowerTags.filter((tag) => tag.includes(query)).length;
-  score += tagHits * 3;
+  if (post.searchableTopic.includes(query)) {
+    score += 3;
+  }
+
+  score += post.searchableKeywords.filter((keyword) => keyword.includes(query)).length * 3;
 
   return score;
 };
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const q = searchParams.get('q') ?? '';
-  const query = normalize(q);
+  const query = normalize(new URL(request.url).searchParams.get('q') ?? '');
 
   if (query.length < 2) {
     return NextResponse.json({ results: [] });
   }
 
-  const posts = await getSearchCorpus();
+  // Drafts must never enter the persistent published corpus, even locally.
+  const preview = isDraftPreviewEnabled();
+  const bypassCache = preview || process.env.E2E_FIXTURES === 'true';
+  const posts = bypassCache
+    ? await buildSearchCorpus(!preview)
+    : await getPublishedSearchCorpus(usesPrimaryTopicModel() ? 'primary' : 'legacy');
 
-  const results: SearchResult[] = posts
-    .map((post) => {
-      const score = scorePost({
-        query,
-        title: post.searchableTitle,
-        excerpt: post.searchableExcerpt,
-        tags: post.searchableTags,
-      });
-
-      return {
-        id: post.id,
-        slug: post.slug,
-        title: post.title,
-        excerpt: post.excerpt,
-        tags: post.tags,
-        score,
-      };
-    })
-    .filter((item) => item.score > 0)
+  const results: SearchResult[] = posts.map((post) => ({
+    id: post.id,
+    slug: post.slug,
+    title: post.title,
+    excerpt: post.excerpt,
+    primaryTopic: post.primaryTopic,
+    tags: [],
+    score: scorePost(post, query),
+  })).filter((item) => item.score > 0)
     .sort((a, b) => b.score - a.score)
     .slice(0, 20);
 

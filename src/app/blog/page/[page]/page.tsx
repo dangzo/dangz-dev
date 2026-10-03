@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { PostList } from '@/features/blog/components';
 import { getPostList } from '@/features/blog/api/queries/posts';
-import { getTagsWithCount } from '@/features/blog/api/queries/tags';
+import { getTopicsWithCount } from '@/features/blog/api/queries/topics';
 import { getTotalPages, parsePageParam } from '@/features/blog/utils/pagination';
 import { notFound, redirect } from 'next/navigation';
 
@@ -34,12 +34,12 @@ async function BlogPagedPage({ params }: { params: Promise<{ page: string }> }) 
     redirect('/blog');
   }
 
-  const [posts, { tagCount }] = await Promise.all([
+  const [posts, { totalPostCount }] = await Promise.all([
     getPostList({ page }),
-    getTagsWithCount(),
+    getTopicsWithCount(),
   ]);
 
-  const totalPages = getTotalPages(tagCount());
+  const totalPages = getTotalPages(totalPostCount);
 
   if (page > totalPages || !posts?.length) {
     return notFound();

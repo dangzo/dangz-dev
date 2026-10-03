@@ -153,7 +153,7 @@ describe('SearchModal', () => {
             slug: 'hello-world',
             title: 'Hello world',
             excerpt: '',
-            tags: [],
+            primaryTopic: null,
           },
         ]}
         isLoading={false}
@@ -174,8 +174,8 @@ describe('SearchModal', () => {
         isOpen
         query="ab"
         results={[
-          { id: '1', slug: 'one', title: 'First', excerpt: '', tags: [] },
-          { id: '2', slug: 'two', title: 'Second', excerpt: '', tags: [] },
+          { id: '1', slug: 'one', title: 'First', excerpt: '', primaryTopic: null },
+          { id: '2', slug: 'two', title: 'Second', excerpt: '', primaryTopic: null },
         ]}
         isLoading={false}
         inputRef={inputRef}
@@ -197,8 +197,8 @@ describe('SearchModal', () => {
         isOpen
         query="ab"
         results={[
-          { id: '1', slug: 'one', title: 'First', excerpt: '', tags: [] },
-          { id: '2', slug: 'two', title: 'Second', excerpt: '', tags: [] },
+          { id: '1', slug: 'one', title: 'First', excerpt: '', primaryTopic: null },
+          { id: '2', slug: 'two', title: 'Second', excerpt: '', primaryTopic: null },
         ]}
         isLoading={false}
         inputRef={inputRef}

@@ -1,11 +1,11 @@
 import { DateText, Text, Heading, Link, Img } from '@/components/ui';
 import TagList from './TagList';
 import Skeleton from 'react-loading-skeleton';
-import type { PostWithTags } from '@/features/blog/types/Post.types';
+import type { PostWithTopic } from '@/features/blog/types/Post.types';
 import ReactionsSummary from './reactions/ReactionsSummary';
 
 interface PostCardProps {
-  post: PostWithTags;
+  post: PostWithTopic;
   preload: boolean;
 }
 
@@ -25,7 +25,7 @@ export const PostCardSkeleton = () => {
   );
 };
 
-export const PostCard = ({ post, preload }: PostCardProps) => {
+export const PostCard = ({ post, preload }: Readonly<PostCardProps>) => {
   const hasVisibleReactions = (post.reactions?.some((reaction) => (reaction.count ?? 0) > 0 && reaction.emoji) ?? false);
   const postHref = `/blog/${post.slug?.current}`;
 
@@ -49,7 +49,7 @@ export const PostCard = ({ post, preload }: PostCardProps) => {
               : null}
             <ReactionsSummary reactions={post.reactions} href={postHref} />
           </div>
-          {post.tags && <TagList tags={post.tags} />}
+          {post.primaryTopic && <TagList topic={post.primaryTopic} />}
         </div>
 
         <Text className="my-4">

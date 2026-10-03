@@ -1,8 +1,10 @@
 import { TagsSidebar } from '@/features/blog/components';
-import { getTagsWithCount } from '@/features/blog/api/queries/tags';
+import { getTopicsWithCount } from '@/features/blog/api/queries/topics';
 
 export default async function BlogSidebar() {
-  const { tags, tagCount } = await getTagsWithCount();
+  const { topics, totalPostCount } = await getTopicsWithCount();
 
-  return <TagsSidebar tags={tags} tagCount={tagCount} />;
+  return (
+    <TagsSidebar topics={topics} totalPostCount={totalPostCount} />
+  );
 }

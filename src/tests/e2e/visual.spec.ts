@@ -5,7 +5,7 @@ const visualRoutes = [
   { name: 'about.png', path: '/about' },
   { name: 'blog-list.png', path: '/blog' },
   { name: 'blog-article.png', path: '/blog/stable-visual-regression-tests' },
-  { name: 'tag-list.png', path: '/blog/tags/react' },
+  { name: 'topic-list.png', path: '/blog/topics/architecture' },
 ] as const;
 
 async function waitForImage(image: Locator) {

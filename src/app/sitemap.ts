@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { siteUrl } from '@/data/siteMetadata';
+import { getTopicsWithCount } from '@/features/blog/api/queries/topics';
 import { getPostSlugs } from '@/features/blog/api/queries/singlePost';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -25,7 +26,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Blog posts
-  const posts = await getPostSlugs();
+  const [posts, { topics }] = await Promise.all([
+    getPostSlugs({ publishedOnly: true }),
+    getTopicsWithCount({ publishedOnly: true }),
+  ]);
   const blogPosts: MetadataRoute.Sitemap = posts
     .filter(post => post.slug?.current)
     .map(post => ({
@@ -34,5 +38,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }));
 
-  return [...staticPages, ...blogPosts];
+  const topicPages: MetadataRoute.Sitemap = topics
+    .filter(topic => topic.postCount > 0)
+    .map(topic => ({
+      url: `${baseUrl}/blog/topics/${topic.slug.current}`,
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+    }));
+
+  return [...staticPages, ...blogPosts, ...topicPages];
 }
