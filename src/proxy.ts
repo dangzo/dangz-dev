@@ -13,7 +13,15 @@ export async function proxy(request: NextRequest) {
 
   // Decide permanent destinations before the App Router can stream a response.
   // Legacy destinations use published counts; canonical routes follow the current perspective.
-  const { topics, totalPostCount } = await getTopicsWithCount({ publishedOnly: Boolean(legacyMatch), outsideRender: true });
+  let result: Awaited<ReturnType<typeof getTopicsWithCount>>;
+
+  try {
+    result = await getTopicsWithCount({ publishedOnly: Boolean(legacyMatch), outsideRender: true });
+  } catch {
+    return NextResponse.next();
+  }
+
+  const { topics, totalPostCount } = result;
   let destination: string | null = null;
 
   if (legacyMatch) {
