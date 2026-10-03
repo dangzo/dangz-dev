@@ -1,6 +1,7 @@
 import { PostCard, PostCardSkeleton } from './PostCard';
 import { Pagination } from '@/components/ui';
 import type { PostWithTopic } from '@/features/blog/types/Post.types';
+import { getEditorialSummary } from '@/features/blog/utils/editorial-preview';
 
 interface PostListPagination {
   currentPage: number;
@@ -9,7 +10,7 @@ interface PostListPagination {
 }
 
 interface PostListProps {
-  posts: PostWithTopic[];
+  posts: readonly PostWithTopic[];
   pagination?: PostListPagination;
 }
 
@@ -18,16 +19,13 @@ const postListSkeletonKeys = ['one', 'two', 'three'] as const;
 export const PostList = ({ posts, pagination }: Readonly<PostListProps>) => {
   return (
     <>
-      <ul className="space-y-6">
+      <ul className="divide-y divide-border-light dark:divide-border-dark">
         {posts?.map((post, index) => (
           <li
             key={post._id}
-            className="
-              relative dark:bg-background-secondary-darks border-b
-              px-0 py-6 my-3 sm:mb-3 md:py-4 md:mt-0 md:pr-4
-            "
+            className="py-6 md:py-8"
           >
-            <PostCard key={post._id} post={post} preload={index < 2}/>
+            <PostCard post={post} summary={getEditorialSummary(post)} preload={index < 2} />
           </li>
         ))}
       </ul>
@@ -39,13 +37,11 @@ export const PostList = ({ posts, pagination }: Readonly<PostListProps>) => {
 
 export const PostListSkeleton = () => {
   return (
-    <ul className="space-y-6">
+    <ul className="divide-y divide-border-light dark:divide-border-dark">
       {postListSkeletonKeys.map((key) => (
         <li
           key={key}
-          className="
-            relative px-0 my-3 sm:mb-3 sm:mt-0 py-2 md:py-4 md:pr-4 duration-300 dark:bg-background-secondary-darks border-b
-          "
+          className="py-6 md:py-8"
         >
           <PostCardSkeleton />
         </li>

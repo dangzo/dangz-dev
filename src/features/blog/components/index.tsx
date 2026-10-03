@@ -6,4 +6,4 @@ export { default as TagList } from './TagList';
 export { default as Reactions } from './reactions/Reactions';
 export { default as PortableText } from './portable-text/PortableText';
 export { default as ToCSidebar } from './sidebars/ToCSidebar';
-export { default as TagsSidebar } from './sidebars/TagsSidebar';
+export { default as TopicNavigation } from './TopicNavigation';

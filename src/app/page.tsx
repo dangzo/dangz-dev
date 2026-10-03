@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui';
 import { links } from '@/data/siteMetadata';
 import LatestWriting from '@/features/home/components/LatestWriting';
+import { WritingPreviewSkeleton } from '@/features/home/components/WritingPreview';
 import { TopTags, TopTagsSkeleton } from '@/features/home/components/TopTags';
 
 export const metadata: Metadata = {
@@ -48,7 +49,9 @@ export default function HomePage() {
           </div>
           <Link href="/blog" className="py-2 text-sm font-medium text-accent-light hover:underline dark:text-accent-dark">All articles <span aria-hidden="true">→</span></Link>
         </div>
-        <Suspense fallback={<p className="py-12 text-secondary-light dark:text-secondary-dark" role="status">Loading the latest writing…</p>}><LatestWriting /></Suspense>
+        <Suspense fallback={<WritingPreviewSkeleton />}>
+          <LatestWriting />
+        </Suspense>
       </section>
 
       <section aria-labelledby="topics-heading" className="border-y border-border-light py-8 dark:border-border-dark md:flex md:items-start md:gap-10">

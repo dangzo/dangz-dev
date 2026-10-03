@@ -50,6 +50,22 @@ test.describe('Blog Article Page', () => {
     await expect(articleImage).toBeVisible();
   });
 
+  test('mobile ToC preserves anchor navigation and rich content stays within the viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    const toggle = page.getByRole('button', { name: 'Show Table of Contents' });
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await toggle.click();
+    const anchor = page.locator('aside a[href^="#"]').first();
+    const href = await anchor.getAttribute('href');
+    await anchor.click();
+
+    await expect(page).toHaveURL(new RegExp(`${href}$`));
+    await expect(page.getByRole('button', { name: 'Show Table of Contents' })).toHaveAttribute('aria-expanded', 'false');
+    await expect(page.locator('table')).toBeVisible();
+    await expect(page.locator('pre').first()).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+
   test('code blocks and rich content are rendered', async ({ page }) => {
     await expect(page.getByRole('button', { name: /copy code/i }).first()).toBeVisible();
     await expect(page.locator('main article pre').first()).toBeVisible();

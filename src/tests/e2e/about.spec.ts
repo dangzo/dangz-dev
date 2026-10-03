@@ -40,10 +40,10 @@ test.describe('About Page', () => {
     }).first();
 
     await expect(toolsSection.getByRole('heading', { level: 2, name: /tools i trust/i })).toBeVisible();
-    await expect(toolsSection.getByRole('heading', { level: 4, name: /frameworks & languages/i })).toBeVisible();
-    await expect(toolsSection.getByRole('heading', { level: 4, name: /testing, monitoring & quality assurance/i })).toBeVisible();
-    await expect(toolsSection.getByRole('heading', { level: 4, name: /cloud deployment/i })).toBeVisible();
-    await expect(toolsSection.getByRole('heading', { level: 4, name: /ai-assisted development/i })).toBeVisible();
+    await expect(toolsSection.getByRole('heading', { level: 3, name: /frameworks & languages/i })).toBeVisible();
+    await expect(toolsSection.getByRole('heading', { level: 3, name: /testing, monitoring & quality assurance/i })).toBeVisible();
+    await expect(toolsSection.getByRole('heading', { level: 3, name: /cloud deployment/i })).toBeVisible();
+    await expect(toolsSection.getByRole('heading', { level: 3, name: /ai-assisted development/i })).toBeVisible();
 
     await expect(toolsSection.getByText('Next.js')).toBeVisible();
     await expect(toolsSection.getByText('Cypress')).toBeVisible();
@@ -51,7 +51,7 @@ test.describe('About Page', () => {
     await expect(toolsSection.getByText('Codex', { exact: true })).toBeVisible();
 
     const aiAssistedDevelopmentTools = toolsSection
-      .getByRole('heading', { level: 4, name: /ai-assisted development/i })
+      .getByRole('heading', { level: 3, name: /ai-assisted development/i })
       .locator('xpath=following-sibling::ul');
 
     await expect(aiAssistedDevelopmentTools.getByRole('listitem')).toHaveText([
@@ -61,7 +61,7 @@ test.describe('About Page', () => {
       'GitHub Copilot',
     ]);
 
-    await expect(toolsSection.getByRole('heading', { level: 4 })).toHaveCount(8);
+    await expect(toolsSection.getByRole('heading', { level: 3 })).toHaveCount(8);
   });
 
   test('my journey so far section', async ({ page }) => {
