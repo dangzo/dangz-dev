@@ -21,11 +21,10 @@ export default function HomePage() {
           <p className="mb-5 font-mono text-xs uppercase tracking-[0.18em] text-accent-light dark:text-accent-dark">Senior Frontend Engineer</p>
           <h1 className="font-heading text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
             Hi, I'm Daniele.<br />
-            <span className="text-accent-light dark:text-accent-dark">I craft interfaces for the web.</span>
+            <span className="text-accent-light dark:text-accent-dark">I create software for the web.</span>
           </h1>
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-secondary-light dark:text-secondary-dark md:text-lg">
-            Notes from building real products with React, Vue and TypeScript.
-            Frontend architecture, thoughtful tradeoffs, and lessons worth sharing.
+          <p className="mt-6 max-w-3xl text-base leading-relaxed text-secondary-light dark:text-secondary-dark md:text-lg">
+            Notes on engineering best practices, exploring AI-assisted development, and learning across the stack. Architecture, thoughtful tradeoffs, and lessons worth sharing.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-5">
             <Button to="/blog" size="large">Explore the writing <span aria-hidden="true">→</span></Button>
@@ -33,8 +32,8 @@ export default function HomePage() {
           </div>
         </div>
         <aside aria-label="About this space" className="border-l-2 border-primary-500 pl-6">
-          <p className="mb-3 font-mono text-xs uppercase tracking-widest text-secondary-light dark:text-secondary-dark">Why I write and build here</p>
-          <p className="hidden font-heading text-xl leading-relaxed md:block">Building things.<br />Making sense of them.<br />Sharing what sticks.</p>
+          <p className="mb-3 font-mono text-xs uppercase tracking-widest text-secondary-light dark:text-secondary-dark">Why I write here</p>
+          <p className="hidden font-heading text-xl leading-relaxed md:block">Stay curious.<br />Follow the details.<br />See what holds up.</p>
           <p className="text-sm leading-6 text-secondary-light dark:text-secondary-dark md:mt-4 md:leading-7">A place to share my work and how I think, experiment with new technologies, and deepen my understanding through writing.</p>
           <a href={links.github} className="mt-2 inline-block py-2 text-sm font-medium text-accent-light underline-offset-4 hover:underline dark:text-accent-dark md:mt-4">Explore my GitHub <span aria-hidden="true">↗︎</span></a>
         </aside>

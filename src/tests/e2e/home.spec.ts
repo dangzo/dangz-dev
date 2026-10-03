@@ -9,7 +9,7 @@ test.describe('Home Page', () => {
     const heroSection = page.locator('article > div').first();
 
     await expect(heroSection.getByRole('heading', { level: 1, name: /hi, i'm daniele/i })).toBeVisible();
-    await expect(heroSection.getByText(/notes from building real products/i)).toBeVisible();
+    await expect(heroSection.getByText(/notes on engineering best practices/i)).toBeVisible();
     await expect(heroSection.getByText(/deepen my understanding through writing/i)).toBeVisible();
   });
 
