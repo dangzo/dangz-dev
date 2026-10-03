@@ -1,126 +1,94 @@
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 import { parseBody } from 'next-sanity/webhook';
+import { CMS_CONTENT_CACHE_TAG, SEARCH_CORPUS_CACHE_TAG } from '@/api/apollo-client';
 
-type WebhookSlug = {
-  current?: string;
-};
-
-type WebhookBody = {
-  _type?: 'post' | 'tag';
+type WebhookBody = Readonly<{
+  _type: 'post' | 'topic' | 'tag';
   operation?: 'create' | 'update' | 'delete';
-  slug?: WebhookSlug;
+  slug?: Readonly<{ current?: string }>;
   previousSlug?: string;
-  previous?: {
-    slug?: WebhookSlug;
-  };
-  tags?: Array<{
-    slug?: WebhookSlug;
-  }>;
-  previousTags?: Array<{
-    slug?: WebhookSlug;
-  }>;
-};
+  previous?: Readonly<{ slug?: Readonly<{ current?: string }> }>;
+}>;
 
-const webhookSecret = process.env.SANITY_REVALIDATE_SECRET;
-
-const getPreviousSlug = (body: WebhookBody): string | undefined => {
-  return body.previousSlug ?? body.previous?.slug?.current;
-};
-
-const addPath = (paths: Set<string>, path: string | undefined) => {
-  if (!path) {
-    return;
+const isWebhookBody = (value: unknown): value is WebhookBody => {
+  if (!value || typeof value !== 'object' || !('_type' in value)) {
+    return false;
   }
 
-  const normalized = path.trim();
-  if (!normalized) {
-    return;
-  }
-
-  paths.add(normalized.startsWith('/') ? normalized : `/${normalized}`);
+  return value._type === 'post' || value._type === 'topic' || value._type === 'tag';
 };
 
-const parseWebhookBody = async <Body>(request: NextRequest, secret: string) => {
-  // next-sanity can resolve NextRequest from a nested next installation in CI.
-  // Keep NextRequest on the route boundary for ergonomics, and isolate the
-  // compatibility cast here where parseBody is called.
-  return parseBody<Body>(
+const parseWebhookBody = async (request: NextRequest, secret: string) => {
+  // next-sanity can resolve NextRequest from a nested Next installation in CI.
+  return parseBody<unknown>(
     request as unknown as Parameters<typeof parseBody>[0],
     secret,
   );
 };
 
 export async function POST(request: NextRequest) {
-  if (!webhookSecret) {
+  const secret = process.env.SANITY_REVALIDATE_SECRET;
+
+  if (!secret) {
     return NextResponse.json(
       { ok: false, message: 'Missing SANITY_REVALIDATE_SECRET' },
       { status: 500 },
     );
   }
 
-  const { isValidSignature, body } = await parseWebhookBody<WebhookBody>(
-    request,
-    webhookSecret,
-  );
+  let payload: Awaited<ReturnType<typeof parseWebhookBody>>;
 
-  if (!isValidSignature) {
+  try {
+    payload = await parseWebhookBody(request, secret);
+  } catch {
+    return NextResponse.json({ ok: false, message: 'Invalid webhook payload' }, { status: 400 });
+  }
+
+  if (!payload.isValidSignature) {
     return NextResponse.json(
       { ok: false, message: 'Invalid webhook signature' },
       { status: 401 },
     );
   }
 
-  if (!body?._type) {
+  if (!isWebhookBody(payload.body)) {
     return NextResponse.json(
-      { ok: false, message: 'Missing webhook payload type' },
+      { ok: false, message: 'Unsupported webhook payload type' },
       { status: 400 },
     );
   }
 
-  const pathsToRevalidate = new Set<string>();
-
-  // Global entry points that surface posts/tags.
-  addPath(pathsToRevalidate, '/');
-  addPath(pathsToRevalidate, '/blog');
-  addPath(pathsToRevalidate, '/api/search');
+  const body = payload.body;
+  const paths = new Set(['/', '/blog', '/api/search', '/sitemap.xml']);
 
   if (body._type === 'post') {
-    const currentSlug = body.slug?.current;
-    const previousSlug = getPreviousSlug(body);
+    const slugs = [body.slug?.current, body.previousSlug, body.previous?.slug?.current];
 
-    addPath(pathsToRevalidate, currentSlug ? `/blog/${currentSlug}` : undefined);
-    addPath(pathsToRevalidate, previousSlug ? `/blog/${previousSlug}` : undefined);
-
-    (body.tags ?? []).forEach((tag) => {
-      const tagSlug = tag.slug?.current;
-      addPath(pathsToRevalidate, tagSlug ? `/blog/tags/${tagSlug}` : undefined);
-    });
-
-    (body.previousTags ?? []).forEach((tag) => {
-      const tagSlug = tag.slug?.current;
-      addPath(pathsToRevalidate, tagSlug ? `/blog/tags/${tagSlug}` : undefined);
-    });
+    for (const slug of slugs) {
+      if (typeof slug === 'string' && slug.trim()) {
+        paths.add(`/blog/${slug.trim()}`);
+      }
+    }
   }
 
-  if (body._type === 'tag') {
-    const currentTagSlug = body.slug?.current;
-    const previousTagSlug = getPreviousSlug(body);
+  // Reassignment, topic renames, deletes, and pagination changes affect every
+  // archive and parallel route slot, including former topic destinations.
+  revalidatePath('/blog', 'layout');
 
-    addPath(pathsToRevalidate, currentTagSlug ? `/blog/tags/${currentTagSlug}` : undefined);
-    addPath(pathsToRevalidate, previousTagSlug ? `/blog/tags/${previousTagSlug}` : undefined);
+  for (const path of paths) {
+    if (path !== '/blog') {
+      revalidatePath(path);
+    }
   }
 
-  const revalidated: string[] = [];
-  pathsToRevalidate.forEach((path) => {
-    revalidatePath(path);
-    revalidated.push(path);
-  });
+  revalidateTag(CMS_CONTENT_CACHE_TAG, { expire: 0 });
+  revalidateTag(SEARCH_CORPUS_CACHE_TAG, { expire: 0 });
 
   return NextResponse.json({
     ok: true,
     type: body._type,
     operation: body.operation ?? 'unknown',
-    revalidated,
+    revalidated: [...paths],
   });
 }

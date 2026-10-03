@@ -55,6 +55,8 @@ export default defineConfig({
     env: {
       E2E_FIXTURES: 'true',
       E2E_FIXTURES_URL: 'http://127.0.0.1:3100/api/e2e/sanity',
+      SANITY_API_READ_ONLY_TOKEN: process.env.E2E_PREVIEW_DRAFTS === 'true' ? 'fixture-preview' : '',
+      SANITY_TOPIC_MODEL: 'primary',
     },
   },
 });

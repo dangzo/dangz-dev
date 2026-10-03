@@ -27,7 +27,7 @@ describe('useBlogSearch', () => {
       slug: 'react-testing',
       title: 'React Testing',
       excerpt: 'Testing hooks',
-      tags: ['react', 'testing'],
+      primaryTopic: null,
     },
   ];
 

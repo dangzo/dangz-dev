@@ -40,6 +40,8 @@ A personal blog and portfolio site built with **Next.js**, **TypeScript**, and *
 
 This project serves as a personal web presence for publishing content and showcasing work. It combines a modern frontend stack with a headless CMS setup for flexible content management.
 
+For the blog topic taxonomy, article assignments, and Sanity rollout sequence, see [docs/BLOG_TOPICS.md](docs/BLOG_TOPICS.md).
+
 ---
 
 ## Tech Stack
@@ -153,7 +155,7 @@ Vitest explicitly excludes e2e specs under `src/tests/e2e/**`, so `yarn test:uni
 
 Playwright starts an isolated app server automatically via the configured `webServer` command and runs against `http://127.0.0.1:3100` by default.
 
-Visual regression tests run the Home, About, blog list, article, and tag-list pages against deterministic E2E CMS fixtures at desktop and mobile Chromium viewports. Their committed baselines live in `src/tests/e2e/__screenshots__/`. Review all image diffs as UI changes; after intentionally changing a layout, regenerate them with `yarn test:e2e:visual:update` and commit the updated PNGs.
+Visual regression tests run the Home, About, blog list, article, and topic archive pages against deterministic E2E CMS fixtures at desktop and mobile Chromium viewports. Their committed baselines live in `src/tests/e2e/__screenshots__/`. Review all image diffs as UI changes; after intentionally changing a layout, regenerate them with `yarn test:e2e:visual:update` and commit the updated PNGs.
 
 ---
 
@@ -321,6 +323,7 @@ The project's AI guidance is split between a short [AGENTS.md](AGENTS.md) and fo
 
 - [ARCHITECTURE.md](docs/ARCHITECTURE.md): code locations, routing, CMS data flow, and rendering conventions.
 - [WORKFLOW.md](docs/WORKFLOW.md): development commands, focused checks, test fixtures, and generated files.
+- [BLOG_TOPICS.md](docs/BLOG_TOPICS.md): topic taxonomy, article assignments, legacy URL compatibility, and rollout sequence.
 
 Keeping the entry point small reduces the tokens spent on instructions loaded for every task. For example, a copy edit needs no CMS data-flow details, while a routing change benefits from the architecture guide. The separate guides also make project knowledge easier to find and maintain without duplicating this README's setup and CI documentation.
 

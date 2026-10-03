@@ -1,3 +1,5 @@
+import { TOPICS } from '@/features/blog/data/topics';
+
 const image = {
   asset: {
     url: 'https://cdn.sanity.io/images/wdxhl3tc/production/098fa2b1b448e79f99fd53f629d2fb721bdec4a2-1536x1024.png',
@@ -59,23 +61,27 @@ const articleBody = [
   },
 ];
 
-const posts = Array.from({ length: 8 }, (_, index) => {
+const posts = Array.from({ length: 16 }, (_, index) => {
   const postNumber = index + 1;
   const postTags = index % 2 === 0 ? [tags[0], tags[1]] : [tags[2]];
+  const topicIndex = index < 10 ? 0 : index === 15 ? 5 : index - 9;
+  const primaryTopic = index === 14 ? null : TOPICS[topicIndex];
 
   return {
-    _id: `post-${postNumber}`,
+    _id: index === 15 ? 'drafts.post-16' : `post-${postNumber}`,
     _type: 'post',
     _createdAt: '2025-01-01',
     _updatedAt: '2025-01-01',
     _rev: '1',
-    title: postNumber === 1 ? 'Building stable visual regression tests' : `Fixture post ${postNumber}`,
-    slug: { _type: 'slug', current: postNumber === 1 ? 'stable-visual-regression-tests' : `fixture-post-${postNumber}` },
+    title: postNumber === 1 ? 'Building stable visual regression tests' : index === 15 ? 'Unpublished AI workflow' : `Fixture post ${postNumber}`,
+    slug: { _type: 'slug', current: postNumber === 1 ? 'stable-visual-regression-tests' : index === 15 ? 'unpublished-ai-workflow' : `fixture-post-${postNumber}` },
     publishedAt: `2025-0${Math.min(postNumber, 9)}-01T12:00:00.000Z`,
     image,
     imageAltText: 'Abstract blue and purple shapes',
     excerpt: 'A deterministic fixture excerpt that establishes the expected card layout',
     tags: postTags,
+    primaryTopic,
+    keywords: index === 9 ? ['pagination-keyword-only'] : index === 15 ? ['draft-only-keyword'] : [],
     body: postNumber === 1 ? articleBody : undefined,
   };
 });
@@ -85,22 +91,37 @@ const reactions = [
   { _id: 'reaction-love', name: 'Love', emoji: '❤️', sortOrder: 2 },
 ];
 
+type FixturePost = typeof posts[number];
+type FixtureQueryPost = Omit<FixturePost, 'tags' | 'primaryTopic' | 'keywords'> & Partial<Pick<FixturePost, 'tags' | 'primaryTopic' | 'keywords'>>;
+
 interface GraphQLRequest {
   operationName: string;
   query: string;
+  variables?: Readonly<Record<string, unknown>>;
+  perspective?: 'published' | 'previewDrafts';
 }
 
-function getPostsPage(query: string) {
-  const limit = Number(query.match(/limit:\s*(\d+)/)?.[1] ?? posts.length);
+function getPostsPage(query: string, visiblePosts: readonly FixtureQueryPost[]) {
+  const limit = Number(query.match(/limit:\s*(\d+)/)?.[1] ?? visiblePosts.length);
   const offset = Number(query.match(/offset:\s*(\d+)/)?.[1] ?? 0);
 
-  return posts.slice(offset, offset + limit);
+  return visiblePosts.slice(offset, offset + limit);
 }
 
-export function getE2EGraphQLResponse({ operationName, query }: Readonly<GraphQLRequest>) {
+export function getE2EGraphQLResponse({ operationName, query, variables, perspective = 'published' }: Readonly<GraphQLRequest>) {
+  const perspectivePosts = perspective === 'previewDrafts'
+    ? posts
+    : posts.filter((post) => !post._id.startsWith('drafts.'));
+  const visiblePosts: FixtureQueryPost[] = perspectivePosts.map(({ tags: postTags, primaryTopic, keywords, ...post }) => ({
+    ...post,
+    ...(/\btags\s*\{/.test(query) ? { tags: postTags } : {}),
+    ...(/\bprimaryTopic\s*\{/.test(query) ? { primaryTopic } : {}),
+    ...(/\bkeywords\b/.test(query) ? { keywords } : {}),
+  }));
+
   if (operationName === 'AllPosts') {
     return {
-      allPost: getPostsPage(query),
+      allPost: getPostsPage(query, visiblePosts),
       allReaction: reactions,
       allPostReactionCount: [
         { count: 3, post: { _id: 'post-1' }, reaction: { _id: 'reaction-useful' } },
@@ -111,22 +132,35 @@ export function getE2EGraphQLResponse({ operationName, query }: Readonly<GraphQL
 
   if (operationName === 'AllTags') {
     return {
-      allPost: posts,
+      allPost: visiblePosts,
       allTag: tags,
     };
   }
 
+  if (operationName === 'AllTopics') {
+    return {
+      allPost: visiblePosts,
+      allTopic: /\ballTopic\b/.test(query) ? TOPICS : undefined,
+    };
+  }
+
+  if (operationName === 'SearchablePosts') {
+    return { allPost: visiblePosts };
+  }
+
   if (operationName === 'postsBySlug') {
-    const slug = query.match(/current:\s*\{\s*eq:\s*"([^"]+)"/)?.[1];
+    const slug = typeof variables?.slug === 'string'
+      ? variables.slug
+      : query.match(/current:\s*\{\s*eq:\s*"([^"]+)"/)?.[1];
 
     return {
-      allPost: posts.filter((post) => post.slug.current === slug),
+      allPost: visiblePosts.filter((post) => post.slug.current === slug),
     };
   }
 
   if (operationName === 'AllPostSlugs') {
     return {
-      allPost: posts.map((post) => ({ slug: post.slug })),
+      allPost: visiblePosts.map((post) => ({ slug: post.slug })),
     };
   }
 

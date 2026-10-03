@@ -1,65 +1,48 @@
-import type { Tag } from '@/types/sanity.types';
+import type { TopicWithCount } from '@/features/blog/types/Topic.types';
+import { getTopicHref } from '@/features/blog/utils/topics';
 import SidebarHeader from './SidebarHeader';
 import SidebarMobileToggle from './SidebarMobileToggle';
 import SidebarNav from './SidebarNav';
 import SidebarNavItem from './SidebarNavItem';
 import SidebarPanel from './SidebarPanel';
 
-interface TagsSidebarProps {
+type TopicsSidebarProps = Readonly<{
   activeSlug?: string;
-  tags?: Tag[];
-  tagCount?: (slug?: string) => number;
-}
+  topics: readonly TopicWithCount[];
+  totalPostCount: number;
+}>;
 
-export default function TagsSidebar({ activeSlug, tags, tagCount }: Readonly<TagsSidebarProps>) {
-  const tagsWithPostCount = tags?.map(tag => ({
-    ...tag,
-    postCount: tagCount?.(tag.slug?.current) ?? 0,
-  }));
-
-  const sortedTagsWithCount = tagsWithPostCount
-    ?.filter(tag => tag.postCount > 0)
-    ?.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''))
-    ?? [];
-
-  const hasActiveTag = Boolean(activeSlug);
-  const totalPostCount = tagCount?.() ?? 0;
+export default function TagsSidebar({ activeSlug, topics, totalPostCount }: TopicsSidebarProps) {
+  const visibleTopics = topics
+    .filter(topic => topic.postCount > 0)
+    .sort((a, b) => a.displayName.localeCompare(b.displayName));
+  const hasActiveTopic = Boolean(activeSlug);
 
   return (
     <SidebarPanel>
       <SidebarMobileToggle
-        showLabel="Show all tags"
-        hideLabel="Hide all tags"
-        contentId="tags-sidebar-content"
-        defaultOpen={hasActiveTag}
+        showLabel="Show all topics"
+        hideLabel="Hide all topics"
+        contentId="topics-sidebar-content"
+        defaultOpen={hasActiveTopic}
         header={(
-          <SidebarHeader
-            title="All tags"
-            count={sortedTagsWithCount.length}
-            singular="tag"
-            plural="tags"
-          />
+          <SidebarHeader title="All topics" count={visibleTopics.length} singular="topic" plural="topics" />
         )}
       >
-        <SidebarNav label="Tags">
-          <SidebarNavItem
-            href="/blog"
-            isActive={!hasActiveTag}
-            activeMode="always"
-            className="font-semibold uppercase tracking-wide"
-          >
+        <SidebarNav label="Topics">
+          <SidebarNavItem href="/blog" isActive={!hasActiveTopic} activeMode="always" className="font-semibold uppercase tracking-wide">
             All posts ({totalPostCount})
           </SidebarNavItem>
 
-          {sortedTagsWithCount.map(tag => (
+          {visibleTopics.map(topic => (
             <SidebarNavItem
-              key={tag._id}
-              href={`/blog/tags/${tag.slug?.current}`}
-              isActive={activeSlug === tag.slug?.current}
+              key={topic._id}
+              href={getTopicHref(topic)}
+              isActive={activeSlug === topic.slug.current}
               activeMode="always"
               className="font-semibold uppercase tracking-wide"
             >
-              {tag.name?.toUpperCase()} ({tag.postCount})
+              {topic.displayName.toUpperCase()} ({topic.postCount})
             </SidebarNavItem>
           ))}
         </SidebarNav>

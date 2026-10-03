@@ -10,8 +10,8 @@ vi.mock('next/navigation', () => ({
 }));
 
 const results: SearchHit[] = [
-  { id: '1', slug: 'alpha', title: 'Alpha', excerpt: '', tags: [] },
-  { id: '2', slug: 'beta', title: 'Beta', excerpt: '', tags: [] },
+  { id: '1', slug: 'alpha', title: 'Alpha', excerpt: '', primaryTopic: null },
+  { id: '2', slug: 'beta', title: 'Beta', excerpt: '', primaryTopic: null },
 ];
 
 beforeAll(() => {
