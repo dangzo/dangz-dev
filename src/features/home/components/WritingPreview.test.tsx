@@ -19,6 +19,16 @@ const post: PostWithTopic = {
 };
 
 describe('WritingPreview', () => {
+  it.each([undefined, { _type: 'slug' as const }, { _type: 'slug' as const, current: '' }])('keeps content and topic navigation without article links when the slug is %j', (slug) => {
+    render(<WritingPreview post={{ ...post, slug }} summary="An article summary." />);
+
+    expect(screen.getByRole('heading', { name: post.title })).toBeVisible();
+    expect(screen.getByText('An article summary.')).toBeVisible();
+    expect(screen.getByRole('link', { name: TOPICS[0].displayName })).toHaveAttribute('href', `/blog/topics/${TOPICS[0].slug.current}`);
+    expect(screen.queryByRole('link', { name: post.title })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: `Read article: ${post.title}` })).not.toBeInTheDocument();
+  });
+
   it('provides independent canonical topic and article links without nesting anchors', () => {
     const { container } = render(<WritingPreview post={post} summary="Learn to structure your application." />);
 

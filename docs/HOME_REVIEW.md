@@ -7,10 +7,10 @@ This branch builds on taxonomy PR #161 (`c2d6fba`). Home was approved after rest
 From this worktree, with the repository’s local `.env` configured:
 
 ```sh
-NEXT_TURBOPACK_ROOT=/home/dangz0/Projects/dangz-dev LOCAL_EDITORIAL_PREVIEW=true yarn dev -p 3000
+NEXT_TURBOPACK_ROOT=/path/to/main-checkout LOCAL_EDITORIAL_PREVIEW=true yarn dev -p 3000
 ```
 
-Open <http://localhost:3000/>. If that port is occupied, use another available port. The optional Turbopack root supports shared dependencies in local worktrees. Playwright uses its own fixture server on port 3100.
+Replace `/path/to/main-checkout` with your main checkout’s absolute path. Open <http://localhost:3000/>. If that port is occupied, use another available port. The optional Turbopack root supports shared dependencies in local worktrees. Playwright uses its own fixture server on port 3100.
 
 The preview reads real CMS content. A configured development read token permits CMS drafts, following PR #161’s existing perspective rules. Production shows only published content. Leave `SANITY_TOPIC_MODEL` unset until #159’s schema/content migration has been verified.
 

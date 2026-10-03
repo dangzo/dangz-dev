@@ -57,9 +57,14 @@ test.describe('Blog Article Page', () => {
     await toggle.click();
     const anchor = page.locator('aside a[href^="#"]').first();
     const href = await anchor.getAttribute('href');
+
+    if (!href) {
+      throw new Error('Expected table of contents link to have an href');
+    }
+
     await anchor.click();
 
-    await expect(page).toHaveURL(new RegExp(`${href}$`));
+    await expect(page).toHaveURL(url => url.href.endsWith(href));
     await expect(page.getByRole('button', { name: 'Show Table of Contents' })).toHaveAttribute('aria-expanded', 'false');
     await expect(page.locator('table')).toBeVisible();
     await expect(page.locator('pre').first()).toBeVisible();

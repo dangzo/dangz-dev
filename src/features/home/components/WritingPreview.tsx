@@ -8,7 +8,7 @@ type WritingPreviewProps = Readonly<{
 }>;
 
 export default function WritingPreview({ post, summary }: WritingPreviewProps) {
-  const href = `/blog/${post.slug?.current}`;
+  const href = post.slug?.current ? `/blog/${post.slug.current}` : null;
 
   return (
     <article className="flex min-w-0 flex-col overflow-hidden rounded-xl border border-border-light bg-background-main-light dark:border-border-dark dark:bg-background-main-dark">
@@ -32,9 +32,13 @@ export default function WritingPreview({ post, summary }: WritingPreviewProps) {
       </div>
 
       <h3 className="mt-4 min-w-0 px-6 font-heading text-xl font-semibold leading-snug wrap-break-word md:px-5">
-        <Link href={href} className="rounded-sm hover:text-accent-light dark:hover:text-accent-dark">
-          {post.title}
-        </Link>
+        {href
+          ? (
+            <Link href={href} className="rounded-sm hover:text-accent-light dark:hover:text-accent-dark">
+              {post.title}
+            </Link>
+          )
+          : post.title}
       </h3>
 
       {summary && (
@@ -43,11 +47,13 @@ export default function WritingPreview({ post, summary }: WritingPreviewProps) {
         </p>
       )}
 
-      <div className="mt-auto px-6 pt-5 pb-6 md:px-5 md:pb-5">
-        <Link href={href} aria-label={`Read article: ${post.title}`} className="inline-block rounded-sm py-1 text-sm font-medium text-accent-light hover:underline dark:text-accent-dark">
-          Read article <span aria-hidden="true">→</span>
-        </Link>
-      </div>
+      {href && (
+        <div className="mt-auto px-6 pt-5 pb-6 md:px-5 md:pb-5">
+          <Link href={href} aria-label={`Read article: ${post.title}`} className="inline-block rounded-sm py-1 text-sm font-medium text-accent-light hover:underline dark:text-accent-dark">
+            Read article <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+      )}
     </article>
   );
 }
