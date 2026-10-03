@@ -219,20 +219,33 @@ Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality
 | `lighthouse` | `yarn lhci:mobile` + `yarn lhci:desktop` | Runs Lighthouse CI audits for both mobile and desktop, restoring cached dependencies |
 | `build` | `yarn ci:build` | Builds both packages; blocked until lint, test-unit, test-e2e, and typecheck pass |
 
-### Skip labels
+### Kodiak and automerge
 
-Apply these labels **before** opening the PR, or add/remove them afterward (the workflow re-runs on `skip-ci` / `skip-lighthouse` label changes):
+[Kodiak](https://kodiakhq.com/docs/config-reference) is the GitHub app used to automate PR merging. The repository's [`.kodiak.toml`](.kodiak.toml) contains only `version = 1`, so Kodiak uses its default settings, including the `automerge` label. Kodiak requires installation on the repository and branch protection on the target branch.
+
+Once a PR is reviewed and ready to merge, add the `automerge` label from the PR's **Labels** sidebar. This authorizes Kodiak to merge it once the target branch's protection requirements, including required checks and reviews, are satisfied. Remove `automerge` before merging to withdraw that authorization. The label does not bypass branch protection or skip CI.
+
+### PR labels
+
+Add or remove these labels from the PR's **Labels** sidebar:
 
 | Label | Effect |
 |---|---|
+| `automerge` | Authorizes Kodiak to merge the PR when branch protection requirements are satisfied |
 | `skip-ci` | Skips every check after `gate` (setup, lint, tests, typecheck, Lighthouse, and build) |
 | `skip-lighthouse` | Skips only the Lighthouse job; quality jobs and build still run |
 
-`dependencies` is a classification label only — it does not skip CI. Dependabot PRs get `skip-lighthouse` by default (see [`.github/dependabot.yml`](.github/dependabot.yml)); remove that label on a given PR to force a full Lighthouse run.
+Use `skip-ci` for changes that do not need code validation, such as documentation-only updates. Use `skip-lighthouse` when performance audits are unnecessary for the change but lint, tests, type checks, and builds should still run. If both skip labels are present, `skip-ci` takes precedence.
+
+Adding or removing `skip-ci` or `skip-lighthouse` cancels any running PR Checks workflow and starts a new run using the current labels, subject to the workflow's path filters. Removing both restores all checks on the next run. Other label changes, including `automerge`, do not run the check jobs or cancel checks already in progress.
+
+The skip labels control CI independently of `automerge`: they do not authorize a merge, and `automerge` does not restore skipped checks. Check that the selected labels are appropriate before enabling automerge.
+
+`dependencies` is a classification label only — it does not skip CI or enable automerge. Dependabot PRs get `skip-lighthouse` by default (see [`.github/dependabot.yml`](.github/dependabot.yml)), but do not receive `automerge` automatically; add it when an update is ready to merge. Remove `skip-lighthouse` on a given PR to run Lighthouse as well.
 
 Do not use `[skip ci]` in commit messages: GitHub skips the whole workflow and required checks stay pending.
 
-The workflow runs on pull requests that touch `src/**`, `studio/**`, config files, or the workflow file itself.
+The workflow runs on pull requests that touch `src/**`, `public/**`, `studio/**`, root files matching `*.*` (including `README.md` and config files), or the workflow file itself.
 
 ---
 
