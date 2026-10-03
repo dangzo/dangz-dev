@@ -269,7 +269,7 @@ Add or remove these labels from the PR's **Labels** sidebar:
 
 Use `skip-ci` for changes that do not need code validation, such as documentation-only updates. Use `skip-lighthouse` when performance audits are unnecessary for the change but lint, tests, type checks, and builds should still run. If both skip labels are present, `skip-ci` takes precedence.
 
-Adding or removing `skip-ci` or `skip-lighthouse` cancels any running PR Checks workflow and starts a new run using the current labels, subject to the workflow's path filters. Removing both restores all checks on the next run. Other label changes, including `automerge`, do not run the check jobs or cancel checks already in progress.
+Adding or removing any label starts a new PR Checks run using the current labels. Changes to `skip-ci` or `skip-lighthouse` cancel the running workflow; other label changes, including `automerge`, queue a new run without cancelling the running workflow. Removing both skip labels restores all checks on the next run. The label gate always runs so unrelated label changes cannot replace failed or pending required checks with skipped results.
 
 The skip labels control CI independently of `automerge`: they do not authorize a merge, and `automerge` does not restore skipped checks. Check that the selected labels are appropriate before enabling automerge.
 
