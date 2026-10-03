@@ -17,7 +17,7 @@ function ToolsITrust() {
             key={kebabCase(label)}
             className="rounded-2xl border border-border-light/60 dark:border-border-dark/60 bg-background-secondary-light/70 dark:bg-background-secondary-dark/40 p-3 md:p-5"
           >
-            <Heading as="h4" className="mb-4">{label}</Heading>
+            <Heading as="h3" className="mb-4 text-lg! md:text-xl!">{label}</Heading>
 
             <ul className="grid grid-cols-2 gap-2 sm:gap-3 xl:grid-cols-3">
               {items.map((tool) => (

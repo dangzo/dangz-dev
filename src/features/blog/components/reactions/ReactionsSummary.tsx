@@ -14,13 +14,14 @@ export default function ReactionsSummary({ reactions, href }: Readonly<Reactions
   }
 
   const totalReactions = visibleReactions.reduce((sum, reaction) => sum + (reaction.count ?? 0), 0);
+  const label = `${totalReactions} ${totalReactions === 1 ? 'reaction' : 'reactions'}`;
 
   return (
     <Link
       href={href}
       type="primary"
       className="inline-flex items-center gap-1 text-secondary-light dark:text-secondary-dark"
-      aria-label={`${totalReactions} reactions - open post`}
+      aria-label={`${label} - open post`}
     >
       <span className="inline-flex items-center gap-0.5" aria-hidden="true">
         {visibleReactions.map((reaction) => (
@@ -30,7 +31,7 @@ export default function ReactionsSummary({ reactions, href }: Readonly<Reactions
         ))}
       </span>
       <span className="text-xs leading-none tabular-nums">
-        {totalReactions} reactions
+        {label}
       </span>
     </Link>
   );

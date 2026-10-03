@@ -6,7 +6,9 @@ interface BlockNormalProps {
 }
 
 function BlockNormal({ children }: BlockNormalProps) {
-  return <Text>{children}</Text>;
+  return (
+    <Text className="text-base! leading-7!">{children}</Text>
+  );
 }
 
 export default BlockNormal;

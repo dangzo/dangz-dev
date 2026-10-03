@@ -14,7 +14,7 @@ export default function SidebarPanel({
   return (
     <div
       className={clsx('space-y-4', {
-        'sm:sticky sm:top-12 sm:max-h-[calc(100dvh-4rem)] sm:space-y-6 sm:overflow-y-auto sm:pr-2 sm:pb-8': sticky,
+        'md:sticky md:top-12 md:max-h-[calc(100dvh-4rem)] md:space-y-6 md:overflow-y-auto md:pr-2 md:pb-8': sticky,
       })}
     >
       <section className="rounded-xl border border-border-light bg-background-secondary-light p-3 dark:border-border-dark dark:bg-background-secondary-dark md:p-5">

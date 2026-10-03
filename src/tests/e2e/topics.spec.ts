@@ -2,9 +2,38 @@ import { expect, test } from '@playwright/test';
 
 const preview = process.env.E2E_PREVIEW_DRAFTS === 'true';
 
+test('mobile topics stay collapsed on direct entry and after navigation, with results in the first viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+
+  for (const path of ['/blog', '/blog/topics/architecture', '/blog/tags/frontend-architecture']) {
+    await page.goto(path);
+    const navigation = page.getByRole('navigation', { name: 'Topics', exact: true });
+    const toggle = navigation.getByRole('button', { name: 'Browse topics' });
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(navigation.getByRole('link', { name: 'Performance (1)' })).toHaveCount(0);
+
+    const firstTitle = page.getByRole('region', { name: 'Articles', exact: true }).getByRole('heading').first();
+    await expect(firstTitle).toBeVisible();
+    const titleBounds = await firstTitle.boundingBox();
+    expect(titleBounds?.y).toBeLessThan(844);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  }
+
+  const navigation = page.getByRole('navigation', { name: 'Topics', exact: true });
+  await navigation.getByRole('button', { name: 'Browse topics' }).click();
+  await navigation.getByRole('link', { name: 'Performance (1)' }).click();
+
+  await expect(page).toHaveURL(/\/blog\/topics\/performance$/);
+  await expect(navigation.getByRole('button', { name: 'Browse topics' })).toHaveAttribute('aria-expanded', 'false');
+  await expect(page.getByRole('heading', { level: 1, name: 'Performance' })).toBeVisible();
+  await navigation.getByRole('link', { name: 'All posts', exact: true }).click();
+  await expect(page).toHaveURL(/\/blog$/);
+  await expect(navigation.getByRole('button', { name: 'Browse topics' })).toHaveAttribute('aria-expanded', 'false');
+});
+
 test('topic navigation counts published and preview content consistently', async ({ page }) => {
   await page.goto('/blog');
-  const sidebar = page.locator('aside').first();
+  const sidebar = page.getByRole('navigation', { name: 'Topics', exact: true });
 
   await expect(sidebar.getByRole('link', { name: /^architecture \(10\)$/i })).toBeVisible();
   await expect(sidebar.getByRole('link', { name: /^all posts \(/i })).toHaveText(`All posts (${preview ? 16 : 15})`);
@@ -43,7 +72,7 @@ test('client navigation restores topic heading and sidebar after an article visi
 
   await expect(page).toHaveURL(/\/blog\/topics\/architecture$/);
   await expect(page.getByRole('heading', { level: 1, name: 'Architecture' })).toBeVisible();
-  await expect(page.locator('aside').getByRole('heading', { name: 'All topics' })).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Topics', exact: true })).toBeVisible();
   await expect(page.locator('aside').getByRole('heading', { name: 'Table of contents' })).toHaveCount(0);
 });
 

@@ -34,7 +34,7 @@ export default async function PostPage({ params, }: Readonly<PostPageProps>) {
   const lqip = post.image?.asset?.metadata?.lqip;
 
   return (
-    <article className="mx-auto pr-3 py-4 sm:pr-4 sm:py-6 md:py-8">
+    <article className="mx-auto min-w-0 max-w-[70ch]">
       {post.image
         ? (
           <div className="mb-5 sm:mb-6 md:mb-8 rounded-lg overflow-hidden">
@@ -44,9 +44,8 @@ export default async function PostPage({ params, }: Readonly<PostPageProps>) {
               className="w-full h-auto object-cover"
               width={930}
               height={665}
-              sizes="(max-width: 640px) calc(100vw - 1.5rem), (max-width: 768px) calc(100vw - 2rem), 930px"
+              sizes="(min-width: 1024px) 700px, (min-width: 768px) calc(100vw - 20rem), calc(100vw - 2rem)"
               fetchPriority="high"
-              quality={72}
               blurDataURL={lqip}
               preload
             />

@@ -43,7 +43,7 @@ async function globalSetup(config: FullConfig) {
   await page.goto(`${baseURL}/blog`);
 
   const firstTopicHref = await page
-    .locator('aside a[href^="/blog/topics/"]')
+    .getByRole('navigation', { name: 'Topics', exact: true }).locator('a[href^="/blog/topics/"]')
     .first()
     .getAttribute('href');
 

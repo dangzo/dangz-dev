@@ -61,7 +61,7 @@ export default async function PortableText({ value }: PortableTextProps) {
   };
 
   return (
-    <div className="prose prose-sm sm:prose-base dark:prose-invert max-w-none font-body wrap-break-words">
+    <div className="prose prose-base dark:prose-invert min-w-0 max-w-none font-body wrap-break-word">
       <SanityPortableText value={value} components={portableTextComponents} />
     </div>
   );
