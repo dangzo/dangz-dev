@@ -4,6 +4,35 @@ A personal blog and portfolio site built with **Next.js**, **TypeScript**, and *
 
 🔗 **Live URL:** [https://dangz.dev/](https://dangz.dev/)
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Tech Stack](#tech-stack)
+- [Monorepo Structure](#monorepo-structure)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Run Locally](#run-locally)
+  - [Linting](#linting)
+  - [Type Checking](#type-checking)
+  - [Testing Strategy](#testing-strategy)
+    - [Unit Tests (Vitest)](#unit-tests-vitest)
+    - [End-to-End Tests (Playwright)](#end-to-end-tests-playwright)
+- [Yarn Workspaces](#yarn-workspaces)
+  - [Available Scripts](#available-scripts)
+    - [Core Commands](#core-commands)
+    - [Quality Commands](#quality-commands)
+    - [Lighthouse Commands](#lighthouse-commands)
+    - [Utility and Deployment Commands](#utility-and-deployment-commands)
+- [CI/CD Pipeline](#cicd-pipeline)
+  - [Kodiak and automerge](#kodiak-and-automerge)
+  - [PR labels](#pr-labels)
+- [Project Structure](#project-structure)
+- [Deployment](#deployment)
+- [Build Version (Footer Semver)](#build-version-footer-semver)
+  - [How It Is Generated](#how-it-is-generated)
+- [License](#license)
+
 ---
 
 ## Overview
