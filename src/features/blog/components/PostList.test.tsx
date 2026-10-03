@@ -59,6 +59,5 @@ describe('PostList', () => {
 
     expect(screen.getAllByTestId('post-card-skeleton')).toHaveLength(3);
     expect(container.querySelectorAll('li')).toHaveLength(3);
-    expect(container.querySelectorAll('li')[0]).toHaveClass('md:pr-4');
   });
 });

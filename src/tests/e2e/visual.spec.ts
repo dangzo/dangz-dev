@@ -6,6 +6,8 @@ const visualRoutes = [
   { name: 'blog-list.png', path: '/blog' },
   { name: 'blog-article.png', path: '/blog/stable-visual-regression-tests' },
   { name: 'topic-list.png', path: '/blog/topics/architecture' },
+  { name: 'blog-page-2.png', path: '/blog/page/2' },
+  { name: 'topic-page-2.png', path: '/blog/topics/architecture/page/2' },
 ] as const;
 
 async function waitForImage(image: Locator) {
@@ -29,7 +31,7 @@ async function waitForStablePage(page: Page) {
   await expect(page.locator('main')).toBeVisible();
   await page.evaluate(() => document.fonts.ready);
 
-  const images = page.locator('img');
+  const images = page.locator('img:visible');
   const imageCount = await images.count();
 
   for (let index = 0; index < imageCount; index += 1) {
@@ -60,6 +62,22 @@ test.describe('Visual regression', () => {
       await waitForStablePage(page);
 
       await expect(page).toHaveScreenshot(route.name, {
+        animations: 'disabled',
+        fullPage: true,
+        maxDiffPixelRatio: 0.001,
+      });
+    });
+  }
+
+  for (const route of visualRoutes.filter(route => route.path === '/' || route.path.startsWith('/blog'))) {
+    test(`${route.path} dark theme matches its visual baseline`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: 'dark' });
+      await page.addInitScript(() => localStorage.setItem('theme', 'dark'));
+      await page.goto(route.path);
+      await waitForStablePage(page);
+
+      await expect(page.locator('html')).toHaveClass(/dark/);
+      await expect(page).toHaveScreenshot(route.name.replace('.png', '-dark.png'), {
         animations: 'disabled',
         fullPage: true,
         maxDiffPixelRatio: 0.001,

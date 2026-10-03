@@ -24,8 +24,6 @@ export default async function BlogSlugHeading({ params }: Readonly<{ params: Pro
         {post.title || '(Untitled)'}
       </Heading>
 
-      <ReactionsClient postId={post._id} variant="compact" />
-
       <div className="flex flex-wrap flex-col sm:flex-row sm:items-center gap-x-1 gap-y-1 text-sm md:text-base">
         <div className="flex flex-row items-center gap-x-1">
           <DateText date={post.publishedAt} className="sm:mb-0!" />
@@ -36,6 +34,10 @@ export default async function BlogSlugHeading({ params }: Readonly<{ params: Pro
         <span className="hidden sm:inline mx-2">&bull;</span>
 
         <TagList topic={post.primaryTopic} />
+      </div>
+
+      <div className="mt-3">
+        <ReactionsClient postId={post._id} variant="compact" />
       </div>
     </>
   );

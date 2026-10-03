@@ -30,7 +30,6 @@ test.describe('Global UI', () => {
     const themeSwitch = page.getByRole('button', { name: /theme switcher/i });
 
     const isDarkBefore = await page.evaluate(() => document.documentElement.classList.contains('dark'));
-    const expectedTheme = isDarkBefore ? 'light' : 'dark';
 
     await expect(themeSwitch).toBeVisible();
     await themeSwitch.click();
