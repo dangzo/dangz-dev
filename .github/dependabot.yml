@@ -11,5 +11,6 @@ updates:
     schedule:
       interval: "weekly"
     labels:
+      - "automerge"
       - "dependencies"
       - "skip-lighthouse"
