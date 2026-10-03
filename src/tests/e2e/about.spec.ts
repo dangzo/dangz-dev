@@ -11,7 +11,7 @@ test.describe('About Page', () => {
     }).first();
 
     await expect(introSection.getByRole('heading', { level: 1, name: /hi, i'm daniele/i })).toBeVisible();
-    await expect(introSection.getByText(/build frontend solutions that help teams ship and products scale/i)).toBeVisible();
+    await expect(introSection.getByText(/help teams ship reliable frontend products/i)).toBeVisible();
     await expect(introSection.getByText(/over the last/i)).toBeVisible();
     await expect(introSection.getByText(/react/i)).toBeVisible();
     await expect(introSection.getByText(/vue/i)).toBeVisible();

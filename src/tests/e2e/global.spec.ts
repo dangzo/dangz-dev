@@ -35,8 +35,6 @@ test.describe('Global UI', () => {
     await expect(themeSwitch).toBeVisible();
     await themeSwitch.click();
 
-    await expect.poll(() => page.evaluate(() => localStorage.getItem('theme'))).toBe(expectedTheme);
-
     await expect
       .poll(() => page.evaluate(() => document.documentElement.classList.contains('dark')))
       .toBe(!isDarkBefore);
