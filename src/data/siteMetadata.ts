@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 const siteName = 'dangz.dev';
 const defaultPageTitle = 'Daniele Gazzelloni | Frontend Engineering Blog';
 const title = `${siteName} | ${defaultPageTitle}`;
-const description = 'Practical insights on how to build scalable, maintainable, and high-performance frontend web apps in React, Vue and TypeScript.';
+const description = 'Frontend engineering, AI-assisted development, and lessons from building across the stack.';
 const author = 'Daniele Gazzelloni';
 const siteUrl = 'https://dangz.dev';
 

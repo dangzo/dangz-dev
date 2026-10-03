@@ -24,12 +24,13 @@ Resolve `@/` imports from `src/`. Check package manifests for current dependency
 ## Follow rendering and data flow
 
 - Keep route files focused on composition; place feature behavior under `src/features/` and shared behavior in the shared directories above.
-- Preserve blog route parity: `src/app/blog/layout.tsx` renders `children`, `@heading`, and `@sidebar`. Check matching slots when changing article, tag, or pagination routes.
+- Preserve blog route parity: `src/app/blog/layout.tsx` renders `children`, `@heading`, and `@sidebar`. Check matching slots when changing article, topic, legacy tag, or pagination routes.
 - Use `src/features/blog/api/queries/` for CMS reads through the server Apollo client in `src/api/apollo-client.ts`. Development with a read token previews drafts; production reads published content with hourly fetch revalidation. Some query helpers also use React `cache` to share reads within a render.
-- Keep tag filtering in mind: Sanity's generated GraphQL filter lacks the tags reference array. Tagged lists fetch all posts, then filter and paginate in application code. Reuse `src/features/blog/utils/pagination.ts` for page parsing and sizing.
-- Review `src/app/api/search/route.ts` and `src/app/api/revalidate/route.ts` together when changing content freshness: search caches its corpus, and the signed Sanity webhook revalidates affected paths.
+- Topic definitions, approved post-ID assignments, and the durable legacy tag redirect manifest live in `src/features/blog/data/topics.ts`. Topic queries and archives live beside other blog queries and routes. See [BLOG_TOPICS.md](BLOG_TOPICS.md) for the taxonomy, assignment inventory, compatibility behavior, and rollout boundary.
+- Topic archives filter the fetched post corpus in JavaScript through shared topic resolution during the legacy/primary model transition. Sanity's generated GraphQL filter cannot filter the legacy `tags` reference array. The legacy tag route remains for permanent redirects; search keywords can include old tag labels without exposing them as topic chips. Reuse `src/features/blog/utils/pagination.ts` for page parsing and sizing.
+- Review `src/app/api/search/route.ts` and `src/app/api/revalidate/route.ts` together when changing content freshness: search caches its published corpus, and the signed Sanity webhook invalidates shared content and search data and revalidates blog routes.
 - Keep reaction mutations behind `src/app/api/reactions/route.ts`; its query helpers use a server write token. `useReactions` shares optimistic counts across mounted components and rolls back failures.
 - Extend article rendering in `src/features/blog/components/portable-text/`. Keep heading IDs aligned with table-of-contents extraction in `src/features/blog/utils/posts.ts`; keep Shiki highlighting on the server.
-- Use generated Sanity types through feature types such as `PostWithTags`, which adapt document references to populated query results.
+- Use generated Sanity types through feature adapters such as `PostWithTopic`, which adapt document references to populated query results and the primary-topic model.
 
 For schema generation, fixtures, and validation commands, read [WORKFLOW.md](WORKFLOW.md).

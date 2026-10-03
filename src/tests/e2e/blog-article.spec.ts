@@ -27,7 +27,7 @@ test.describe('Blog Article Page', () => {
     const headingArea = page.locator('article').first();
     await expect(headingArea.locator('time')).toBeVisible();
     await expect(headingArea.getByText(/min read/i)).toBeVisible();
-    await expect(headingArea.locator('a[href^="/blog/tags/"]').first()).toBeVisible();
+    await expect(headingArea.locator('a[href^="/blog/topics/"]').first()).toBeVisible();
   });
 
   test('table of contents section provides anchor navigation', async ({ page }) => {

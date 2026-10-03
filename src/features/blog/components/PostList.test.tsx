@@ -1,14 +1,14 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { PostWithTags } from '@/features/blog/types/Post.types';
+import type { PostWithTopic } from '@/features/blog/types/Post.types';
 import { PostList, PostListSkeleton } from './PostList';
 
 vi.mock('next/link', () => import('@/tests/unit/mocks/nextLink'));
 
 vi.mock('./PostCard', () => {
   return {
-    PostCard: ({ post, preload }: { post: PostWithTags; preload: boolean }) => {
+    PostCard: ({ post, preload }: { post: PostWithTopic; preload: boolean }) => {
       return (
         <div
           data-testid={`post-card-${post._id}`}
@@ -27,7 +27,7 @@ describe('PostList', () => {
     { _id: 'post-1' },
     { _id: 'post-2' },
     { _id: 'post-3' },
-  ] as PostWithTags[];
+  ] as PostWithTopic[];
 
   beforeEach(() => {
     vi.clearAllMocks();

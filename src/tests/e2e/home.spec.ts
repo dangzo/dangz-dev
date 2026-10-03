@@ -21,9 +21,9 @@ test.describe('Home Page', () => {
     await expect(diveInButton).toHaveAttribute('href', '/blog');
   });
 
-  test('top tags area renders tag links with post counts', async ({ page }) => {
+  test('topics area renders topic links with post counts', async ({ page }) => {
     const topics = page.getByRole('region', { name: 'Follow your curiosity' });
-    const tagLinks = topics.locator('a[href^="/blog/tags/"]');
+    const tagLinks = topics.locator('a[href^="/blog/topics/"]');
 
     await expect(tagLinks.first()).toBeVisible();
     await expect.poll(() => tagLinks.count()).toBeGreaterThan(0);
