@@ -10,6 +10,9 @@ export default async function TopicHeading({ params }: Readonly<{ params: Promis
     <>
       <Heading as="h1">{topic.displayName}</Heading>
       <BlogTagline description={topic.description} />
+      <p className="text-sm text-secondary-light dark:text-secondary-dark">
+        {topic.postCount} {topic.postCount === 1 ? 'article' : 'articles'}
+      </p>
     </>
   );
 }

@@ -40,6 +40,15 @@ describe('TopTags', () => {
     render(await TopTags());
 
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
+    expect(screen.getByText('Topics will appear as new writing is published.')).toBeVisible();
+  });
+
+  it('keeps the rest of Home usable when topic fetching fails', async () => {
+    vi.mocked(getTopicsWithCount).mockRejectedValue(new Error('CMS unavailable'));
+
+    render(await TopTags());
+
+    expect(screen.getByText('Topics couldn’t load. Try again shortly.')).toBeVisible();
   });
 });
 

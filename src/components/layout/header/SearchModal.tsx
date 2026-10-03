@@ -71,7 +71,8 @@ const SearchModal = ({
               value={query}
               onChange={(event) => onQueryChange(event.target.value)}
               placeholder="Search titles, topics, technologies..."
-              className="w-full bg-transparent text-base text-main-light dark:text-main-dark outline-none placeholder:text-main-light/60 dark:placeholder:text-main-dark/50"
+              aria-label="Search posts"
+              className="min-w-0 w-full bg-transparent text-base text-main-light dark:text-main-dark outline-none placeholder:text-main-light/60 dark:placeholder:text-main-dark/50"
             />
 
             <div className="flex shrink-0 items-center gap-2">

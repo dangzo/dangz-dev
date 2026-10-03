@@ -11,7 +11,7 @@ async function LetsTalkFrontend() {
         dark:shadow-none md:mt-12 md:p-8
       "
     >
-      <Heading as="h2" className="mb-3">
+      <Heading as="h2" className="flex items-center justify-center mb-3">
         Let&apos;s talk frontend
       </Heading>
 

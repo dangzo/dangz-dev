@@ -5,6 +5,7 @@
 - Use Node and Yarn versions declared in the root `package.json`; keep the single `yarn.lock`.
 - Install both workspaces with `yarn install --frozen-lockfile` from the root.
 - Run the site with `yarn dev`; run Studio with `yarn workspace studio dev`.
+- For the #158 local review, `LOCAL_EDITORIAL_PREVIEW=true yarn dev` uses proposed article summaries on Home and blog listings in development only. Omit the switch to use CMS excerpts. See [HOME_REVIEW.md](HOME_REVIEW.md) for the checkpoint and worktree restart command.
 - Configure local `.env` and `studio/.env` as needed. Keep `SANITY_API_READ_ONLY_TOKEN` (draft preview), `SANITY_API_WRITE_TOKEN` (reactions), and `SANITY_REVALIDATE_SECRET` (webhook verification) server-side. Read Studio variable names from its config and CLI files.
 
 ## Validate the affected behavior

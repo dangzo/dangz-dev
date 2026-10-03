@@ -13,7 +13,7 @@ export default function TagList({ topic, className = '' }: TopicListProps) {
 
   return (
     <div className={`flex flex-wrap gap-1.5 ${className}`}>
-      <TagChip {...topic} />
+      <TagChip {...topic} size="comfortable" />
     </div>
   );
 }
