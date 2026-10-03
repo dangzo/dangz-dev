@@ -196,15 +196,15 @@ Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality
              │    setup     │   (install dependencies + cache; skipped if skip-ci)
              └──────┬───────┘
                     │
-     ┌─────────────┬─────────────┬──────────────┬──────────────┬──────────────┐
-     ▼             ▼             ▼              ▼              ▼
+     ┌───────────────┬────────────────┬─────────────────┬──────────────────┐
+     ▼               ▼                ▼                 ▼                  ▼
 ┌──────────┐  ┌─────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
 │  lint    │  │  test-unit  │  │   test-e2e   │  │  typecheck   │  │  lighthouse  │   (parallel; lighthouse skipped if skip-lighthouse)
-└────┬─────┘  └──────┬──────┘  └──────┬───────┘  └──────┬───────┘  └──────────────┘
-     └────┬──────────┴───────────────┴──────────────┘
+└────┬─────┘  └──────┬──────┘  └──────┬───────┘  └──────┬───────┘  └───────┬──────┘
+     └────┬──────────┴────────────────┴─────────────────┴──────────────────┘
           ▼
       ┌─────────┐
-     │  build  │                   (runs if quality jobs pass; does not wait on lighthouse)
+      │  build  │                   (runs if quality jobs pass; does not wait on lighthouse)
       └─────────┘
 ```
 
