@@ -8,12 +8,6 @@ env:
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
-    paths:
-      - 'src/**'
-      - 'public/**'
-      - 'studio/**'
-      - '.github/workflows/pr-quality-and-build.yml'
-      - '*.*'
 
 concurrency:
   group: pr-quality-and-build-${{ github.event.pull_request.number || github.ref }}
