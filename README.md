@@ -28,6 +28,7 @@ A personal blog and portfolio site built with **Next.js**, **TypeScript**, and *
   - [Kodiak and automerge](#kodiak-and-automerge)
   - [PR labels](#pr-labels)
 - [Project Structure](#project-structure)
+- [AI Agent Guidance](#ai-agent-guidance)
 - [Deployment](#deployment)
 - [Build Version (Footer Semver)](#build-version-footer-semver)
   - [How It Is Generated](#how-it-is-generated)
@@ -311,6 +312,17 @@ dangz-dev/                         # Yarn workspace root (blog package)
 ├── ...
 └── package.json                   # Root workspace manifest
 ```
+
+---
+
+## AI Agent Guidance
+
+The project's AI guidance is split between a short [AGENTS.md](AGENTS.md) and focused reference files in the root `docs/` folder. This replaces a single growing instructions file with a small set of core coding rules and project context that agents can read when a task needs it:
+
+- [ARCHITECTURE.md](docs/ARCHITECTURE.md): code locations, routing, CMS data flow, and rendering conventions.
+- [WORKFLOW.md](docs/WORKFLOW.md): development commands, focused checks, test fixtures, and generated files.
+
+Keeping the entry point small reduces the tokens spent on instructions loaded for every task. For example, a copy edit needs no CMS data-flow details, while a routing change benefits from the architecture guide. The separate guides also make project knowledge easier to find and maintain without duplicating this README's setup and CI documentation.
 
 ---
 
