@@ -20,7 +20,7 @@ async function LetsTalkFrontend() {
       </Text>
 
       <Text className="mb-5 md:mb-6 max-w-3xl mx-auto">
-        I&apos;m always up for a good conversation about programming languages, frontend architecture, product direction, or the tradeoffs that come with building things for real users.
+        I&apos;m always up for a good conversation about programming languages, frontend architecture, product direction, or the decisions that shape useful software.
       </Text>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap items-center justify-center sm:pt-4">

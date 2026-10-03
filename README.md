@@ -4,6 +4,36 @@ A personal blog and portfolio site built with **Next.js**, **TypeScript**, and *
 
 🔗 **Live URL:** [https://dangz.dev/](https://dangz.dev/)
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Tech Stack](#tech-stack)
+- [Monorepo Structure](#monorepo-structure)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Run Locally](#run-locally)
+  - [Linting](#linting)
+  - [Type Checking](#type-checking)
+  - [Testing Strategy](#testing-strategy)
+    - [Unit Tests (Vitest)](#unit-tests-vitest)
+    - [End-to-End Tests (Playwright)](#end-to-end-tests-playwright)
+- [Yarn Workspaces](#yarn-workspaces)
+  - [Available Scripts](#available-scripts)
+    - [Core Commands](#core-commands)
+    - [Quality Commands](#quality-commands)
+    - [Lighthouse Commands](#lighthouse-commands)
+    - [Utility and Deployment Commands](#utility-and-deployment-commands)
+- [CI/CD Pipeline](#cicd-pipeline)
+  - [Kodiak and automerge](#kodiak-and-automerge)
+  - [PR labels](#pr-labels)
+- [Project Structure](#project-structure)
+- [AI Agent Guidance](#ai-agent-guidance)
+- [Deployment](#deployment)
+- [Build Version (Footer Semver)](#build-version-footer-semver)
+  - [How It Is Generated](#how-it-is-generated)
+- [License](#license)
+
 ---
 
 ## Overview
@@ -129,7 +159,7 @@ Visual regression tests run the Home, About, blog list, article, and tag-list pa
 
 ## Yarn Workspaces
 
-This monorepo is managed with Yarn workspaces. The root `package.json` defines the workspace configuration and shared dependencies. Each package (project root and `studio`) has its own `package.json` for package-specific dependencies and scripts.
+This monorepo is managed with Yarn workspaces, and the root `package.json` defines the workspace configuration and shared dependencies. Each package (project root and `studio`) has its own `package.json` for package-specific dependencies and scripts.
 
 ### Available Scripts
 
@@ -196,15 +226,15 @@ Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality
              │    setup     │   (install dependencies + cache; skipped if skip-ci)
              └──────┬───────┘
                     │
-     ┌─────────────┬─────────────┬──────────────┬──────────────┬──────────────┐
-     ▼             ▼             ▼              ▼              ▼
+     ┌───────────────┬────────────────┬─────────────────┬──────────────────┐
+     ▼               ▼                ▼                 ▼                  ▼
 ┌──────────┐  ┌─────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
 │  lint    │  │  test-unit  │  │   test-e2e   │  │  typecheck   │  │  lighthouse  │   (parallel; lighthouse skipped if skip-lighthouse)
-└────┬─────┘  └──────┬──────┘  └──────┬───────┘  └──────┬───────┘  └──────────────┘
-     └────┬──────────┴───────────────┴──────────────┘
+└────┬─────┘  └──────┬──────┘  └──────┬───────┘  └──────┬───────┘  └───────┬──────┘
+     └────┬──────────┴────────────────┴─────────────────┴──────────────────┘
           ▼
       ┌─────────┐
-     │  build  │                   (runs if quality jobs pass; does not wait on lighthouse)
+      │  build  │                   (runs if quality jobs pass; does not wait on lighthouse)
       └─────────┘
 ```
 
@@ -219,20 +249,33 @@ Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality
 | `lighthouse` | `yarn lhci:mobile` + `yarn lhci:desktop` | Runs Lighthouse CI audits for both mobile and desktop, restoring cached dependencies |
 | `build` | `yarn ci:build` | Builds both packages; blocked until lint, test-unit, test-e2e, and typecheck pass |
 
-### Skip labels
+### Kodiak and automerge
 
-Apply these labels **before** opening the PR, or add/remove them afterward (the workflow re-runs on `skip-ci` / `skip-lighthouse` label changes):
+[Kodiak](https://kodiakhq.com/docs/config-reference) is the GitHub app used to automate PR merging. The repository's [`.kodiak.toml`](.kodiak.toml) contains only `version = 1`, so Kodiak uses its default settings, including the `automerge` label. Kodiak requires installation on the repository and branch protection on the target branch.
+
+Once a PR is reviewed and ready to merge, add the `automerge` label from the PR's **Labels** sidebar. This authorizes Kodiak to merge it once the target branch's protection requirements, including required checks and reviews, are satisfied. Remove `automerge` before merging to withdraw that authorization. The label does not bypass branch protection or skip CI.
+
+### PR labels
+
+Add or remove these labels from the PR's **Labels** sidebar:
 
 | Label | Effect |
 |---|---|
+| `automerge` | Authorizes Kodiak to merge the PR when branch protection requirements are satisfied |
 | `skip-ci` | Skips every check after `gate` (setup, lint, tests, typecheck, Lighthouse, and build) |
 | `skip-lighthouse` | Skips only the Lighthouse job; quality jobs and build still run |
 
-`dependencies` is a classification label only — it does not skip CI. Dependabot PRs get `skip-lighthouse` by default (see [`.github/dependabot.yml`](.github/dependabot.yml)); remove that label on a given PR to force a full Lighthouse run.
+Use `skip-ci` for changes that do not need code validation, such as documentation-only updates. Use `skip-lighthouse` when performance audits are unnecessary for the change but lint, tests, type checks, and builds should still run. If both skip labels are present, `skip-ci` takes precedence.
+
+Adding or removing `skip-ci` or `skip-lighthouse` cancels any running PR Checks workflow and starts a new run using the current labels, subject to the workflow's path filters. Removing both restores all checks on the next run. Other label changes, including `automerge`, do not run the check jobs or cancel checks already in progress.
+
+The skip labels control CI independently of `automerge`: they do not authorize a merge, and `automerge` does not restore skipped checks. Check that the selected labels are appropriate before enabling automerge.
+
+`dependencies` is a classification label only — it does not skip CI or enable automerge. Dependabot PRs get `skip-lighthouse` by default (see [`.github/dependabot.yml`](.github/dependabot.yml)), but do not receive `automerge` automatically; add it when an update is ready to merge. Remove `skip-lighthouse` on a given PR to run Lighthouse as well.
 
 Do not use `[skip ci]` in commit messages: GitHub skips the whole workflow and required checks stay pending.
 
-The workflow runs on pull requests that touch `src/**`, `studio/**`, config files, or the workflow file itself.
+The workflow runs on pull requests that touch `src/**`, `public/**`, `studio/**`, root files matching `*.*` (including `README.md` and config files), or the workflow file itself.
 
 ---
 
@@ -269,6 +312,17 @@ dangz-dev/                         # Yarn workspace root (blog package)
 ├── ...
 └── package.json                   # Root workspace manifest
 ```
+
+---
+
+## AI Agent Guidance
+
+The project's AI guidance is split between a short [AGENTS.md](AGENTS.md) and focused reference files in the root `docs/` folder. This replaces a single growing instructions file with a small set of core coding rules and project context that agents can read when a task needs it:
+
+- [ARCHITECTURE.md](docs/ARCHITECTURE.md): code locations, routing, CMS data flow, and rendering conventions.
+- [WORKFLOW.md](docs/WORKFLOW.md): development commands, focused checks, test fixtures, and generated files.
+
+Keeping the entry point small reduces the tokens spent on instructions loaded for every task. For example, a copy edit needs no CMS data-flow details, while a routing change benefits from the architecture guide. The separate guides also make project knowledge easier to find and maintain without duplicating this README's setup and CI documentation.
 
 ---
 

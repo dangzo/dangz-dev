@@ -11,16 +11,16 @@ function IntroTextAndCTAs() {
           Hi, I'm Daniele.
         </span>
         <span className="block text-xl md:text-2xl lg:text-4xl">
-          I build frontend solutions that help teams ship and products scale.
+          I help teams ship reliable frontend products.
         </span>
       </Heading>
 
       <Text size="large">
-        Over the last { devYears } years, I&apos;ve moved from freelance and full-stack work into
-        senior frontend roles, helping teams build reliable products with
-        <strong className="text-accent-dark">&nbsp;React</strong>
-        <strong className="text-accent-dark">&nbsp;Vue</strong> and
-        <strong className="text-accent-dark">&nbsp;TypeScript</strong>.
+        Over the last { devYears } years, I&apos;ve &#32; worked across freelance, full-stack, and senior frontend roles. I work mainly with
+        <strong className="text-accent-dark">&nbsp;React</strong>,
+        <strong className="text-accent-dark">&nbsp;Vue</strong>,
+        <strong className="text-accent-dark">&nbsp;TypeScript</strong> and
+        <strong className="text-accent-dark">&nbsp;AI tools</strong> in my day-to-day engineering workflow.
       </Text>
 
       <Text size="large" className="mb-0">
