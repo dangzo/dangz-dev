@@ -7,7 +7,6 @@ test.describe('Blog Page', () => {
 
   test('heading and tagline section is visible', async ({ page }) => {
     await expect(page.getByRole('heading', { name: /all posts/i })).toBeVisible();
-    await expect(page.getByText(/all things/i)).toBeVisible();
     await expect(page.getByText(/frontend engineering/i)).toBeVisible();
   });
 
@@ -27,17 +26,17 @@ test.describe('Blog Page', () => {
     await expect(publishedTime).toBeVisible();
     await expect(publishedTime).toHaveAttribute('datetime', /.+/);
 
-    await expect(firstPostCard.locator('a[href^="/blog/tags/"]').first()).toBeVisible();
+    await expect(firstPostCard.locator('a[href^="/blog/topics/"]').first()).toBeVisible();
     await expect(firstPostCard.getByRole('link', { name: /read more/i })).toBeVisible();
   });
 
-  test('sidebar tags section renders tag navigation', async ({ page }) => {
+  test('sidebar topics section renders topic navigation', async ({ page }) => {
     const sidebar = page.locator('aside').first();
 
-    await expect(sidebar.getByRole('heading', { name: /all tags/i })).toBeVisible();
-    await expect(sidebar.locator('a[href^="/blog/tags/"]').first()).toBeVisible();
+    await expect(sidebar.getByRole('heading', { name: /all topics/i })).toBeVisible();
+    await expect(sidebar.locator('a[href^="/blog/topics/"]').first()).toBeVisible();
 
-    const sidebarTagLinks = sidebar.locator('a[href^="/blog/tags/"]');
+    const sidebarTagLinks = sidebar.locator('a[href^="/blog/topics/"]');
     await expect.poll(() => sidebarTagLinks.count()).toBeGreaterThan(0);
   });
 

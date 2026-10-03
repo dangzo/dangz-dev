@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   distDir: process.env.E2E_FIXTURES === 'true' ? '.next-e2e' : '.next',
   devIndicators: process.env.E2E_FIXTURES === 'true' ? false : undefined,
   allowedDevOrigins: ['127.0.0.1'],
+  turbopack: process.env.NEXT_TURBOPACK_ROOT
+    ? { root: process.env.NEXT_TURBOPACK_ROOT }
+    : undefined,
   experimental: {
     optimizePackageImports: [
       'clsx',

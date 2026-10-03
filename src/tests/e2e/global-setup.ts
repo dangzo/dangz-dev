@@ -42,13 +42,13 @@ async function globalSetup(config: FullConfig) {
 
   await page.goto(`${baseURL}/blog`);
 
-  const firstTagHref = await page
-    .locator('aside a[href^="/blog/tags/"]')
+  const firstTopicHref = await page
+    .locator('aside a[href^="/blog/topics/"]')
     .first()
     .getAttribute('href');
 
-  if (firstTagHref) {
-    await visitUntilRendered(`${baseURL}${firstTagHref}`, 'section article', page);
+  if (firstTopicHref) {
+    await visitUntilRendered(`${baseURL}${firstTopicHref}`, 'section article', page);
   }
 
   await browser.close();

@@ -1,10 +1,12 @@
-import type { PostWithTags, PostReactionSummaryItem } from '@/features/blog/types/Post.types';
-import { getClient } from '@/api/apollo-client';
+import type { PostWithTopicSource, PostReactionSummaryItem } from '@/features/blog/types/Post.types';
+import { getClient, type ContentReadOptions } from '@/api/apollo-client';
 import { gql, type TypedDocumentNode } from '@apollo/client';
 import { PAGE_SIZE } from '@/features/blog/utils/pagination';
+import { resolvePrimaryTopic, getSearchKeywords } from '@/features/blog/utils/topics';
+import { getPostTopicFields } from './topicFields';
 
 interface PostListQueryResult {
-  allPost: PostWithTags[];
+  allPost: PostWithTopicSource[];
   allReaction: Array<Pick<PostReactionSummaryItem, '_id' | 'name' | 'emoji' | 'sortOrder'>>;
   allPostReactionCount: Array<{
     count?: number;
@@ -14,10 +16,9 @@ interface PostListQueryResult {
 }
 
 export const POST_LIST_QUERY = ({ limit, offset }: {limit?: number, offset?: number} = {}): TypedDocumentNode<PostListQueryResult> => {
-  // Sanity's auto-generated GraphQL PostFilter has no field for the `tags`
-  // reference array, so tag filtering can't be pushed into `where` here —
-  // omitting limit/offset fetches every post, which callers filter/paginate
-  // in JS (see getPostList's tagSlug branch).
+  // Fetch the complete corpus for filtered archives so topic resolution and
+  // pagination stay consistent across legacy assignments and CMS references.
+  // Legacy tag reference arrays also require application-side filtering.
   const pagination = typeof limit === 'number' ? `, limit: ${limit}, offset: ${offset ?? 0}` : '';
 
   return gql`
@@ -38,13 +39,7 @@ export const POST_LIST_QUERY = ({ limit, offset }: {limit?: number, offset?: num
             }
           }
         }
-        tags {
-          _id
-          name
-          slug {
-            current
-          }
-        }
+        ${getPostTopicFields()}
         publishedAt
       }
       allReaction(sort: [{ sortOrder: ASC }]) {
@@ -66,31 +61,40 @@ export const POST_LIST_QUERY = ({ limit, offset }: {limit?: number, offset?: num
   `;
 };
 
-interface GetPostListParams {
+interface GetPostListParams extends ContentReadOptions {
   page?: number;
   pageSize?: number;
   tagSlug?: string;
+  topicSlug?: string;
 }
 
-export async function getPostList({ page = 1, pageSize = PAGE_SIZE, tagSlug }: GetPostListParams = {}) {
+export async function getPostList({ page = 1, pageSize = PAGE_SIZE, tagSlug, topicSlug, publishedOnly }: GetPostListParams = {}) {
   const safePage = Number.isInteger(page) && page > 0 ? page : 1;
   const safePageSize = Number.isInteger(pageSize) && pageSize > 0 ? pageSize : PAGE_SIZE;
   const offset = (safePage - 1) * safePageSize;
 
-  const client = getClient();
+  const client = getClient({ publishedOnly });
   const { data } = await client.query({
-    // Tag filtering happens in JS below, so a filtered page needs the full
-    // unbounded set rather than a single limit/offset slice.
-    query: tagSlug
+    // Resolve and filter topics or legacy tags before selecting the page.
+    query: tagSlug || topicSlug
       ? POST_LIST_QUERY()
       : POST_LIST_QUERY({ limit: safePageSize, offset }),
   });
 
-  let allPosts = data?.allPost ?? [];
+  let allPosts = (data?.allPost ?? []).map((post) => ({
+    ...post,
+    tags: post.tags ?? [],
+    primaryTopic: resolvePrimaryTopic(post),
+    keywords: getSearchKeywords(post),
+  }));
   const allReactions = data?.allReaction ?? [];
   const allReactionCounts = data?.allPostReactionCount ?? [];
 
-  if (tagSlug) {
+  if (topicSlug) {
+    allPosts = allPosts
+      .filter((post) => post.primaryTopic?.slug.current === topicSlug)
+      .slice(offset, offset + safePageSize);
+  } else if (tagSlug) {
     allPosts = allPosts
       .filter((post) => post.tags?.some((tag) => tag.slug?.current === tagSlug))
       .slice(offset, offset + safePageSize);

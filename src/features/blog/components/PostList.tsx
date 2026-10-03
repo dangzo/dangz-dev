@@ -1,6 +1,6 @@
 import { PostCard, PostCardSkeleton } from './PostCard';
 import { Pagination } from '@/components/ui';
-import type { PostWithTags } from '@/features/blog/types/Post.types';
+import type { PostWithTopic } from '@/features/blog/types/Post.types';
 
 interface PostListPagination {
   currentPage: number;
@@ -9,13 +9,13 @@ interface PostListPagination {
 }
 
 interface PostListProps {
-  posts: PostWithTags[];
+  posts: PostWithTopic[];
   pagination?: PostListPagination;
 }
 
 const postListSkeletonKeys = ['one', 'two', 'three'] as const;
 
-export const PostList = ({ posts, pagination }: PostListProps) => {
+export const PostList = ({ posts, pagination }: Readonly<PostListProps>) => {
   return (
     <>
       <ul className="space-y-6">

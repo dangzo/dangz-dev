@@ -14,7 +14,7 @@
     ]
   },
   "scripts": {
-    "build": "next build",
+    "build": "next build --webpack",
     "build-studio": "yarn workspace studio build",
     "ci": "yarn ci:lint && yarn ci:test && yarn ci:typecheck && yarn ci:lighthouse && yarn ci:build",
     "ci:build": "yarn build && yarn build-studio",

@@ -3,7 +3,7 @@ import { ReadingTimeText, TagList } from '@/features/blog/components';
 import ReactionsClient from '@/features/blog/components/reactions/ReactionsClient';
 import { notFound } from 'next/navigation';
 import { getPostBySlug } from '@/features/blog/api/queries/singlePost';
-import type { PostWithTags } from '@/features/blog/types/Post.types';
+import type { PostWithTopic } from '@/features/blog/types/Post.types';
 
 export default async function BlogSlugHeading({ params }: Readonly<{ params: Promise<{ slug?: string }> }>) {
   const { slug } = await params;
@@ -12,7 +12,7 @@ export default async function BlogSlugHeading({ params }: Readonly<{ params: Pro
     return notFound();
   }
 
-  const post = await getPostBySlug(slug) as PostWithTags | null;
+  const post = await getPostBySlug(slug) as PostWithTopic | null;
 
   if (!post) {
     return notFound();
@@ -35,7 +35,7 @@ export default async function BlogSlugHeading({ params }: Readonly<{ params: Pro
 
         <span className="hidden sm:inline mx-2">&bull;</span>
 
-        <TagList tags={post.tags} />
+        <TagList topic={post.primaryTopic} />
       </div>
     </>
   );
