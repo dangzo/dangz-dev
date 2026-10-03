@@ -51,11 +51,11 @@ function TagPostsList({ tagId }: Readonly<{ tagId: string }>) {
   }, [documentStore, tagId]);
 
   return (
-    <Stack padding={4} space={4}>
+    <Stack padding={4} gap={4}>
       <Text size={2} weight="semibold">Blog posts with this tag</Text>
       {state.status === 'loading' && (
         <Card padding={3} role="status">
-          <Stack space={3}>
+          <Stack gap={3}>
             <Spinner />
             <Text>Loading posts…</Text>
           </Stack>
@@ -70,7 +70,7 @@ function TagPostsList({ tagId }: Readonly<{ tagId: string }>) {
         <Text muted>No blog posts use this tag yet.</Text>
       )}
       {state.status === 'ready' && state.posts.length > 0 && (
-        <Stack as="ul" space={3}>
+        <Stack as="ul" gap={3}>
           {state.posts.map((post) => (
             <Card as="li" key={post._id} padding={3} border radius={2}>
               <IntentLink
