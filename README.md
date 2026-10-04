@@ -277,7 +277,7 @@ The skip labels control CI independently of `automerge`: they do not authorize a
 
 Do not use `[skip ci]` in commit messages: GitHub skips the whole workflow and required checks stay pending.
 
-The workflow runs on pull requests that touch `src/**`, `public/**`, `studio/**`, root files matching `*.*` (including `README.md` and config files), or the workflow file itself.
+The workflow runs when a pull request is opened, updated with new commits, reopened, marked ready for review, labeled, or unlabeled, regardless of which files changed.
 
 ---
 
