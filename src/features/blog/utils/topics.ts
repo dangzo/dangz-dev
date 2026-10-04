@@ -1,3 +1,5 @@
+export { getSearchKeywords } from '@/data/blogTopics';
+
 import { LEGACY_TAG_REDIRECTS, POST_TOPIC_ASSIGNMENTS, TOPICS } from '@/features/blog/data/topics';
 import type { TopicSource, TopicSummary } from '@/features/blog/types/Topic.types';
 
@@ -12,14 +14,6 @@ export type LegacyTopicPost = Readonly<{
     slug?: Readonly<{ current?: string }>;
   }>[] | null;
 }>;
-
-const TECHNOLOGY_ALIASES: Readonly<Record<string, readonly string[]>> = {
-  react: ['React.js', 'ReactJS'],
-  'vue-js': ['Vue', 'Vue.js', 'VueJS'],
-  'next-js': ['Next', 'Next.js', 'NextJS'],
-  typescript: ['TypeScript', 'TS'],
-  graphql: ['GraphQL'],
-};
 
 function getPublishedId(id: string): string {
   return id.replace(/^drafts\./, '');
@@ -58,44 +52,6 @@ export function resolvePrimaryTopic(post: LegacyTopicPost): TopicSummary | null 
   const assignedSlug = POST_TOPIC_ASSIGNMENTS[id];
 
   return TOPICS.find((topic) => topic.slug.current === assignedSlug) ?? null;
-}
-
-export function getSearchKeywords(post: LegacyTopicPost): string[] {
-  const keywords = [...(post.keywords ?? [])];
-
-  for (const tag of post.tags ?? []) {
-    if (tag.name) {
-      keywords.push(tag.name);
-    }
-
-    const slug = tag.slug?.current;
-
-    if (slug) {
-      keywords.push(slug, slug.replace(/-/g, ' '));
-
-      if (Object.hasOwn(TECHNOLOGY_ALIASES, slug)) {
-        keywords.push(...TECHNOLOGY_ALIASES[slug]);
-      }
-    }
-  }
-
-  if (Object.hasOwn(POST_TOPIC_ASSIGNMENTS, getPublishedId(post._id))) {
-    keywords.push('frontend');
-  }
-
-  const seen = new Set<string>();
-
-  return keywords.map((keyword) => keyword.trim()).filter((keyword) => {
-    const normalized = keyword.toLowerCase();
-
-    if (!normalized || seen.has(normalized)) {
-      return false;
-    }
-
-    seen.add(normalized);
-
-    return true;
-  });
 }
 
 export function getTopicHref(topic: TopicSummary | string): string {

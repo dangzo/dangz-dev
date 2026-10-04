@@ -98,7 +98,7 @@ const Reactions = ({ postId }: ReactionsProps) => {
     <div ref={reactionsSectionRef} className="mt-14 sm:mt-20 flex flex-col items-center gap-3" aria-label="Reactions">
       <ScrollToTop />
       <div className="w-full flex flex-wrap items-center gap-3 justify-center border-t border-secondary-light/30 dark:border-secondary-dark/50 pt-8">
-        <Heading as="h6" className="text-lg font-semibold text-center w-full mb-4">
+        <Heading as="h6" className="text-lg font-semibold text-center justify-center w-full mb-4">
           How do you find this article?
         </Heading>
         {reactions.map((reaction) => {

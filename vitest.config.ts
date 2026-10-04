@@ -9,6 +9,7 @@ const rootDir = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   plugins: [react()],
   resolve: {
+    dedupe: ['react', 'react-dom'],
     alias: {
       '@': path.resolve(rootDir, './src'),
       'server-only': path.resolve(rootDir, 'node_modules/next/dist/compiled/server-only/empty.js'),
@@ -17,7 +18,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
-    include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    include: ['src/**/*.{test,spec}.{ts,tsx}', 'studio/**/*.{test,spec}.{ts,tsx}', 'scripts/**/*.{test,spec}.{ts,mts}'],
     exclude: [...configDefaults.exclude, 'src/tests/e2e/**'],
     setupFiles: ['./src/tests/unit/setup.ts'],
   },
