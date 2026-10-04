@@ -44,7 +44,8 @@
     "preview": "next build && next start",
     "start": "next start",
     "typecheck": "tsc",
-    "typecheck-studio": "yarn workspace studio typecheck"
+    "typecheck-studio": "yarn workspace studio typecheck",
+    "migrate:topics": "node --env-file-if-exists=.env --env-file-if-exists=studio/.env scripts/migrate-blog-topics.mts"
   },
   "dependencies": {
     "@apollo/client": "^4.3.1",

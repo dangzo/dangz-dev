@@ -2,8 +2,9 @@ import { defineField, defineType } from 'sanity';
 
 export const tagType = defineType({
   name: 'tag',
-  title: 'Tag',
+  title: 'Legacy tag',
   type: 'document',
+  readOnly: true,
   fields: [
     defineField({
       name: 'name',

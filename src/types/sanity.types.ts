@@ -12,7 +12,7 @@
  * ---------------------------------------------------------------------------------
  */
 
-export declare const internalGroqTypeReferenceTo: unique symbol;
+export declare const internalGroqTypeReferenceTo: unique symbol
 
 // Source: schema.json
 export type PostReference = {
@@ -76,6 +76,13 @@ export type SanityImageAssetReference = {
   [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
 }
 
+export type TopicReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'topic'
+}
+
 export type TagReference = {
   _ref: string
   _type: 'reference'
@@ -101,6 +108,8 @@ export type Post = {
   }
   imageAltText?: string
   excerpt?: string
+  primaryTopic?: TopicReference
+  keywords?: Array<string>
   tags?: Array<
     {
       _key: string
@@ -160,6 +169,18 @@ export type SanityImageHotspot = {
   y?: number
   height?: number
   width?: number
+}
+
+export type Topic = {
+  _id: string
+  _type: 'topic'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  displayName?: string
+  slug?: Slug
+  description?: string
+  editorialGuidance?: string
 }
 
 export type Table = {
@@ -289,10 +310,12 @@ export type AllSanitySchemaTypes =
   | Slug
   | Reaction
   | SanityImageAssetReference
+  | TopicReference
   | TagReference
   | Post
   | SanityImageCrop
   | SanityImageHotspot
+  | Topic
   | Table
   | TableRow
   | Code

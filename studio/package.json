@@ -13,7 +13,7 @@
     "ci": "yarn lint && yarn typecheck && yarn build",
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
-    "generate-types": "sanity schema extract && sanity typegen generate"
+    "generate-types": "sanity schema extract --force && sanity typegen generate"
   },
   "keywords": [
     "sanity"
