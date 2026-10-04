@@ -20,8 +20,8 @@ jobs:
     name: Label gates
     runs-on: ubuntu-latest
     timeout-minutes: 2
-    # Ignore labeled/unlabeled events that are not skip-ci or skip-lighthouse.
-    if: ${{ github.event.action != 'labeled' && github.event.action != 'unlabeled' || contains(fromJSON('["skip-ci","skip-lighthouse"]'), github.event.label.name) }}
+    # Always read labels: skipping this job also skips required checks, which
+    # GitHub accepts as passing even when another run is failing or pending.
     outputs:
       skip_ci: ${{ steps.labels.outputs.skip_ci }}
       skip_lighthouse: ${{ steps.labels.outputs.skip_lighthouse }}
