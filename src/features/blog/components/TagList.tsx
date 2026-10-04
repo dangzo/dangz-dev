@@ -1,17 +1,19 @@
 import { TagChip } from '@/components/ui';
-import type { Tag as TagType } from '@/types/sanity.types';
+import type { TopicSummary } from '@/features/blog/types/Topic.types';
 
-interface TagListProps {
-  tags?: TagType[];
-  className?: string
-}
+type TopicListProps = Readonly<{
+  topic?: TopicSummary | null;
+  className?: string;
+}>;
 
-export default async function TagList({ tags, className = '' }: TagListProps) {
+export default function TagList({ topic, className = '' }: TopicListProps) {
+  if (!topic) {
+    return null;
+  }
+
   return (
     <div className={`flex flex-wrap gap-1.5 ${className}`}>
-      {tags?.map((tag) => (
-        <TagChip key={tag._id} {...tag} />
-      ))}
+      <TagChip {...topic} size="comfortable" />
     </div>
   );
 }

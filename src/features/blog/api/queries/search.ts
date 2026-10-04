@@ -1,33 +1,31 @@
-import type { PostWithTags } from '@/features/blog/types/Post.types';
-import { getClient } from '@/api/apollo-client';
+import type { SearchablePost, SearchablePostSource } from '@/features/blog/types/Post.types';
+import { getClient, type ContentReadOptions } from '@/api/apollo-client';
 import { gql } from '@apollo/client';
+import { resolvePrimaryTopic, getSearchKeywords } from '@/features/blog/utils/topics';
+import { getPostTopicFields } from './topicFields';
 
-const SEARCHABLE_POSTS_QUERY = gql`
+export const SEARCHABLE_POSTS_QUERY = () => gql`
   query SearchablePosts {
-    allPost(sort: [{ publishedAt: DESC }], limit: 200) {
+    allPost(sort: [{ publishedAt: DESC }]) {
       _id
       title
-      slug {
-        current
-      }
+      slug { current }
       excerpt
-      tags {
-        _id
-        name
-        slug {
-          current
-        }
-      }
+      ${getPostTopicFields()}
     }
   }
 `;
 
-export async function getSearchablePosts(): Promise<PostWithTags[]> {
-  const client = getClient();
-  const { data } = await client.query<{ allPost: PostWithTags[] }>({
-    query: SEARCHABLE_POSTS_QUERY,
+export async function getSearchablePosts(options: ContentReadOptions = {}): Promise<SearchablePost[]> {
+  const { data } = await getClient(options).query<{ allPost: SearchablePostSource[] }>({
+    query: SEARCHABLE_POSTS_QUERY(),
     fetchPolicy: 'no-cache',
   });
 
-  return data?.allPost ?? [];
+  return (data?.allPost ?? []).map((post) => ({
+    ...post,
+    tags: post.tags ?? [],
+    primaryTopic: resolvePrimaryTopic(post),
+    keywords: getSearchKeywords(post),
+  }));
 }

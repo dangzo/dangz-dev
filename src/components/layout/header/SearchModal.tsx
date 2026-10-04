@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { createPortal } from 'react-dom';
-import { Fragment } from 'react';
 import type { RefObject } from 'react';
 import styles from './SearchModal.module.css';
 import HighlightText from './HighlightText';
@@ -71,8 +70,9 @@ const SearchModal = ({
               ref={inputRef}
               value={query}
               onChange={(event) => onQueryChange(event.target.value)}
-              placeholder="Search titles, tags, content..."
-              className="w-full bg-transparent text-base text-main-light dark:text-main-dark outline-none placeholder:text-main-light/60 dark:placeholder:text-main-dark/50"
+              placeholder="Search titles, topics, technologies..."
+              aria-label="Search posts"
+              className="min-w-0 w-full bg-transparent text-base text-main-light dark:text-main-dark outline-none placeholder:text-main-light/60 dark:placeholder:text-main-dark/50"
             />
 
             <div className="flex shrink-0 items-center gap-2">
@@ -146,15 +146,10 @@ const SearchModal = ({
                             </p>
                           )
                           : null}
-                        {result.tags.length > 0
+                        {result.primaryTopic
                           ? (
                             <p className="mt-2 text-xs text-primary-500 dark:text-primary-400">
-                              {result.tags.map((tag, index) => (
-                                <Fragment key={`${tag}-${index}`}>
-                                  {index > 0 ? ' • ' : null}
-                                  <HighlightText text={tag} query={query} />
-                                </Fragment>
-                              ))}
+                              <HighlightText text={result.primaryTopic.displayName} query={query} />
                             </p>
                           )
                           : null}

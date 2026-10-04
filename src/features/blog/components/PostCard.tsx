@@ -1,78 +1,83 @@
-import { DateText, Text, Heading, Link, Img } from '@/components/ui';
-import TagList from './TagList';
+import { DateText, Link, Img, TagChip } from '@/components/ui';
 import Skeleton from 'react-loading-skeleton';
-import type { PostWithTags } from '@/features/blog/types/Post.types';
+import type { PostWithTopic } from '@/features/blog/types/Post.types';
 import ReactionsSummary from './reactions/ReactionsSummary';
+import clsx from 'clsx';
 
-interface PostCardProps {
-  post: PostWithTags;
+type PostCardProps = Readonly<{
+  post: PostWithTopic;
   preload: boolean;
-}
+  summary?: string;
+}>;
+
+const imageClasses = 'aspect-video w-full overflow-hidden rounded-md md:col-start-2 md:row-start-1 md:w-64 md:self-start lg:w-80';
 
 export const PostCardSkeleton = () => {
   return (
-    <div className="flex flex-row relative">
-      <div className="leading-6 min-w-38">
-        <Skeleton width={120} height={20} />
+    <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_256px] md:gap-x-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div className={imageClasses}>
+        <Skeleton height="100%" />
       </div>
-      <div className="flex-1">
-        <Skeleton width="60%" height={30} className="mb-2" />
-        <Skeleton width="40%" height={20} className="mb-2" />
-        <Skeleton count={3} className="mb-2" />
-        <Skeleton width={100} height={20} />
+      <div className="min-w-0 md:col-start-1 md:row-start-1">
+        <Skeleton width={120} height={24} />
+        <Skeleton height={56} className="mt-3" />
+        <Skeleton count={2} className="mt-3" />
+        <Skeleton width={100} height={20} className="mt-3" />
       </div>
     </div>
   );
 };
 
-export const PostCard = ({ post, preload }: PostCardProps) => {
-  const hasVisibleReactions = (post.reactions?.some((reaction) => (reaction.count ?? 0) > 0 && reaction.emoji) ?? false);
+export const PostCard = ({ post, preload, summary = post.excerpt }: PostCardProps) => {
   const postHref = `/blog/${post.slug?.current}`;
+  const hasImage = Boolean(post.image?.asset?.url);
 
   return (
-    <article className="flex flex-col-reverse md:flex-row relative md:items-center">
-      <div className="md:w-5/7">
-        <Link
-          href={postHref}
-          className="text-2xl font-semibold"
-        >
-          <Heading as="h3" className="inline-block">
-            {post.title}
-          </Heading>
-        </Link>
+    <article className={clsx(
+      'grid min-w-0 gap-5 md:gap-x-8',
+      hasImage ? 'md:grid-cols-[minmax(0,1fr)_256px] lg:grid-cols-[minmax(0,1fr)_320px]' : 'grid-cols-1',
+    )}>
+      {hasImage && (
+        <div className={imageClasses}>
+          <Img
+            source={post.image}
+            alt={post.imageAltText}
+            className="h-full w-full object-cover"
+            width={960}
+            height={540}
+            sizes="(min-width: 1024px) 320px, (min-width: 768px) 256px, calc(100vw - 32px)"
+            preload={preload}
+            loading={preload ? undefined : 'lazy'}
+            blurDataURL={post.image?.asset?.metadata?.lqip}
+          />
+        </div>
+      )}
 
-        <div className="flex flex-col gap-1">
-          <div className="flex flex-row items-center gap-x-1 mb-1">
-            <DateText date={post.publishedAt} className="mb-0!" />
-            {hasVisibleReactions
-              ? <span className="mx-2 mb-0">&bull;</span>
-              : null}
-            <ReactionsSummary reactions={post.reactions} href={postHref} />
-          </div>
-          {post.tags && <TagList tags={post.tags} />}
+      <div className="flex min-w-0 flex-col gap-3 md:col-start-1 md:row-start-1">
+        <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2">
+          {post.primaryTopic && <TagChip {...post.primaryTopic} size="comfortable" />}
+          <DateText date={post.publishedAt} className="mb-0! text-xs" />
         </div>
 
-        <Text className="my-4">
-          {post.excerpt ? `${post.excerpt}...` : 'No description available.'}
-        </Text>
-
-        <Link href={postHref} type="accent">
-          Read more →
+        <Link href={postHref} className="min-w-0 rounded-sm hover:text-accent-light dark:hover:text-accent-dark">
+          <h3 className="font-heading text-xl font-semibold leading-snug wrap-break-word md:text-2xl">
+            {post.title}
+          </h3>
         </Link>
-      </div>
 
-      {/* priority=true on first two cards adds a <link rel="preload"> in <head>; lazy load the rest */}
-      <Img
-        source={post.image}
-        alt={post.imageAltText}
-        className="object-cover rounded-md block md:ml-4 md:w-38 mb-8 md:mb-0 grow w-full h-auto"
-        width={930}
-        height={665}
-        sizes="(min-width: 768px) 152px, 100vw"
-        preload={preload}
-        loading={preload ? undefined : 'lazy'}
-        blurDataURL={post.image?.asset?.metadata?.lqip}
-      />
+        {summary && (
+          <p className="text-sm leading-6 text-secondary-light dark:text-secondary-dark md:text-base">
+            {summary}
+          </p>
+        )}
+
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+          <Link href={postHref} type="accent" className="py-1 text-sm">
+            Read more <span aria-hidden="true">→</span>
+          </Link>
+          <ReactionsSummary reactions={post.reactions} href={postHref} />
+        </div>
+      </div>
     </article>
   );
 };

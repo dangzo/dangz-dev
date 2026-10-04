@@ -1,9 +1,15 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
+import { TOPICS } from '../../src/data/blogTopics';
+import { PrimaryTopicInput } from '../components/PrimaryTopicInput';
+import { validateKeywords, validatePrimaryTopic, validateSummary } from '../utils/topicValidation';
 
 export const postType = defineType({
   name: 'post',
   title: 'Post',
   type: 'document',
+  preview: {
+    select: { title: 'title', subtitle: 'primaryTopic.displayName', media: 'image' },
+  },
   fields: [
     defineField({
       name: 'title',
@@ -34,13 +40,34 @@ export const postType = defineType({
       name: 'excerpt',
       type: 'text',
       rows: 3,
-      description: 'A short summary shown in post listings. Avoids fetching the full body for previews.',
-      validation: (rule) => rule.max(300),
+      description: 'In one or two concise sentences, explain what the reader will learn or be able to do. Used in listings and search; required before publishing. Maximum 300 characters.',
+      validation: (rule) => rule.required().max(300).custom(validateSummary),
+    }),
+    defineField({
+      name: 'primaryTopic',
+      title: 'Primary topic',
+      type: 'reference',
+      to: [{ type: 'topic' }],
+      description: `Choose the article's main reader benefit. Start with ${TOPICS.map((topic) => topic.displayName).join(', ')}. Manage deliberate additions in Topics; drafts can remain unclassified.`,
+      options: { disableNew: true },
+      components: { input: PrimaryTopicInput },
+      validation: (rule) => rule.required().custom(validatePrimaryTopic),
+    }),
+    defineField({
+      name: 'keywords',
+      title: 'Search keywords',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'Optional technology names, aliases, and terms that help search find this article. These are never public topic labels. Existing legacy search terms are preserved by migration.',
+      validation: (rule) => rule.custom(validateKeywords),
     }),
     defineField({
       name: 'tags',
+      title: 'Legacy tags',
       type: 'array',
       of: [{ type: 'reference', to: { type: 'tag' } }],
+      hidden: true,
+      readOnly: true,
     }),
     defineField({
       name: 'body',

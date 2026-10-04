@@ -25,6 +25,8 @@ export default defineConfig([
     // Custom ignores:
     'public',
     'scripts',
+    // TypeGen owns the formatting of this generated artifact.
+    'src/types/sanity.types.ts',
   ]),
   {
     files: ['**/*.{ts,tsx}'],

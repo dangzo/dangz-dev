@@ -16,6 +16,7 @@
 - Split components for readability; colocate private helpers and extract shared or architecturally public components.
 - Prefer Tailwind utilities over CSS modules and inline styles; reuse existing UI primitives and theme tokens.
 - Reuse About icons from `public/icons/`; ask the developer for an SVG before adding a new icon.
+- When a PR completes a GitHub issue, include `Closes #<issue-number>` in the PR description so merging into the repository's default branch automatically closes it. Use `Refs #<issue-number>` only for related or partially completed issues that should remain open. Before merging, confirm the description includes closing references for every completed issue and the PR targets the default branch.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

@@ -1,100 +1,61 @@
 import { render, screen } from '@testing-library/react';
-
 import { TopTags, TopTagsSkeleton } from './TopTags';
-import { getTagsWithCount } from '@/features/blog/api/queries/tags';
+import { getTopicsWithCount } from '@/features/blog/api/queries/topics';
+import type { TopicWithCount } from '@/features/blog/types/Topic.types';
 
-vi.mock('@/components/ui/TagChip', () => ({
-  default: function TagChipMock({ name }: { name?: string }) {
-    return <span data-testid="tag-chip">#{name}</span>;
-  },
-}));
-
+vi.mock('next/link', () => import('@/tests/unit/mocks/nextLink'));
 vi.mock('react-loading-skeleton', () => ({
-  default: function SkeletonMock({ width, height }: { width?: number; height?: number }) {
-    return <div data-testid="top-tag-skeleton" data-width={width} data-height={height} />;
+  default: function SkeletonMock() {
+    return <div data-testid="topic-skeleton" />;
   },
 }));
+vi.mock('@/features/blog/api/queries/topics', () => ({ getTopicsWithCount: vi.fn() }));
 
-vi.mock('@/features/blog/api/queries/tags', () => ({
-  getTagsWithCount: vi.fn(),
-}));
+const topic = (displayName: string, postCount: number): TopicWithCount => ({
+  _id: displayName,
+  displayName,
+  slug: { current: displayName.toLowerCase() },
+  description: '',
+  postCount,
+});
 
 describe('TopTags', () => {
-  it('renders up to 7 tags sorted by post count desc then name asc, excluding zero-count tags', async () => {
-    const tags = [
-      { _id: 'react', name: 'React', slug: { current: 'react' } },
-      { _id: 'vue', name: 'Vue', slug: { current: 'vue' } },
-      { _id: 'angular', name: 'Angular', slug: { current: 'angular' } },
-      { _id: 'svelte', name: 'Svelte', slug: { current: 'svelte' } },
-      { _id: 'next', name: 'Next', slug: { current: 'next' } },
-      { _id: 'empty', name: 'Empty', slug: { current: 'empty' } },
-      { _id: 'astro', name: 'Astro', slug: { current: 'astro' } },
-      { _id: 'remix', name: 'Remix', slug: { current: 'remix' } },
-      { _id: 'nuxt', name: 'Nuxt', slug: { current: 'nuxt' } },
-    ];
-
-    const counts: Record<string, number> = {
-      react: 5,
-      vue: 5,
-      angular: 3,
-      svelte: 1,
-      next: 5,
-      empty: 0,
-      astro: 2,
-      remix: 1,
-      nuxt: 4,
-    };
-
-    vi.mocked(getTagsWithCount).mockResolvedValue({
-      tags: tags as never,
-      tagCount: (slug?: string) => counts[slug || ''] || 0,
+  it('links populated topics in descending count order with alphabetical ties', async () => {
+    vi.mocked(getTopicsWithCount).mockResolvedValue({
+      topics: [topic('Performance', 2), topic('Architecture', 3), topic('Accessibility', 2), topic('AI', 0)],
+      totalPostCount: 7,
     });
 
     render(await TopTags());
 
-    const chips = screen.getAllByTestId('tag-chip');
-    expect(chips).toHaveLength(7);
-    expect(chips.map(chip => chip.textContent)).toEqual([
-      '#Next',
-      '#React',
-      '#Vue',
-      '#Nuxt',
-      '#Angular',
-      '#Astro',
-      '#Remix',
-    ]);
-
-    expect(screen.queryByText('#Empty')).not.toBeInTheDocument();
-    expect(screen.queryByText('#Svelte')).not.toBeInTheDocument();
-
-    expect(screen.getAllByText('5 posts')).toHaveLength(3);
-    expect(screen.getByText('4 posts')).toBeInTheDocument();
+    expect(screen.getAllByRole('link').map(link => link.textContent)).toEqual(['Architecture', 'Accessibility', 'Performance']);
+    expect(screen.getByRole('link', { name: 'Architecture' })).toHaveAttribute('href', '/blog/topics/architecture');
+    expect(screen.queryByText('AI')).not.toBeInTheDocument();
     expect(screen.getByText('3 posts')).toBeInTheDocument();
-    expect(screen.getByText('2 posts')).toBeInTheDocument();
-    expect(screen.getByText('1 post')).toBeInTheDocument();
   });
 
-  it('renders nothing when the query returns no tags', async () => {
-    vi.mocked(getTagsWithCount).mockResolvedValue({
-      tags: undefined,
-      tagCount: () => 0,
-    });
+  it('renders no topic links for an empty corpus', async () => {
+    vi.mocked(getTopicsWithCount).mockResolvedValue({ topics: [topic('Architecture', 0)], totalPostCount: 0 });
 
     render(await TopTags());
 
-    expect(screen.queryByTestId('tag-chip')).not.toBeInTheDocument();
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+    expect(screen.getByText('Topics will appear as new writing is published.')).toBeVisible();
+  });
+
+  it('keeps the rest of Home usable when topic fetching fails', async () => {
+    vi.mocked(getTopicsWithCount).mockRejectedValue(new Error('CMS unavailable'));
+
+    render(await TopTags());
+
+    expect(screen.getByText('Topics couldn’t load. Try again shortly.')).toBeVisible();
   });
 });
 
 describe('TopTagsSkeleton', () => {
-  it('renders 7 skeleton placeholders sized 200x32', () => {
+  it('provides placeholders for the six curated topics', () => {
     render(<TopTagsSkeleton />);
 
-    const placeholders = screen.getAllByTestId('top-tag-skeleton');
-    expect(placeholders).toHaveLength(7);
-    for (const node of placeholders) {
-      expect(node).toHaveAttribute('data-width', '200');
-      expect(node).toHaveAttribute('data-height', '32');
-    }
+    expect(screen.getAllByTestId('topic-skeleton')).toHaveLength(6);
   });
 });

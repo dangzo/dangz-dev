@@ -25,6 +25,7 @@ A personal blog and portfolio site built with **Next.js**, **TypeScript**, and *
     - [Lighthouse Commands](#lighthouse-commands)
     - [Utility and Deployment Commands](#utility-and-deployment-commands)
 - [CI/CD Pipeline](#cicd-pipeline)
+  - [CodeRabbit reviews](#coderabbit-reviews)
   - [Kodiak and automerge](#kodiak-and-automerge)
   - [PR labels](#pr-labels)
 - [Project Structure](#project-structure)
@@ -39,6 +40,8 @@ A personal blog and portfolio site built with **Next.js**, **TypeScript**, and *
 ## Overview
 
 This project serves as a personal web presence for publishing content and showcasing work. It combines a modern frontend stack with a headless CMS setup for flexible content management.
+
+For the blog topic taxonomy, article assignments, and Sanity rollout sequence, see [docs/BLOG_TOPICS.md](docs/BLOG_TOPICS.md).
 
 ---
 
@@ -153,7 +156,7 @@ Vitest explicitly excludes e2e specs under `src/tests/e2e/**`, so `yarn test:uni
 
 Playwright starts an isolated app server automatically via the configured `webServer` command and runs against `http://127.0.0.1:3100` by default.
 
-Visual regression tests run the Home, About, blog list, article, and tag-list pages against deterministic E2E CMS fixtures at desktop and mobile Chromium viewports. Their committed baselines live in `src/tests/e2e/__screenshots__/`. Review all image diffs as UI changes; after intentionally changing a layout, regenerate them with `yarn test:e2e:visual:update` and commit the updated PNGs.
+Visual regression tests run the Home, About, blog list, article, and topic archive pages against deterministic E2E CMS fixtures at desktop and mobile Chromium viewports. Their committed baselines live in `src/tests/e2e/__screenshots__/`. Review all image diffs as UI changes; after intentionally changing a layout, regenerate them with `yarn test:e2e:visual:update` and commit the updated PNGs.
 
 ---
 
@@ -249,6 +252,22 @@ Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality
 | `lighthouse` | `yarn lhci:mobile` + `yarn lhci:desktop` | Runs Lighthouse CI audits for both mobile and desktop, restoring cached dependencies |
 | `build` | `yarn ci:build` | Builds both packages; blocked until lint, test-unit, test-e2e, and typecheck pass |
 
+### CodeRabbit reviews
+
+[CodeRabbit](https://docs.coderabbit.ai/reference/configuration) is configured in [`.coderabbit.yaml`](.coderabbit.yaml) for on-demand reviews. Request a review by posting a comment on the pull request:
+
+| Comment | Action |
+|---|---|
+| `@coderabbitai review` | Review new changes; use this again after pushing more commits |
+| `@coderabbitai full review` | Run a fresh, complete review of the PR |
+| `@coderabbitai configuration` | Show the effective configuration and each setting's source |
+
+Opening, reopening, marking a PR ready, adding labels, or pushing commits does not request a review. Chat replies require an explicit `@coderabbitai` mention. See the [review commands](https://docs.coderabbit.ai/reference/review-commands) for other available commands.
+
+Reviews use the balanced `chill` profile and the repository's agent, architecture, and workflow guidance. Summaries appear in the walkthrough comment, skipped-review messages and decorative output are disabled, and the docstring coverage quota is off. The generated build version is excluded; generated Sanity types and schema remain available for consistency checks, with fixes directed to their sources.
+
+To verify the setup on a PR, check that opening it and pushing changes produces no automatic review, request a review with one of the commands above, then check that another push requires a new request. An unmentioned reply should not trigger a chat response. Use `@coderabbitai configuration` to confirm these settings are effective; organization or workspace [global overrides](https://docs.coderabbit.ai/configuration/configuration-inheritance) can take precedence over the repository file even with inheritance disabled.
+
 ### Kodiak and automerge
 
 [Kodiak](https://kodiakhq.com/docs/config-reference) is the GitHub app used to automate PR merging. The repository's [`.kodiak.toml`](.kodiak.toml) contains only `version = 1`, so Kodiak uses its default settings, including the `automerge` label. Kodiak requires installation on the repository and branch protection on the target branch.
@@ -267,7 +286,7 @@ Add or remove these labels from the PR's **Labels** sidebar:
 
 Use `skip-ci` for changes that do not need code validation, such as documentation-only updates. Use `skip-lighthouse` when performance audits are unnecessary for the change but lint, tests, type checks, and builds should still run. If both skip labels are present, `skip-ci` takes precedence.
 
-Adding or removing `skip-ci` or `skip-lighthouse` cancels any running PR Checks workflow and starts a new run using the current labels, subject to the workflow's path filters. Removing both restores all checks on the next run. Other label changes, including `automerge`, do not run the check jobs or cancel checks already in progress.
+Adding or removing any label starts a new PR Checks run using the current labels. Changes to `skip-ci` or `skip-lighthouse` cancel the running workflow; other label changes, including `automerge`, queue a new run without cancelling the running workflow. Removing both skip labels restores all checks on the next run. The label gate always runs so unrelated label changes cannot replace failed or pending required checks with skipped results.
 
 The skip labels control CI independently of `automerge`: they do not authorize a merge, and `automerge` does not restore skipped checks. Check that the selected labels are appropriate before enabling automerge.
 
@@ -275,7 +294,7 @@ The skip labels control CI independently of `automerge`: they do not authorize a
 
 Do not use `[skip ci]` in commit messages: GitHub skips the whole workflow and required checks stay pending.
 
-The workflow runs on pull requests that touch `src/**`, `public/**`, `studio/**`, root files matching `*.*` (including `README.md` and config files), or the workflow file itself.
+The workflow runs when a pull request is opened, updated with new commits, reopened, marked ready for review, labeled, or unlabeled, regardless of which files changed.
 
 ---
 
@@ -321,6 +340,7 @@ The project's AI guidance is split between a short [AGENTS.md](AGENTS.md) and fo
 
 - [ARCHITECTURE.md](docs/ARCHITECTURE.md): code locations, routing, CMS data flow, and rendering conventions.
 - [WORKFLOW.md](docs/WORKFLOW.md): development commands, focused checks, test fixtures, and generated files.
+- [BLOG_TOPICS.md](docs/BLOG_TOPICS.md): topic taxonomy, article assignments, legacy URL compatibility, and rollout sequence.
 
 Keeping the entry point small reduces the tokens spent on instructions loaded for every task. For example, a copy edit needs no CMS data-flow details, while a routing change benefits from the architecture guide. The separate guides also make project knowledge easier to find and maintain without duplicating this README's setup and CI documentation.
 
