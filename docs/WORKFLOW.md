@@ -1,5 +1,9 @@
 # Workflow
 
+## File issues and describe PRs
+
+Use the GitHub templates to state the problem or goal, bounded scope, and acceptance criteria or investigation deliverables. Keep small tasks short and remove irrelevant optional sections. See [GitHub template guidance](GITHUB_TEMPLATES.md) for browser/CLI usage, examples, and the investigation rationale. For PRs, report selected checks and their results using the guidance below; follow [AGENTS.md](../AGENTS.md) for closing references and the default-branch check before merging.
+
 ## Run locally
 
 - Use Node and Yarn versions declared in the root `package.json`; keep the single `yarn.lock`.
