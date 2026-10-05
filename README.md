@@ -28,6 +28,7 @@ A personal blog and portfolio site built with **Next.js**, **TypeScript**, and *
   - [CodeRabbit reviews](#coderabbit-reviews)
   - [Kodiak and automerge](#kodiak-and-automerge)
   - [PR labels](#pr-labels)
+  - [Issue and PR templates](#issue-and-pr-templates)
 - [Project Structure](#project-structure)
 - [AI Agent Guidance](#ai-agent-guidance)
 - [Deployment](#deployment)
@@ -295,6 +296,12 @@ The skip labels control CI independently of `automerge`: they do not authorize a
 Do not use `[skip ci]` in commit messages: GitHub skips the whole workflow and required checks stay pending.
 
 The workflow runs when a pull request is opened, updated with new commits, reopened, marked ready for review, labeled, or unlabeled, regardless of which files changed.
+
+### Issue and PR templates
+
+Choose a bug report, feature/change, or investigation/maintenance template from the [new issue page](https://github.com/dangzo/dangz-dev/issues/new/choose); blank issues remain available. Keep small tasks concise and remove irrelevant optional sections. The default PR template prompts for the problem and result, issue references, focused validation, and relevant risks.
+
+See [GitHub template guidance](docs/GITHUB_TEMPLATES.md) for the investigation findings, browser/CLI usage, and examples. Select checks from [WORKFLOW.md](docs/WORKFLOW.md#validate-the-affected-behavior) and follow [AGENTS.md](AGENTS.md) for completed-issue references and the pre-merge default-branch check.
 
 ---
 
