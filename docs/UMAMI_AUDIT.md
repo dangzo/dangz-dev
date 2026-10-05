@@ -9,7 +9,7 @@ The audit confirmed a lost bottom-section event before tracker initialization, h
 ## Evidence and limits
 
 - Source: `origin/dev` at `73801d1fad3e1bc429261683d3a44d0c2d42e6b8`; audit branch `docs/168-umami-audit`. GitHub reports `dev` as its default branch; the local `origin/HEAD` pointer to `main` is stale.
-- Browser: Playwright 1.61.1, headless Chromium, fresh contexts, desktop viewport 1280 × 900. The preliminary Blog probe used 1280 × 720. Mobile and other browsers were not tested.
+- Browser: installed Playwright 1.62.1, headless Chromium, fresh contexts, desktop viewport 1280 × 900. The preliminary Blog probe used 1280 × 720. Mobile and other browsers were not tested.
 - Live deployment: `https://dangz.dev`, footer version `v26.80.1004`. The deployment commit was not independently identified; source and deployed behavior are reported separately.
 - Tracker: `https://cloud.umami.is/script.js`, SHA-256 `91a876d767646fd5b7701b6fabf97f8a99ae53b94e7e5b58d465bad1e5d763e0`, fetched on 2026-10-05. Collector: `https://gateway.umami.is/api/send`.
 - Main live matrix: **2026-10-05 19:03:34–19:04:38 UTC**. Additional live coverage: **19:06:04–19:06:29 UTC**. Isolated diagnostics: **19:07:53–19:08:07 UTC**, with the collector intercepted.
