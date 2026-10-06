@@ -47,7 +47,7 @@ Follow-up: [issue #181](https://github.com/dangzo/dangz-dev/issues/181) tracks a
 - Inspect resolved versions, including nested packages in both workspaces; every patched package must be outside all corresponding advisory ranges.
 - Run `yarn ci:lint`, `yarn ci:typecheck`, `yarn test:unit`, `yarn test:e2e`, and `yarn ci:build`. Review existing desktop/mobile visual coverage and smoke-test Studio/GraphiQL plus the overridden UUID/temp-file consumers.
 - Run mobile and desktop Lighthouse checks with an installed Chrome executable. Report unavailable checks or failures separately from successful dependency-version verification.
-- The PR must target `dev` and include `Closes #170`. After merge, refresh the alert inventory, confirm closure for the 30 addressed alerts, and retain the three exceptions with follow-up tracking.
+- For the #170 remediation described here, the PR targets `dev` and includes `Closes #170`. After that merge, refresh the alert inventory, confirm closure for the 30 addressed alerts, and retain the three exceptions with follow-up tracking. Future dependency work follows its own issue criteria and the current default-branch checks in [AGENTS.md](../AGENTS.md).
 
 Local validation on 2026-10-04: all 292 unit tests and 64 browser tests (including desktop/mobile visual baselines) passed, frontend and Studio type checks passed, and both standard production builds passed. Lint passed with generated `playwright-report/**` and `test-results/**` excluded; the unmodified lint command also scanned pre-existing report bundles. Mobile and desktop Lighthouse assertions passed on all four configured URLs, three runs per URL, using installed Chrome and local report storage.
 

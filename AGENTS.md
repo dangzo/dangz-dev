@@ -6,6 +6,14 @@
 - Read [docs/WORKFLOW.md](docs/WORKFLOW.md) when running checks or changing schemas, queries, or generated files.
 - Read only task-relevant sections; update guidance when documented behavior changes.
 
+## Skills and delegation
+
+- Shared skills live in `.agents/skills/`; shared specialist roles live in `.agents/roles/`. See [docs/WORKFLOW.md](docs/WORKFLOW.md#skills-and-specialist-agents) for invocation and maintenance.
+- Delegate to `implementer`, `reviewer`, `test-engineer`, or `product-owner` when independent work or context isolation justifies the overhead. Handle small tasks directly; implementation includes necessary tests and docs without requiring an agent pipeline.
+- Give each agent the assigned checkout, goal, acceptance criteria, relevant context, existing authorization, and file ownership. Avoid concurrent edits to the same files. The parent integrates results and verifies the complete task.
+- Reuse existing worktrees before creating one. New worktrees belong under `<main-checkout>/git-worktrees/<branch>`. Never switch branches or stash another agent's work; remove only worktrees created for the task after checking for uncommitted work.
+- Honor existing authorization for requested local reviews, related doc updates, and explicitly requested external actions. Ask only for unresolved consequential choices or actions outside that authorization. A review request authorizes a report; fixes, posting, and merging need their own task scope.
+
 ## Rules
 
 - Write readable, strict TypeScript; prefer `Readonly<T>`, especially for props. Avoid `any`; explain necessary uses.

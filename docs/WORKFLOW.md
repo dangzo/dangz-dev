@@ -4,6 +4,24 @@
 
 Use the GitHub templates to state the problem or goal, bounded scope, and acceptance criteria or investigation deliverables. Keep small tasks short and remove irrelevant optional sections. See [GitHub template guidance](GITHUB_TEMPLATES.md) for browser/CLI usage, examples, and the investigation rationale. For PRs, report selected checks and their results using the guidance below; follow [AGENTS.md](../AGENTS.md) for required issue-reference and default-branch checks before creation, after creation or updates, and before merging.
 
+## Skills and specialist agents
+
+Repository skills are shared between Codex and Claude Code. Canonical instructions live in `.agents/skills/`; the individual folders under `.claude/skills/` are relative symlinks to them. Edit the canonical files to keep both tools aligned. Codex loads repository skills automatically and supports `$<skill-name>`; Claude Code supports `/<skill-name>`. Automatic discovery remains enabled.
+
+| Skill | Use |
+| --- | --- |
+| [spec-first](../.agents/skills/spec-first/SKILL.md) | Ground implementation in relevant docs and issue criteria; update code, tests, and docs together. |
+| [pr-review](../.agents/skills/pr-review/SKILL.md) | Review a PR, branch, or diff for defects, security, doc drift, and issue completion. |
+| [ui-review](../.agents/skills/ui-review/SKILL.md) | Verify affected browser flows using local fixtures, accessibility checks, and relevant viewports/themes. |
+
+The `implementer`, `reviewer`, `test-engineer`, and `product-owner` agents share their role instructions in `.agents/roles/`. The Markdown definitions in `.claude/agents/` and standalone TOML definitions in `.codex/agents/` direct each host to those roles. Both hosts inherit the parent model; no provider-specific model is pinned. Codex's reviewer additionally requests a read-only sandbox, while both reviewer definitions forbid source edits and publication regardless of runtime permissions.
+
+Ask for a named specialist directly, or let the main agent delegate independent work when the benefit justifies it. For example: “Have reviewer review this branch” or “Have product-owner draft an investigation issue.” Small implementation tasks include necessary tests without a mandatory agent pipeline. Follow [AGENTS.md](../AGENTS.md#skills-and-delegation) for ownership, existing authorization, and worktree placement.
+
+These instructions adapt the generic Claude Code export: local reviews and accepted doc updates use existing authorization; checks run according to impact rather than three times by default; architecture findings use this repository's boundaries; dependency and documentation changes are reviewed for actual behavior; review-only tasks return reports. Issue and PR drafting uses the existing GitHub templates. Skills do not themselves authorize posting, deployment, or merging.
+
+To validate changes, check skill frontmatter, parse agent YAML/TOML, resolve role links and symlinks, and run `git diff --check`. Verify discovery in both hosts after changing definitions; restart a session if its skill or agent list is stale. Application tests are unnecessary for instructions-only changes. Shared definitions are tracked, while personal Claude settings remain ignored.
+
 ## Run locally
 
 - Use Node and Yarn versions declared in the root `package.json`; keep the single `yarn.lock`.

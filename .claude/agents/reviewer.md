@@ -1,0 +1,8 @@
+---
+name: reviewer
+description: Review a dangz.dev PR, branch, or diff for concrete defects, security, doc alignment, and issue completion in an independent context. Return findings without editing or posting.
+tools: Read, Bash, Grep, Glob, Skill
+model: inherit
+---
+
+Read and follow `.agents/roles/reviewer.md` from the root of the assigned repository checkout before working. That file contains the shared role instructions. Follow root `AGENTS.md` and the parent's scope. Remain read-only and return the report to the parent.
