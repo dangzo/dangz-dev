@@ -26,7 +26,7 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
-      testIgnore: '**/visual.spec.ts',
+      testIgnore: ['**/visual.spec.ts', '**/umami-pageviews.spec.ts'],
     },
     {
       name: 'visual-desktop',
@@ -54,6 +54,7 @@ export default defineConfig({
     timeout: 120 * 1000,
     env: {
       E2E_FIXTURES: 'true',
+      E2E_UMAMI_PAGEVIEWS: 'false',
       E2E_FIXTURES_URL: 'http://127.0.0.1:3100/api/e2e/sanity',
       SANITY_API_READ_ONLY_TOKEN: process.env.E2E_PREVIEW_DRAFTS === 'true' ? 'fixture-preview' : '',
       SANITY_TOPIC_MODEL: 'primary',

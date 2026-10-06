@@ -11,6 +11,11 @@ collector request, and fulfill outbound profile destinations locally. No live
 analytics or outbound service is needed. The fixture contains no audit tokens
 or collector cache values.
 
+The dedicated pageview suite also serves this unmodified tracker through the
+application's actual script integration. It gates readiness, intercepts the
+collector and reaction writes, and observes manually captured route visits.
+See [pageview validation](../../../../docs/UMAMI_PAGEVIEWS.md).
+
 This fixture tests the captured tracker version, not future cloud updates.
 Production verification must use the actual deployed tracker separately.
 To update the fixture, fetch the official script, review its behavior, record
