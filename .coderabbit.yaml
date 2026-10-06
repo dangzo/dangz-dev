@@ -14,7 +14,7 @@ reviews:
     auto_incremental_review: true
     description_keyword: ''
     labels:
-      - '!skip-ci'
+      - '!skip-review'
   path_filters:
     - '!src/data/buildVersion.ts'
   path_instructions:
