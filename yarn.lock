@@ -3785,13 +3785,13 @@
     "@noble/ed25519" "^3.1.0"
     "@noble/hashes" "^2.3.0"
 
-"@sanity/table@^3.1.3":
-  version "3.1.16"
-  resolved "https://registry.yarnpkg.com/@sanity/table/-/table-3.1.16.tgz#b5424c9cb3f89d3a596f92835d06709755e3e7f4"
-  integrity sha512-hFbuOOvIf5evleWvS/sEo2CVHxo6iJ5F4Qo/a3uc4zZhzT5FcVtgJmwaNFf5K1eZw2z/IfvVOroJZRj7Z1TwvQ==
+"@sanity/table@^3.1.17":
+  version "3.1.17"
+  resolved "https://registry.yarnpkg.com/@sanity/table/-/table-3.1.17.tgz#40aca6400f6a6fb7389e38b066debb0a5e26ef3d"
+  integrity sha512-mfISehFTSm8n+VkkkNMTi+dXobENGX3dZxzGjTVngH56U1l83K0dXaENbduR5yOfg7DLn0EzitXPh/E9aXEJhQ==
   dependencies:
-    "@sanity/icons" "^5.2.1"
-    "@sanity/ui" "^4.0.4"
+    "@sanity/icons" "^5.2.2"
+    "@sanity/ui" "^4.2.7"
     "@sanity/uuid" "^3.0.3"
 
 "@sanity/telemetry@^1.1.0":
