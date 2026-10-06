@@ -1,7 +1,7 @@
 import { Header, Footer } from '@/components/layout';
 import { baseMetadata } from '@/data/siteMetadata';
 import { geist, geistMono, roboto, robotoSlab } from '@/styles/fonts';
-import Script from 'next/script';
+import UmamiScript from '@/components/analytics/UmamiScript';
 import ThemeProvider from '@/contexts/ThemeProvider';
 import 'react-loading-skeleton/dist/skeleton.css';
 import '@/styles/tailwind.css';
@@ -31,11 +31,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 
         {process.env.NODE_ENV === 'production' && (
-          <Script
-            strategy="lazyOnload"
-            src="https://cloud.umami.is/script.js"
-            data-website-id="546ca232-1b93-4b09-862d-8aebf53123d0"
-          />
+          <UmamiScript />
         )}
       </head>
 

@@ -1,10 +1,44 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Reactions from './Reactions';
 
 describe('Reactions', () => {
   afterEach(() => {
     vi.unstubAllGlobals();
+  });
+
+  it('retains bottom exposure until the tracker becomes ready', async () => {
+    const observers: IntersectionObserverCallback[] = [];
+    vi.stubGlobal('IntersectionObserver', class {
+      constructor(callback: IntersectionObserverCallback) {
+        observers.push(callback);
+      }
+
+      observe() {}
+      disconnect() {}
+    });
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        reactions: [{ _id: 'ready-love', name: 'Love', emoji: '❤️', count: 1 }],
+      }),
+    }));
+
+    render(<Reactions postId="delayed-post" />);
+    await screen.findByRole('button', { name: 'Love' });
+
+    act(() => {
+      observers.at(-1)?.([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver);
+    });
+
+    const track = vi.fn();
+    vi.stubGlobal('umami', { track });
+    act(() => {
+      window.dispatchEvent(new Event('umami:ready'));
+      window.dispatchEvent(new Event('umami:ready'));
+    });
+
+    expect(track).toHaveBeenCalledExactlyOnceWith('post_bottom_reactions_reached', { post_id: 'delayed-post' });
   });
 
   it('renders a skeleton while reactions are loading', () => {

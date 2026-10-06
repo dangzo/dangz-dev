@@ -1,20 +1,14 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import { Heading } from '@/components/ui';
 import { useReactions } from '@/features/blog/hooks/useReactions';
+import { useBottomReactionsExposure } from '@/features/blog/hooks/useBottomReactionsExposure';
 import Skeleton from 'react-loading-skeleton';
 import ScrollToTop from '@/features/blog/components/ScrollToTop';
 import EmojiBtn from './EmojiBtn';
 
 export interface ReactionsProps {
   postId: string;
-}
-
-interface UmamiWindow extends Window {
-  umami?: {
-    track?: (eventName: string, eventData?: Record<string, string>) => void;
-  };
 }
 
 const skeletonKeys = ['one', 'two', 'three', 'four', 'five'] as const;
@@ -44,47 +38,9 @@ const ReactionsSkeleton = () => {
   );
 };
 
-const Reactions = ({ postId }: ReactionsProps) => {
+const Reactions = ({ postId }: Readonly<ReactionsProps>) => {
   const { reactions, pendingIds, reactToPost } = useReactions(postId);
-  const reactionsSectionRef = useRef<HTMLDivElement | null>(null);
-  const hasTrackedViewportEventRef = useRef(false);
-
-  useEffect(() => {
-    hasTrackedViewportEventRef.current = false;
-  }, [postId]);
-
-  useEffect(() => {
-    if (reactions === null || reactions.length === 0 || hasTrackedViewportEventRef.current) {
-      return;
-    }
-
-    const element = reactionsSectionRef.current;
-    if (!element || typeof IntersectionObserver === 'undefined') {
-      return;
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      const isVisible = entries.some((entry) => entry.isIntersecting);
-
-      if (!isVisible || hasTrackedViewportEventRef.current) {
-        return;
-      }
-
-      hasTrackedViewportEventRef.current = true;
-
-      const umamiWindow = window as UmamiWindow;
-      umamiWindow.umami?.track?.('Post Bottom Reactions Reached', { postId });
-      observer.disconnect();
-    }, {
-      threshold: 0.25,
-    });
-
-    observer.observe(element);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [postId, reactions]);
+  const reactionsSectionRef = useBottomReactionsExposure(postId, reactions !== null && reactions.length > 0);
 
   if (reactions === null) {
     return <ReactionsSkeleton />;

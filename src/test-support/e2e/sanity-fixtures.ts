@@ -82,7 +82,7 @@ const posts = Array.from({ length: 16 }, (_, index) => {
     tags: postTags,
     primaryTopic,
     keywords: index === 9 ? ['pagination-keyword-only'] : index === 15 ? ['draft-only-keyword'] : [],
-    body: postNumber === 1 ? articleBody : undefined,
+    body: postNumber <= 2 ? articleBody : undefined,
   };
 });
 
