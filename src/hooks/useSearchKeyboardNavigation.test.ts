@@ -2,6 +2,9 @@ import { act, renderHook } from '@testing-library/react';
 
 import type { SearchHit } from '@/features/blog/hooks/useBlogSearch';
 import { useSearchKeyboardNavigation } from './useSearchKeyboardNavigation';
+import { trackSearchResultSelected } from '@/utils/searchAnalytics';
+
+vi.mock('@/utils/searchAnalytics', () => ({ trackSearchResultSelected: vi.fn() }));
 
 const push = vi.fn();
 
@@ -21,6 +24,7 @@ beforeAll(() => {
 describe('useSearchKeyboardNavigation', () => {
   beforeEach(() => {
     push.mockClear();
+    vi.mocked(trackSearchResultSelected).mockClear();
   });
 
   it('keeps activeResultIndex at -1 until keyboard navigation selects a row', () => {
@@ -140,6 +144,8 @@ describe('useSearchKeyboardNavigation', () => {
 
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(push).toHaveBeenCalledWith('/blog/alpha');
+    expect(trackSearchResultSelected).toHaveBeenCalledExactlyOnceWith(results[0], 0);
+    expect(vi.mocked(trackSearchResultSelected).mock.invocationCallOrder[0]).toBeLessThan(onClose.mock.invocationCallOrder[0]);
   });
 
   it('navigates to the highlighted hit on Enter', () => {
@@ -164,5 +170,6 @@ describe('useSearchKeyboardNavigation', () => {
 
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(push).toHaveBeenCalledWith('/blog/beta');
+    expect(trackSearchResultSelected).toHaveBeenCalledExactlyOnceWith(results[1], 1);
   });
 });

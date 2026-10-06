@@ -2,12 +2,22 @@ import { render, screen } from '@testing-library/react';
 import type { ScriptProps } from 'next/script';
 import UmamiScript from './UmamiScript';
 import { UMAMI_READY_EVENT } from '@/utils/umami';
+import { discardPendingSearchEvents, flushPendingSearchEvents } from '@/utils/searchAnalytics';
 
-const script = vi.hoisted(() => ({ onReady: undefined as ScriptProps['onReady'] }));
+vi.mock('@/utils/searchAnalytics', () => ({
+  discardPendingSearchEvents: vi.fn(),
+  flushPendingSearchEvents: vi.fn(),
+}));
+
+const script = vi.hoisted(() => ({
+  onReady: undefined as ScriptProps['onReady'],
+  onError: undefined as ScriptProps['onError'],
+}));
 
 vi.mock('next/script', () => ({
-  default: ({ onReady, ...props }: Readonly<ScriptProps>) => {
+  default: ({ onReady, onError, ...props }: Readonly<ScriptProps>) => {
     script.onReady = onReady;
+    script.onError = onError;
 
     return (
       <script data-testid="umami-script" {...props} />
@@ -29,7 +39,14 @@ it('preserves the tracker configuration and announces script readiness', () => {
 
     script.onReady?.();
     expect(onReady).toHaveBeenCalledOnce();
+    expect(flushPendingSearchEvents).toHaveBeenCalledOnce();
   } finally {
     window.removeEventListener(UMAMI_READY_EVENT, onReady);
   }
+});
+
+it('discards queued search events when the script fails', () => {
+  render(<UmamiScript />);
+  script.onError?.(new Error('Blocked'));
+  expect(discardPendingSearchEvents).toHaveBeenCalledOnce();
 });

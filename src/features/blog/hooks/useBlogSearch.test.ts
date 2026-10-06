@@ -1,6 +1,9 @@
 import { act, renderHook } from '@testing-library/react';
 
 import { useBlogSearch, type SearchHit } from './useBlogSearch';
+import { trackSearchEvent } from '@/utils/searchAnalytics';
+
+vi.mock('@/utils/searchAnalytics', () => ({ trackSearchEvent: vi.fn() }));
 
 type MockFetchResponse = {
   ok: boolean;
@@ -34,6 +37,7 @@ describe('useBlogSearch', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.restoreAllMocks();
+    vi.mocked(trackSearchEvent).mockClear();
 
     vi.spyOn(window, 'requestAnimationFrame').mockImplementation(cb => {
       cb(0);
@@ -56,6 +60,21 @@ describe('useBlogSearch', () => {
     expect(result.current.query).toBe('');
     expect(result.current.results).toEqual([]);
     expect(result.current.isLoading).toBe(false);
+  });
+
+  it('tracks one confirmed transition with the first pending opening method', () => {
+    const { result, rerender } = renderHook(() => useBlogSearch());
+    act(() => {
+      result.current.openSearch('shortcut');
+      result.current.openSearch('button');
+    });
+    rerender();
+    act(() => result.current.openSearch('button'));
+    expect(trackSearchEvent).toHaveBeenCalledExactlyOnceWith({ name: 'search_opened', method: 'shortcut' });
+    act(() => result.current.closeSearch());
+    act(() => result.current.openSearch('button'));
+    expect(trackSearchEvent).toHaveBeenLastCalledWith({ name: 'search_opened', method: 'button' });
+    expect(trackSearchEvent).toHaveBeenCalledTimes(2);
   });
 
   it('opens search, locks body scroll, and closes on Escape', () => {
@@ -94,6 +113,7 @@ describe('useBlogSearch', () => {
 
     expect(fetchMock).not.toHaveBeenCalled();
     expect(result.current.isLoading).toBe(false);
+    expect(trackSearchEvent).not.toHaveBeenCalledWith(expect.objectContaining({ name: 'search_completed' }));
   });
 
   it('fetches debounced search results and updates state', async () => {
@@ -128,6 +148,7 @@ describe('useBlogSearch', () => {
     });
     expect(result.current.results).toEqual(sampleResults);
     expect(result.current.isLoading).toBe(false);
+    expect(trackSearchEvent).toHaveBeenCalledWith({ name: 'search_completed', query_length: 5, result_count: 1 });
   });
 
   it('clears results on non-ok response', async () => {
@@ -150,6 +171,7 @@ describe('useBlogSearch', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(result.current.results).toEqual([]);
     expect(result.current.isLoading).toBe(false);
+    expect(trackSearchEvent).not.toHaveBeenCalledWith(expect.objectContaining({ name: 'search_completed' }));
   });
 
   it('ignores stale request results and keeps only the latest query response', async () => {
@@ -206,5 +228,43 @@ describe('useBlogSearch', () => {
     expect(result.current.results).toEqual([
       { ...sampleResults[0], id: '2', slug: 'latest', title: 'Latest' },
     ]);
+    expect(vi.mocked(trackSearchEvent).mock.calls.filter(([event]) => event.name === 'search_completed')).toEqual([
+      [{ name: 'search_completed', query_length: 6, result_count: 1 }],
+    ]);
+  });
+
+  it.each([
+    ['zero results', { ok: true, json: async () => ({ results: [] }) }, true],
+    ['missing results', { ok: true, json: async () => ({}) }, false],
+    ['invalid results', { ok: true, json: async (): Promise<unknown> => ({ results: null }) }, false],
+    ['null body', { ok: true, json: async (): Promise<unknown> => null }, false],
+    ['invalid JSON', { ok: true, json: async (): Promise<unknown> => { throw new SyntaxError('Invalid'); } }, false],
+  ] as const)('counts completion correctly for %s', async (_name, response, shouldTrack) => {
+    vi.mocked(fetch).mockResolvedValue(response as unknown as Response);
+    const { result } = renderHook(() => useBlogSearch());
+    act(() => {
+      result.current.openSearch();
+      result.current.setQuery('  empty  ');
+    });
+    await act(async () => { await vi.advanceTimersByTimeAsync(180); });
+    const completions = vi.mocked(trackSearchEvent).mock.calls.filter(([event]) => event.name === 'search_completed');
+    expect(completions).toEqual(shouldTrack ? [[{ name: 'search_completed', query_length: 5, result_count: 0 }]] : []);
+  });
+
+  it('does not complete after closing while JSON parsing is pending', async () => {
+    let resolveJson: ((data: { results: SearchHit[] }) => void) | undefined;
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      json: () => new Promise((resolve) => { resolveJson = resolve; }),
+    } as unknown as Response);
+    const { result } = renderHook(() => useBlogSearch());
+    act(() => {
+      result.current.openSearch();
+      result.current.setQuery('react');
+    });
+    await act(async () => { await vi.advanceTimersByTimeAsync(180); });
+    act(() => result.current.closeSearch());
+    await act(async () => { resolveJson?.({ results: sampleResults }); });
+    expect(trackSearchEvent).not.toHaveBeenCalledWith(expect.objectContaining({ name: 'search_completed' }));
   });
 });

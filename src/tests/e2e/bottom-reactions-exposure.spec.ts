@@ -1,9 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
-import { UMAMI_READY_EVENT, type UmamiWindow } from '@/utils/umami';
+import { UMAMI_READY_EVENT, type UmamiPayload, type UmamiWindow } from '@/utils/umami';
 
 interface Exposure {
   readonly name: string;
-  readonly data: Readonly<Record<string, string>>;
+  readonly data: Readonly<Record<string, string | number>>;
   readonly pathname: string;
 }
 
@@ -27,7 +27,14 @@ async function makeTrackerReady(page: Page) {
   await page.evaluate((readyEvent) => {
     const analyticsWindow = window as unknown as AnalyticsTestWindow;
     analyticsWindow.umami = {
-      track: (name, data) => analyticsWindow.captureExposure({ name, data, pathname: location.pathname }),
+      track: async (
+        name: string | ((defaults: UmamiPayload) => UmamiPayload),
+        data?: Readonly<Record<string, string | number>>,
+      ) => {
+        if (typeof name === 'string') {
+          await analyticsWindow.captureExposure({ name, data: data ?? {}, pathname: location.pathname });
+        }
+      },
     };
     window.dispatchEvent(new Event(readyEvent));
   }, UMAMI_READY_EVENT);

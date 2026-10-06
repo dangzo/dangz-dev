@@ -8,6 +8,7 @@ import HighlightText from './HighlightText';
 import { type SearchHit } from '@/features/blog/hooks/useBlogSearch';
 import { useSearchKeyboardNavigation } from '@/hooks/useSearchKeyboardNavigation';
 import { getSearchShortcutLabel } from './getSearchShortcutLabel';
+import { trackSearchResultSelected } from '@/utils/searchAnalytics';
 
 export type { SearchHit };
 
@@ -127,7 +128,10 @@ const SearchModal = ({
                     <li key={result.id}>
                       <Link
                         href={`/blog/${result.slug}`}
-                        onClick={onClose}
+                        onClick={() => {
+                          trackSearchResultSelected(result, index);
+                          onClose();
+                        }}
                         ref={(element) => {
                           resultLinkRefs.current[index] = element;
                         }}
