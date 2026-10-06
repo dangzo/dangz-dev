@@ -39,7 +39,7 @@ const ReactionsSkeleton = () => {
 };
 
 const Reactions = ({ postId }: Readonly<ReactionsProps>) => {
-  const { reactions, pendingIds, reactToPost } = useReactions(postId);
+  const { reactions, pendingIds, reactToPost } = useReactions(postId, 'bottom');
   const reactionsSectionRef = useBottomReactionsExposure(postId, reactions !== null && reactions.length > 0);
 
   if (reactions === null) {
@@ -69,7 +69,6 @@ const Reactions = ({ postId }: Readonly<ReactionsProps>) => {
               <EmojiBtn
                 emoji={reaction.emoji}
                 name={reaction.name}
-                data-umami-event={`Reaction ${reaction.name} Click`}
                 onClick={() => reactToPost(reaction._id)}
                 isPending={pendingIds[reaction._id] ?? false}
                 size="default"

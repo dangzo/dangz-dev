@@ -29,7 +29,7 @@ describe('useReactions', () => {
     );
     vi.stubGlobal('fetch', fetchMock);
 
-    const { result } = renderHook(() => useReactions('post-1'));
+    const { result } = renderHook(() => useReactions('post-1', 'compact'));
 
     await waitFor(() => {
       expect(result.current.reactions).toEqual([
@@ -59,7 +59,7 @@ describe('useReactions', () => {
       .mockReturnValueOnce(votePromise);
     vi.stubGlobal('fetch', fetchMock);
 
-    const { result } = renderHook(() => useReactions('post-1'));
+    const { result } = renderHook(() => useReactions('post-1', 'compact'));
 
     await waitFor(() => {
       expect(result.current.reactions?.[0]?.count).toBe(3);
@@ -103,7 +103,7 @@ describe('useReactions', () => {
       );
     vi.stubGlobal('fetch', fetchMock);
 
-    const { result } = renderHook(() => useReactions('post-1'));
+    const { result } = renderHook(() => useReactions('post-1', 'compact'));
 
     await waitFor(() => {
       expect(result.current.reactions?.[0]?.count).toBe(3);
@@ -141,8 +141,8 @@ describe('useReactions', () => {
       .mockReturnValueOnce(votePromise);
     vi.stubGlobal('fetch', fetchMock);
 
-    const { result: first } = renderHook(() => useReactions('post-1'));
-    const { result: second } = renderHook(() => useReactions('post-1'));
+    const { result: first } = renderHook(() => useReactions('post-1', 'compact'));
+    const { result: second } = renderHook(() => useReactions('post-1', 'compact'));
 
     await waitFor(() => {
       expect(first.current.reactions?.[0]?.count).toBe(2);
@@ -172,8 +172,10 @@ describe('useReactions', () => {
   });
 
   it('uses the shared store snapshot for back-to-back reactions', async () => {
-    const firstVotePromise = new Promise<Response>(() => {});
-    const secondVotePromise = new Promise<Response>(() => {});
+    let resolveFirst!: (response: Response) => void;
+    const firstVotePromise = new Promise<Response>((resolve) => { resolveFirst = resolve; });
+    let resolveSecond!: (response: Response) => void;
+    const secondVotePromise = new Promise<Response>((resolve) => { resolveSecond = resolve; });
 
     const fetchMock = vi.fn()
       .mockResolvedValueOnce(
@@ -194,8 +196,8 @@ describe('useReactions', () => {
       .mockReturnValueOnce(secondVotePromise);
     vi.stubGlobal('fetch', fetchMock);
 
-    const { result: first } = renderHook(() => useReactions('post-1'));
-    const { result: second } = renderHook(() => useReactions('post-1'));
+    const { result: first } = renderHook(() => useReactions('post-1', 'compact'));
+    const { result: second } = renderHook(() => useReactions('post-1', 'compact'));
 
     await waitFor(() => {
       expect(first.current.reactions?.[0]?.count).toBe(2);
@@ -220,6 +222,11 @@ describe('useReactions', () => {
       method: 'POST',
       body: expect.stringContaining('"currentCount":3'),
     }));
+
+    await act(async () => {
+      resolveFirst(makeFetchResponse({ count: 3 }) as Response);
+      resolveSecond(makeFetchResponse({ count: 4 }) as Response);
+    });
   });
 
   it('does not allow stale fetch responses to overwrite newer optimistic shared state', async () => {
@@ -245,8 +252,8 @@ describe('useReactions', () => {
       .mockReturnValueOnce(votePromise);
     vi.stubGlobal('fetch', fetchMock);
 
-    const { result: first } = renderHook(() => useReactions(postId));
-    const { result: second } = renderHook(() => useReactions(postId));
+    const { result: first } = renderHook(() => useReactions(postId, 'compact'));
+    const { result: second } = renderHook(() => useReactions(postId, 'compact'));
 
     await act(async () => {
       resolveSecondFetch?.(makeFetchResponse({
@@ -317,7 +324,7 @@ describe('useReactions', () => {
       .mockReturnValueOnce(secondFetchPromise);
     vi.stubGlobal('fetch', fetchMock);
 
-    const firstRender = renderHook(() => useReactions('post-1'));
+    const firstRender = renderHook(() => useReactions('post-1', 'compact'));
 
     await waitFor(() => {
       expect(firstRender.result.current.reactions?.[0]?.count).toBe(5);
@@ -329,7 +336,7 @@ describe('useReactions', () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
-    const secondRender = renderHook(() => useReactions('post-1'));
+    const secondRender = renderHook(() => useReactions('post-1', 'compact'));
 
     expect(secondRender.result.current.reactions).toBeNull();
 

@@ -214,7 +214,7 @@ describe('Reactions', () => {
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
-  it('does render umami data attributes on emoji buttons', async () => {
+  it('does not emit legacy click events from emoji buttons', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({
@@ -225,6 +225,6 @@ describe('Reactions', () => {
     render(<Reactions postId="post-1" />);
 
     const loveButton = await screen.findByRole('button', { name: 'Love' });
-    expect(loveButton).toHaveAttribute('data-umami-event', 'Reaction Love Click');
+    expect(loveButton).not.toHaveAttribute('data-umami-event');
   });
 });
