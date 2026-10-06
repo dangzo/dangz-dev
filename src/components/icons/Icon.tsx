@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
 import { Link } from '@/components/ui';
+import type { ContactAnalyticsAttributes } from '@/utils/contactAnalytics';
 
 import GithubIcon from './socials/GithubIcon';
 import LinkedinIcon from './socials/LinkedinIcon';
@@ -17,6 +18,7 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
   href?: string;
   size?: number;
   'data-umami-event'?: string;
+  analytics?: ContactAnalyticsAttributes;
 };
 
 const IconWrapper = ({ icon, size, ...rest }: React.SVGProps<SVGSVGElement> & {
@@ -33,7 +35,7 @@ const IconWrapper = ({ icon, size, ...rest }: React.SVGProps<SVGSVGElement> & {
   );
 };
 
-const Icon = ({ icon, href, size = 8, className, 'data-umami-event': umamiEvent, ...rest }: IconProps) => {
+const Icon = ({ icon, href, size = 8, className, analytics, 'data-umami-event': umamiEvent, ...rest }: Readonly<IconProps>) => {
   if (!href) {
     return <IconWrapper icon={icon} size={size} {...rest} />;
   }
@@ -45,6 +47,7 @@ const Icon = ({ icon, href, size = 8, className, 'data-umami-event': umamiEvent,
       rel="noopener noreferrer"
       href={href}
       data-umami-event={umamiEvent}
+      {...analytics}
     >
       <span className="sr-only">{icon}</span>
       <IconWrapper
