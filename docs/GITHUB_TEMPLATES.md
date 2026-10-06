@@ -34,7 +34,7 @@ For CLI authoring, `gh issue create --template 'Bug report'` selects an issue te
 
 PRs should lead with the problem and resulting behavior. Follow [WORKFLOW.md](WORKFLOW.md#validate-the-affected-behavior) to select validation; report what ran and its results, including failures and checks not run with reasons. Screenshots, deployment/schema sequencing, and rollback notes belong only in relevant changes. Remove the optional risks section when unnecessary.
 
-Follow the issue-linking rule in [AGENTS.md](../AGENTS.md): use `Closes #<number>` for every completed issue and `Refs #<number>` for related or partial work. Before merging, confirm closing references and the repository's current default-branch target. GitHub only interprets PR closing keywords when the PR targets the default branch; see [GitHub's linking documentation](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue). CI and merge labels remain governed by the [README](../README.md#pr-labels).
+Follow the issue-linking rule in [AGENTS.md](../AGENTS.md): before creating a PR, identify related issues and read their acceptance criteria. Use `Closes #<number>` for every completed issue and `Refs #<number>` for related or partial work, stating what remains. Write `None` when no related issues exist. Check the prepared description and current default-branch target before submission, then read back and verify the saved description and target after creation or updates and before merging. These checks apply to drafts and custom CLI bodies too. GitHub only interprets PR closing keywords when the PR targets the default branch; see [GitHub's linking documentation](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue). CI and merge labels remain governed by the [README](../README.md#pr-labels).
 
 ## Representative filled examples
 
@@ -82,7 +82,7 @@ These examples demonstrate the prompts; they are not new reports or claims about
 
 **Problem and result:** Contributors could not find the manual review command. The README now explains how to request a review.
 
-**Related issues:** In a real PR, add `Closes #<number>` for the completed documentation issue, or omit references if there is none. Confirm closing references and the default-branch target before merging.
+**Related issues:** In a real PR, add `Closes #<number>` for the completed documentation issue, or write `None` if there is none. Confirm closing references and the default-branch target before creation, after creation or updates, and before merging.
 
 **Validation:** Checked the command against configuration, verified the documentation link, and ran `git diff --check`. Application tests were not run because only documentation changed. Live review triggering was not exercised.
 

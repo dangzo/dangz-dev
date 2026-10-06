@@ -4,9 +4,9 @@
 
 ## Related issues
 
-<!-- Use Closes #<number> for every completed issue; use Refs #<number> for related or partial work. Omit references when there are no related issues. -->
+<!-- Required before creating the PR: replace this comment with Closes #<number> for every completed issue. For related or partial work, use Refs #<number> and state what remains. If there are no related issues, write None. -->
 
-- [ ] Before merging, confirm every completed issue has a closing reference and this PR targets the repository's default branch (currently `dev`).
+- [ ] Before creating this PR, checked related issues and their acceptance criteria, included a closing reference for every completed issue, and confirmed the repository's current default branch as the target (currently `dev`). Recheck the saved description and target after creation and before merging.
 
 ## Validation
 

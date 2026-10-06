@@ -13,7 +13,8 @@ reviews:
     enabled: true
     auto_incremental_review: true
     description_keyword: ''
-    labels: []
+    labels:
+      - '!skip-review'
   path_filters:
     - '!src/data/buildVersion.ts'
   path_instructions:
