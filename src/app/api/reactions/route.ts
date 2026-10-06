@@ -41,7 +41,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'currentCount must be a non-negative number.' }, { status: 400 });
     }
 
-    const count = await incrementReactionCount(body.postId, body.reactionId, body.currentCount);
+    const count = await incrementReactionCount(body.postId, body.reactionId);
     return NextResponse.json({ count });
   } catch {
     return NextResponse.json({ error: 'Unable to update reaction count.' }, { status: 500 });

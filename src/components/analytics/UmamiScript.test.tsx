@@ -2,11 +2,11 @@ import { render, screen } from '@testing-library/react';
 import type { ScriptProps } from 'next/script';
 import UmamiScript from './UmamiScript';
 import { UMAMI_READY_EVENT } from '@/utils/umami';
-import { discardPendingSearchEvents, flushPendingSearchEvents } from '@/utils/searchAnalytics';
+import { discardPendingAnalyticsEvents, flushPendingAnalyticsEvents } from '@/utils/analyticsTransport';
 
-vi.mock('@/utils/searchAnalytics', () => ({
-  discardPendingSearchEvents: vi.fn(),
-  flushPendingSearchEvents: vi.fn(),
+vi.mock('@/utils/analyticsTransport', () => ({
+  discardPendingAnalyticsEvents: vi.fn(),
+  flushPendingAnalyticsEvents: vi.fn(),
 }));
 
 const script = vi.hoisted(() => ({
@@ -39,14 +39,14 @@ it('preserves the tracker configuration and announces script readiness', () => {
 
     script.onReady?.();
     expect(onReady).toHaveBeenCalledOnce();
-    expect(flushPendingSearchEvents).toHaveBeenCalledOnce();
+    expect(flushPendingAnalyticsEvents).toHaveBeenCalledOnce();
   } finally {
     window.removeEventListener(UMAMI_READY_EVENT, onReady);
   }
 });
 
-it('discards queued search events when the script fails', () => {
+it('discards queued analytics events when the script fails', () => {
   render(<UmamiScript />);
   script.onError?.(new Error('Blocked'));
-  expect(discardPendingSearchEvents).toHaveBeenCalledOnce();
+  expect(discardPendingAnalyticsEvents).toHaveBeenCalledOnce();
 });

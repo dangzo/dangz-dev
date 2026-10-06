@@ -14,9 +14,9 @@ Length means the trimmed query's JavaScript `.length`. Result count measures the
 
 The search helper accepts only the three event contracts and reconstructs their properties. It retains no raw query, keystrokes, result title, search API URL, or personal identifier. Search event payloads include only website, hostname, language, screen, query-free source pathname/referrer, occurrence time, event name, and the listed properties. Default tracker IDs and arbitrary metadata are excluded. The search API still receives the query to perform the search; that request is separate from analytics.
 
-Before tracker readiness, at most 50 events are retained in memory for 60 seconds. Overflow drops the oldest event; expiry discards it. Client navigation preserves the original source path and timestamp. A full page unload loses pending events. `UmamiScript` flushes the buffer when the existing production-only lazy-loaded tracker is ready. Subsequent events also attempt a flush when the tracker is present.
+Search and reaction lifecycle events share `src/utils/analyticsTransport.ts`. Before tracker readiness, at most 50 events across both features are retained in memory for 60 seconds. Overflow drops the oldest event; expiry discards it. Client navigation preserves the original source path and timestamp. A full page unload loses pending events. `UmamiScript` flushes the buffer when the existing production-only lazy-loaded tracker is ready. Subsequent events also attempt a flush when the tracker is present.
 
-Script failure clears pending events and disables further search collection for that document. No tracker reload, alternative collector, persistent storage, or transport retry bypasses unavailable analytics. Each event gets at most one tracker invocation. A resolved tracker promise does not prove collector acceptance or dashboard visibility.
+Script failure clears the shared queue and disables further search and reaction collection for that document. No tracker reload, alternative collector, persistent storage, or transport retry bypasses unavailable analytics. Each event gets at most one tracker invocation. A resolved tracker promise does not prove collector acceptance or dashboard visibility.
 
 This reuses #184's readiness integration but does not change its per-article exposure policy. #176's command-palette enhancements remain separate.
 

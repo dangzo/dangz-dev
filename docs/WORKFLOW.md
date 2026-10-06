@@ -28,6 +28,7 @@ Run commands from the repository root. Select checks by the change; report failu
 | Documentation only | Check links, command names, and consistency with source; skip application tests |
 
 - Keep unit tests beside source as `*.test.ts(x)` or `*.spec.ts(x)`. Vitest includes frontend, Studio, and migration tests, uses jsdom and `src/tests/unit/setup.ts`, and excludes E2E specs. Migration tests select the Node environment; React is deduplicated across the workspaces for Studio component tests.
+- Reaction lifecycle and concurrency checks are listed in [REACTION_ANALYTICS.md](REACTION_ANALYTICS.md); include search and bottom-exposure regressions when changing their shared transport.
 - Analytics timing changes need separate production browser and dashboard evidence; development fixture tests simulate tracker readiness. Follow [UMAMI_EXPOSURE.md](UMAMI_EXPOSURE.md) for bottom-reaction checks and intercept production reaction POSTs.
 - Contact analytics browser tests inject a pinned real tracker and intercept its collector; no live analytics is sent. Follow [CONTACT_ANALYTICS.md](CONTACT_ANALYTICS.md) for separate delivery, download, and owner dashboard checks.
 - Let Playwright start its isolated fixture server on port 3100 with `.next-e2e` output. Extend `src/test-support/e2e/sanity-fixtures.ts` when changing GraphQL operations used by browser tests. The fixture API is enabled only with `E2E_FIXTURES=true`; the topic fixtures exercise primary-model GraphQL fields by default.
