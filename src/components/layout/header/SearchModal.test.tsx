@@ -3,6 +3,9 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import SearchModal from './SearchModal';
+import { trackSearchResultSelected } from '@/utils/searchAnalytics';
+
+vi.mock('@/utils/searchAnalytics', () => ({ trackSearchResultSelected: vi.fn() }));
 
 beforeAll(() => {
   window.HTMLElement.prototype.scrollIntoView = vi.fn();
@@ -19,6 +22,7 @@ vi.mock('next/navigation', () => ({
 describe('SearchModal', () => {
   beforeEach(() => {
     push.mockClear();
+    vi.mocked(trackSearchResultSelected).mockClear();
   });
 
   it('renders nothing when the modal is closed', () => {
@@ -35,6 +39,20 @@ describe('SearchModal', () => {
       />,
     );
     expect(screen.queryByRole('dialog', { name: 'Search posts' })).not.toBeInTheDocument();
+  });
+
+  it('tracks a nested result click exactly once before closing', async () => {
+    const onClose = vi.fn();
+    const results = [
+      { id: 'first', slug: 'first', title: 'First', excerpt: '', primaryTopic: null },
+      { id: 'second', slug: 'second', title: 'Second', excerpt: '', primaryTopic: null },
+    ];
+    render(<SearchModal isOpen query="second" results={results} isLoading={false}
+      inputRef={createRef<HTMLInputElement>()} onQueryChange={vi.fn()} onClose={onClose} />);
+    await userEvent.setup().click(screen.getByText('Second'));
+    expect(trackSearchResultSelected).toHaveBeenCalledExactlyOnceWith(results[1], 1);
+    expect(onClose).toHaveBeenCalledOnce();
+    expect(vi.mocked(trackSearchResultSelected).mock.invocationCallOrder[0]).toBeLessThan(onClose.mock.invocationCallOrder[0]);
   });
 
   it('portals an accessible dialog when open', () => {
