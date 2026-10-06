@@ -10,8 +10,8 @@ reviews:
   in_progress_fortune: false
   poem: false
   auto_review:
-    enabled: false
-    auto_incremental_review: false
+    enabled: true
+    auto_incremental_review: true
     description_keyword: ''
     labels: []
   path_filters:
