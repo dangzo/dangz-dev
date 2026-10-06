@@ -16,7 +16,10 @@
 - Split components for readability; colocate private helpers and extract shared or architecturally public components.
 - Prefer Tailwind utilities over CSS modules and inline styles; reuse existing UI primitives and theme tokens.
 - Reuse About icons from `public/icons/`; ask the developer for an SVG before adding a new icon.
-- When a PR completes a GitHub issue, include `Closes #<issue-number>` in the PR description so merging into the repository's default branch automatically closes it. Use `Refs #<issue-number>` only for related or partially completed issues that should remain open. Before merging, confirm the description includes closing references for every completed issue and the PR targets the default branch.
+- Before creating any PR (including drafts and CLI-generated PRs), identify related GitHub issues from the task, branch, commits, and existing issue links. Read each related issue's acceptance criteria to determine whether the PR completes it.
+- Include `Closes #<issue-number>` in the PR description for every completed issue so merging into the repository's default branch automatically closes it. Use `Refs #<issue-number>` only for related or partially completed issues that should remain open, and state what remains. If there are no related issues, write `None` in the Related issues section; do not invent an issue number or create an issue solely to fill this section.
+- Treat issue references as a required PR creation check: do not submit the PR until the prepared description includes every completed issue's closing reference and the target is the repository's current default branch. An explicit user request to target another branch takes precedence; explain that closing references will not automatically close issues on that merge.
+- Immediately after creating or updating a PR, read back its saved description and base branch and correct missing or incorrect issue references. Repeat this check before merging. Supplying a custom body or using a template does not replace these checks.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
