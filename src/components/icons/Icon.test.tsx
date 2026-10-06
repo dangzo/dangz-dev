@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
 import Icon from './Icon';
+import { contactAnalytics } from '@/utils/contactAnalytics';
 
 vi.mock('next/link', () => import('@/tests/unit/mocks/nextLink'));
 
@@ -30,7 +31,7 @@ describe('Icon', () => {
       <Icon
         icon="github"
         href="https://github.com/dangz0"
-        data-umami-event="GitHub Click"
+        analytics={contactAnalytics({ name: 'outbound_link_clicked', destination_host: 'github.com', placement: 'footer' })}
       />,
     );
 
@@ -39,7 +40,12 @@ describe('Icon', () => {
     expect(link).toHaveAttribute('href', 'https://github.com/dangz0');
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', 'noopener noreferrer');
-    expect(link).toHaveAttribute('data-umami-event', 'GitHub Click');
+    expect(link).toHaveAttribute('data-umami-event', 'outbound_link_clicked');
+    expect(link).toHaveAttribute('data-umami-event-placement', 'footer');
+    expect(link).toHaveAttribute('data-umami-event-destination_host', 'github.com');
+    expect(link.querySelector('svg')).not.toHaveAttribute('data-umami-event');
+    expect(link.querySelector('svg')).not.toHaveAttribute('data-umami-event-placement');
+    expect(link.querySelector('svg')).not.toHaveAttribute('data-umami-event-destination_host');
   });
 
   it('applies custom size and classes to the linked svg icon', () => {
