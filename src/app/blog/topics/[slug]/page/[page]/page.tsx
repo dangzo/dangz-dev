@@ -24,6 +24,6 @@ export default async function TopicPagedPage({ params }: TopicPageProps) {
   const { posts, page, totalPages, basePath } = await getTopicArchivePosts(slug, rawPage);
 
   return (
-    <PostList posts={posts} pagination={{ currentPage: page, totalPages, basePath }} />
+    <PostList source="topic" posts={posts} pagination={{ currentPage: page, totalPages, basePath }} />
   );
 }

@@ -3,9 +3,11 @@ import Skeleton from 'react-loading-skeleton';
 import type { PostWithTopic } from '@/features/blog/types/Post.types';
 import ReactionsSummary from './reactions/ReactionsSummary';
 import clsx from 'clsx';
+import { getPostOpenedAttributes, type PostOpenSource } from '@/utils/postDiscoveryAnalytics';
 
 type PostCardProps = Readonly<{
   post: PostWithTopic;
+  source: Exclude<PostOpenSource, 'home'>;
   preload: boolean;
   summary?: string;
 }>;
@@ -28,7 +30,7 @@ export const PostCardSkeleton = () => {
   );
 };
 
-export const PostCard = ({ post, preload, summary = post.excerpt }: PostCardProps) => {
+export const PostCard = ({ post, preload, source, summary = post.excerpt }: PostCardProps) => {
   const postHref = `/blog/${post.slug?.current}`;
   const hasImage = Boolean(post.image?.asset?.url);
 
@@ -59,7 +61,11 @@ export const PostCard = ({ post, preload, summary = post.excerpt }: PostCardProp
           <DateText date={post.publishedAt} className="mb-0! text-xs" />
         </div>
 
-        <Link href={postHref} className="min-w-0 rounded-sm hover:text-accent-light dark:hover:text-accent-dark">
+        <Link
+          {...getPostOpenedAttributes({ post_id: post._id, source, placement: 'title' })}
+          href={postHref}
+          className="min-w-0 rounded-sm hover:text-accent-light dark:hover:text-accent-dark"
+        >
           <h3 className="font-heading text-xl font-semibold leading-snug wrap-break-word md:text-2xl">
             {post.title}
           </h3>
@@ -72,10 +78,15 @@ export const PostCard = ({ post, preload, summary = post.excerpt }: PostCardProp
         )}
 
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-          <Link href={postHref} type="accent" className="py-1 text-sm">
+          <Link
+            {...getPostOpenedAttributes({ post_id: post._id, source, placement: 'cta' })}
+            href={postHref}
+            type="accent"
+            className="py-1 text-sm"
+          >
             Read more <span aria-hidden="true">→</span>
           </Link>
-          <ReactionsSummary reactions={post.reactions} href={postHref} />
+          <ReactionsSummary postId={post._id} source={source} reactions={post.reactions} href={postHref} />
         </div>
       </div>
     </article>

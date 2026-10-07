@@ -46,7 +46,7 @@ async function BlogPagedPage({ params }: { params: Promise<{ page: string }> }) 
   }
 
   return (
-    <PostList posts={posts} pagination={{ currentPage: page, totalPages, basePath: '/blog' }} />
+    <PostList source="blog" posts={posts} pagination={{ currentPage: page, totalPages, basePath: '/blog' }} />
   );
 }
 

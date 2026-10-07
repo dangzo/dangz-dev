@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getPostOpenedAttributes } from '@/utils/postDiscoveryAnalytics';
 import { DateText, Img, TagChip } from '@/components/ui';
 import type { PostWithTopic } from '@/features/blog/types/Post.types';
 
@@ -34,7 +35,11 @@ export default function WritingPreview({ post, summary }: WritingPreviewProps) {
       <h3 className="mt-4 min-w-0 px-6 font-heading text-xl font-semibold leading-snug wrap-break-word md:px-5">
         {href
           ? (
-            <Link href={href} className="rounded-sm hover:text-accent-light dark:hover:text-accent-dark">
+            <Link
+              {...getPostOpenedAttributes({ post_id: post._id, source: 'home', placement: 'title' })}
+              href={href}
+              className="rounded-sm hover:text-accent-light dark:hover:text-accent-dark"
+            >
               {post.title}
             </Link>
           )
@@ -49,7 +54,12 @@ export default function WritingPreview({ post, summary }: WritingPreviewProps) {
 
       {href && (
         <div className="mt-auto px-6 pt-5 pb-6 md:px-5 md:pb-5">
-          <Link href={href} aria-label={`Read article: ${post.title}`} className="inline-block rounded-sm py-1 text-sm font-medium text-accent-light hover:underline dark:text-accent-dark">
+          <Link
+            {...getPostOpenedAttributes({ post_id: post._id, source: 'home', placement: 'cta' })}
+            href={href}
+            aria-label={`Read article: ${post.title}`}
+            className="inline-block rounded-sm py-1 text-sm font-medium text-accent-light hover:underline dark:text-accent-dark"
+          >
             Read article <span aria-hidden="true">→</span>
           </Link>
         </div>

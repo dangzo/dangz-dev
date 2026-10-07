@@ -2,6 +2,7 @@ import { Header, Footer } from '@/components/layout';
 import { baseMetadata } from '@/data/siteMetadata';
 import { geist, geistMono, roboto, robotoSlab } from '@/styles/fonts';
 import UmamiScript from '@/components/analytics/UmamiScript';
+import PostDiscoveryAnalytics from '@/components/analytics/PostDiscoveryAnalytics';
 import UmamiPageviews from '@/components/analytics/UmamiPageviews';
 import { Suspense } from 'react';
 import ThemeProvider from '@/contexts/ThemeProvider';
@@ -50,6 +51,7 @@ export default function RootLayout({
             <UmamiPageviews />
           </Suspense>
         )}
+        {analyticsEnabled && <PostDiscoveryAnalytics />}
         <ThemeProvider>
           <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-80 focus:rounded-lg focus:bg-primary-700 focus:px-5 focus:py-3 focus:text-white">Skip to content</a>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 xl:px-0">

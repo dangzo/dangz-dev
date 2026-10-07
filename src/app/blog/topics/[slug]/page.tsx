@@ -36,6 +36,6 @@ export default async function TopicPage({ params }: TopicPageProps) {
   const { posts, page, totalPages, basePath } = await getTopicArchivePosts(slug);
 
   return (
-    <PostList posts={posts} pagination={{ currentPage: page, totalPages, basePath }} />
+    <PostList source="topic" posts={posts} pagination={{ currentPage: page, totalPages, basePath }} />
   );
 }
