@@ -57,7 +57,7 @@ export default async function PostPage({ params, }: Readonly<PostPageProps>) {
       {post.body && post.body.length > 0
         ? (
           <>
-            <PortableText value={post.body} />
+            <PortableText value={post.body} postId={post._id} />
             <ReactionsClient postId={post._id} />
           </>
         )

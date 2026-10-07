@@ -14,6 +14,9 @@ Placement values are exactly `home`, `about_intro`, `about_journey`,
 `about_contact`, and `footer`. There are 11 distinct controls: two Home,
 six About, and three shared footer controls. The footer retains `footer`
 placement on every page; Umami's source-page metadata identifies the page.
+Article references reuse `outbound_link_clicked` with `placement=article_body`,
+a CMS `post_id`, and the reference hostname. See [article analytics](ARTICLE_ANALYTICS.md)
+for that separate control inventory and validation.
 LinkedIn emits only `contact_clicked`, never a second outbound event.
 
 ## Historical naming break
