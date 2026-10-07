@@ -14,7 +14,8 @@ export function articleOutboundAnalytics(postId: string, href: string): ArticleO
     const url = new URL(href.startsWith('//') ? `https:${href}` : href);
     const isLoopback = /^127\.\d+\.\d+\.\d+$/.test(url.hostname);
 
-    if ((url.protocol !== 'http:' && url.protocol !== 'https:') || INTERNAL_HOSTS.has(url.hostname) || isLoopback) {
+    const hostname = url.hostname.replace(/\.$/, '');
+    if ((url.protocol !== 'http:' && url.protocol !== 'https:') || INTERNAL_HOSTS.has(hostname) || isLoopback) {
       return undefined;
     }
 
