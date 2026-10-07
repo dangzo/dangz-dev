@@ -219,39 +219,37 @@ This monorepo is managed with Yarn workspaces, and the root `package.json` defin
 
 ## CI/CD Pipeline
 
-Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality-and-build.yml`](.github/workflows/pr-quality-and-build.yml)), which runs eight jobs:
+Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality-and-build.yml`](.github/workflows/pr-quality-and-build.yml)). The quality checks and production build run in parallel after dependency setup. Mobile and desktop Lighthouse audits then run on separate runners against the same production build:
 
-```
-             ┌──────────────┐
-             │     gate     │   (read PR labels)
-             └──────┬───────┘
-                    │
-             ┌──────────────┐
-             │    setup     │   (install dependencies + cache; skipped if skip-ci)
-             └──────┬───────┘
-                    │
-     ┌───────────────┬────────────────┬─────────────────┬──────────────────┐
-     ▼               ▼                ▼                 ▼                  ▼
-┌──────────┐  ┌─────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-│  lint    │  │  test-unit  │  │   test-e2e   │  │  typecheck   │  │  lighthouse  │   (parallel; lighthouse skipped if skip-lighthouse)
-└────┬─────┘  └──────┬──────┘  └──────┬───────┘  └──────┬───────┘  └───────┬──────┘
-     └────┬──────────┴────────────────┴─────────────────┴──────────────────┘
-          ▼
-      ┌─────────┐
-      │  build  │                   (runs if quality jobs pass; does not wait on lighthouse)
-      └─────────┘
+```mermaid
+flowchart TD
+  gate[Label gates] --> setup[Setup Dependencies]
+  setup --> lint[Lint]
+  setup --> unit[Test: Unit]
+  setup --> e2e[Test: E2E]
+  setup --> types[Type Check]
+  setup --> build[Build]
+  build --> mobile[Lighthouse: mobile]
+  build --> desktop[Lighthouse: desktop]
+  mobile --> lighthouse[Lighthouse]
+  desktop --> lighthouse
 ```
 
 | Job | Script | What it does |
 |---|---|---|
 | `gate` | n/a | Reads PR labels and exposes skip flags for downstream jobs |
-| `setup` | n/a | Installs dependencies once and stores a lockfile-keyed cache for downstream jobs |
-| `lint` | `yarn ci:lint` | Lints both packages (`eslint` + Sanity Studio), restoring cached dependencies |
-| `test-unit` | `yarn test:unit` | Runs Vitest unit/component tests (Vitest run mode), restoring cached dependencies |
-| `test-e2e` | `yarn test:e2e` | Runs Playwright e2e specs after installing Chromium |
-| `typecheck` | `yarn ci:typecheck` | Type-checks both packages with `tsc`, restoring cached dependencies |
-| `lighthouse` | `yarn lhci:mobile` + `yarn lhci:desktop` | Runs Lighthouse CI audits for both mobile and desktop, restoring cached dependencies |
-| `build` | `yarn ci:build` | Builds both packages; blocked until lint, test-unit, test-e2e, and typecheck pass |
+| `setup` | n/a | Checks for the exact dependency cache without downloading it; installs and saves both workspaces only on a miss |
+| `lint` | `yarn ci:lint` | Lints both packages (`eslint` + Sanity Studio) |
+| `test-unit` | `yarn test:unit` | Runs Vitest unit/component tests |
+| `test-e2e` | `yarn test:e2e` + `yarn test:e2e:pageviews` | Runs ordinary and pageview Playwright suites after installing Chromium |
+| `typecheck` | `yarn ci:typecheck` | Type-checks both packages with `tsc` |
+| `build` | `yarn ci:build` | Builds Next.js and Studio alongside the quality checks; uploads the Next.js output without `.next/cache` |
+| `lighthouse-audits` | `yarn lhci:mobile` or `yarn lhci:desktop` | Runs both presets on separate runners, downloading the same run's build and starting it with `yarn start` |
+| `lighthouse` | n/a | Preserves the required `Lighthouse` check; fails if either enabled audit fails or is unexpectedly skipped |
+
+Downstream jobs restore only `node_modules` and `studio/node_modules`, with `yarn install --frozen-lockfile` as a cache-miss fallback. Only dependency setup restores the Yarn download cache, and only when installation is needed. Node and the dependency-cache key remain shared across jobs.
+
+The six required check names remain `Lint`, `Test (Unit)`, `Test (E2E)`, `Type Check`, `Build`, and `Lighthouse`. The Lighthouse presets retain all four URLs, three runs per URL, thresholds, and separate mobile/desktop reporting contexts. Local Lighthouse commands still build the app before starting it; CI overrides only the server command to reuse its artifact. `skip-ci` skips every job after the label gate; `skip-lighthouse` skips both audits and their summary.
 
 ### CodeRabbit reviews
 
@@ -284,7 +282,7 @@ Add or remove these labels from the PR's **Labels** sidebar:
 | `automerge` | Authorizes Kodiak to merge the PR when branch protection requirements are satisfied |
 | `skip-ci` | Skips every check after `gate` (setup, lint, tests, typecheck, Lighthouse, and build) |
 | `skip-review` | Skips automatic CodeRabbit reviews; CI is unaffected |
-| `skip-lighthouse` | Skips only the Lighthouse job; quality jobs and build still run |
+| `skip-lighthouse` | Skips both Lighthouse audits and their summary; quality jobs and build still run |
 
 PRs that change only `.md` files and do not affect live production behavior must have `skip-ci` and `skip-review` (once available). Check the full PR diff and whether Markdown is consumed by the production site or build; reassess after updates and remove both labels if non-Markdown files or production-affecting changes are added. Add both labels at PR creation so validation jobs and automatic reviews can skip from the start. Use `skip-lighthouse` when performance audits are unnecessary for the change but lint, tests, type checks, and builds should still run. If both CI skip labels are present, `skip-ci` takes precedence. `skip-review` controls automatic reviews independently of CI.
 

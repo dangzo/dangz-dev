@@ -44,14 +44,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24.15
-          cache: yarn
-          cache-dependency-path: yarn.lock
-
-      - name: Restore dependencies cache
+      - name: Look up dependencies cache
         id: deps-cache
         uses: actions/cache/restore@v4
         with:
@@ -59,6 +52,15 @@ jobs:
             node_modules
             studio/node_modules
           key: ${{ runner.os }}-node-24.15-yarn-modules-${{ hashFiles('yarn.lock') }}
+          lookup-only: true
+
+      - name: Set up Node.js
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.15
+          cache: yarn
+          cache-dependency-path: yarn.lock
 
       - name: Install dependencies
         if: steps.deps-cache.outputs.cache-hit != 'true'
@@ -87,8 +89,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24.15
-          cache: yarn
-          cache-dependency-path: yarn.lock
 
       - name: Restore dependencies cache
         id: deps-cache
@@ -120,8 +120,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24.15
-          cache: yarn
-          cache-dependency-path: yarn.lock
 
       - name: Restore dependencies cache
         id: deps-cache
@@ -153,8 +151,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24.15
-          cache: yarn
-          cache-dependency-path: yarn.lock
 
       - name: Restore dependencies cache
         id: deps-cache
@@ -208,8 +204,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24.15
-          cache: yarn
-          cache-dependency-path: yarn.lock
 
       - name: Restore dependencies cache
         id: deps-cache
@@ -227,12 +221,17 @@ jobs:
       - name: Run type checks
         run: yarn ci:typecheck
 
-  lighthouse:
-    name: Lighthouse
+  lighthouse-audits:
+    name: Lighthouse (${{ matrix.preset }})
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    needs: [gate, setup]
+    needs: [gate, build]
     if: ${{ needs.gate.outputs.skip_ci != 'true' && needs.gate.outputs.skip_lighthouse != 'true' }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        preset: [mobile, desktop]
 
     steps:
       - name: Check out repository
@@ -242,9 +241,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24.15
-          cache: yarn
-          cache-dependency-path: yarn.lock
-      
+
       - name: Restore dependencies cache
         id: deps-cache
         uses: actions/cache/restore@v4
@@ -253,26 +250,46 @@ jobs:
             node_modules
             studio/node_modules
           key: ${{ runner.os }}-node-24.15-yarn-modules-${{ hashFiles('yarn.lock') }}
-      
+
       - name: Install dependencies (cache miss fallback)
         if: steps.deps-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
-      
-      - name: Lighthouse mobile audit
-        run: yarn lhci:mobile
+
+      - name: Download Next.js build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: next-build
+          path: .next
+
+      - name: Run Lighthouse audit
+        run: yarn lhci:${{ matrix.preset }} --collect.startServerCommand="yarn start"
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
-      - name: Lighthouse desktop audit
-        run: yarn lhci:desktop
+  lighthouse:
+    name: Lighthouse
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    needs: [gate, lighthouse-audits]
+    # Run after failed, cancelled, or skipped audits, so the check cannot pass
+    # unless both presets succeeded. Skip labels still intentionally skip it.
+    if: ${{ always() && needs.gate.outputs.skip_ci != 'true' && needs.gate.outputs.skip_lighthouse != 'true' }}
+
+    steps:
+      - name: Verify Lighthouse audits
         env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          AUDIT_RESULT: ${{ needs.lighthouse-audits.result }}
+        run: |
+          if [ "$AUDIT_RESULT" != 'success' ]; then
+            echo "Lighthouse audits did not succeed: $AUDIT_RESULT"
+            exit 1
+          fi
 
   build:
     name: Build
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    needs: [lint, test-unit, test-e2e, typecheck]
+    needs: setup
 
     steps:
       - name: Check out repository
@@ -282,8 +299,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24.15
-          cache: yarn
-          cache-dependency-path: yarn.lock
 
       - name: Restore dependencies cache
         id: deps-cache
@@ -305,7 +320,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: next-build
-          path: .next
+          path: |
+            .next
+            !.next/cache
           include-hidden-files: true
           if-no-files-found: error
-
