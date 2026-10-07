@@ -40,7 +40,7 @@ The dedicated suite establishes **browser request evidence — collector interce
 
 ## Owner verification and completion
 
-Status: implementation and local validation; production collector and owner-dashboard verification remain pending. Keep #189 open until its dashboard acceptance criterion has evidence. An earlier implementation PR uses `Refs #189` and `Refs #168`, stating what remains; use `Closes #189` only after all acceptance criteria are satisfied. The broader [#168 audit](https://github.com/dangzo/dangz-dev/issues/168) remains separate.
+Status: implementation, local validation, deployed browser/collector verification, and owner-dashboard verification passed. The owner confirmed the headed test window's source/placement counts and visible post-ID breakdowns on 2026-10-07. The evidence PR [#214](https://github.com/dangzo/dangz-dev/pull/214) uses `Closes #189` against the repository default branch `dev`. The implementation PR [#208](https://github.com/dangzo/dangz-dev/pull/208) correctly retained `Refs #189` while rollout evidence was pending. The broader [#168 audit](https://github.com/dangzo/dangz-dev/issues/168) remains separate.
 
 After deployment, the owner verifies a coordinated UTC window:
 
@@ -50,3 +50,59 @@ After deployment, the owner verifies a coordinated UTC window:
 4. Filter the Umami dashboard to the production hostname and matching UTC window. Inspect `post_opened` event data by `source`, `placement`, and `post_id`; reconcile known activation counts, unrelated traffic, and ingestion lag. Record observation time and counts/property evidence without credentials or dashboard access tokens. If a breakdown is unavailable, leave that criterion pending.
 
 Compare source/placement activity to inform discovery control decisions, accounting for unavailable tracking and buffer limits. These are activation counts, not unique-reader conversion or completed reads. Rollback reverts discovery annotations/listener while preserving independent pageview, search, reaction, and contact analytics.
+
+## Production verification — 2026-10-07
+
+The production release [#213](https://github.com/dangzo/dangz-dev/pull/213) includes discovery implementation #208. Verification used `https://dangz.dev`, production merge revision `531bcb354770debc35dfc0b4a47c29744bb5882a`, footer version `26.98.1007`, Node 24.15.0, and Chromium 151.0.7922.34 on Linux. The actual cloud tracker was fetched during the probes, without replacing `window.umami`; its SHA-256 remained `91a876d767646fd5b7701b6fabf97f8a99ae53b94e7e5b58d465bad1e5d763e0`, matching the pinned integration fixture. Inventory capture began at 22:25:42 UTC.
+
+### Browser diagnostics — collector intercepted
+
+The final 22 scenarios passed during 22:26:55.716–22:28:53.392 UTC:
+
+- Eleven source/placement cases covered Home title/CTA and Blog, paginated Blog, and Architecture topic title/CTA/reaction-summary links. Each activation sent exactly one correctly attributed request with only `post_id`, `source`, and `placement`, retained the source pathname/time, and preserved the original document through Next navigation. Nested headings, spans, and reaction-summary content were exercised.
+- Enter, Ctrl-click, middle-click, and Shift-click retained their intended navigation. New-tab/window probes foregrounded the destination before checking its lazy-loaded tracker. Each ready-navigation case produced exactly one source and one destination pageview, with one tracker request per document.
+- Delayed readiness flushed one original-source event without duplicates. Blocked script and opt-out produced no analytics while navigation remained usable. Aborted collector requests did not trigger application retries or navigation failures.
+- Topic and pagination navigation produced destination pageviews without discovery events. Mouse and keyboard search selection each emitted its separate search event, with no `post_opened` event. Images remained unlinked across all nine inventoried routes.
+
+There are currently no paginated topic archives in the published corpus. That branch remains covered by the existing fixture integration tests; production topic pagination is not claimed as exercised. Two initial probe issues were corrected in the harness: foregrounding a background tab before awaiting lazy tracker readiness, and restricting opt-out initialization to the production origin rather than opaque subframes. No application changes were needed. Final scenarios reported no page errors or reaction POST attempts, and all diagnostic collector requests were intercepted.
+
+### Initial headless HTTP response evidence
+
+The initial matrix ran during **22:29:00.116–22:29:21.324 UTC** (23:29 in Atlantic/Canary). Playwright forwarded each collector request once without transport retries and fulfilled the browser with the actual collector response. All **11 `post_opened` requests and 22 pageviews received HTTP 200**. Each activation retained the same document and produced one discovery event and one destination pageview. No page errors or reaction POST attempts occurred. Response bodies were not classified in this initial run, so these status codes do not establish collection. The owner subsequently reported that `post_opened` was absent from the unfiltered Last 24h event list.
+
+A follow-up headless probe at **22:34:24.800–22:34:26.980 UTC** reproduced the discrepancy: the discovery request and both pageviews returned HTTP 200 with `{"beep":"boop"}`, no cache token, and no disabled flag. The request used the production website ID `546ca232-1b93-4b09-862d-8aebf53123d0` and hostname `dangz.dev`. [Umami's collector source](https://github.com/umami-software/umami/blob/master/src/app/api/send/route.ts) returns this marker when its user-agent bot check discards a request. The probe's user agent contained `HeadlessChrome`. This explains why status-only evidence was insufficient and strongly indicates the original headless run was also discarded; its response bodies were not retained, so individual original responses cannot be retrospectively classified. Do not expect the original 11 requests to appear in the dashboard.
+
+### Headed live collector verification
+
+Verification was repeated with an actual headed Chromium browser, using its default user agent and leaving Umami bot filtering enabled. A single Blog-title probe at **22:35:08.068–22:35:10.254 UTC** returned normal collection responses for one discovery event and two pageviews: HTTP 200, a cache token present, and neither bot-filter nor disabled markers. Only those response-shape booleans were retained; token and session values were not logged.
+
+The full headed matrix then passed during **22:35:34.226–22:35:57.019 UTC**: **11 discovery requests and 22 pageviews**, all HTTP 200 with normal collection response shapes. The harness now rejects bot-filtered or disabled responses and requires a cache token before marking live collection checks passed. Each activation retained the original document, reported exact selected-anchor properties and source metadata, and produced one destination pageview. There were no page errors or reaction POST attempts. The fetched tracker hash was unchanged. Dashboard ingestion remains a separate owner check.
+
+The matrix's request counts and selected post IDs are:
+
+| Source path | `source` | Title | CTA | Reaction summary | Total |
+| --- | --- | ---: | ---: | ---: | ---: |
+| `/` | `home` | 1 | 1 | 0 | 2 |
+| `/blog` | `blog` | 1 | 1 | 1 | 3 |
+| `/blog/page/2` | `blog` | 1 | 1 | 1 | 3 |
+| `/blog/topics/architecture` | `topic` | 1 | 1 | 1 | 3 |
+| Total | | 4 | 4 | 3 | 11 |
+
+Expected source totals are `home=2`, `blog=6`, and `topic=3`. The selected post IDs provide a second reconciliation:
+
+| `post_id` | Selected article | Expected events |
+| --- | --- | ---: |
+| `cecb1ab3-1182-4de2-9955-703b1d0a87cd` | `/blog/software-engineering-in-the-era-of-ai` | 5 |
+| `27dd202f-fbfa-4549-b8a1-a9926769bfa6` | `/blog/three-layered-architecture-for-front-end` | 3 |
+| `56a36c36-3097-43b2-8244-d5179515a692` | `/blog/monolith-monorepo-or-multi-repo-choosing-the-right-codebase-architecture` | 2 |
+| `a3db5c8d-71ec-4480-b59f-2771fa7aa0a7` | `/blog/how-to-structure-a-react-app-in-2026` | 1 |
+
+The topic reaction-summary selection belongs to a different post from its title/CTA selections because the first topic article has no rendered summary. Each request was checked against the activated anchor's own metadata.
+
+### Owner dashboard evidence — verified
+
+The owner reported a Last 24h event list containing bottom exposure, reaction, contact, search-opening, and legacy labels, but no `post_opened`, after the initial headless run. That observation is recorded as a failed dashboard reconciliation for the original run, not a production instrumentation defect. After the headed rerun, the owner confirmed that `post_opened` appeared, then explicitly confirmed all requested source/placement breakdowns matched and `post_id` values were visible. This owner-assisted confirmation was recorded at **2026-10-07 22:39:21 UTC**; the dashboard's exact observation timestamp was not independently captured.
+
+The confirmed dashboard check used the requested `dangz.dev` / `post_opened` test window **22:35:00–22:36:00 UTC** (23:35–23:36 Atlantic/Canary), including the additional Blog-title probe: **12 test events**, `home=2`, `blog=7`, `topic=3`, and `title=5`, `cta=4`, `reaction_summary=3`. Post-ID visibility was confirmed; the per-post count table above remains browser-request evidence rather than an independently supplied dashboard count table. No exact ingestion delay was measured. Normal collector responses and owner dashboard confirmation are separate evidence; together with the production interaction checks, this completes #189's acceptance criteria.
+
+Sanitized request ledgers, inventory, scripts, and the initial harness probes are retained locally under ignored `.tmp/189-production-verification/` in the verification checkout. They contain event names, source paths, selected post IDs, occurrence/request times, response statuses, and safe response-shape markers; tracker cache values, session values, and credentials were not recorded. These are local evidence artifacts, not portable repository test commands. For reproduction in a fresh checkout, follow the owner procedure above and the existing integration spec as the interaction reference. Use a headed browser for collector/dashboard checks and inspect safe response markers, rather than relying on HTTP status alone.
