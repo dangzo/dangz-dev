@@ -23,7 +23,7 @@ export default function HomePage() {
           <p className="mb-5 font-mono text-xs uppercase tracking-[0.18em] text-accent-light dark:text-accent-dark">Senior Frontend Engineer</p>
           <h1 className="font-heading text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
             Hi, I'm Daniele.<br />
-            <span className="text-accent-light dark:text-accent-dark">I create software for the web.</span>
+            <span className="text-5xl md:text-6xl text-accent-light dark:text-accent-dark">I build software for the web.</span>
           </h1>
           <p className="mt-6 max-w-3xl text-base leading-relaxed text-secondary-light dark:text-secondary-dark md:text-lg">
             Notes on engineering best practices, exploring AI-assisted development, and learning across the stack. Architecture, thoughtful tradeoffs, and lessons worth sharing.
