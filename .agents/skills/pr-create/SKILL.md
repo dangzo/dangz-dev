@@ -11,8 +11,9 @@ Follow [AGENTS.md](../../../AGENTS.md) and use the [PR template](../../../.githu
 
 - Use a short, concrete title describing the final change.
 - Aim for a body of 100–150 words. Small changes can be shorter; this is not a minimum or a hard cap. Expand only for essential risks, compatibility or rollout requirements, validation gaps, required issue references, or explicit user requests for detail.
-- Keep **Problem and result**, **Related issues**, and **Validation**. Add **Risks and rollout** only when relevant; remove template comments and unused optional sections from the prepared body.
+- Keep **Problem and result**, **Changes**, **Related issues**, and **Validation**. Add **Risks and rollout** only when relevant; remove template comments and unused optional sections from the prepared body.
 - Lead with the concrete problem and resulting behavior in one or two sentences. Describe the final implementation rather than the conversation or abandoned approaches.
+- In **Changes**, list the main changes in a few short bullets. Group related edits by behavior or purpose rather than listing files; do not repeat the problem and result. Keep this list within the overall word target.
 - Omit work chronology, file inventories, procedural checklists, repeated explanations, and claims that add no review value. Link supporting detail instead of copying it. Use bullets only when they make parallel information easier to scan.
 - In **Related issues**, use `Closes #<number>` for each completed issue, `Refs #<number>` for partial work with a brief note on what remains, or `None` when there are no related issues.
 - In **Validation**, state checks actually run and their results. Disclose failures and relevant checks not run with reasons; do not claim success from planned checks. Include relevant screenshots and material limits of manual or live verification.

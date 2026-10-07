@@ -32,7 +32,7 @@ Choose a category from the repository's [new issue page](https://github.com/dang
 
 For CLI authoring, `gh issue create --template 'Bug report'` selects an issue template by name. The other names are `Feature or change` and `Investigation or maintenance`. The default PR template is used in GitHub's web flow; `gh pr create --template pull_request_template.md --base dev` selects it explicitly in the CLI. For prepared descriptions, use `--body-file` with a filled Markdown body, omitting issue-template YAML front matter. Supplying a body does not enforce template prompts, so review the headings yourself.
 
-PRs should use a short, concrete title and lead with the problem and resulting behavior. Aim for a body of 100–150 words; small changes can be shorter, and essential review details can justify more. Omit procedural checklists, file inventories, work chronology, and repeated explanations. Link supporting detail instead of repeating it. Follow [WORKFLOW.md](WORKFLOW.md#validate-the-affected-behavior) to select validation; report what ran and its results, including failures and relevant checks not run with reasons. Screenshots, deployment/schema sequencing, and rollback notes belong only in relevant changes. Remove template comments and the optional risks section when unnecessary. Agents follow the [pr-create skill](../.agents/skills/pr-create/SKILL.md).
+PRs should use a short, concrete title and lead with the problem and resulting behavior. Under **Changes**, list the main changes in a few short bullets, grouping related edits without repeating the summary. Aim for a body of 100–150 words; small changes can be shorter, and essential review details can justify more. Omit procedural checklists, file inventories, work chronology, and repeated explanations. Link supporting detail instead of repeating it. Follow [WORKFLOW.md](WORKFLOW.md#validate-the-affected-behavior) to select validation; report what ran and its results, including failures and relevant checks not run with reasons. Screenshots, deployment/schema sequencing, and rollback notes belong only in relevant changes. Remove template comments and the optional risks section when unnecessary. Agents follow the [pr-create skill](../.agents/skills/pr-create/SKILL.md).
 
 Follow the issue-linking rule in [AGENTS.md](../AGENTS.md): before creating a PR, identify related issues and read their acceptance criteria. Use `Closes #<number>` for every completed issue and `Refs #<number>` for related or partial work, stating what remains. Write `None` when no related issues exist. Check the prepared description and current default-branch target before submission, then read back and verify the saved description and target after creation or updates and before merging. These checks apply to drafts and custom CLI bodies too. GitHub only interprets PR closing keywords when the PR targets the default branch; see [GitHub's linking documentation](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue). CI and merge labels remain governed by the [README](../README.md#pr-labels).
 
@@ -81,6 +81,10 @@ These examples demonstrate the prompts; they are not new reports or claims about
 ### PR example: documentation-only change
 
 **Problem and result:** Contributors could not find the manual review command. The README now explains how to request a review.
+
+**Changes:**
+
+- Add the manual review command and a link to its documentation.
 
 **Related issues:** None
 
