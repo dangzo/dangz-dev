@@ -21,20 +21,21 @@ import {
 
 interface PortableTextProps {
   value: PortableTextBlock[];
+  postId: string;
 }
 
 type PortableTextComponents = NonNullable<ComponentProps<typeof SanityPortableText>['components']>;
 
-export default async function PortableText({ value }: PortableTextProps) {
+export default async function PortableText({ value, postId }: Readonly<PortableTextProps>) {
   const blocks = value;
   const getHeadingId = createHeadingIdFactory();
 
   const portableTextComponents: PortableTextComponents = {
     block: {
       h1: ({ children }) => <BlockH1 getHeadingId={getHeadingId}>{children}</BlockH1>,
-      h2: ({ children }) => <BlockH2 getHeadingId={getHeadingId}>{children}</BlockH2>,
-      h3: ({ children, value: block }) => <BlockH3 getHeadingId={getHeadingId} value={block} blocks={blocks}>{children}</BlockH3>,
-      h4: ({ children }) => <BlockH4 getHeadingId={getHeadingId}>{children}</BlockH4>,
+      h2: ({ children }) => <BlockH2 postId={postId} getHeadingId={getHeadingId}>{children}</BlockH2>,
+      h3: ({ children, value: block }) => <BlockH3 postId={postId} getHeadingId={getHeadingId} value={block} blocks={blocks}>{children}</BlockH3>,
+      h4: ({ children }) => <BlockH4 postId={postId} getHeadingId={getHeadingId}>{children}</BlockH4>,
       normal: ({ children }) => <BlockNormal>{children}</BlockNormal>,
     },
 
@@ -49,7 +50,7 @@ export default async function PortableText({ value }: PortableTextProps) {
     },
 
     marks: {
-      link: ({ children, value }) => <MarkLink value={value}>{children}</MarkLink>,
+      link: ({ children, value }) => <MarkLink postId={postId} value={value}>{children}</MarkLink>,
       inlineCode: ({ children }) => <MarkInlineCode>{children}</MarkInlineCode>,
     },
 
