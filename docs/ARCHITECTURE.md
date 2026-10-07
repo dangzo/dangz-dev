@@ -21,6 +21,10 @@ Resolve `@/` imports from `src/`. Check package manifests for current dependency
 | Static assets and About tool SVGs | `public/`, `public/icons/` |
 | CMS schemas and Studio configuration | `studio/schemaTypes/`, `studio/sanity.config.ts` |
 
+Roboto Slab is bundled with its license in `src/styles/fonts/roboto-slab/` and
+loaded through `next/font/local` to avoid a Google font-loader build failure.
+The other font families use `next/font/google`.
+
 ## Follow rendering and data flow
 
 - Keep route files focused on composition; place feature behavior under `src/features/` and shared behavior in the shared directories above.

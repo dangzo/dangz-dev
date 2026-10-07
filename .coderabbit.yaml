@@ -15,6 +15,7 @@ reviews:
     description_keyword: ''
     labels:
       - '!skip-review'
+      - '!dependencies'
   path_filters:
     - '!src/data/buildVersion.ts'
   path_instructions:
