@@ -9,6 +9,7 @@
 ## Skills and delegation
 
 - Shared skills live in `.agents/skills/`; shared specialist roles live in `.agents/roles/`. See [docs/WORKFLOW.md](docs/WORKFLOW.md#skills-and-specialist-agents) for invocation and maintenance.
+- Always use [pr-create](.agents/skills/pr-create/SKILL.md) when creating a PR, including drafts and PR creation within a larger task, or drafting or rewriting its description.
 - Delegate to `implementer`, `reviewer`, `test-engineer`, or `product-owner` when independent work or context isolation justifies the overhead. Handle small tasks directly; implementation includes necessary tests and docs without requiring an agent pipeline.
 - Give each agent the assigned checkout, goal, acceptance criteria, relevant context, existing authorization, and file ownership. Avoid concurrent edits to the same files. The parent integrates results and verifies the complete task.
 - Reuse existing worktrees before creating one. New worktrees belong under `<main-checkout>/git-worktrees/<branch>`. Never switch branches or stash another agent's work; remove only worktrees created for the task after checking for uncommitted work.

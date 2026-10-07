@@ -87,6 +87,7 @@ next-env.d.ts
 !.claude/agents/*.md
 .claude/skills/*
 !.claude/skills/spec-first
+!.claude/skills/pr-create
 !.claude/skills/pr-review
 !.claude/skills/ui-review
 .cursor

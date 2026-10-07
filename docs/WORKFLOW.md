@@ -11,6 +11,7 @@ Repository skills are shared between Codex and Claude Code. Canonical instructio
 | Skill | Use |
 | --- | --- |
 | [spec-first](../.agents/skills/spec-first/SKILL.md) | Ground implementation in relevant docs and issue criteria; update code, tests, and docs together. |
+| [pr-create](../.agents/skills/pr-create/SKILL.md) | Create concise PR titles and descriptions, including drafts; aim for 100–150 words while preserving required references and validation. |
 | [pr-review](../.agents/skills/pr-review/SKILL.md) | Review a PR, branch, or diff for defects, security, doc drift, and issue completion. |
 | [ui-review](../.agents/skills/ui-review/SKILL.md) | Verify affected browser flows using local fixtures, accessibility checks, and relevant viewports/themes. |
 
