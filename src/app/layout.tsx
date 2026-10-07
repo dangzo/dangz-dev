@@ -1,7 +1,9 @@
 import { Header, Footer } from '@/components/layout';
 import { baseMetadata } from '@/data/siteMetadata';
 import { geist, geistMono, roboto, robotoSlab } from '@/styles/fonts';
-import Script from 'next/script';
+import UmamiScript from '@/components/analytics/UmamiScript';
+import UmamiPageviews from '@/components/analytics/UmamiPageviews';
+import { Suspense } from 'react';
 import ThemeProvider from '@/contexts/ThemeProvider';
 import 'react-loading-skeleton/dist/skeleton.css';
 import '@/styles/tailwind.css';
@@ -13,6 +15,9 @@ export const metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const fixtureAnalytics = process.env.E2E_FIXTURES === 'true' && process.env.E2E_UMAMI_PAGEVIEWS === 'true';
+  const analyticsEnabled = process.env.NODE_ENV === 'production' || fixtureAnalytics;
+
   return (
     <html
       lang="en"
@@ -30,12 +35,8 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 
-        {process.env.NODE_ENV === 'production' && (
-          <Script
-            strategy="lazyOnload"
-            src="https://cloud.umami.is/script.js"
-            data-website-id="546ca232-1b93-4b09-862d-8aebf53123d0"
-          />
+        {analyticsEnabled && (
+          <UmamiScript websiteId={fixtureAnalytics ? '00000000-0000-0000-0000-000000000186' : undefined} />
         )}
       </head>
 
@@ -44,6 +45,11 @@ export default function RootLayout({
           bg-background-main-light text-main-light dark:bg-background-main-dark dark:text-main-dark
         "
       >
+        {analyticsEnabled && (
+          <Suspense fallback={null}>
+            <UmamiPageviews />
+          </Suspense>
+        )}
         <ThemeProvider>
           <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-80 focus:rounded-lg focus:bg-primary-700 focus:px-5 focus:py-3 focus:text-white">Skip to content</a>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 xl:px-0">

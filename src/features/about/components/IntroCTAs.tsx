@@ -1,3 +1,4 @@
+import { contactAnalytics } from '@/utils/contactAnalytics';
 import { Button } from '@/components/ui';
 import { links } from '@/data/siteMetadata';
 
@@ -9,7 +10,7 @@ async function IntroCTAs() {
         download
         type="primary"
         size="medium"
-        data-umami-event="About Download Resume Click"
+        {...contactAnalytics({ name: 'resume_download_clicked', placement: 'about_intro' })}
       >
         Download my resume
       </Button>
@@ -17,7 +18,7 @@ async function IntroCTAs() {
         to={links.linkedin}
         type="ghost"
         size="medium"
-        data-umami-event="About Connect LinkedIn Click"
+        {...contactAnalytics({ name: 'contact_clicked', channel: 'linkedin', placement: 'about_intro' })}
       >
         Connect on LinkedIn
       </Button>

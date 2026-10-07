@@ -55,7 +55,7 @@ const AddReactionButton = ({ isExpanded, onToggle }: Readonly<AddReactionButtonP
 };
 
 const ReactionsCompact = ({ postId }: Readonly<ReactionsCompactProps>) => {
-  const { reactions, pendingIds, reactToPost } = useReactions(postId);
+  const { reactions, pendingIds, reactToPost } = useReactions(postId, 'compact');
   const [showZeroCountReactions, setShowZeroCountReactions] = useState(false);
 
   if (reactions === null) {
@@ -116,7 +116,6 @@ const ReactionsCompact = ({ postId }: Readonly<ReactionsCompactProps>) => {
                 emoji={reaction.emoji}
                 name={reaction.name}
                 title={reaction.name}
-                data-umami-event={`Reaction ${reaction.name} Click`}
                 onClick={() => reactToPost(reaction._id)}
                 isPending={pendingIds[reaction._id] ?? false}
                 size="compact"

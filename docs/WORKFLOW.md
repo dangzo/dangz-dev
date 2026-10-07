@@ -1,5 +1,28 @@
 # Workflow
 
+## File issues and describe PRs
+
+Use the GitHub templates to state the problem or goal, bounded scope, and acceptance criteria or investigation deliverables. Keep small tasks short and remove irrelevant optional sections. See [GitHub template guidance](GITHUB_TEMPLATES.md) for browser/CLI usage, examples, and the investigation rationale. For PRs, report selected checks and their results using the guidance below; follow [AGENTS.md](../AGENTS.md) for required issue-reference and default-branch checks before creation, after creation or updates, and before merging.
+
+## Skills and specialist agents
+
+Repository skills are shared between Codex and Claude Code. Canonical instructions live in `.agents/skills/`; the individual folders under `.claude/skills/` are relative symlinks to them. Edit the canonical files to keep both tools aligned. Codex loads repository skills automatically and supports `$<skill-name>`; Claude Code supports `/<skill-name>`. Automatic discovery remains enabled.
+
+| Skill | Use |
+| --- | --- |
+| [spec-first](../.agents/skills/spec-first/SKILL.md) | Ground implementation in relevant docs and issue criteria; update code, tests, and docs together. |
+| [pr-create](../.agents/skills/pr-create/SKILL.md) | Create concise PR titles and descriptions, including drafts; aim for 100–150 words while preserving required references and validation. |
+| [pr-review](../.agents/skills/pr-review/SKILL.md) | Review a PR, branch, or diff for defects, security, doc drift, and issue completion. |
+| [ui-review](../.agents/skills/ui-review/SKILL.md) | Verify affected browser flows using local fixtures, accessibility checks, and relevant viewports/themes. |
+
+The `implementer`, `reviewer`, `test-engineer`, and `product-owner` agents share their role instructions in `.agents/roles/`. The Markdown definitions in `.claude/agents/` and standalone TOML definitions in `.codex/agents/` direct each host to those roles. Both hosts inherit the parent model; no provider-specific model is pinned. Codex's reviewer additionally requests a read-only sandbox, while both reviewer definitions forbid source edits and publication regardless of runtime permissions.
+
+Ask for a named specialist directly, or let the main agent delegate independent work when the benefit justifies it. For example: “Have reviewer review this branch” or “Have product-owner draft an investigation issue.” Small implementation tasks include necessary tests without a mandatory agent pipeline. Follow [AGENTS.md](../AGENTS.md#skills-and-delegation) for ownership, existing authorization, and worktree placement.
+
+These instructions adapt the generic Claude Code export: local reviews and accepted doc updates use existing authorization; checks run according to impact rather than three times by default; architecture findings use this repository's boundaries; dependency and documentation changes are reviewed for actual behavior; review-only tasks return reports. Issue and PR drafting uses the existing GitHub templates. Skills do not themselves authorize posting, deployment, or merging.
+
+To validate changes, check skill frontmatter, parse agent YAML/TOML, resolve role links and symlinks, and run `git diff --check`. Verify discovery in both hosts after changing definitions; restart a session if its skill or agent list is stale. Application tests are unnecessary for instructions-only changes. Shared definitions are tracked, while personal Claude settings remain ignored.
+
 ## Run locally
 
 - Use Node and Yarn versions declared in the root `package.json`; keep the single `yarn.lock`.
@@ -24,6 +47,10 @@ Run commands from the repository root. Select checks by the change; report failu
 | Documentation only | Check links, command names, and consistency with source; skip application tests |
 
 - Keep unit tests beside source as `*.test.ts(x)` or `*.spec.ts(x)`. Vitest includes frontend, Studio, and migration tests, uses jsdom and `src/tests/unit/setup.ts`, and excludes E2E specs. Migration tests select the Node environment; React is deduplicated across the workspaces for Studio component tests.
+- Reaction lifecycle and concurrency checks are listed in [REACTION_ANALYTICS.md](REACTION_ANALYTICS.md); include search and bottom-exposure regressions when changing their shared transport.
+- Analytics timing changes need separate production browser and dashboard evidence; development fixture tests simulate tracker readiness. Follow [UMAMI_EXPOSURE.md](UMAMI_EXPOSURE.md) for bottom-reaction checks and intercept production reaction POSTs.
+- Pageview integration tests use `yarn test:e2e:pageviews`, a separate fixture server on port 3101 with an intercepted real tracker. Both fixture flags enable the actual integration with a fictitious website ID; normal browser suites omit it. CI and `yarn ci:test` run this suite after ordinary E2E tests. Follow [UMAMI_PAGEVIEWS.md](UMAMI_PAGEVIEWS.md) for counting policy and deployed collector/dashboard checks.
+- Contact analytics browser tests inject a pinned real tracker and intercept its collector; no live analytics is sent. Follow [CONTACT_ANALYTICS.md](CONTACT_ANALYTICS.md) for separate delivery, download, and owner dashboard checks.
 - Let Playwright start its isolated fixture server on port 3100 with `.next-e2e` output. Extend `src/test-support/e2e/sanity-fixtures.ts` when changing GraphQL operations used by browser tests. The fixture API is enabled only with `E2E_FIXTURES=true`; the topic fixtures exercise primary-model GraphQL fields by default.
 - When a worktree uses a symlink to dependencies in the main checkout and Turbopack rejects the worktree boundary, prefix either topic E2E command with `NEXT_TURBOPACK_ROOT=/path/to/main-checkout`. This optional development setting does not change production configuration.
 - Update intentional visual baselines with `yarn test:e2e:visual:update` after reviewing changes; commit the PNGs under `src/tests/e2e/__screenshots__/`.

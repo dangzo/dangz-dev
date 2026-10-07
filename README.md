@@ -28,6 +28,7 @@ A personal blog and portfolio site built with **Next.js**, **TypeScript**, and *
   - [CodeRabbit reviews](#coderabbit-reviews)
   - [Kodiak and automerge](#kodiak-and-automerge)
   - [PR labels](#pr-labels)
+  - [Issue and PR templates](#issue-and-pr-templates)
 - [Project Structure](#project-structure)
 - [AI Agent Guidance](#ai-agent-guidance)
 - [Deployment](#deployment)
@@ -254,19 +255,19 @@ Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality
 
 ### CodeRabbit reviews
 
-[CodeRabbit](https://docs.coderabbit.ai/reference/configuration) is configured in [`.coderabbit.yaml`](.coderabbit.yaml) for on-demand reviews. Request a review by posting a comment on the pull request:
+[CodeRabbit](https://docs.coderabbit.ai/reference/configuration) is configured in [`.coderabbit.yaml`](.coderabbit.yaml) for automatic reviews of eligible pull requests and incremental reviews after new commits are pushed. Manual reviews remain available by posting a comment on the pull request:
 
 | Comment | Action |
 |---|---|
-| `@coderabbitai review` | Review new changes; use this again after pushing more commits |
+| `@coderabbitai review` | Request an incremental review of new changes manually |
 | `@coderabbitai full review` | Run a fresh, complete review of the PR |
 | `@coderabbitai configuration` | Show the effective configuration and each setting's source |
 
-Opening, reopening, marking a PR ready, adding labels, or pushing commits does not request a review. Chat replies require an explicit `@coderabbitai` mention. See the [review commands](https://docs.coderabbit.ai/reference/review-commands) for other available commands.
+Automatic reviews skip PRs labeled `skip-review` through the `!skip-review` label filter. Other eligibility rules use CodeRabbit's defaults, including skipping draft PRs and reviewing PRs targeting the default branch. Automatic incremental reviews can pause under CodeRabbit's default pause policy. Chat replies require an explicit `@coderabbitai` mention. See the [automatic review controls](https://docs.coderabbit.ai/configuration/auto-review) and [review commands](https://docs.coderabbit.ai/reference/review-commands) for details.
 
 Reviews use the balanced `chill` profile and the repository's agent, architecture, and workflow guidance. Summaries appear in the walkthrough comment, skipped-review messages and decorative output are disabled, and the docstring coverage quota is off. The generated build version is excluded; generated Sanity types and schema remain available for consistency checks, with fixes directed to their sources.
 
-To verify the setup on a PR, check that opening it and pushing changes produces no automatic review, request a review with one of the commands above, then check that another push requires a new request. An unmentioned reply should not trigger a chat response. Use `@coderabbitai configuration` to confirm these settings are effective; organization or workspace [global overrides](https://docs.coderabbit.ai/configuration/configuration-inheritance) can take precedence over the repository file even with inheritance disabled.
+To verify the setup on an eligible PR, check that opening it triggers an automatic review and pushing another commit triggers an incremental review. Confirm that the manual commands above still work. An unmentioned reply should not trigger a chat response. Use `@coderabbitai configuration` to confirm these settings are effective; organization or workspace [global overrides](https://docs.coderabbit.ai/configuration/configuration-inheritance) can take precedence over the repository file even with inheritance disabled.
 
 ### Kodiak and automerge
 
@@ -282,9 +283,10 @@ Add or remove these labels from the PR's **Labels** sidebar:
 |---|---|
 | `automerge` | Authorizes Kodiak to merge the PR when branch protection requirements are satisfied |
 | `skip-ci` | Skips every check after `gate` (setup, lint, tests, typecheck, Lighthouse, and build) |
+| `skip-review` | Skips automatic CodeRabbit reviews; CI is unaffected |
 | `skip-lighthouse` | Skips only the Lighthouse job; quality jobs and build still run |
 
-Use `skip-ci` for changes that do not need code validation, such as documentation-only updates. Use `skip-lighthouse` when performance audits are unnecessary for the change but lint, tests, type checks, and builds should still run. If both skip labels are present, `skip-ci` takes precedence.
+PRs that change only `.md` files and do not affect live production behavior must have `skip-ci` and `skip-review` (once available). Check the full PR diff and whether Markdown is consumed by the production site or build; reassess after updates and remove both labels if non-Markdown files or production-affecting changes are added. Add both labels at PR creation so validation jobs and automatic reviews can skip from the start. Use `skip-lighthouse` when performance audits are unnecessary for the change but lint, tests, type checks, and builds should still run. If both CI skip labels are present, `skip-ci` takes precedence. `skip-review` controls automatic reviews independently of CI.
 
 Adding or removing any label starts a new PR Checks run using the current labels. Changes to `skip-ci` or `skip-lighthouse` cancel the running workflow; other label changes, including `automerge`, queue a new run without cancelling the running workflow. Removing both skip labels restores all checks on the next run. The label gate always runs so unrelated label changes cannot replace failed or pending required checks with skipped results.
 
@@ -295,6 +297,12 @@ The skip labels control CI independently of `automerge`: they do not authorize a
 Do not use `[skip ci]` in commit messages: GitHub skips the whole workflow and required checks stay pending.
 
 The workflow runs when a pull request is opened, updated with new commits, reopened, marked ready for review, labeled, or unlabeled, regardless of which files changed.
+
+### Issue and PR templates
+
+Choose a bug report, feature/change, or investigation/maintenance template from the [new issue page](https://github.com/dangzo/dangz-dev/issues/new/choose); blank issues remain available. Keep small tasks concise and remove irrelevant optional sections. The default PR template prompts for the problem and result, issue references, focused validation, and relevant risks.
+
+See [GitHub template guidance](docs/GITHUB_TEMPLATES.md) for the investigation findings, browser/CLI usage, and examples. Select checks from [WORKFLOW.md](docs/WORKFLOW.md#validate-the-affected-behavior) and follow [AGENTS.md](AGENTS.md) for completed-issue references and the pre-merge default-branch check.
 
 ---
 

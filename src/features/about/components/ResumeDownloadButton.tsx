@@ -1,3 +1,4 @@
+import { contactAnalytics } from '@/utils/contactAnalytics';
 import { Button } from '@/components/ui';
 import { links } from '@/data/siteMetadata';
 
@@ -8,7 +9,7 @@ async function ResumeDownloadButton() {
       download
       type="ghost"
       size="small"
-      data-umami-event="Download Resume Click"
+      {...contactAnalytics({ name: 'resume_download_clicked', placement: 'about_journey' })}
     >
       Download my resume
     </Button>

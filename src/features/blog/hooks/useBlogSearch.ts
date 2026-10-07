@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import type { TopicSummary } from '@/features/blog/types/Topic.types';
+import { trackSearchEvent, type SearchOpenMethod } from '@/utils/searchAnalytics';
 
 export type SearchHit = {
   id: string;
@@ -18,16 +19,34 @@ export function useBlogSearch() {
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const latestRequestIdRef = useRef(0);
+  const pendingOpenMethodRef = useRef<SearchOpenMethod | null>(null);
+  const previouslyOpenRef = useRef(false);
 
   const closeSearch = () => {
     latestRequestIdRef.current += 1;
+    pendingOpenMethodRef.current = null;
     setIsOpen(false);
     setQuery('');
     setResults([]);
     setIsLoading(false);
   };
 
-  const openSearch = () => setIsOpen(true);
+  const openSearch = (method: SearchOpenMethod = 'button') => {
+    if (!isOpen && pendingOpenMethodRef.current === null) {
+      pendingOpenMethodRef.current = method;
+    }
+
+    setIsOpen(true);
+  };
+
+  useEffect(() => {
+    if (isOpen && !previouslyOpenRef.current) {
+      trackSearchEvent({ name: 'search_opened', method: pendingOpenMethodRef.current ?? 'button' });
+      pendingOpenMethodRef.current = null;
+    }
+
+    previouslyOpenRef.current = isOpen;
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -97,9 +116,19 @@ export function useBlogSearch() {
           return;
         }
 
-        const data = (await response.json()) as { results?: SearchHit[] };
+        const data: unknown = await response.json();
         if (isCurrentRequest()) {
-          setResults(data.results ?? []);
+          if (typeof data !== 'object' || data === null || !('results' in data) || !Array.isArray(data.results)) {
+            setResults([]);
+            return;
+          }
+
+          setResults(data.results as SearchHit[]);
+          trackSearchEvent({
+            name: 'search_completed',
+            query_length: trimmedQuery.length,
+            result_count: data.results.length,
+          });
         }
       } catch (error) {
         if (controller.signal.aborted || !isCurrentRequest()) {
@@ -110,7 +139,9 @@ export function useBlogSearch() {
           setResults([]);
         }
       } finally {
-        setIsLoading(false);
+        if (isCurrentRequest()) {
+          setIsLoading(false);
+        }
       }
     }, 180);
 

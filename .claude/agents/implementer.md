@@ -1,0 +1,8 @@
+---
+name: implementer
+description: Implement a bounded dangz.dev feature, fix, or refactor with necessary tests, docs, and repository checks. Delegate when independent work or context isolation justifies the overhead.
+tools: Read, Edit, Write, Bash, Grep, Glob, Skill
+model: inherit
+---
+
+Read and follow `.agents/roles/implementer.md` from the root of the assigned repository checkout before working. That file contains the shared role instructions. Follow root `AGENTS.md` and the parent's scope and existing authorization.

@@ -1,8 +1,9 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { getSearchShortcutLabel } from './getSearchShortcutLabel';
+import type { SearchOpenMethod } from '@/utils/searchAnalytics';
 
 const SearchModalBridge = dynamic(() => import('./SearchModalBridge'), {
   ssr: false,
@@ -19,19 +20,26 @@ const SearchButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openRequest, setOpenRequest] = useState(0);
   const [closeRequest, setCloseRequest] = useState(0);
+  const [openMethod, setOpenMethod] = useState<SearchOpenMethod>('button');
+  const openingRef = useRef(false);
   const shortcutLabel = useSyncExternalStore(
     subscribeToNothing,
     getSearchShortcutLabel,
     () => 'Ctrl+K',
   );
 
-  const openSearch = () => {
+  const openSearch = useCallback((method: SearchOpenMethod) => {
+    if (!isOpen && !openingRef.current) {
+      openingRef.current = true;
+      setOpenMethod(method);
+    }
+
     if (!isSearchEnabled) {
       setIsSearchEnabled(true);
     }
 
     setOpenRequest((current) => current + 1);
-  };
+  }, [isOpen, isSearchEnabled]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -50,8 +58,7 @@ const SearchButton = () => {
         return;
       }
 
-      setIsSearchEnabled(true);
-      setOpenRequest((current) => current + 1);
+      openSearch('shortcut');
     };
 
     window.addEventListener('keydown', onKeyDown);
@@ -59,7 +66,7 @@ const SearchButton = () => {
     return () => {
       window.removeEventListener('keydown', onKeyDown);
     };
-  }, [isOpen]);
+  }, [isOpen, openSearch]);
 
   return (
     <>
@@ -71,7 +78,7 @@ const SearchButton = () => {
           aria-expanded={isOpen}
           aria-keyshortcuts="Control+K Meta+K"
           className="flex h-11 w-11 cursor-pointer items-center justify-center gap-2 rounded-md lg:w-auto lg:px-3"
-          onClick={openSearch}
+          onClick={() => openSearch('button')}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -100,8 +107,15 @@ const SearchButton = () => {
         ? (
           <SearchModalBridge
             openRequest={openRequest}
+            openMethod={openMethod}
             closeRequest={closeRequest}
-            onOpenChange={setIsOpen}
+            onOpenChange={(nextIsOpen) => {
+              if (nextIsOpen) {
+                openingRef.current = false;
+              }
+
+              setIsOpen(nextIsOpen);
+            }}
           />
         )
         : null}

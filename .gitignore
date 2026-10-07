@@ -34,6 +34,7 @@
 *.log
 
 # misc
+/git-worktrees/
 .DS_Store
 *.pem
 
@@ -78,5 +79,15 @@ next-env.d.ts
 /studio/*.log
 /studio/*.tsbuildinfo
 
-.claude
+# Shared Claude skills and agents are version controlled; personal settings are not.
+.claude/*
+!.claude/agents/
+!.claude/skills/
+.claude/agents/*
+!.claude/agents/*.md
+.claude/skills/*
+!.claude/skills/spec-first
+!.claude/skills/pr-create
+!.claude/skills/pr-review
+!.claude/skills/ui-review
 .cursor
