@@ -3,7 +3,7 @@ language: en-US
 inheritance: false
 
 reviews:
-  profile: chill
+  profile: assertive
   request_changes_workflow: false
   high_level_summary_in_walkthrough: true
   review_status: false
@@ -15,6 +15,7 @@ reviews:
     description_keyword: ''
     labels:
       - '!skip-review'
+      - '!dependencies'
   path_filters:
     - '!src/data/buildVersion.ts'
   path_instructions:

@@ -1,3 +1,4 @@
+import type { PostOpenSource } from '@/utils/postDiscoveryAnalytics';
 import { PostCard, PostCardSkeleton } from './PostCard';
 import { Pagination } from '@/components/ui';
 import type { PostWithTopic } from '@/features/blog/types/Post.types';
@@ -11,12 +12,13 @@ interface PostListPagination {
 
 interface PostListProps {
   posts: readonly PostWithTopic[];
+  source: Exclude<PostOpenSource, 'home'>;
   pagination?: PostListPagination;
 }
 
 const postListSkeletonKeys = ['one', 'two', 'three'] as const;
 
-export const PostList = ({ posts, pagination }: Readonly<PostListProps>) => {
+export const PostList = ({ posts, pagination, source }: Readonly<PostListProps>) => {
   return (
     <>
       <ul className="divide-y divide-border-light dark:divide-border-dark">
@@ -25,7 +27,7 @@ export const PostList = ({ posts, pagination }: Readonly<PostListProps>) => {
             key={post._id}
             className="py-6 md:py-8"
           >
-            <PostCard post={post} summary={getEditorialSummary(post)} preload={index < 2} />
+            <PostCard source={source} post={post} summary={getEditorialSummary(post)} preload={index < 2} />
           </li>
         ))}
       </ul>

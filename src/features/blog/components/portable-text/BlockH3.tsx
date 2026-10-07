@@ -7,6 +7,7 @@ import HeadingAnchor from './HeadingAnchor';
 
 interface BlockH3Props {
   children: ReactNode;
+  postId: string;
   getHeadingId: (value: string) => string;
   value?: {
     _key?: string;
@@ -15,7 +16,7 @@ interface BlockH3Props {
   blocks: PortableTextBlock[];
 }
 
-function BlockH3({ children, getHeadingId, value: block, blocks }: Readonly<BlockH3Props>) {
+function BlockH3({ children, postId, getHeadingId, value: block, blocks }: Readonly<BlockH3Props>) {
   const id = getHeadingId(getNodeText(children));
   const blockIndex = block?._key ? blocks.findIndex((item) => item._key === block._key) : -1;
   const previousBlock = blockIndex > 0 ? blocks[blockIndex - 1] : undefined;
@@ -31,7 +32,7 @@ function BlockH3({ children, getHeadingId, value: block, blocks }: Readonly<Bloc
       })}
     >
       {children}
-      <HeadingAnchor id={id} />
+      <HeadingAnchor id={id} postId={postId} />
     </Heading>
   );
 }

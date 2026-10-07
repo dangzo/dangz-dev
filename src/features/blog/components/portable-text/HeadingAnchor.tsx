@@ -1,12 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { captureAnalyticsContext } from '@/utils/analyticsTransport';
+import { trackHeadingLinkCopied } from '@/features/blog/utils/articleAnalytics';
 
 interface HeadingAnchorProps {
   id: string;
+  postId: string;
 }
 
-function HeadingAnchor({ id }: Readonly<HeadingAnchorProps>) {
+function HeadingAnchor({ id, postId }: Readonly<HeadingAnchorProps>) {
   const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
@@ -26,13 +29,17 @@ function HeadingAnchor({ id }: Readonly<HeadingAnchorProps>) {
   const handleCopy = async () => {
     const url = new URL(window.location.href);
     url.hash = id;
+    const context = captureAnalyticsContext();
 
     try {
       await navigator.clipboard.writeText(url.toString());
-      setIsCopied(true);
     } catch {
       setIsCopied(false);
+      return;
     }
+
+    setIsCopied(true);
+    trackHeadingLinkCopied({ post_id: postId, section_id: id }, context);
   };
 
   const label = isCopied ? 'Link copied' : 'Copy link to this section';

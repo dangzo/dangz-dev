@@ -21,6 +21,10 @@ Resolve `@/` imports from `src/`. Check package manifests for current dependency
 | Static assets and About tool SVGs | `public/`, `public/icons/` |
 | CMS schemas and Studio configuration | `studio/schemaTypes/`, `studio/sanity.config.ts` |
 
+Roboto Slab is bundled with its license in `src/styles/fonts/roboto-slab/` and
+loaded through `next/font/local` to avoid a Google font-loader build failure.
+The other font families use `next/font/google`.
+
 ## Follow rendering and data flow
 
 - Keep route files focused on composition; place feature behavior under `src/features/` and shared behavior in the shared directories above.
@@ -30,10 +34,12 @@ Resolve `@/` imports from `src/`. Check package manifests for current dependency
 - Topic archives filter the fetched post corpus in JavaScript through shared topic resolution during the legacy/primary model transition. Sanity's generated GraphQL filter cannot filter the legacy `tags` reference array. The legacy tag route remains for permanent redirects; search keywords can include old tag labels without exposing them as topic chips. Reuse `src/features/blog/utils/pagination.ts` for page parsing and sizing.
 - Review `src/app/api/search/route.ts` and `src/app/api/revalidate/route.ts` together when changing content freshness: search caches its published corpus, and the signed Sanity webhook invalidates shared content and search data and revalidates blog routes.
 - Keep reaction mutations behind `src/app/api/reactions/route.ts`; its query helpers use a server write token. `useReactions(postId, placement)` shares optimistic counts, reconciles overlapping submissions, and reports each initiating request's lifecycle. See [REACTION_ANALYTICS.md](REACTION_ANALYTICS.md) for count and delivery contracts.
-- Search and reaction events use typed feature helpers with a shared bounded in-memory transport in `src/utils/analyticsTransport.ts`, flushed by the Umami script readiness integration. See [SEARCH_ANALYTICS.md](SEARCH_ANALYTICS.md) for event contracts, privacy, and production verification.
+- Article discovery uses typed server-safe anchor marks and the root `PostDiscoveryAnalytics` capture listener, preserving Next navigation. See [POST_DISCOVERY_ANALYTICS.md](POST_DISCOVERY_ANALYTICS.md) for sources, placements, and dashboard verification.
+- Search, discovery, heading-copy, and reaction events use typed feature helpers with a shared bounded in-memory transport in `src/utils/analyticsTransport.ts`, flushed by the Umami script readiness integration. See [SEARCH_ANALYTICS.md](SEARCH_ANALYTICS.md) for event contracts, privacy, and production verification.
 - The production Umami script announces readiness through `UmamiScript`; `useBottomReactionsExposure` retains bottom-section exposure only for the mounted post visit. See [UMAMI_EXPOSURE.md](UMAMI_EXPOSURE.md) for the event rename and separate browser/dashboard validation.
 - Pageviews use the root `UmamiPageviews` route observer and `pageviewAnalytics` buffer; automatic Umami pageviews are disabled while click tracking stays initialized. Each committed pathname/query change counts once, fragments are ignored, and visits before readiness retain captured URLs/referrers. See [UMAMI_PAGEVIEWS.md](UMAMI_PAGEVIEWS.md) for queue limits, counting policy, and separate collector/dashboard verification.
 - Contact/profile/résumé links use the server-safe `contactAnalytics` attribute helper. Keep event properties on the anchor, including footer icons. See [CONTACT_ANALYTICS.md](CONTACT_ANALYTICS.md) for placements, historical labels, and validation.
+- Successful article heading copies use a typed blog helper and the shared event buffer; external reference anchors use delegated Umami attributes with the article post ID. See [ARTICLE_ANALYTICS.md](ARTICLE_ANALYTICS.md) for event contracts and production verification.
 - Extend article rendering in `src/features/blog/components/portable-text/`. Keep heading IDs aligned with table-of-contents extraction in `src/features/blog/utils/posts.ts`; keep Shiki highlighting on the server.
 - Use generated Sanity types through feature adapters such as `PostWithTopic`, which adapt document references to populated query results and the primary-topic model.
 - Home previews use `WritingPreview` independently of blog listing cards. `BlogFrame` positions the `@sidebar` slot as topic navigation above listings and as a ToC beside articles. The shared server-only editorial preview helper overrides known excerpts only in development with `LOCAL_EDITORIAL_PREVIEW=true`; CMS data and public production excerpts remain authoritative.

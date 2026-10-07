@@ -26,7 +26,7 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
-      testIgnore: ['**/visual.spec.ts', '**/umami-pageviews.spec.ts'],
+      testIgnore: ['**/visual.spec.ts', '**/umami-pageviews.spec.ts', '**/post-discovery.spec.ts'],
     },
     {
       name: 'visual-desktop',
