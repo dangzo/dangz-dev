@@ -22,7 +22,7 @@ const post: PostWithTopic = {
 
 describe('PostCard', () => {
   it('uses one canonical topic label and preserves the summary and reaction link', () => {
-    render(<PostCard post={post} preload={false} />);
+    render(<PostCard source="blog" post={post} preload={false} />);
 
     expect(screen.getByRole('link', { name: TOPICS[0].displayName })).toHaveAttribute('href', `/blog/topics/${TOPICS[0].slug.current}`);
     expect(screen.getByText(post.excerpt ?? '')).toBeVisible();
@@ -31,10 +31,22 @@ describe('PostCard', () => {
   });
 
   it('keeps a text-only preview usable when image, topic, summary, and reactions are absent', () => {
-    render(<PostCard post={{ ...post, primaryTopic: null, excerpt: undefined, reactions: [] }} preload={false} />);
+    render(<PostCard source="blog" post={{ ...post, primaryTopic: null, excerpt: undefined, reactions: [] }} preload={false} />);
 
     expect(screen.queryByRole('img')).not.toBeInTheDocument();
     expect(screen.queryByText(/no description/i)).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Read more' })).toHaveAttribute('href', '/blog/sample');
   });
+});
+
+it.each(['blog', 'topic'] as const)('marks only article entry points with source %s', (source) => {
+  const { container } = render(<PostCard source={source} post={post} preload={false} />);
+  const links = container.querySelectorAll('a[data-post-opened-post-id]');
+  expect(Array.from(links).map((link) => ({
+    id: link.getAttribute('data-post-opened-post-id'),
+    source: link.getAttribute('data-post-opened-source'),
+    placement: link.getAttribute('data-post-opened-placement'),
+  }))).toEqual(['title', 'cta', 'reaction_summary'].map((placement) => ({ id: post._id, source, placement })));
+  expect(screen.getByRole('link', { name: TOPICS[0].displayName })).not.toHaveAttribute('data-post-opened-post-id');
+  expect(container.querySelector('a[data-umami-event]')).toBeNull();
 });

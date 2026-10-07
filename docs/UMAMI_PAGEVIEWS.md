@@ -51,9 +51,11 @@ The dedicated Playwright configuration starts an isolated fixture server on port
 3101. Both `E2E_FIXTURES=true` and `E2E_UMAMI_PAGEVIEWS=true` are required to mount
 analytics in development; this mode uses a fictitious website ID. Ordinary E2E
 suites omit this mode and keep their existing simulated/injected trackers.
-The pageview suite is excluded from the ordinary Playwright configuration.
+The pageview and article-discovery suites are excluded from the ordinary Playwright configuration.
 Run these suites sequentially in one checkout: both fixture servers share
 `.next-e2e` output, so different ports do not prevent cache or lock collisions.
+
+The same dedicated configuration also runs [article discovery integration tests](POST_DISCOVERY_ANALYTICS.md), checking source/placement events and preserved client navigation.
 
 Browser tests serve the unmodified [pinned real tracker](../src/test-support/e2e/umami/README.md)
 and intercept every collector request, fulfilling it with `{}`. Reaction POSTs

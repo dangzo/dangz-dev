@@ -26,7 +26,7 @@ async function BlogPage() {
   const totalPages = getTotalPages(totalPostCount);
 
   return (
-    <PostList posts={posts} pagination={{ currentPage: 1, totalPages, basePath: '/blog' }} />
+    <PostList source="blog" posts={posts} pagination={{ currentPage: 1, totalPages, basePath: '/blog' }} />
   );
 }
 

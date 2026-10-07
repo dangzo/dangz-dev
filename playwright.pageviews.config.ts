@@ -4,7 +4,7 @@ import base from './playwright.config';
 export default defineConfig({
   ...base,
   globalSetup: undefined,
-  testMatch: '**/umami-pageviews.spec.ts',
+  testMatch: ['**/umami-pageviews.spec.ts', '**/post-discovery.spec.ts'],
   testIgnore: [],
   workers: 1,
   use: {

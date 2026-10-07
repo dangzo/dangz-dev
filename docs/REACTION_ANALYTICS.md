@@ -22,7 +22,7 @@ A failed or lost response can follow a persisted increment. The failure event re
 
 ## Delivery and privacy
 
-Search and reaction events share the existing in-memory transport: at most 50 events for 60 seconds across both features, dropping the oldest on overflow. Readiness flushes the queue; repeated readiness does not resend events. Each event preserves its individual occurrence time and originating context across client navigation. Full document unload loses pending events.
+Search, article discovery, and reaction events share the existing in-memory transport: at most 50 events for 60 seconds across these features, dropping the oldest on overflow. Readiness flushes the queue; repeated readiness does not resend events. Each event preserves its individual occurrence time and originating context across client navigation. Full document unload loses pending events.
 
 Payload construction retains only website, hostname, language, screen, sanitized source pathname/referrer, occurrence time, event name, and allowlisted event data. Query strings, fragments, tracker identifiers, arbitrary metadata, and raw errors are excluded.
 
