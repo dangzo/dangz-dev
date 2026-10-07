@@ -1,4 +1,5 @@
-import { Geist, Geist_Mono, Roboto, Roboto_Slab } from 'next/font/google';
+import { Geist, Geist_Mono, Roboto } from 'next/font/google';
+import localFont from 'next/font/local';
 
 export const geist = Geist({
   subsets: ['latin'],
@@ -22,9 +23,20 @@ export const roboto = Roboto({
   display: 'swap',
 });
 
-export const robotoSlab = Roboto_Slab({
-  subsets: ['latin'],
-  weight: ['600', '700'],
+export const robotoSlab = localFont({
+  src: [
+    {
+      path: './fonts/roboto-slab/RobotoSlab.woff2',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: './fonts/roboto-slab/RobotoSlab.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
   variable: '--font-roboto-slab',
   display: 'swap',
+  adjustFontFallback: 'Times New Roman',
 });
