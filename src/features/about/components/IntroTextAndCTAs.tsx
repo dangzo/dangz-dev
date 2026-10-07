@@ -16,7 +16,7 @@ function IntroTextAndCTAs() {
       </Heading>
 
       <Text size="large">
-        Over the last { devYears } years, I&apos;ve &#32; worked across freelance, full-stack, and senior frontend roles, working with teams to architect, build, and plan features, bringing projects from idea to concept.
+        Over the last { devYears } years, I&apos;ve &#32; worked across freelance, full-stack, and senior frontend roles, working with teams to architect, build, and plan features, bringing projects from idea to implementation.
       </Text>
 
       <Text size="large">
