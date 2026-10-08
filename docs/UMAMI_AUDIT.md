@@ -2,7 +2,7 @@
 
 The original audit identified reaction click overcounting, lost bottom exposure before tracker readiness, pageview attribution defects, and valuable search/contact/discovery/article measurement gaps. Follow-ups #184–#190 are now closed and their instrumentation is present. The refreshed inventory and production diagnostics below describe the current deployment separately from the historical findings.
 
-**Current status: browser diagnostics and normal live collector responses passed on 2026-10-08; owner-dashboard verification remains pending.** The audit remains open until both reaction placements and their properties are reconciled with stored events. A new, confirmed search middle-click gap is tracked in [#217](https://github.com/dangzo/dangz-dev/issues/217).
+**Current status: all six #168 acceptance criteria are satisfied.** Browser diagnostics, normal live collector responses, and owner-confirmed stored counts/property breakdowns passed on 2026-10-08. PR #191 targets the default branch `dev` with `Closes #168`; the issue remains open until that PR is merged. A new, confirmed search middle-click gap is tracked in [#217](https://github.com/dangzo/dangz-dev/issues/217).
 
 Every reaction POST is intercepted throughout this audit. Successful API responses are simulated; production persistence is untested. A failure response is not proof that a real mutation would leave the database unchanged. Neither HTTP 200 nor a resolved tracker promise proves ingestion.
 
@@ -205,10 +205,10 @@ Inventory reviewed against `dev` at `1853110` and the documented feature contrac
 | Event | Current trigger and properties | Reporting purpose | Evidence available at this audit |
 | --- | --- | --- | --- |
 | Pageview | Each committed pathname/query visit; fragments ignored; captured URL/referrer retained before readiness | Popularity and navigation through pages, topics, pagination | Real-tracker regressions in [pageview guide](UMAMI_PAGEVIEWS.md); October 7 owner-assisted verification recorded in the separate local #186 worktree, not yet published on `dev` |
-| `reaction_attempted` | One accepted POST dispatch; `post_id`, `reaction_id`, `placement=compact` or `bottom` | Accepted engagement attempts by content/control | Current production diagnostics and normal live collector responses verified; owner-dashboard check pending |
-| `reaction_submission_succeeded` | HTTP OK and a valid finite, nonnegative integer count; same properties | Observed successful API responses | Simulated successful responses and normal live collector responses verified; real persistence remains untested and dashboard storage pending |
-| `reaction_submission_failed` | HTTP/network/invalid-response failure; same properties, no error text | Observed failures and engagement friction | All three failure classes exercised at both placements in intercepted and live collector matrices; owner-dashboard check pending |
-| `post_bottom_reactions_reached` | First qualifying intersection per mounted post visit, retained until readiness; `post_id` | Exposure to bottom controls, not completed reading | Timing/navigation/blocking diagnostics passed; one live normal collector response verified; owner-dashboard check pending |
+| `reaction_attempted` | One accepted POST dispatch; `post_id`, `reaction_id`, `placement=compact` or `bottom` | Accepted engagement attempts by content/control | Production diagnostics, normal live collector responses and owner-confirmed stored counts/properties verified |
+| `reaction_submission_succeeded` | HTTP OK and a valid finite, nonnegative integer count; same properties | Observed successful API responses | Simulated successful responses, normal live collector responses and owner-confirmed stored counts/properties verified; real persistence remains untested |
+| `reaction_submission_failed` | HTTP/network/invalid-response failure; same properties, no error text | Observed failures and engagement friction | All three failure classes exercised at both placements; normal live collector responses and owner-confirmed stored counts/properties verified |
+| `post_bottom_reactions_reached` | First qualifying intersection per mounted post visit, retained until readiness; `post_id` | Exposure to bottom controls, not completed reading | Timing/navigation/blocking diagnostics passed; one normal live collector response and owner-confirmed stored count/post ID verified |
 | `search_opened` | Confirmed closed-to-open transition; `method=button` or `shortcut` | Search adoption | Production button-opening request observed with collector intercepted; broader fixture coverage in [search guide](SEARCH_ANALYTICS.md); stored-event verification remains separate |
 | `search_completed` | Successful current debounced response, including zero results; `query_length`, `result_count` | Search usefulness and zero-result rate | Current nonempty response request observed with collector intercepted; stale/aborted/failed/empty cases have documented fixture coverage; stored-event verification remains separate |
 | `search_result_selected` | Primary/modified link activation or router-driven keyboard selection; `post_id`, one-based `result_position` | Article discovery through search | Documented fixture coverage; production middle-click opens a tab but emits no selection event, tracked in #217 |
@@ -261,17 +261,21 @@ Exactly **33 intended custom events** were forwarded once to the real collector.
 
 All reaction events carry post ID `ccc19dd2-2579-4cc7-8cd0-a14c4ececdc4`, reaction ID `783c1d5e-c4ea-4702-ae4f-3cd4b25a80b2`, and their initiating placement. Exposure carries only the same `post_id` as custom data. Ignored same-control pending activations emitted nothing; cross-placement requests emitted independent attempt/outcome pairs. Re-entering the bottom section did not add exposure. The sanitized evidence is `.tmp/168-verification/live-report.json`.
 
-**Owner-dashboard evidence: pending.** The owner has been supplied the exact window, expected counts and property values. They must independently confirm stored counts and post/reaction/placement breakdowns, identifying any unrelated traffic or ingestion lag. Normal collector responses support acceptance but do not substitute for that stored-event check. No dashboard credentials or Share URL are needed for the selected owner-assisted method.
+### Owner-dashboard evidence — confirmed
+
+After receiving the exact hostname/window, event totals, per-placement breakdowns and post/reaction IDs, the owner answered **“Yes”** to whether the stored counts matched and both placements/expected properties were visible. This confirmation was recorded at **2026-10-08 15:07:12 UTC** (**16:07:12 Atlantic/Canary**); the dashboard's exact observation timestamp was not independently captured.
+
+The owner-assisted confirmation covers 16 attempts, 10 successes, six failures and one exposure in the **15:04:00–15:06:00 UTC** window; compact and bottom each show eight attempts/five successes/three failures, with the expected post ID and reaction ID. Bottom exposure shows the same post ID. No mismatch or unavailable property view was reported. The exact ingestion delay was not measured. This is owner-reported dashboard evidence, separate from the browser's independently recorded collector responses; no screenshot, direct dashboard query or dashboard credentials are claimed. Together these evidence types complete the audit's remaining reaction-delivery criterion.
 
 ## Current #168 acceptance
 
 | Criterion | Current status |
 | --- | --- |
-| Both reaction controls reach Umami; failures documented | Intercepted production diagnostics and all 33 normal live collector responses passed; owner-dashboard evidence pending |
+| Both reaction controls reach Umami; failures documented | Complete: production diagnostics, 33 normal live collector responses, and owner-confirmed stored counts/properties for both placements |
 | Click tracking versus successful persistence distinguished | Complete: attempts/outcomes defined; simulated API successes are not persisted reactions |
 | Timing, client navigation, duplicates, unavailable tracker assessed | Complete for the documented Chromium scope; historical pageview defects have follow-ups and current regression contracts |
 | Inventory identifies coverage, gaps and limited-value events | Complete: historical and current inventories, evidence limits, adequate pageviews and confirmed #217 gap |
 | Prioritized recommendations give question, trigger, properties and validation | Complete: original recommendations retained, implementation status and bounded new gap documented |
 | Follow-up issues capture fixes/additions | Complete: #184–#190 and #217 |
 
-Use `Refs #168` until the pending live/dashboard row is verified. Only then change the PR to `Closes #168` against the current default branch `dev`. The audit does not need to implement #217 or complete every feature's separate rollout checks to deliver its investigation and recommendations.
+All six criteria are now satisfied. PR #191 uses `Closes #168` against the verified default branch `dev`; merging is separately authorized and has not occurred. The audit does not need to implement #217 or complete every feature's separate rollout checks to deliver its investigation and recommendations. #217 remains open as the confirmed additional gap. Real production reaction persistence remains untested, explicitly distinguished from the simulated successful API responses.
