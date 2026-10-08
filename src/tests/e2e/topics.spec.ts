@@ -67,13 +67,13 @@ test('client navigation restores topic heading and sidebar after an article visi
   await page.locator('section article a:has(h3)').first().click();
 
   await expect(page.getByRole('heading', { level: 1, name: 'Building stable visual regression tests' })).toBeVisible();
-  await expect(page.locator('aside').getByRole('heading', { name: 'Table of contents' })).toBeVisible();
+  await expect(page.locator('aside').getByRole('heading', { name: 'Contents', exact: true })).toBeVisible();
   await page.locator('article').first().getByRole('link', { name: 'Architecture' }).click();
 
   await expect(page).toHaveURL(/\/blog\/topics\/architecture$/);
   await expect(page.getByRole('heading', { level: 1, name: 'Architecture' })).toBeVisible();
   await expect(page.getByRole('navigation', { name: 'Topics', exact: true })).toBeVisible();
-  await expect(page.locator('aside').getByRole('heading', { name: 'Table of contents' })).toHaveCount(0);
+  await expect(page.locator('aside').getByRole('heading', { name: 'Contents', exact: true })).toHaveCount(0);
 });
 
 test('legacy archives redirect permanently in one hop using published destinations', async ({ request }) => {

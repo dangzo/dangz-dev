@@ -4,6 +4,10 @@ import { PortableText } from '@/features/blog/components';
 import ReactionsClient from '@/features/blog/components/reactions/ReactionsClient';
 import { getPostBySlug, getPostSlugs } from '@/features/blog/api/queries/singlePost';
 import getPostMetadata from '@/features/blog/api/getPostMetadata';
+import { extractTocFromBody } from '@/features/blog/hooks/usePostInsights';
+import ArticleImageViewer from '@/features/blog/components/images/ArticleImageViewer';
+import ArticleImageTrigger from '@/features/blog/components/images/ArticleImageTrigger';
+import { getArticleImage } from '@/features/blog/utils/articleImage';
 
 interface PostPageProps {
   params: Promise<{ slug: string }>;
@@ -32,37 +36,43 @@ export default async function PostPage({ params, }: Readonly<PostPageProps>) {
   }
 
   const lqip = post.image?.asset?.metadata?.lqip;
+  const hasToc = extractTocFromBody(post.body).length > 0;
+  const imageSizes = `${hasToc ? '(min-width: 1280px) 608px, ' : ''}(min-width: 818px) 770px, (min-width: 640px) calc(100vw - 3rem), calc(100vw - 2rem)`;
 
   return (
-    <article className="mx-auto min-w-0 max-w-[70ch]">
-      {post.image
-        ? (
-          <div className="mb-5 sm:mb-6 md:mb-8 rounded-lg overflow-hidden">
-            <Img
-              source={post.image}
-              alt={post.imageAltText}
-              className="w-full h-auto object-cover"
-              width={930}
-              height={665}
-              sizes="(min-width: 1024px) 700px, (min-width: 768px) calc(100vw - 20rem), calc(100vw - 2rem)"
-              fetchPriority="high"
-              blurDataURL={lqip}
-              preload
-            />
-          </div>
-        )
-        : null}
+    <ArticleImageViewer key={post._id}>
+      <article className="mx-auto min-w-0 max-w-[70ch]">
+        {post.image
+          ? (
+            <div className="mb-5 sm:mb-6 md:mb-8 rounded-lg overflow-hidden">
+              <ArticleImageTrigger image={getArticleImage(post.image, post.imageAltText || '(Image)')}>
+                <Img
+                  source={post.image}
+                  alt={post.imageAltText}
+                  className="w-full h-auto object-cover"
+                  width={930}
+                  height={665}
+                  sizes={imageSizes}
+                  fetchPriority="high"
+                  blurDataURL={lqip}
+                  preload
+                />
+              </ArticleImageTrigger>
+            </div>
+          )
+          : null}
 
-      {/* Body Content */}
-      {post.body && post.body.length > 0
-        ? (
-          <>
-            <PortableText value={post.body} postId={post._id} />
-            <ReactionsClient postId={post._id} />
-          </>
-        )
-        : <Text>No content available for this post.</Text>
-      }
-    </article>
+        {/* Body Content */}
+        {post.body && post.body.length > 0
+          ? (
+            <>
+              <PortableText value={post.body} postId={post._id} />
+              <ReactionsClient postId={post._id} />
+            </>
+          )
+          : <Text>No content available for this post.</Text>
+        }
+      </article>
+    </ArticleImageViewer>
   );
 }

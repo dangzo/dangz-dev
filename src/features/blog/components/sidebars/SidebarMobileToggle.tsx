@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import clsx from 'clsx';
 import { SidebarMobileContext } from './SidebarMobileContext';
 
@@ -11,6 +11,8 @@ interface SidebarMobileToggleProps {
   hideLabel?: string;
   contentId?: string;
   defaultOpen?: boolean;
+  desktopBreakpoint?: 'md' | 'xl';
+  closeOnEscape?: boolean;
 }
 
 function ChevronIcon({ isOpen }: Readonly<{ isOpen: boolean }>) {
@@ -39,8 +41,11 @@ export default function SidebarMobileToggle({
   hideLabel = 'Hide content',
   contentId = 'mobile-toggle-content',
   defaultOpen = false,
+  desktopBreakpoint = 'md',
+  closeOnEscape = false,
 }: Readonly<SidebarMobileToggleProps>) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+  const toggleRef = useRef<HTMLButtonElement>(null);
 
   const close = () => {
     setIsOpen(false);
@@ -52,19 +57,36 @@ export default function SidebarMobileToggle({
 
   return (
     <SidebarMobileContext.Provider value={{ close, isOpen }}>
-      <div>
+      <div
+        onKeyDown={(event) => {
+          const desktopWidth = desktopBreakpoint === 'xl' ? 1280 : 768;
+
+          if (closeOnEscape && isOpen && event.key === 'Escape' && !window.matchMedia(`(min-width: ${desktopWidth}px)`).matches) {
+            event.preventDefault();
+            close();
+            toggleRef.current?.focus();
+          }
+        }}
+      >
         {header && (
-          <div className="mb-4 hidden border-b border-border-light pb-4 dark:border-border-dark md:block">
+          <div className={clsx('hidden border-b border-border-light dark:border-border-dark', {
+            'mb-4 pb-4 md:block': desktopBreakpoint === 'md',
+            'mb-3 pb-3 xl:block': desktopBreakpoint === 'xl',
+          })}>
             {header}
           </div>
         )}
 
         <button
           type="button"
+          ref={toggleRef}
           onClick={toggle}
           aria-expanded={isOpen}
           aria-controls={contentId}
-          className="mb-0 flex w-full items-center gap-3 rounded-lg px-1 py-2 text-left transition-colors active:bg-background-main-light/80 md:hidden dark:active:bg-background-main-dark/50"
+          className={clsx('mb-0 flex w-full items-center gap-3 rounded-lg px-1 py-2 text-left transition-colors active:bg-background-main-light/80 dark:active:bg-background-main-dark/50', {
+            'md:hidden': desktopBreakpoint === 'md',
+            'xl:hidden': desktopBreakpoint === 'xl',
+          })}
         >
           <span className="min-w-0 flex-1 text-sm font-semibold text-main-light dark:text-main-dark">
             {isOpen ? hideLabel : showLabel}
@@ -74,7 +96,9 @@ export default function SidebarMobileToggle({
 
         <div
           id={contentId}
-          className={clsx('md:block', {
+          className={clsx({
+            'md:block': desktopBreakpoint === 'md',
+            'xl:block': desktopBreakpoint === 'xl',
             'mt-4 block': isOpen,
             hidden: !isOpen,
           })}

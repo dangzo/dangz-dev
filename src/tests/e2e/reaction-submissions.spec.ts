@@ -40,6 +40,9 @@ test.beforeEach(async ({ page }) => {
     await route.fulfill({ json: { reactions: [{ _id: 'love', name: 'Love', emoji: '❤️', sortOrder: 0, count: 2 }] } });
   });
   await page.goto(article);
+  // The two reaction components load independently; first() must resolve to the header.
+  await expect(page.getByLabel('Reactions', { exact: true })).toHaveCount(2);
+  await expect(control(page, 'compact')).toBeVisible();
   await expect(control(page, 'bottom')).toBeVisible();
 });
 

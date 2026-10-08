@@ -45,7 +45,7 @@ Follow-up: [issue #181](https://github.com/dangzo/dangz-dev/issues/181) tracks a
 
 - Install with Node 24.15 and Yarn 1.22.22 using `yarn install --frozen-lockfile`.
 - Inspect resolved versions, including nested packages in both workspaces; every patched package must be outside all corresponding advisory ranges.
-- Run `yarn ci:lint`, `yarn ci:typecheck`, `yarn test:unit`, `yarn test:e2e`, and `yarn ci:build`. Review existing desktop/mobile visual coverage and smoke-test Studio/GraphiQL plus the overridden UUID/temp-file consumers.
+- Run `yarn ci:lint`, `yarn ci:typecheck`, `yarn test:unit`, `yarn test:e2e`, and `yarn ci:build`. Inspect affected desktop/mobile layouts in both themes and smoke-test Studio/GraphiQL plus the overridden UUID/temp-file consumers.
 - Run mobile and desktop Lighthouse checks with an installed Chrome executable. Report unavailable checks or failures separately from successful dependency-version verification.
 - For the #170 remediation described here, the PR targets `dev` and includes `Closes #170`. After that merge, refresh the alert inventory, confirm closure for the 30 addressed alerts, and retain the three exceptions with follow-up tracking. Future dependency work follows its own issue criteria and the current default-branch checks in [AGENTS.md](../AGENTS.md).
 

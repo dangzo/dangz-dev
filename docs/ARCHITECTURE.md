@@ -21,9 +21,11 @@ Resolve `@/` imports from `src/`. Check package manifests for current dependency
 | Static assets and About tool SVGs | `public/`, `public/icons/` |
 | CMS schemas and Studio configuration | `studio/schemaTypes/`, `studio/sanity.config.ts` |
 
-Roboto Slab is bundled with its license in `src/styles/fonts/roboto-slab/` and
-loaded through `next/font/local` to avoid a Google font-loader build failure.
-The other font families use `next/font/google`.
+Geist, Geist Mono, Roboto, and Roboto Slab are bundled with their licenses in
+`src/styles/fonts/` and loaded through `next/font/local` to avoid Google
+font-loader build failures and build-time font downloads. The bundled Latin
+subsets retain the site's font weights and Roboto's normal and italic styles;
+characters outside those subsets use the theme's fallback font stacks.
 
 ## Follow rendering and data flow
 
@@ -41,7 +43,8 @@ The other font families use `next/font/google`.
 - Contact/profile/résumé links use the server-safe `contactAnalytics` attribute helper. Keep event properties on the anchor, including footer icons. See [CONTACT_ANALYTICS.md](CONTACT_ANALYTICS.md) for placements, historical labels, and validation.
 - Successful article heading copies use a typed blog helper and the shared event buffer; external reference anchors use delegated Umami attributes with the article post ID. See [ARTICLE_ANALYTICS.md](ARTICLE_ANALYTICS.md) for event contracts and production verification.
 - Extend article rendering in `src/features/blog/components/portable-text/`. Keep heading IDs aligned with table-of-contents extraction in `src/features/blog/utils/posts.ts`; keep Shiki highlighting on the server.
+- Article cover and inline images use button triggers under one article-scoped `ArticleImageViewer` provider in `src/features/blog/components/images/`. The article and Portable Text remain server-rendered; the client viewer portals above the page, isolates focus and background interaction, and restores scroll and trigger focus after dismissal. Its responsive Next Image source uses the original Sanity asset without thumbnail resizing or crop/hotspot parameters; captions and alternative text come from the existing content.
 - Use generated Sanity types through feature adapters such as `PostWithTopic`, which adapt document references to populated query results and the primary-topic model.
-- Home previews use `WritingPreview` independently of blog listing cards. `BlogFrame` positions the `@sidebar` slot as topic navigation above listings and as a ToC beside articles. The shared server-only editorial preview helper overrides known excerpts only in development with `LOCAL_EDITORIAL_PREVIEW=true`; CMS data and public production excerpts remain authoritative.
+- Home previews use `WritingPreview` independently of blog listing cards. `BlogFrame` positions the `@sidebar` slot as topic navigation above listings. Article headers retain a 1152px limit with centered titles, metadata, and compact reactions; article bodies and bottom reactions share the footer's center axis. The article ToC is a disclosure above the reading column below 1280px and a sticky 240px left rail within a balanced 1152px three-column frame with 32px gaps at larger widths. Only its entry list scrolls, with overflow cues; headingless articles omit the ToC. The shared server-only editorial preview helper overrides known excerpts only in development with `LOCAL_EDITORIAL_PREVIEW=true`; CMS data and public production excerpts remain authoritative.
 
 For schema generation, fixtures, and validation commands, read [WORKFLOW.md](WORKFLOW.md).
