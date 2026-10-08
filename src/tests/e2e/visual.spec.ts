@@ -84,4 +84,34 @@ test.describe('Visual regression', () => {
       });
     });
   }
+
+  for (const theme of ['light', 'dark'] as const) {
+    test(`article image viewer ${theme} matches its visual baseline`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: theme, reducedMotion: 'reduce' });
+      await page.addInitScript(value => localStorage.setItem('theme', value), theme);
+      await page.route('**/_next/image?*', async route => {
+        const source = new URL(route.request().url()).searchParams.get('url') ?? '';
+        const portrait = source.includes('1200x2400');
+        const width = portrait ? 1200 : 2400;
+        const height = portrait ? 2400 : 1200;
+        await route.fulfill({
+          contentType: 'image/svg+xml',
+          body: `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><rect width="100%" height="100%" fill="#305e88"/><circle cx="${width / 2}" cy="${height / 2}" r="300" fill="#d8b4fe"/><rect x="20" y="20" width="${width - 40}" height="${height - 40}" fill="none" stroke="#fde68a" stroke-width="20"/></svg>`,
+        });
+      });
+      await page.goto('/blog/fixture-post-5');
+      await waitForStablePage(page);
+      const trigger = page.getByRole('button', { name: 'View image: Landscape image with cropped thumbnail', exact: true });
+      await trigger.evaluate(element => element.scrollIntoView({ block: 'center', behavior: 'instant' }));
+      await trigger.click();
+      const dialog = page.getByRole('dialog', { name: 'Image viewer' });
+      await expect(dialog).toHaveCSS('opacity', '1');
+      await waitForImage(dialog.getByRole('img'));
+      await expect(page).toHaveScreenshot(`article-image-viewer-${theme}.png`, {
+        animations: 'disabled',
+        maxDiffPixelRatio: 0.001,
+      });
+    });
+  }
+
 });

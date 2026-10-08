@@ -1,4 +1,6 @@
 import { Img, type ImgProps } from '@/components/ui';
+import ArticleImageTrigger from '../images/ArticleImageTrigger';
+import { getArticleImage } from '@/features/blog/utils/articleImage';
 
 const MAX_IMAGE_WIDTH = 930;
 const MAX_IMAGE_HEIGHT = 665;
@@ -30,14 +32,16 @@ export default function TypeImage({ value }: Readonly<TypeImageProps>) {
 
   return (
     <figure className="my-6">
-      <Img
-        source={value}
-        alt={value.alt || ' '}
-        width={width}
-        height={height}
-        loading='lazy'
-        className="mx-auto rounded-md object-cover"
-      />
+      <ArticleImageTrigger image={getArticleImage(value, value.alt || ' ', value.caption)}>
+        <Img
+          source={value}
+          alt={value.alt || ' '}
+          width={width}
+          height={height}
+          loading="lazy"
+          className="mx-auto h-auto rounded-md object-cover"
+        />
+      </ArticleImageTrigger>
 
       {hasCaption
         ? (
