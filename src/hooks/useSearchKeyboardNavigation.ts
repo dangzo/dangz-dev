@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { SearchHit } from '@/features/blog/hooks/useBlogSearch';
+import { trackSearchResultSelected } from '@/utils/searchAnalytics';
 
 type UseSearchKeyboardNavigationOptions = {
   isOpen: boolean;
@@ -59,6 +60,7 @@ export function useSearchKeyboardNavigation({
           return;
         }
 
+        trackSearchResultSelected(selectedResult, targetIndex);
         onClose();
         router.push(`/blog/${selectedResult.slug}`);
       }

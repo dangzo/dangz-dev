@@ -1,12 +1,15 @@
 import type { PostReactionSummaryItem } from '@/features/blog/types/Post.types';
+import { getPostOpenedAttributes, type PostOpenSource } from '@/utils/postDiscoveryAnalytics';
 import { Link } from '@/components/ui';
 
 interface ReactionsSummaryProps {
   reactions?: PostReactionSummaryItem[];
   href: string;
+  postId: string;
+  source: Exclude<PostOpenSource, 'home'>;
 }
 
-export default function ReactionsSummary({ reactions, href }: Readonly<ReactionsSummaryProps>) {
+export default function ReactionsSummary({ reactions, href, postId, source }: Readonly<ReactionsSummaryProps>) {
   const visibleReactions = reactions?.filter((reaction) => (reaction.count ?? 0) > 0 && reaction.emoji) ?? [];
 
   if (visibleReactions.length === 0) {
@@ -18,6 +21,7 @@ export default function ReactionsSummary({ reactions, href }: Readonly<Reactions
 
   return (
     <Link
+      {...getPostOpenedAttributes({ post_id: postId, source, placement: 'reaction_summary' })}
       href={href}
       type="primary"
       className="inline-flex items-center gap-1 text-secondary-light dark:text-secondary-dark"

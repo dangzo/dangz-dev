@@ -5,16 +5,17 @@ import HeadingAnchor from './HeadingAnchor';
 
 interface BlockH4Props {
   children: ReactNode;
+  postId: string;
   getHeadingId: (value: string) => string;
 }
 
-function BlockH4({ children, getHeadingId }: BlockH4Props) {
+function BlockH4({ children, postId, getHeadingId }: Readonly<BlockH4Props>) {
   const id = getHeadingId(getNodeText(children));
 
   return (
     <Heading as="h4" id={id} className="group">
       {children}
-      <HeadingAnchor id={id} />
+      <HeadingAnchor id={id} postId={postId} />
     </Heading>
   );
 }

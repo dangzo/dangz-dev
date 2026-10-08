@@ -3,15 +3,18 @@
 import { useEffect, useRef } from 'react';
 import SearchModal from './SearchModal';
 import { useBlogSearch } from '@/features/blog/hooks/useBlogSearch';
+import type { SearchOpenMethod } from '@/utils/searchAnalytics';
 
-type SearchModalBridgeProps = {
+type SearchModalBridgeProps = Readonly<{
   openRequest: number;
+  openMethod?: SearchOpenMethod;
   closeRequest: number;
   onOpenChange: (isOpen: boolean) => void;
-};
+}>;
 
 const SearchModalBridge = ({
   openRequest,
+  openMethod = 'button',
   closeRequest,
   onOpenChange,
 }: SearchModalBridgeProps) => {
@@ -31,9 +34,9 @@ const SearchModalBridge = ({
   useEffect(() => {
     if (openRequest > lastHandledOpenRequest.current) {
       lastHandledOpenRequest.current = openRequest;
-      openSearch();
+      openSearch(openMethod);
     }
-  }, [openRequest, openSearch]);
+  }, [openRequest, openMethod, openSearch]);
 
   useEffect(() => {
     if (closeRequest > lastHandledCloseRequest.current) {

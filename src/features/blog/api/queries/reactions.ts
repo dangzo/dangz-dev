@@ -83,7 +83,6 @@ const createPostReactionCountDocumentId = (postId: string, reactionId: string) =
 export async function incrementReactionCount(
   postId: string,
   reactionId: string,
-  currentCount: number,
 ): Promise<number> {
   const writeToken = process.env.SANITY_API_WRITE_TOKEN;
 
@@ -145,12 +144,12 @@ export async function incrementReactionCount(
     throw new Error(errorMessage || `Failed to increment reaction count (status ${response.status}).`);
   }
 
-  const updatedCount = payload.results?.reduce<number | undefined>((acc, result) => {
-    if (typeof result.document?.count === 'number') {
-      return result.document.count;
-    }
-    return acc;
-  }, undefined);
+  // Only the final increment result confirms the count; the create result may still be zero.
+  const updatedCount = payload.results?.at(-1)?.document?.count;
+  if (typeof updatedCount !== 'number' || !Number.isFinite(updatedCount)
+    || !Number.isInteger(updatedCount) || updatedCount < 0) {
+    throw new Error('Missing or invalid incremented reaction count.');
+  }
 
-  return updatedCount ?? currentCount + 1;
+  return updatedCount;
 }

@@ -1,7 +1,14 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { StrictMode } from 'react';
+import { trackSearchEvent } from '@/utils/searchAnalytics';
 
 import SearchButton from './SearchButton';
+
+vi.mock('@/utils/searchAnalytics', () => ({
+  trackSearchEvent: vi.fn(),
+  trackSearchResultSelected: vi.fn(),
+}));
 
 vi.mock('next/dynamic', async () => {
   const { default: SearchModalBridge } = await import('./SearchModalBridge');
@@ -21,6 +28,7 @@ vi.mock('next/navigation', () => ({
 describe('SearchButton', () => {
   beforeEach(() => {
     push.mockClear();
+    vi.mocked(trackSearchEvent).mockClear();
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue({
@@ -134,5 +142,25 @@ describe('SearchButton', () => {
       expect(screen.queryByRole('dialog', { name: 'Search posts' })).not.toBeInTheDocument();
     });
     expect(button).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it.each([
+    ['button', null], ['shortcut', '{Control>}k{/Control}'], ['shortcut', '{Meta>}k{/Meta}'],
+  ] as const)('tracks one %s opening in Strict Mode', async (method, keys) => {
+    const user = userEvent.setup();
+    render(<StrictMode><SearchButton /></StrictMode>);
+    if (keys) {
+      await user.keyboard(keys);
+    } else {
+      await user.click(screen.getByRole('button', { name: 'Search' }));
+    }
+    await screen.findByRole('dialog');
+    await user.click(screen.getByRole('button', { name: 'Search' }));
+    expect(trackSearchEvent).toHaveBeenCalledExactlyOnceWith({ name: 'search_opened', method });
+    await user.keyboard('{Escape}');
+    await user.click(screen.getByRole('button', { name: 'Search' }));
+    await screen.findByRole('dialog');
+    expect(trackSearchEvent).toHaveBeenCalledTimes(2);
+    expect(trackSearchEvent).toHaveBeenLastCalledWith({ name: 'search_opened', method: 'button' });
   });
 });

@@ -5,10 +5,11 @@ import HeadingAnchor from './HeadingAnchor';
 
 interface BlockH2Props {
   children: ReactNode;
+  postId: string;
   getHeadingId: (value: string) => string;
 }
 
-function BlockH2({ children, getHeadingId }: BlockH2Props) {
+function BlockH2({ children, postId, getHeadingId }: Readonly<BlockH2Props>) {
   const id = getHeadingId(getNodeText(children));
 
   return (
@@ -18,7 +19,7 @@ function BlockH2({ children, getHeadingId }: BlockH2Props) {
       className="group border-t border-border-light dark:border-border-dark pt-8 mt-12!"
     >
       {children}
-      <HeadingAnchor id={id} />
+      <HeadingAnchor id={id} postId={postId} />
     </Heading>
   );
 }

@@ -1,3 +1,4 @@
+import { contactAnalytics } from '@/utils/contactAnalytics';
 import { Button, Heading, Text } from '@/components/ui';
 import { links } from '@/data/siteMetadata';
 
@@ -29,7 +30,7 @@ async function LetsTalkFrontend() {
           to={`mailto:${links.email}`}
           type="primary"
           size="medium"
-          data-umami-event="About Email Click"
+          {...contactAnalytics({ name: 'contact_clicked', channel: 'email', placement: 'about_contact' })}
         >
           Email me
         </Button>
@@ -39,7 +40,7 @@ async function LetsTalkFrontend() {
           to={links.linkedin}
           type="ghost"
           size="medium"
-          data-umami-event="About LinkedIn Click"
+          {...contactAnalytics({ name: 'contact_clicked', channel: 'linkedin', placement: 'about_contact' })}
         >
           Connect on LinkedIn
         </Button>
@@ -49,7 +50,7 @@ async function LetsTalkFrontend() {
           to={links.github}
           type="ghost"
           size="medium"
-          data-umami-event="About GitHub Click"
+          {...contactAnalytics({ name: 'outbound_link_clicked', destination_host: 'github.com', placement: 'about_contact' })}
         >
           View GitHub
         </Button>

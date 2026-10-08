@@ -48,3 +48,14 @@ describe('WritingPreview', () => {
     expect(screen.getByRole('heading', { name: post.title })).toBeVisible();
   });
 });
+
+it('marks home article entry points without marking images or topics', () => {
+  const { container } = render(<WritingPreview post={post} />);
+  const links = container.querySelectorAll('a[data-post-opened-post-id]');
+  expect(Array.from(links).map((link) => ({
+    id: link.getAttribute('data-post-opened-post-id'),
+    source: link.getAttribute('data-post-opened-source'),
+    placement: link.getAttribute('data-post-opened-placement'),
+  }))).toEqual(['title', 'cta'].map((placement) => ({ id: post._id, source: 'home', placement })));
+  expect(container.querySelector('a[data-umami-event]')).toBeNull();
+});

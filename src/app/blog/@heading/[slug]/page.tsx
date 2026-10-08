@@ -20,15 +20,15 @@ export default async function BlogSlugHeading({ params }: Readonly<{ params: Pro
 
   return (
     <>
-      <Heading as="h1" className="text-3xl md:text-4xl lg:text-5xl">
+      <Heading as="h1" className="text-center text-3xl md:text-4xl lg:text-5xl">
         {post.title || '(Untitled)'}
       </Heading>
 
-      <div className="flex flex-wrap flex-col sm:flex-row sm:items-center gap-x-1 gap-y-1 text-sm md:text-base">
+      <div className="flex flex-wrap flex-col items-center justify-center sm:flex-row gap-x-1 gap-y-1 text-center text-sm md:text-base">
         <div className="flex flex-row items-center gap-x-1">
           <DateText date={post.publishedAt} className="sm:mb-0!" />
           <span className="mx-2 mb-2 sm:mb-0">&bull;</span>
-          <ReadingTimeText postBody={post.body} className='sm:mb-0!' />
+          <ReadingTimeText postBody={post.body} className="sm:mb-0!" />
         </div>
 
         <span className="hidden sm:inline mx-2">&bull;</span>
@@ -36,7 +36,7 @@ export default async function BlogSlugHeading({ params }: Readonly<{ params: Pro
         <TagList topic={post.primaryTopic} />
       </div>
 
-      <div className="mt-3">
+      <div className="mt-3 flex justify-center">
         <ReactionsClient postId={post._id} variant="compact" />
       </div>
     </>

@@ -61,6 +61,69 @@ const articleBody = [
   },
 ];
 
+const articleAnalyticsBody = [
+  ...['h2', 'h3', 'h4', 'h2'].map((style, index) => ({
+    _key: `analytics-heading-${index}`,
+    _type: 'block',
+    style,
+    children: [{
+      _key: `analytics-heading-text-${index}`,
+      _type: 'span',
+      text: ['Reference section', 'Detailed references', 'Reference details', 'Reference section'][index],
+    }],
+    markDefs: [],
+  })),
+  ...[
+    ['HTTPS reference', 'https://references.example/docs?private=query#fragment'],
+    ['HTTP reference', 'http://plain.example:8080/guide?private=query#fragment'],
+    ['Protocol relative reference', '//protocol.example/guide'],
+    ['Production reference', 'https://dangz.dev/blog'],
+    ['Local reference', 'http://localhost:3100/blog'],
+    ['Loopback reference', 'http://127.0.0.1:3100/blog'],
+    ['Relative reference', '/blog'],
+    ['Fragment reference', '#reference-section'],
+    ['Email reference', 'mailto:fixture@example.com'],
+  ].map(([label, href], index) => ({
+    _key: `analytics-reference-${index}`,
+    _type: 'block',
+    style: 'normal',
+    children: [{
+      _key: `analytics-reference-text-${index}`,
+      _type: 'span',
+      text: label,
+      marks: index === 0 ? ['article-reference', 'inlineCode'] : ['article-reference'],
+    }],
+    markDefs: [{ _key: 'article-reference', _type: 'link', href }],
+  })),
+];
+
+const lengthyArticleBody = Array.from({ length: 30 }, (_, index) => [
+  {
+    _key: `lengthy-heading-${index}`,
+    _type: 'block',
+    style: index % 3 === 0 ? 'h2' : 'h3',
+    children: [{
+      _key: `lengthy-heading-text-${index}`,
+      _type: 'span',
+      text: `Section ${index + 1}: Keeping long descriptive section labels readable while navigating a detailed article`,
+    }],
+    markDefs: [],
+  },
+  {
+    _key: `lengthy-paragraph-${index}`,
+    _type: 'block',
+    style: 'normal',
+    children: [{
+      _key: `lengthy-paragraph-text-${index}`,
+      _type: 'span',
+      text: 'Each section includes representative prose so the contents list and article scroll independently, and the final section remains reachable with a keyboard.',
+    }],
+    markDefs: [],
+  },
+]).flat();
+
+const headinglessArticleBody = articleBody.filter((block) => block._type === 'block' && block.style === 'normal');
+
 const posts = Array.from({ length: 16 }, (_, index) => {
   const postNumber = index + 1;
   const postTags = index % 2 === 0 ? [tags[0], tags[1]] : [tags[2]];
@@ -82,7 +145,15 @@ const posts = Array.from({ length: 16 }, (_, index) => {
     tags: postTags,
     primaryTopic,
     keywords: index === 9 ? ['pagination-keyword-only'] : index === 15 ? ['draft-only-keyword'] : [],
-    body: postNumber === 1 ? articleBody : undefined,
+    body: postNumber === 1
+      ? articleBody
+      : postNumber === 2
+        ? articleAnalyticsBody
+        : postNumber === 3
+          ? lengthyArticleBody
+          : postNumber === 4
+            ? headinglessArticleBody
+            : undefined,
   };
 });
 

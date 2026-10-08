@@ -8,11 +8,12 @@ vi.mock('next/link', () => import('@/tests/unit/mocks/nextLink'));
 
 vi.mock('./PostCard', () => {
   return {
-    PostCard: ({ post, preload }: { post: PostWithTopic; preload: boolean }) => {
+    PostCard: ({ post, preload, source }: { post: PostWithTopic; preload: boolean; source: string }) => {
       return (
         <div
           data-testid={`post-card-${post._id}`}
           data-preload={String(preload)}
+          data-source={source}
         />
       );
     },
@@ -34,7 +35,7 @@ describe('PostList', () => {
   });
 
   it('renders each post and preloads the first two cards', () => {
-    const { container } = render(<PostList posts={posts} />);
+    const { container } = render(<PostList source="blog" posts={posts} />);
 
     expect(screen.getByTestId('post-card-post-1')).toHaveAttribute('data-preload', 'true');
     expect(screen.getByTestId('post-card-post-2')).toHaveAttribute('data-preload', 'true');
@@ -43,13 +44,13 @@ describe('PostList', () => {
   });
 
   it('does not render pagination when no pagination prop is passed', () => {
-    render(<PostList posts={posts} />);
+    render(<PostList source="blog" posts={posts} />);
 
     expect(screen.queryByRole('navigation', { name: 'Pagination' })).not.toBeInTheDocument();
   });
 
   it('renders pagination when a pagination prop with more than one page is passed', () => {
-    render(<PostList posts={posts} pagination={{ currentPage: 1, totalPages: 3, basePath: '/blog' }} />);
+    render(<PostList source="blog" posts={posts} pagination={{ currentPage: 1, totalPages: 3, basePath: '/blog' }} />);
 
     expect(screen.getByRole('navigation', { name: 'Pagination' })).toBeInTheDocument();
   });
@@ -60,4 +61,9 @@ describe('PostList', () => {
     expect(screen.getAllByTestId('post-card-skeleton')).toHaveLength(3);
     expect(container.querySelectorAll('li')).toHaveLength(3);
   });
+});
+
+it.each(['blog', 'topic'] as const)('passes explicit %s source to every card', (source) => {
+  render(<PostList source={source} posts={[{ _id: 'source-test' } as PostWithTopic]} />);
+  expect(screen.getByTestId('post-card-source-test')).toHaveAttribute('data-source', source);
 });

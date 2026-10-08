@@ -30,7 +30,7 @@ interface AddReactionButtonProps {
 }
 
 const AddReactionButton = ({ isExpanded, onToggle }: Readonly<AddReactionButtonProps>) => {
-  const actionLabel = isExpanded ? 'Hide extra reactions' : 'Add reaction';
+  const actionLabel = isExpanded ? 'Hide extra reactions' : 'Like: add reaction';
 
   return (
     <button
@@ -48,14 +48,14 @@ const AddReactionButton = ({ isExpanded, onToggle }: Readonly<AddReactionButtonP
         </span>
       </span>
       <span className={compactCountClassName}>
-        {isExpanded ? 'Hide' : 'Add'}
+        {isExpanded ? 'Hide' : 'Like'}
       </span>
     </button>
   );
 };
 
 const ReactionsCompact = ({ postId }: Readonly<ReactionsCompactProps>) => {
-  const { reactions, pendingIds, reactToPost } = useReactions(postId);
+  const { reactions, pendingIds, reactToPost } = useReactions(postId, 'compact');
   const [showZeroCountReactions, setShowZeroCountReactions] = useState(false);
 
   if (reactions === null) {
@@ -116,7 +116,6 @@ const ReactionsCompact = ({ postId }: Readonly<ReactionsCompactProps>) => {
                 emoji={reaction.emoji}
                 name={reaction.name}
                 title={reaction.name}
-                data-umami-event={`Reaction ${reaction.name} Click`}
                 onClick={() => reactToPost(reaction._id)}
                 isPending={pendingIds[reaction._id] ?? false}
                 size="compact"

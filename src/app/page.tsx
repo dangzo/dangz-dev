@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Button } from '@/components/ui';
 import { links } from '@/data/siteMetadata';
+import { contactAnalytics } from '@/utils/contactAnalytics';
 import LatestWriting from '@/features/home/components/LatestWriting';
 import { WritingPreviewSkeleton } from '@/features/home/components/WritingPreview';
 import { TopTags, TopTagsSkeleton } from '@/features/home/components/TopTags';
@@ -22,7 +23,7 @@ export default function HomePage() {
           <p className="mb-5 font-mono text-xs uppercase tracking-[0.18em] text-accent-light dark:text-accent-dark">Senior Frontend Engineer</p>
           <h1 className="font-heading text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
             Hi, I'm Daniele.<br />
-            <span className="text-accent-light dark:text-accent-dark">I create software for the web.</span>
+            <span className="text-5xl md:text-6xl text-accent-light dark:text-accent-dark">I build software for the web.</span>
           </h1>
           <p className="mt-6 max-w-3xl text-base leading-relaxed text-secondary-light dark:text-secondary-dark md:text-lg">
             Notes on engineering best practices, exploring AI-assisted development, and learning across the stack. Architecture, thoughtful tradeoffs, and lessons worth sharing.
@@ -36,7 +37,13 @@ export default function HomePage() {
           <p className="mb-3 font-mono text-xs uppercase tracking-widest text-secondary-light dark:text-secondary-dark">Why I write here</p>
           <p className="hidden font-heading text-xl leading-relaxed md:block">Stay curious.<br />Follow the details.<br />See what holds up.</p>
           <p className="text-sm leading-6 text-secondary-light dark:text-secondary-dark md:mt-4 md:leading-7">A place to share my work and how I think, experiment with new technologies, and deepen my understanding through writing.</p>
-          <a href={links.github} className="mt-2 inline-block py-2 text-sm font-medium text-accent-light underline-offset-4 hover:underline dark:text-accent-dark md:mt-4">Explore my GitHub <span aria-hidden="true">↗︎</span></a>
+          <a
+            {...contactAnalytics({ name: 'outbound_link_clicked', destination_host: 'github.com', placement: 'home' })}
+            href={links.github}
+            className="mt-2 inline-block py-2 text-sm font-medium text-accent-light underline-offset-4 hover:underline dark:text-accent-dark md:mt-4"
+          >
+            Explore my GitHub <span aria-hidden="true">↗︎</span>
+          </a>
         </aside>
       </div>
 
@@ -66,7 +73,13 @@ export default function HomePage() {
           <h2 className="font-heading text-2xl font-semibold">Good software starts with a conversation.</h2>
           <p className="mt-2 max-w-2xl leading-relaxed text-secondary-light dark:text-secondary-dark">An interesting frontend problem, a different perspective, or something you read here? I’d love to hear it.</p>
         </div>
-        <a href={`mailto:${links.email}`} className="shrink-0 self-start rounded-lg border border-primary-600 px-5 py-3 font-medium text-accent-light hover:bg-primary-50 dark:text-accent-dark dark:hover:bg-primary-950 sm:self-auto">Say hello <span aria-hidden="true">↗︎</span></a>
+        <a
+          {...contactAnalytics({ name: 'contact_clicked', channel: 'email', placement: 'home' })}
+          href={`mailto:${links.email}`}
+          className="shrink-0 self-start rounded-lg border border-primary-600 px-5 py-3 font-medium text-accent-light hover:bg-primary-50 dark:text-accent-dark dark:hover:bg-primary-950 sm:self-auto"
+        >
+          Say hello <span aria-hidden="true">↗︎</span>
+        </a>
       </section>
     </article>
   );
