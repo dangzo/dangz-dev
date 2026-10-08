@@ -41,13 +41,13 @@ Run commands from the repository root. Select checks by the change; report failu
 | Component, hook, utility | `yarn test:unit src/path/to/file.test.tsx` (use the actual test path) |
 | Routing or browser interaction | `yarn test:e2e src/tests/e2e/<name>.spec.ts` |
 | Blog topic routes and publication split | `yarn test:e2e src/tests/e2e/topics.spec.ts`; to check fixture draft preview behavior, `E2E_PREVIEW_DRAFTS=true yarn test:e2e src/tests/e2e/topics.spec.ts` |
-| Layout or visual styling | `yarn test:e2e:visual`; review desktop and mobile image diffs |
+| Layout or visual styling | Run affected browser specs; inspect affected pages at desktop and mobile widths in light and dark themes, using screenshots when useful |
 | Studio schema or code | `yarn lint-studio`, `yarn typecheck-studio`; regenerate types for schema changes |
 | Build or dependency configuration | `yarn ci:build`; add relevant lint, type, and test checks |
 | Documentation only | Check links, command names, and consistency with source; skip application tests |
 
 - Keep unit tests beside source as `*.test.ts(x)` or `*.spec.ts(x)`. Vitest includes frontend, Studio, and migration tests, uses jsdom and `src/tests/unit/setup.ts`, and excludes E2E specs. Migration tests select the Node environment; React is deduplicated across the workspaces for Studio component tests.
-- Article image viewer checks use `yarn test:e2e src/tests/e2e/article-image-viewer.spec.ts` with the `fixture-post-5` cover and landscape/portrait inline images. Browser image responses are intercepted for deterministic sizing and loading/error checks. Viewer snapshots in `yarn test:e2e:visual` cover both themes at desktop/mobile sizes; component tests cover isolation cleanup and original-image URL construction.
+- Article image viewer checks use `yarn test:e2e src/tests/e2e/article-image-viewer.spec.ts` with the `fixture-post-5` cover and landscape/portrait inline images. Browser image responses are intercepted for deterministic sizing and loading/error checks. Inspect the viewer in both themes at desktop/mobile sizes when changing its styling; component tests cover isolation cleanup and original-image URL construction.
 - Reaction lifecycle and concurrency checks are listed in [REACTION_ANALYTICS.md](REACTION_ANALYTICS.md); include search and bottom-exposure regressions when changing their shared transport.
 - Analytics timing changes need separate production browser and dashboard evidence; development fixture tests simulate tracker readiness. Follow [UMAMI_EXPOSURE.md](UMAMI_EXPOSURE.md) for bottom-reaction checks and intercept production reaction POSTs.
 - Pageview integration tests use `yarn test:e2e:pageviews`, a separate fixture server on port 3101 with an intercepted real tracker. Both fixture flags enable the actual integration with a fictitious website ID; normal browser suites omit it. CI and `yarn ci:test` run this suite after ordinary E2E tests. Follow [UMAMI_PAGEVIEWS.md](UMAMI_PAGEVIEWS.md) for counting policy and deployed collector/dashboard checks.
@@ -55,7 +55,7 @@ Run commands from the repository root. Select checks by the change; report failu
 - Contact analytics browser tests inject a pinned real tracker and intercept its collector; no live analytics is sent. Follow [CONTACT_ANALYTICS.md](CONTACT_ANALYTICS.md) for separate delivery, download, and owner dashboard checks.
 - Let Playwright start its isolated fixture server on port 3100 with `.next-e2e` output. Extend `src/test-support/e2e/sanity-fixtures.ts` when changing GraphQL operations used by browser tests. The fixture API is enabled only with `E2E_FIXTURES=true`; the topic fixtures exercise primary-model GraphQL fields by default.
 - When a worktree uses a symlink to dependencies in the main checkout and Turbopack rejects the worktree boundary, prefix either topic E2E command with `NEXT_TURBOPACK_ROOT=/path/to/main-checkout`. This optional development setting does not change production configuration.
-- Update intentional visual baselines with `yarn test:e2e:visual:update` after reviewing changes; commit the PNGs under `src/tests/e2e/__screenshots__/`.
+- Automated pixel comparisons and committed screenshot baselines are not used. Keep functional and targeted layout assertions; add regression coverage for concrete defects. Failure screenshots and first-retry traces remain enabled for debugging.
 - Use `yarn lint:changed` for staged JS/TS only; it does not check unstaged edits. The pre-push hook type-checks the frontend and lints committed changes relative to upstream.
 - Studio type checking includes `sanity.config.ts`, `sanity.cli.ts`, schemas, components, and tests.
 

@@ -15,36 +15,14 @@ export default defineConfig({
     colorScheme: 'light',
     screenshot: 'only-on-failure',
   },
-  snapshotPathTemplate: '{testDir}/__screenshots__/{projectName}/{testFilePath}/{arg}{ext}',
   expect: {
     timeout: 10 * 1000,
-    toHaveScreenshot: {
-      stylePath: './src/tests/e2e/visual.css',
-    },
   },
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
-      testIgnore: ['**/visual.spec.ts', '**/umami-pageviews.spec.ts', '**/post-discovery.spec.ts'],
-    },
-    {
-      name: 'visual-desktop',
-      testMatch: '**/visual.spec.ts',
-      use: {
-        ...devices['Desktop Chrome'],
-        viewport: { width: 1440, height: 960 },
-        deviceScaleFactor: 1,
-      },
-    },
-    {
-      name: 'visual-mobile',
-      testMatch: '**/visual.spec.ts',
-      use: {
-        ...devices['iPhone 13'],
-        browserName: 'chromium',
-        deviceScaleFactor: 1,
-      },
+      testIgnore: ['**/umami-pageviews.spec.ts', '**/post-discovery.spec.ts'],
     },
   ],
   webServer: {
