@@ -124,6 +124,38 @@ const lengthyArticleBody = Array.from({ length: 30 }, (_, index) => [
 
 const headinglessArticleBody = articleBody.filter((block) => block._type === 'block' && block.style === 'normal');
 
+const imageViewerBody = [
+  ...headinglessArticleBody,
+  {
+    _key: 'viewer-landscape',
+    _type: 'image',
+    asset: { ...image.asset, url: 'https://cdn.sanity.io/images/wdxhl3tc/production/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-2400x1200.png' },
+    alt: 'Landscape image with cropped thumbnail',
+    caption: 'The viewer shows the complete landscape image.',
+    width: 2400,
+    height: 1200,
+    crop: { top: 0.1, bottom: 0.1, left: 0.2, right: 0.2 },
+    hotspot: { x: 0.5, y: 0.5, width: 0.6, height: 0.8 },
+  },
+  {
+    _key: 'viewer-portrait',
+    _type: 'image',
+    asset: { ...image.asset, url: 'https://cdn.sanity.io/images/wdxhl3tc/production/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb-1200x2400.png' },
+    alt: 'Portrait image without caption',
+    width: 1200,
+    height: 2400,
+  },
+  {
+    _key: 'viewer-long-caption',
+    _type: 'image',
+    asset: { ...image.asset, url: 'https://cdn.sanity.io/images/wdxhl3tc/production/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-2400x1200.png' },
+    alt: 'Image with long caption',
+    caption: `${'UnbrokenCaption'.repeat(40)} ${'A detailed caption remains readable without covering the image or Close button. '.repeat(30)}`,
+    width: 2400,
+    height: 1200,
+  },
+];
+
 const posts = Array.from({ length: 16 }, (_, index) => {
   const postNumber = index + 1;
   const postTags = index % 2 === 0 ? [tags[0], tags[1]] : [tags[2]];
@@ -153,7 +185,9 @@ const posts = Array.from({ length: 16 }, (_, index) => {
           ? lengthyArticleBody
           : postNumber === 4
             ? headinglessArticleBody
-            : undefined,
+            : postNumber === 5
+              ? imageViewerBody
+              : undefined,
   };
 });
 
