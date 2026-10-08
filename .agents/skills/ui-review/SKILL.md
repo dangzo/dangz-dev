@@ -11,7 +11,7 @@ Resolve repository paths from the assigned checkout root. Follow [AGENTS.md](../
 
 Derive affected routes and flows from the request, diff, issue criteria, and PR validation steps. State the selected coverage and expected results briefly; do not require a whole-site tour. Include keyboard operation and accessible names for changed controls, desktop/mobile layouts for responsive changes, and both themes for styling changes. Include negative, loading, and empty states where the changed behavior makes them relevant.
 
-A review-only request returns findings. If repair or implementation validation is also authorized, fix in-scope defects and rerun the affected flow. Do not expand repairs to unrelated sibling components or update visual baselines just to make a failure pass.
+A review-only request returns findings. If repair or implementation validation is also authorized, fix in-scope defects and rerun the affected flow. Do not expand repairs to unrelated sibling components.
 
 ## Use the local infrastructure
 
@@ -23,13 +23,13 @@ A review-only request returns findings. If repair or implementation validation i
 
 ## Exercise the changed behavior
 
-Use roles and accessible names to locate controls. Wait for observable settled results instead of arbitrary sleeps. Inspect DOM/accessibility state for interactions; capture screenshots when assessing layout or styling. Match configured desktop/mobile viewports for visual comparisons.
+Use roles and accessible names to locate controls. Wait for observable settled results instead of arbitrary sleeps. Inspect DOM/accessibility state for interactions; capture screenshots when assessing layout or styling. Inspect desktop and mobile widths in both light and dark themes for layout or styling changes.
 
 For local mutations, verify the read-back and optimistic rollback on failure; cancellation should preserve prior state. For layout defects, record the viewport/theme and useful measurements. Investigate console errors and failed requests in context: expected negative-path responses are not automatically defects. Compare with baseline behavior only when needed to classify a finding as pre-existing.
 
 Local fixture checks do not prove production analytics delivery or owner dashboard results. Read the relevant contact/search/exposure analytics guide before those checks. Intercept production reaction POSTs and analytics collectors as documented; do not create real reactions or send live telemetry as a side effect of review. Ask only when required access or a consequential choice is missing.
 
-Stop after three failed attempts at the same browser step and report the obstacle. Rerun only affected flows after a fix. For intentional visual changes, inspect desktop/mobile and theme differences before any explicitly authorized baseline update.
+Stop after three failed attempts at the same browser step and report the obstacle. Rerun only affected flows after a fix. For intentional visual changes, inspect desktop/mobile and theme differences; use screenshots as review evidence without creating committed pixel baselines.
 
 ## Report and clean up
 
