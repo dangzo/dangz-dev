@@ -4,6 +4,7 @@ import { PortableText } from '@/features/blog/components';
 import ReactionsClient from '@/features/blog/components/reactions/ReactionsClient';
 import { getPostBySlug, getPostSlugs } from '@/features/blog/api/queries/singlePost';
 import getPostMetadata from '@/features/blog/api/getPostMetadata';
+import { extractTocFromBody } from '@/features/blog/hooks/usePostInsights';
 
 interface PostPageProps {
   params: Promise<{ slug: string }>;
@@ -32,6 +33,8 @@ export default async function PostPage({ params, }: Readonly<PostPageProps>) {
   }
 
   const lqip = post.image?.asset?.metadata?.lqip;
+  const hasToc = extractTocFromBody(post.body).length > 0;
+  const imageSizes = `${hasToc ? '(min-width: 1280px) 608px, ' : ''}(min-width: 818px) 770px, (min-width: 640px) calc(100vw - 3rem), calc(100vw - 2rem)`;
 
   return (
     <article className="mx-auto min-w-0 max-w-[70ch]">
@@ -44,7 +47,7 @@ export default async function PostPage({ params, }: Readonly<PostPageProps>) {
               className="w-full h-auto object-cover"
               width={930}
               height={665}
-              sizes="(min-width: 1024px) 700px, (min-width: 768px) calc(100vw - 20rem), calc(100vw - 2rem)"
+              sizes={imageSizes}
               fetchPriority="high"
               blurDataURL={lqip}
               preload

@@ -30,7 +30,7 @@ interface AddReactionButtonProps {
 }
 
 const AddReactionButton = ({ isExpanded, onToggle }: Readonly<AddReactionButtonProps>) => {
-  const actionLabel = isExpanded ? 'Hide extra reactions' : 'Add reaction';
+  const actionLabel = isExpanded ? 'Hide extra reactions' : 'Like: add reaction';
 
   return (
     <button
@@ -48,7 +48,7 @@ const AddReactionButton = ({ isExpanded, onToggle }: Readonly<AddReactionButtonP
         </span>
       </span>
       <span className={compactCountClassName}>
-        {isExpanded ? 'Hide' : 'Add'}
+        {isExpanded ? 'Hide' : 'Like'}
       </span>
     </button>
   );
