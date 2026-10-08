@@ -2,7 +2,7 @@
 
 The original audit identified reaction click overcounting, lost bottom exposure before tracker readiness, pageview attribution defects, and valuable search/contact/discovery/article measurement gaps. Follow-ups #184–#190 are now closed and their instrumentation is present. The refreshed inventory and production diagnostics below describe the current deployment separately from the historical findings.
 
-**Current status: browser diagnostics passed on 2026-10-08; coordinated collector and owner-dashboard verification remain pending.** The audit remains open until both reaction placements and their properties are reconciled with stored events. A new, confirmed search middle-click gap is tracked in [#217](https://github.com/dangzo/dangz-dev/issues/217).
+**Current status: browser diagnostics and normal live collector responses passed on 2026-10-08; owner-dashboard verification remains pending.** The audit remains open until both reaction placements and their properties are reconciled with stored events. A new, confirmed search middle-click gap is tracked in [#217](https://github.com/dangzo/dangz-dev/issues/217).
 
 Every reaction POST is intercepted throughout this audit. Successful API responses are simulated; production persistence is untested. A failure response is not proof that a real mutation would leave the database unchanged. Neither HTTP 200 nor a resolved tracker promise proves ingestion.
 
@@ -205,10 +205,10 @@ Inventory reviewed against `dev` at `1853110` and the documented feature contrac
 | Event | Current trigger and properties | Reporting purpose | Evidence available at this audit |
 | --- | --- | --- | --- |
 | Pageview | Each committed pathname/query visit; fragments ignored; captured URL/referrer retained before readiness | Popularity and navigation through pages, topics, pagination | Real-tracker regressions in [pageview guide](UMAMI_PAGEVIEWS.md); October 7 owner-assisted verification recorded in the separate local #186 worktree, not yet published on `dev` |
-| `reaction_attempted` | One accepted POST dispatch; `post_id`, `reaction_id`, `placement=compact` or `bottom` | Accepted engagement attempts by content/control | Current production request construction verified with collector intercepted; live/dashboard check pending |
-| `reaction_submission_succeeded` | HTTP OK and a valid finite, nonnegative integer count; same properties | Observed successful API responses | Simulated response/production-browser evidence; neither real persistence nor dashboard storage established yet |
-| `reaction_submission_failed` | HTTP/network/invalid-response failure; same properties, no error text | Observed failures and engagement friction | All three failure classes exercised at both placements with collector intercepted; live/dashboard check pending |
-| `post_bottom_reactions_reached` | First qualifying intersection per mounted post visit, retained until readiness; `post_id` | Exposure to bottom controls, not completed reading | Delayed readiness, repeat entry, stale navigation, blocking and opt-out verified with collector intercepted; live/dashboard check pending |
+| `reaction_attempted` | One accepted POST dispatch; `post_id`, `reaction_id`, `placement=compact` or `bottom` | Accepted engagement attempts by content/control | Current production diagnostics and normal live collector responses verified; owner-dashboard check pending |
+| `reaction_submission_succeeded` | HTTP OK and a valid finite, nonnegative integer count; same properties | Observed successful API responses | Simulated successful responses and normal live collector responses verified; real persistence remains untested and dashboard storage pending |
+| `reaction_submission_failed` | HTTP/network/invalid-response failure; same properties, no error text | Observed failures and engagement friction | All three failure classes exercised at both placements in intercepted and live collector matrices; owner-dashboard check pending |
+| `post_bottom_reactions_reached` | First qualifying intersection per mounted post visit, retained until readiness; `post_id` | Exposure to bottom controls, not completed reading | Timing/navigation/blocking diagnostics passed; one live normal collector response verified; owner-dashboard check pending |
 | `search_opened` | Confirmed closed-to-open transition; `method=button` or `shortcut` | Search adoption | Production button-opening request observed with collector intercepted; broader fixture coverage in [search guide](SEARCH_ANALYTICS.md); stored-event verification remains separate |
 | `search_completed` | Successful current debounced response, including zero results; `query_length`, `result_count` | Search usefulness and zero-result rate | Current nonempty response request observed with collector intercepted; stale/aborted/failed/empty cases have documented fixture coverage; stored-event verification remains separate |
 | `search_result_selected` | Primary/modified link activation or router-driven keyboard selection; `post_id`, one-based `result_position` | Article discovery through search | Documented fixture coverage; production middle-click opens a tab but emits no selection event, tracked in #217 |
@@ -248,15 +248,26 @@ Sanitized ledgers and the temporary harness are retained under ignored `.tmp/168
 
 ## Coordinated collector and owner-dashboard verification
 
-Pending owner readiness. The planned live matrix forwards only the three reaction lifecycle names and bottom exposure. Pageviews and unrelated events stay intercepted. All reaction POSTs remain simulated. The expected ledger is **33 stored events**: 16 `reaction_attempted`, 10 `reaction_submission_succeeded`, six `reaction_submission_failed`, and one `post_bottom_reactions_reached`; per placement, eight attempts/five successes/three failures.
+The owner confirmed readiness before the live matrix. Headed Chromium used its default Chrome user agent and the same actual tracker/deployment identified above. The browser ran during **2026-10-08 15:04:52.902–15:05:05.198 UTC** (**16:04:52–16:05:06 Atlantic/Canary**). The owner reconciliation filter is **15:04:00–15:06:00 UTC**, equivalent to **16:04:00–16:06:00 Atlantic/Canary**, on hostname `dangz.dev`.
 
-Record the exact UTC window and Canary equivalent after execution. Classify response shape in memory: HTTP 200 with ordinary cache issuance and no bot-filter/disabled marker supports collector acceptance, but still requires the owner's separate stored-event check. The owner filters `dangz.dev` and the window, confirms names/counts and the expected post/reaction/placement values, and reports any unrelated traffic or ingestion delay. No dashboard credentials or Share URL are needed for the selected owner-assisted method.
+Exactly **33 intended custom events** were forwarded once to the real collector. Every response was **HTTP 200**, with ordinary tracker-cache issuance and no bot-filter or disabled marker. Classification inspected responses in memory; cache values, session identifiers and raw response bodies were not retained. The initial pageview was intercepted, making 34 total browser collector attempts. No unrelated analytics were forwarded. All **16 reaction POSTs** were intercepted and simulated; failures covered HTTP 500, network abort and invalid count at each placement. Failure count rollback was asserted against each control's pre-submit count. The matrix passed with zero page errors and no live reaction writes.
+
+| Event | Compact | Bottom | Total live collector responses |
+| --- | ---: | ---: | ---: |
+| `reaction_attempted` | 8 | 8 | 16 |
+| `reaction_submission_succeeded` | 5 | 5 | 10 |
+| `reaction_submission_failed` | 3 | 3 | 6 |
+| `post_bottom_reactions_reached` | — | 1 | 1 |
+
+All reaction events carry post ID `ccc19dd2-2579-4cc7-8cd0-a14c4ececdc4`, reaction ID `783c1d5e-c4ea-4702-ae4f-3cd4b25a80b2`, and their initiating placement. Exposure carries only the same `post_id` as custom data. Ignored same-control pending activations emitted nothing; cross-placement requests emitted independent attempt/outcome pairs. Re-entering the bottom section did not add exposure. The sanitized evidence is `.tmp/168-verification/live-report.json`.
+
+**Owner-dashboard evidence: pending.** The owner has been supplied the exact window, expected counts and property values. They must independently confirm stored counts and post/reaction/placement breakdowns, identifying any unrelated traffic or ingestion lag. Normal collector responses support acceptance but do not substitute for that stored-event check. No dashboard credentials or Share URL are needed for the selected owner-assisted method.
 
 ## Current #168 acceptance
 
 | Criterion | Current status |
 | --- | --- |
-| Both reaction controls reach Umami; failures documented | Intercepted production diagnostics passed; normal live collector and owner-dashboard evidence pending |
+| Both reaction controls reach Umami; failures documented | Intercepted production diagnostics and all 33 normal live collector responses passed; owner-dashboard evidence pending |
 | Click tracking versus successful persistence distinguished | Complete: attempts/outcomes defined; simulated API successes are not persisted reactions |
 | Timing, client navigation, duplicates, unavailable tracker assessed | Complete for the documented Chromium scope; historical pageview defects have follow-ups and current regression contracts |
 | Inventory identifies coverage, gaps and limited-value events | Complete: historical and current inventories, evidence limits, adequate pageviews and confirmed #217 gap |
