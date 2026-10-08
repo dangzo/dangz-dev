@@ -14,43 +14,43 @@ function isPortableTextBlock(block: PortableTextBody[number]): block is Portable
   return block._type === 'block';
 }
 
-export default function usePostInsights() {
-  function extractTocFromBody(body?: PortableTextBody): TocItem[] {
-    if (!body?.length) {
-      return [];
-    }
-
-    const getHeadingId = createHeadingIdFactory();
-    const toc: TocItem[] = [];
-
-    for (const block of body) {
-      if (!isPortableTextBlock(block)) {
-        continue;
-      }
-
-      if (block.style !== 'h2' && block.style !== 'h3') {
-        continue;
-      }
-
-      const text = (block.children || [])
-        .map(child => child.text || '')
-        .join('')
-        .trim();
-
-      if (!text) {
-        continue;
-      }
-
-      toc.push({
-        id: getHeadingId(text),
-        title: text,
-        level: block.style === 'h2' ? 2 : 3,
-      });
-    }
-
-    return toc;
+export function extractTocFromBody(body?: PortableTextBody): TocItem[] {
+  if (!body?.length) {
+    return [];
   }
 
+  const getHeadingId = createHeadingIdFactory();
+  const toc: TocItem[] = [];
+
+  for (const block of body) {
+    if (!isPortableTextBlock(block)) {
+      continue;
+    }
+
+    if (block.style !== 'h2' && block.style !== 'h3') {
+      continue;
+    }
+
+    const text = (block.children || [])
+      .map(child => child.text || '')
+      .join('')
+      .trim();
+
+    if (!text) {
+      continue;
+    }
+
+    toc.push({
+      id: getHeadingId(text),
+      title: text,
+      level: block.style === 'h2' ? 2 : 3,
+    });
+  }
+
+  return toc;
+}
+
+export default function usePostInsights() {
   function getReadingTimeMinutes(body?: PortableTextBody): number {
     if (!body?.length) {
       return 1;
