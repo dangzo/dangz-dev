@@ -20,7 +20,7 @@ export default function ArticleImageTrigger({ image, children }: ArticleImageTri
       type="button"
       aria-haspopup="dialog"
       aria-label={`View image: ${image.alt.trim() || 'Article image'}`}
-      className="block w-full cursor-zoom-in rounded-md text-left focus-visible:-outline-offset-2"
+      className="block w-full cursor-pointer rounded-md text-left focus-visible:-outline-offset-2 [&_img]:cursor-pointer"
       onClick={(event) => openViewer(image, event.currentTarget)}
     >
       {children}
