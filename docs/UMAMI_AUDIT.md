@@ -1,10 +1,16 @@
 # Umami event audit — issue #168
 
-Both reaction placements deliver click events to Umami's collector when the tracker is ready. Mouse, Enter, Space, and clicks on the nested emoji all produced HTTP 200 responses. Those events also count ignored clicks during pending requests and failed submissions, so they cannot measure successful reactions.
+The original audit identified reaction click overcounting, lost bottom exposure before tracker readiness, pageview attribution defects, and valuable search/contact/discovery/article measurement gaps. Follow-ups #184–#190 are now closed and their instrumentation is present. The refreshed inventory and production diagnostics below describe the current deployment separately from the historical findings.
 
-The audit confirmed a lost bottom-section event before tracker initialization, hash navigation counted as pageviews, and duplicate final-route pageviews during rapid client navigation. Search, Home contact intent, discovery placement, heading-link copying, and article outbound clicks have instrumentation gaps.
+**Current status: browser diagnostics passed on 2026-10-08; coordinated collector and owner-dashboard verification remain pending.** The audit remains open until both reaction placements and their properties are reconciled with stored events. A new, confirmed search middle-click gap is tracked in [#217](https://github.com/dangzo/dangz-dev/issues/217).
 
-**Status: investigation and recommendations recorded; dashboard verification remains pending.** HTTP 200 verifies the collector response, not dashboard ingestion. Every reaction POST was intercepted, so production persistence was deliberately not tested. Keep [#168](https://github.com/dangzo/dangz-dev/issues/168) open until dashboard evidence is added.
+Every reaction POST is intercepted throughout this audit. Successful API responses are simulated; production persistence is untested. A failure response is not proof that a real mutation would leave the database unchanged. Neither HTTP 200 nor a resolved tracker promise proves ingestion.
+
+## Historical findings — 2026-10-05
+
+The original headless Chromium run recorded HTTP 200 collector responses for both reaction placements, including mouse, Enter, Space, and nested emoji activation. These responses do **not** establish event storage. Later headed-browser verification for [#189](POST_DISCOVERY_ANALYTICS.md#production-verification--2026-10-07) demonstrated that Umami can return HTTP 200 with `{"beep":"boop"}` while discarding headless traffic. The original run did not retain response-shape classification, so its individual requests cannot retrospectively be classified. Its dashboard visibility remains unverified; the refreshed window below supplies independent current evidence.
+
+Historical click events counted ignored pending clicks and failed submissions. They measured activation, not successful reactions. The historical inventory and recommendations below refer to that deployment, not the replacement event contracts now in production.
 
 ## Evidence and limits
 
@@ -15,7 +21,7 @@ The audit confirmed a lost bottom-section event before tracker initialization, h
 - Main live matrix: **2026-10-05 19:03:34–19:04:38 UTC**. Additional live coverage: **19:06:04–19:06:29 UTC**. Isolated diagnostics: **19:07:53–19:08:07 UTC**, with the collector intercepted.
 - Main and coverage runs captured **51 HTTP 200 collector responses**: 22 pageviews, 16 `Reaction Like Click`, four `Post Bottom Reactions Reached`, and one of each of the nine contact/résumé labels. Three additional collector requests were deliberately aborted. The preliminary probe added one Blog pageview outside these totals.
 - Sixteen reaction POSTs in the main matrix and two in isolated diagnostics were fulfilled locally. Successful responses returned `{ count: currentCount + 1 }`; failure responses returned HTTP 500. No reaction POST was forwarded to production.
-- Contact link default actions were prevented while allowing the real tracker listener to observe activation. These tests prove event delivery, not email sending, outbound destination loading, or PDF download completion.
+- Contact link default actions were prevented while allowing the real tracker listener to observe activation. These tests establish request/response behavior, not event storage, email sending, outbound destination loading, or PDF download completion.
 - One React hydration warning (`#418`) appeared in the navigation/inventory run. The controls rendered and the recorded events completed; the cause was not investigated. Other runs recorded no page errors.
 
 The primary article was `/blog/vue-vapor-mode-how-vue-is-rewriting-its-rendering-engine`, post ID `ccc19dd2-2579-4cc7-8cd0-a14c4ececdc4`. Its tested `Like` reaction ID was `783c1d5e-c4ea-4702-ae4f-3cd4b25a80b2`. Other CMS reaction labels rendered as `Wow`, `Not sure`, `Insightful`, and `Awesome!`; their click delivery was not individually exercised. The second article was `/blog/a-practical-guide-to-web-accessibility-in-react-and-vue-a11y`.
@@ -68,11 +74,11 @@ For each placement in the main matrix, eight click events corresponded to six in
 
 The served tracker schedules pageviews using a 300 ms timer and constructs the payload from the current URL when that timer runs. Multiple rapid route changes can therefore report the last URL twice. This explanation is based on inspection of the fetched tracker plus the paced/rapid comparison; it is not a claim about every Umami version.
 
-## Existing event inventory
+## Historical event inventory
 
 All named events also carry Umami's default URL, hostname, title, referrer, language, and screen properties. “No custom properties” means an empty event-data object. **Dashboard visibility is unverified for every row.**
 
-| Existing event | Trigger / source | Custom properties | Reporting purpose | Verified delivery |
+| Historical event | Trigger / source | Custom properties | Reporting purpose | Browser response evidence |
 | --- | --- | --- | --- | --- |
 | Automatic pageview | Production root-layout tracker; initial load and client history changes | No event-specific properties | Page popularity, archive consumption, source pages | HTTP 200 for Home, About, Blog, articles, topics, pagination, and Back; hash/rapid-navigation problems above |
 | `Reaction {name} Click` | Actual emoji button in compact and bottom controls | None | Reaction click interest by name and article URL | `Like`: HTTP 200 in both placements, mouse/Enter/Space/repeated/failed cases; other names rendered only |
@@ -87,7 +93,7 @@ All named events also carry Umami's default URL, hostname, title, referrer, lang
 | `About LinkedIn Click` | About contact-section LinkedIn CTA | None | Professional contact intent | HTTP 200 at 19:04:32–19:04:33 |
 | `About GitHub Click` | About contact-section GitHub CTA | None | Profile exploration | HTTP 200 at 19:04:33–19:04:34 |
 
-Source entry points: [root tracker](../src/app/layout.tsx), [bottom reactions](../src/features/blog/components/reactions/Reactions.tsx), [compact reactions](../src/features/blog/components/reactions/ReactionsCompact.tsx), [emoji button](../src/features/blog/components/reactions/EmojiBtn.tsx), [reaction hook](../src/features/blog/hooks/useReactions.ts), and [server mutation](../src/features/blog/api/queries/reactions.ts). The hook performs optimistic updates and rollback; the server mutation writes to Sanity's production dataset. Neither path currently sends a submission-outcome event.
+Source entry points: [root tracker](../src/app/layout.tsx), [bottom reactions](../src/features/blog/components/reactions/Reactions.tsx), [compact reactions](../src/features/blog/components/reactions/ReactionsCompact.tsx), [emoji button](../src/features/blog/components/reactions/EmojiBtn.tsx), [reaction hook](../src/features/blog/hooks/useReactions.ts), and [server mutation](../src/features/blog/api/queries/reactions.ts). The hook performs optimistic updates and rollback; the server mutation writes to Sanity's production dataset. At the historical deployment, neither path sent a submission-outcome event.
 
 ## Prioritized recommendations
 
@@ -117,7 +123,7 @@ For pageviews, evaluate `data-exclude-hash="true"` first. Address the independen
 - Do not send keystrokes, raw search queries, copied URLs, email addresses, full outbound URLs, arbitrary error messages, or personal identifiers. Query length and result count support the initial search audit without identifying the searched topic.
 - Existing résumé and contact clicks have value but measure intent. Do not label them completed downloads, sent email, or successful contact.
 
-## Reproduce and finish verification
+## Historical reproduction procedure
 
 ### Browser setup
 
@@ -161,15 +167,15 @@ These ignored scripts are local evidence artifacts, not repository commands avai
 8. Open search with the button and shortcut; execute successful nonempty and empty searches; select a result using mouse and ArrowDown/Enter. Review missing custom events independently from the destination pageview.
 9. Select a topic, paginate, open an article from Home, click Home contact, and activate all nine existing About/footer event controls. Prevent mail-client/external navigation while testing event delivery. Check article-body external anchors separately from profile links.
 
-### Dashboard handoff
+### Historical dashboard handoff
 
-A read-only Umami Share URL has been requested but not supplied. The shared view must include Events, and Realtime/Properties where available; see [Share URL configuration](https://docs.umami.is/docs/enable-share-url). Never interpret access restrictions or the wrong date filter as proof that collection failed.
+At the original audit, a read-only Umami Share URL had been requested but not supplied. Completion now uses the owner's selected assisted dashboard check rather than requiring a Share URL. Never interpret access restrictions or the wrong date filter as proof that collection failed.
 
 When access is supplied, select the 2026-10-05 UTC windows above, the production hostname, and the tested article URLs. Verify `Reaction Like Click` and `Post Bottom Reactions Reached`, then the nine contact/résumé names. Inspect the reach `postId` property and the empty custom reaction properties if the view permits it. Account for normal traffic rather than assuming aggregate counts belong exclusively to this audit. If the share view cannot identify the historical events precisely, run a small coordinated new window with reaction writes intercepted and record the new evidence.
 
 Add dashboard observations, filters, and timestamps to this report. If Properties is not available in the shared view, preserve its network-verified status and obtain owner-assisted confirmation for dashboard property visibility. Production reaction persistence remains unverified under the selected audit mode; simulated successes must not be described as database writes.
 
-## Follow-up issues and acceptance
+## Original follow-up issues and historical acceptance
 
 | Priority | Follow-up | Purpose |
 | --- | --- | --- |
@@ -183,7 +189,7 @@ Add dashboard observations, filters, and timestamps to this report. If Propertie
 
 | #168 criterion | Status |
 | --- | --- |
-| Both reaction controls reach Umami; failures documented | Collector responses verified; dashboard confirmation pending |
+| Both reaction controls reach Umami; failures documented | HTTP responses observed; response classification and dashboard confirmation unavailable for the historical run |
 | Clicks versus successful persistence distinguished | Complete distinction; success/failure responses simulated, production persistence unverified |
 | Load timing, navigation, duplicates, unavailable tracker assessed | Complete for the desktop Chromium scenarios above |
 | Existing coverage, gaps, and limited-value events inventoried | Complete |
@@ -191,3 +197,70 @@ Add dashboard observations, filters, and timestamps to this report. If Propertie
 | Follow-up issues filed | Complete: #184–#190 |
 
 This change is documentation only. Validate source references, relative links, event names, evidence totals, and whitespace; application regression tests are not required. No instrumentation, routes, public APIs, CMS schemas, or generated files change.
+
+## Current event inventory — 2026-10-08
+
+Inventory reviewed against `dev` at `1853110` and the documented feature contracts. Production remains `v26.98.1007`, release [#213](https://github.com/dangzo/dangz-dev/pull/213), revision `531bcb354770debc35dfc0b4a47c29744bb5882a`. GitHub deployment `6922269665` reports successful Production deployment at **2026-10-07 22:20:46 UTC**. These identify the deployed release separately from newer source changes.
+
+| Event | Current trigger and properties | Reporting purpose | Evidence available at this audit |
+| --- | --- | --- | --- |
+| Pageview | Each committed pathname/query visit; fragments ignored; captured URL/referrer retained before readiness | Popularity and navigation through pages, topics, pagination | Real-tracker regressions in [pageview guide](UMAMI_PAGEVIEWS.md); October 7 owner-assisted verification recorded in the separate local #186 worktree, not yet published on `dev` |
+| `reaction_attempted` | One accepted POST dispatch; `post_id`, `reaction_id`, `placement=compact` or `bottom` | Accepted engagement attempts by content/control | Current production request construction verified with collector intercepted; live/dashboard check pending |
+| `reaction_submission_succeeded` | HTTP OK and a valid finite, nonnegative integer count; same properties | Observed successful API responses | Simulated response/production-browser evidence; neither real persistence nor dashboard storage established yet |
+| `reaction_submission_failed` | HTTP/network/invalid-response failure; same properties, no error text | Observed failures and engagement friction | All three failure classes exercised at both placements with collector intercepted; live/dashboard check pending |
+| `post_bottom_reactions_reached` | First qualifying intersection per mounted post visit, retained until readiness; `post_id` | Exposure to bottom controls, not completed reading | Delayed readiness, repeat entry, stale navigation, blocking and opt-out verified with collector intercepted; live/dashboard check pending |
+| `search_opened` | Confirmed closed-to-open transition; `method=button` or `shortcut` | Search adoption | Production button-opening request observed with collector intercepted; broader fixture coverage in [search guide](SEARCH_ANALYTICS.md); stored-event verification remains separate |
+| `search_completed` | Successful current debounced response, including zero results; `query_length`, `result_count` | Search usefulness and zero-result rate | Current nonempty response request observed with collector intercepted; stale/aborted/failed/empty cases have documented fixture coverage; stored-event verification remains separate |
+| `search_result_selected` | Primary/modified link activation or router-driven keyboard selection; `post_id`, one-based `result_position` | Article discovery through search | Documented fixture coverage; production middle-click opens a tab but emits no selection event, tracked in #217 |
+| `post_opened` | Home/Blog/topic rendered title, CTA or reaction-summary activation; `post_id`, `source`, `placement` | Discovery effectiveness by entry point | [#189 production evidence](POST_DISCOVERY_ANALYTICS.md#production-verification--2026-10-07) includes normal headed collector responses and owner-confirmed counts/property breakdowns; current diagnostic navigation also produced the expected request |
+| `contact_clicked` | Email/LinkedIn activation; `channel`, `placement` | Contact intent by channel/control | All covered placements and local real-tracker evidence documented in [contact guide](CONTACT_ANALYTICS.md); current full production grouping is not claimed |
+| `resume_download_clicked` | About intro/journey résumé activation; `placement` | Résumé download intent | Real-tracker request and independent PDF-download fixture coverage documented in contact guide; production download/storage verification remains separate |
+| `outbound_link_clicked` | GitHub profiles: `destination_host`, `placement`; article HTTP(S) references additionally include `post_id`, `placement=article_body` | Profile/reference interest without full destination URLs | Profile evidence in contact guide; October 7 article-reference stored counts/properties recorded in the separate local #190 worktree, not yet published on `dev` |
+| `heading_link_copied` | Successful H2/H3/H4 clipboard write; `post_id`, `section_id` | Deliberate section-sharing intent | Success/rejection fixture coverage in [article guide](ARTICLE_ANALYTICS.md); October 7 stored event/property evidence recorded in the separate local #190 worktree, not yet published on `dev` |
+
+The local #186 and #190 documents contain existing uncommitted verification work owned by their respective tasks. This audit read them without editing, committing, or claiming their publication. Portable acceptance evidence for this audit is recorded here; ordinary issue state is not substituted for collector/dashboard evidence.
+
+The original High/Medium/Low priorities and reporting questions remain the rationale for the completed implementations. All seven original follow-ups are closed; that status is distinct from independently verified production delivery. The bounded additional gap is [#217](https://github.com/dangzo/dangz-dev/issues/217), which retains the existing search event contract and asks for middle-button selection coverage, accurate position, native new-tab behavior, no right-click event, and payload privacy.
+
+Ordinary navigation, topic archives and pagination need no extra custom events beyond destination pageviews. ToC/About fragment navigation intentionally adds no pageview. Scroll depth, code copying, compact disclosure, theme/menu toggles and ScrollToTop remain uninstrumented without an established reporting decision. Bottom exposure does not imply reading completion. Contact/résumé events measure intent, not completed actions.
+
+Search/discovery/heading-copy/reaction lifecycle use the shared 50-event, 60-second memory buffer; pageviews have a separate bounded queue. Script failure clears pending events, full document unload loses them, and there are no application transport retries. Bottom exposure is scoped to the mounted post visit. Contact and article-reference attributes are intentionally unbuffered before tracker readiness. These are undercounting limits, not evidence that an event was stored. Follow-up recommendations must not introduce raw search text, copied URLs, full outbound URLs, email addresses, error messages, or personal identifiers.
+
+## Refreshed production diagnostics — 2026-10-08
+
+Headed Chromium 151 used its default `Chrome/151.0.0.0` user agent, viewport **1280 × 900**, actual production pages and the actual fetched tracker. Every fetched tracker matched SHA-256 `91a876d767646fd5b7701b6fabf97f8a99ae53b94e7e5b58d465bad1e5d763e0`. The diagnostic window was **13:29:22.957–13:30:04.813 UTC** (**14:29:22–14:30:05 Atlantic/Canary**). All analytics requests were intercepted/fulfilled or deliberately aborted; **23 reaction POSTs** were intercepted. No diagnostic analytics or reaction writes reached their live collectors.
+
+All seven scenarios passed, with **zero page errors** and **52 observed collector attempts** across pageviews/custom events. These totals describe browser request evidence, not stored events.
+
+| Scenario | Observed result |
+| --- | --- |
+| Reaction matrix | Each placement: eight attempts, five simulated successes, three failures; one bottom exposure across repeated entry. Mouse/nested emoji, Enter, Space, same-control pending repeats, HTTP/network/invalid-count failures, and concurrent compact/bottom submissions exercised. Each accepted POST has one attempt and one outcome with exactly `post_id`, `reaction_id`, `placement`; ignored pending clicks dispatch neither POST nor analytics |
+| Held readiness | Reach bottom, scroll back and submit compact while the real script is held. Before release: no requests. Release within retention: one original-post exposure plus one compact attempt/success; no re-entry required |
+| Held navigation | Qualify post A before readiness, navigate to Blog, release script: no stale exposure. Open post B and qualify: exactly one B exposure with ID `51ab3708-b5ff-4ecf-a933-8afeef408b7e` |
+| Blocked script | Both simulated submissions remain usable; no collector attempts or page errors |
+| Opt-out | Real tracker honors `umami.disabled`; both simulated submissions remain usable, with no collector attempts |
+| Aborted collector | Exactly two reaction attempts/two simulated outcomes/one exposure, each attempted once; no application retry, page error or blocked submission |
+| Search middle-click | Search opens and completes; result opens in a new tab but no `search_result_selected` request. Confirmed gap filed as #217 |
+
+The reaction matrix used post `ccc19dd2-2579-4cc7-8cd0-a14c4ececdc4` and Like reaction `783c1d5e-c4ea-4702-ae4f-3cd4b25a80b2`. The assertions compare each initiating placement's event counts with intercepted dispatch counts. They do not equate shared count updates with additional submissions or claim production database persistence. Existing unit/fixture checks cover additional reconciliation and privacy cases; this documentation refresh did not rerun application suites.
+
+Sanitized ledgers and the temporary harness are retained under ignored `.tmp/168-verification/` in the audit worktree. Run `node .tmp/168-verification/audit.cjs` there for intercepted diagnostics, or add `--live` only during an owner-coordinated window. The harness uses the main checkout's installed Playwright, does not install dependencies, and closes its browser. These are local artifacts, not commands available in a fresh clone. A portable rerun uses the current feature-guide scenarios, headed Chromium, pre-navigation reaction interception, and safe response classification without logging tracker cache/session values.
+
+## Coordinated collector and owner-dashboard verification
+
+Pending owner readiness. The planned live matrix forwards only the three reaction lifecycle names and bottom exposure. Pageviews and unrelated events stay intercepted. All reaction POSTs remain simulated. The expected ledger is **33 stored events**: 16 `reaction_attempted`, 10 `reaction_submission_succeeded`, six `reaction_submission_failed`, and one `post_bottom_reactions_reached`; per placement, eight attempts/five successes/three failures.
+
+Record the exact UTC window and Canary equivalent after execution. Classify response shape in memory: HTTP 200 with ordinary cache issuance and no bot-filter/disabled marker supports collector acceptance, but still requires the owner's separate stored-event check. The owner filters `dangz.dev` and the window, confirms names/counts and the expected post/reaction/placement values, and reports any unrelated traffic or ingestion delay. No dashboard credentials or Share URL are needed for the selected owner-assisted method.
+
+## Current #168 acceptance
+
+| Criterion | Current status |
+| --- | --- |
+| Both reaction controls reach Umami; failures documented | Intercepted production diagnostics passed; normal live collector and owner-dashboard evidence pending |
+| Click tracking versus successful persistence distinguished | Complete: attempts/outcomes defined; simulated API successes are not persisted reactions |
+| Timing, client navigation, duplicates, unavailable tracker assessed | Complete for the documented Chromium scope; historical pageview defects have follow-ups and current regression contracts |
+| Inventory identifies coverage, gaps and limited-value events | Complete: historical and current inventories, evidence limits, adequate pageviews and confirmed #217 gap |
+| Prioritized recommendations give question, trigger, properties and validation | Complete: original recommendations retained, implementation status and bounded new gap documented |
+| Follow-up issues capture fixes/additions | Complete: #184–#190 and #217 |
+
+Use `Refs #168` until the pending live/dashboard row is verified. Only then change the PR to `Closes #168` against the current default branch `dev`. The audit does not need to implement #217 or complete every feature's separate rollout checks to deliver its investigation and recommendations.
