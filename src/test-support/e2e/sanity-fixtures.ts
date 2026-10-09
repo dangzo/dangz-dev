@@ -156,6 +156,22 @@ const imageViewerBody = [
   },
 ];
 
+const codeVariantsBody = [
+  ...headinglessArticleBody,
+  ...[1, 2].map((group) => ({
+    _key: `code-group-${group}`,
+    _type: 'codeGroup',
+    variants: [
+      { _key: 'vue', _type: 'codeVariant', label: 'Vue', snippet: { _type: 'code', language: 'vue', code: '<template><button @click="count++">{{ count }}</button></template>\n<script setup>const count = ref(0);</script>' } },
+      { _key: 'react', _type: 'codeVariant', label: 'React', snippet: { _type: 'code', language: 'tsx', code: 'export function Counter() {\n  const [count, setCount] = useState(0);\n  return <button onClick={() => setCount(count + 1)}>{count}</button>;\n}' } },
+      { _key: 'bash', _type: 'codeVariant', label: 'Shell', snippet: { _type: 'code', language: 'bash', code: '#!/usr/bin/env bash\nfor file in *.ts; do\n  echo "$file"\ndone\n# ' + 'A long shell comment '.repeat(12) } },
+    ],
+  })),
+  { _key: 'single-group', _type: 'codeGroup', variants: [{ _key: 'sh', _type: 'codeVariant', label: 'Shell alias', snippet: { _type: 'code', language: 'sh', code: 'echo "Hello from sh"' } }] },
+  { _key: 'legacy-bash', _type: 'code', language: 'bash', code: 'echo "Legacy Bash"' },
+  { _key: 'unsupported-group', _type: 'codeGroup', variants: [{ _key: 'plaintext', _type: 'codeVariant', label: 'Custom language', snippet: { _type: 'code', language: 'unsupported-fixture-language', code: '<safe> & plaintext' } }] },
+];
+
 const posts = Array.from({ length: 16 }, (_, index) => {
   const postNumber = index + 1;
   const postTags = index % 2 === 0 ? [tags[0], tags[1]] : [tags[2]];
@@ -187,7 +203,9 @@ const posts = Array.from({ length: 16 }, (_, index) => {
             ? headinglessArticleBody
             : postNumber === 5
               ? imageViewerBody
-              : undefined,
+              : postNumber === 6
+                ? codeVariantsBody
+                : undefined,
   };
 });
 
