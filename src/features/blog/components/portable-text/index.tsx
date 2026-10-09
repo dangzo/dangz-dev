@@ -3,6 +3,7 @@ export { default as BlockH2 } from './BlockH2';
 export { default as BlockH3 } from './BlockH3';
 export { default as BlockH4 } from './BlockH4';
 export { default as BlockNormal } from './BlockNormal';
+export { default as TypeCodeGroup } from './TypeCodeGroup';
 export { default as TypeCode } from './TypeCode';
 export { default as TypeTable } from './TypeTable';
 export { default as TypeImage } from './TypeImage';

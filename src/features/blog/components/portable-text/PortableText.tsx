@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react';
 import { PortableText as SanityPortableText } from 'next-sanity';
-import { PortableTextBlock } from 'sanity';
+import type { PortableTextBody } from '@/features/blog/hooks/usePostInsights';
 import { createHeadingIdFactory } from '@/features/blog/utils/posts';
 import {
   BlockH1,
@@ -16,11 +16,12 @@ import {
   MarkLink,
   TypeImage,
   TypeCode,
+  TypeCodeGroup,
   TypeTable,
 } from '@/features/blog/components/portable-text';
 
 interface PortableTextProps {
-  value: PortableTextBlock[];
+  value: PortableTextBody;
   postId: string;
 }
 
@@ -57,6 +58,7 @@ export default async function PortableText({ value, postId }: Readonly<PortableT
     types: {
       image: ({ value }) => <TypeImage value={value as Parameters<typeof TypeImage>[0]['value']} />,
       code: ({ value }) => <TypeCode value={value as Parameters<typeof TypeCode>[0]['value']} />,
+      codeGroup: ({ value }) => <TypeCodeGroup value={value as Parameters<typeof TypeCodeGroup>[0]['value']} />,
       table: ({ value }) => <TypeTable value={value as Parameters<typeof TypeTable>[0]['value']} />,
     },
   };

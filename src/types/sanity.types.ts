@@ -76,6 +76,63 @@ export type SanityImageAssetReference = {
   [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
 }
 
+export type LegacyPostBody = {
+  _type: 'legacyPostBody'
+  body?: Array<
+    | ({
+        _key: string
+      } & Table)
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'blockquote' | 'figcaption'
+        listItem?: 'bullet' | 'number'
+        markDefs?: Array<{
+          href?: string
+          _type: 'link'
+          _key: string
+        }>
+        level?: number
+        _type: 'block'
+        _key: string
+      }
+    | {
+        asset?: SanityImageAssetReference
+        media?: unknown
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        caption?: string
+        alt?: string
+        height?: number
+        width?: number
+        _type: 'image'
+        _key: string
+      }
+    | ({
+        _key: string
+      } & Code)
+  >
+}
+
+export type CodeVariant = {
+  _type: 'codeVariant'
+  label?: string
+  snippet?: Code
+}
+
+export type CodeGroup = {
+  _type: 'codeGroup'
+  variants?: Array<
+    {
+      _key: string
+    } & CodeVariant
+  >
+}
+
 export type TopicReference = {
   _ref: string
   _type: 'reference'
@@ -152,7 +209,18 @@ export type Post = {
     | ({
         _key: string
       } & Code)
+    | ({
+        _key: string
+      } & CodeGroup)
   >
+}
+
+export type Code = {
+  _type: 'code'
+  language?: string
+  filename?: string
+  code?: string
+  highlightedLines?: Array<number>
 }
 
 export type SanityImageCrop = {
@@ -195,14 +263,6 @@ export type Table = {
 export type TableRow = {
   _type: 'tableRow'
   cells?: Array<string>
-}
-
-export type Code = {
-  _type: 'code'
-  language?: string
-  filename?: string
-  code?: string
-  highlightedLines?: Array<number>
 }
 
 export type SanityImagePaletteSwatch = {
@@ -310,15 +370,18 @@ export type AllSanitySchemaTypes =
   | Slug
   | Reaction
   | SanityImageAssetReference
+  | LegacyPostBody
+  | CodeVariant
+  | CodeGroup
   | TopicReference
   | TagReference
   | Post
+  | Code
   | SanityImageCrop
   | SanityImageHotspot
   | Topic
   | Table
   | TableRow
-  | Code
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
