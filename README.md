@@ -358,6 +358,10 @@ The project is deployed on **Vercel**.
 - ~~Pushes to **`dev`** trigger preview deployments.~~ 
 - Merges to **`main`** trigger production deployments.
 
+Create a release from **Actions → Create release PR → Run workflow** on `dev`.
+The workflow fills in the `dev → main` PR for review; merge it after checks pass.
+See [Releases](docs/RELEASES.md) for authentication setup and rollout guidance.
+
 ---
 
 ## Build Version (Footer Semver)
