@@ -33,7 +33,7 @@ describe('CodeBlock', () => {
     expect(highlighter).toHaveTextContent('const x = 1;');
   });
 
-  it('shows the normalized language label when it is not plaintext', async () => {
+  it('shows the normalized language as a single selected tab', async () => {
     render(
       <CodeBlock
         value={{
@@ -44,7 +44,8 @@ describe('CodeBlock', () => {
       />,
     );
 
-    expect(await screen.findByText('bash')).toBeInTheDocument();
+    expect(await screen.findByRole('tab', { name: 'bash' })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getAllByText('bash')).toHaveLength(1);
   });
 
   it('shows vue label when language is vue', async () => {
@@ -59,10 +60,10 @@ describe('CodeBlock', () => {
     );
 
     await screen.findByTestId('syntax-highlighter');
-    expect(await screen.findByText('vue')).toBeInTheDocument();
+    expect(await screen.findByRole('tab', { name: 'vue' })).toBeInTheDocument();
   });
 
-  it('does not show a language label for plaintext', async () => {
+  it('shows a plaintext tab for legacy plaintext snippets', async () => {
     render(
       <CodeBlock
         value={{
@@ -74,7 +75,7 @@ describe('CodeBlock', () => {
     );
 
     await screen.findByTestId('syntax-highlighter');
-    expect(screen.queryByText('plaintext')).not.toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: 'plaintext' })).toHaveAttribute('aria-selected', 'true');
   });
 
   it('copies the snippet to the clipboard and briefly shows confirmation', async () => {
@@ -121,8 +122,8 @@ describe('CodeBlock', () => {
       />,
     );
 
-    const root = (await screen.findByTestId('syntax-highlighter')).parentElement;
-    expect(root?.className).toContain('border-gray-800');
+    const root = (await screen.findByTestId('syntax-highlighter')).closest('[data-code-group]');
+    expect(root).toHaveClass('dark:border-gray-800');
     expect(screen.getByTestId('syntax-highlighter')).toHaveTextContent('const x = 1; // dark');
   });
 });

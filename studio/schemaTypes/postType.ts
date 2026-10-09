@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
+import { codeLanguageOptions } from './codeLanguageOptions';
 import { TOPICS } from '../../src/data/blogTopics';
 import { PrimaryTopicInput } from '../components/PrimaryTopicInput';
 import { validateKeywords, validatePrimaryTopic, validateSummary } from '../utils/topicValidation';
@@ -160,24 +161,9 @@ export const postType = defineType({
         }),
         defineArrayMember({
           type: 'code',
-          options: {
-            language: 'typescript',
-            languageAlternatives: [
-              { title: 'JavaScript', value: 'javascript' },
-              { title: 'JSX', value: 'jsx' },
-              { title: 'TypeScript', value: 'typescript' },
-              { title: 'TSX', value: 'tsx' },
-              { title: 'HTML', value: 'html' },
-              { title: 'XML', value: 'xml' },
-              { title: 'Bash', value: 'bash' },
-              { title: 'JSON', value: 'json' },
-              { title: 'CSS', value: 'css' },
-              { title: 'Docker', value: 'docker' },
-              { title: 'Nginx', value: 'nginx' },
-              { title: 'Vue', value: 'vue' }
-            ],
-          },
+          options: codeLanguageOptions,
         }),
+        defineArrayMember({ type: 'codeGroup' }),
       ],
     }),
   ],
