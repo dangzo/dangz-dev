@@ -24,11 +24,19 @@ for (const theme of ['light', 'dark'] as const) {
 
       await expect(vue).toHaveAttribute('aria-selected', 'true');
       await expect(group.getByRole('tabpanel')).toHaveCount(1);
-      const headerBox = await group.getByRole('tablist').boundingBox();
-      const panelBox = await group.getByRole('tabpanel').boundingBox();
-      expect(headerBox).not.toBeNull();
-      expect(panelBox).not.toBeNull();
-      expect(Math.abs((headerBox?.y ?? 0) + (headerBox?.height ?? 0) - (panelBox?.y ?? 0))).toBeLessThanOrEqual(1);
+      await expect.poll(() => group.evaluate((element) => {
+        const header = element.querySelector('[role="tablist"]');
+        const panel = element.querySelector('[role="tabpanel"]:not([hidden])');
+
+        if (!header || !panel) {
+          return Number.POSITIVE_INFINITY;
+        }
+
+        const headerBox = header.getBoundingClientRect();
+        const panelBox = panel.getBoundingClientRect();
+
+        return Math.abs(headerBox.bottom - panelBox.top);
+      })).toBeLessThanOrEqual(1);
       await react.click();
       await expect(group.getByRole('tabpanel')).toContainText('export function Counter()');
       const copy = group.getByRole('button', { name: 'Copy code' });
