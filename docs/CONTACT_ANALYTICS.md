@@ -6,13 +6,14 @@ contact completed, profile engagement, or download completion.
 
 | Event | Custom properties | Placements |
 | --- | --- | --- |
-| `contact_clicked` | `channel`: `email` or `linkedin`; `placement` | Home email; About intro LinkedIn; About contact email/LinkedIn; footer email/LinkedIn |
-| `resume_download_clicked` | `placement` | About intro and journey |
-| `outbound_link_clicked` | `destination_host`: `github.com`; `placement` | Home, About contact, footer |
+| `contact_clicked` | `channel`: `email` or `linkedin`; `placement` | Home email; About intro LinkedIn; About contact email/LinkedIn; footer and command-palette email/LinkedIn |
+| `resume_download_clicked` | `placement` | About intro and journey; command palette |
+| `outbound_link_clicked` | `destination_host`: `github.com`; `placement` | Home, About contact, footer, command palette |
 
 Placement values are exactly `home`, `about_intro`, `about_journey`,
-`about_contact`, and `footer`. There are 11 distinct controls: two Home,
-six About, and three shared footer controls. The footer retains `footer`
+`about_contact`, `footer`, and `command_palette`. There are 11 existing controls: two Home,
+six About, and three shared footer controls. Issue #176 adds four contact commands
+in the lazy-loaded search palette: email, LinkedIn, GitHub, and résumé. The footer retains `footer`
 placement on every page; Umami's source-page metadata identifies the page.
 Article references reuse `outbound_link_clicked` with `placement=article_body`,
 a CMS `post_id`, and the reference hostname. See [article analytics](ARTICLE_ANALYTICS.md)
@@ -91,7 +92,7 @@ pending until the updated deployment is available.
 
 1. Confirm deployed revision and hostname; record the UTC start/end window.
    Use the actual production tracker with fresh browser contexts.
-2. Activate all 11 controls by mouse and focused Enter. Include Home nested
+2. Activate the 11 page/footer controls and four palette contact commands by mouse and focused Enter. Include Home nested
    spans and footer SVG paths. Record event name, source path, custom properties,
    and collector response status. Confirm exactly one new event and no legacy
    event per activation, with no sensitive destination data in custom properties.

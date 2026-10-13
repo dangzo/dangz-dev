@@ -1,4 +1,4 @@
-import { createRef } from 'react';
+import { createRef, useState } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -13,15 +13,19 @@ beforeAll(() => {
 
 vi.mock('next/link', () => import('@/tests/unit/mocks/nextLink'));
 
-const push = vi.fn();
+const { setTheme, themeState } = vi.hoisted(() => ({
+  setTheme: vi.fn(),
+  themeState: { resolvedTheme: 'light' },
+}));
 
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push }),
+vi.mock('next-themes', () => ({
+  useTheme: () => ({ ...themeState, setTheme }),
 }));
 
 describe('SearchModal', () => {
   beforeEach(() => {
-    push.mockClear();
+    setTheme.mockClear();
+    themeState.resolvedTheme = 'light';
     vi.mocked(trackSearchResultSelected).mockClear();
   });
 
@@ -38,7 +42,7 @@ describe('SearchModal', () => {
         onClose={vi.fn()}
       />,
     );
-    expect(screen.queryByRole('dialog', { name: 'Search posts' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('dialog', { name: 'Search posts and commands' })).not.toBeInTheDocument();
   });
 
   it('tracks a nested result click exactly once before closing', async () => {
@@ -90,7 +94,7 @@ describe('SearchModal', () => {
         onClose={vi.fn()}
       />,
     );
-    expect(screen.getByRole('dialog', { name: 'Search posts' })).toBeInTheDocument();
+    expect(screen.getByRole('dialog', { name: 'Search posts and commands' })).toBeInTheDocument();
   });
 
   it('invokes onClose when the backdrop close control is used', async () => {
@@ -146,7 +150,7 @@ describe('SearchModal', () => {
         onClose={vi.fn()}
       />,
     );
-    expect(screen.getByText(/Type at least 2 characters to search posts/)).toBeInTheDocument();
+    expect(screen.getByText(/at least 2 characters to search posts/)).toBeInTheDocument();
   });
 
   it('shows loading copy while a search is in flight', () => {
@@ -178,7 +182,7 @@ describe('SearchModal', () => {
         onClose={vi.fn()}
       />,
     );
-    expect(screen.getByText('No results found for "xyz".')).toBeInTheDocument();
+    expect(screen.getByText('No posts or commands found for "xyz".')).toBeInTheDocument();
   });
 
   it('renders result links to the blog slug routes', () => {
@@ -223,9 +227,10 @@ describe('SearchModal', () => {
         onClose={onClose}
       />,
     );
+    inputRef.current?.focus();
     await user.keyboard('{Enter}');
     expect(onClose).toHaveBeenCalledTimes(1);
-    expect(push).toHaveBeenCalledWith('/blog/one');
+    expect(trackSearchResultSelected).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ slug: 'one' }), 0);
   });
 
   it('moves the active result with arrow keys before opening on Enter', async () => {
@@ -246,9 +251,108 @@ describe('SearchModal', () => {
         onClose={onClose}
       />,
     );
+    inputRef.current?.focus();
     await user.keyboard('{ArrowDown}');
     await user.keyboard('{ArrowDown}');
     await user.keyboard('{Enter}');
-    expect(push).toHaveBeenCalledWith('/blog/two');
+    expect(trackSearchResultSelected).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ slug: 'two' }), 1);
+    expect(onClose).toHaveBeenCalledOnce();
   });
+
+  it('shows commands immediately without a post query', () => {
+    render(<SearchModal isOpen query="" results={[]} isLoading={false}
+      inputRef={createRef<HTMLInputElement>()} onQueryChange={vi.fn()} onClose={vi.fn()} />);
+    expect(screen.getByRole('link', { name: 'Go to Home' })).toHaveAttribute('href', '/');
+    expect(screen.getByRole('link', { name: 'Go to Post list' })).toHaveAttribute('href', '/blog');
+    expect(screen.getByRole('link', { name: 'Go to About' })).toHaveAttribute('href', '/about');
+    expect(screen.queryByRole('button', { name: 'Use system theme' })).not.toBeInTheDocument();
+  });
+
+  it.each(['BLOG', 'posts', 'articles'])('matches the post-list alias %s', (query) => {
+    render(<SearchModal isOpen query={query} results={[]} isLoading={false}
+      inputRef={createRef<HTMLInputElement>()} onQueryChange={vi.fn()} onClose={vi.fn()} />);
+    expect(screen.getByRole('link', { name: 'Go to Post list' })).toBeVisible();
+    expect(screen.queryByRole('link', { name: 'Go to About' })).not.toBeInTheDocument();
+  });
+
+  it.each([' CV ', 'resume'])('matches the résumé alias %s', (query) => {
+    render(<SearchModal isOpen query={query} results={[]} isLoading={false}
+      inputRef={createRef<HTMLInputElement>()} onQueryChange={vi.fn()} onClose={vi.fn()} />);
+    expect(screen.getByRole('link', { name: 'Download résumé' })).toHaveAttribute('download');
+  });
+
+  it('keeps matching commands usable while loading and hides stale posts', async () => {
+    const onClose = vi.fn();
+    render(<SearchModal isOpen query="about" results={[
+      { id: 'stale', slug: 'stale', title: 'Stale post', excerpt: '', primaryTopic: null },
+    ]} isLoading inputRef={createRef<HTMLInputElement>()} onQueryChange={vi.fn()} onClose={onClose} />);
+    expect(screen.queryByRole('link', { name: 'Stale post' })).not.toBeInTheDocument();
+    await userEvent.setup().click(screen.getByRole('link', { name: 'Go to About' }));
+    expect(onClose).toHaveBeenCalledOnce();
+    expect(trackSearchResultSelected).not.toHaveBeenCalled();
+  });
+
+  it.each([['light', 'dark'], ['dark', 'light']])('toggles resolved %s theme to %s', async (resolvedTheme, targetTheme) => {
+    themeState.resolvedTheme = resolvedTheme;
+    const onClose = vi.fn();
+    render(<SearchModal isOpen query="" results={[]} isLoading={false}
+      inputRef={createRef<HTMLInputElement>()} onQueryChange={vi.fn()} onClose={onClose} />);
+    await userEvent.setup().click(screen.getByRole('button', { name: 'Toggle light/dark theme' }));
+    expect(setTheme).toHaveBeenCalledExactlyOnceWith(targetTheme);
+    expect(onClose).toHaveBeenCalledOnce();
+    expect(trackSearchResultSelected).not.toHaveBeenCalled();
+  });
+
+  it('preserves contact destinations and palette analytics attributes', () => {
+    render(<SearchModal isOpen query="" results={[]} isLoading={false}
+      inputRef={createRef<HTMLInputElement>()} onQueryChange={vi.fn()} onClose={vi.fn()} />);
+    expect(screen.getByRole('link', { name: 'Email me' })).toHaveAttribute('href', expect.stringMatching(/^mailto:/));
+    for (const label of ['View GitHub', 'Connect on LinkedIn']) {
+      const link = screen.getByRole('link', { name: label });
+      expect(link).toHaveAttribute('target', '_blank');
+      expect(link.getAttribute('rel')).toContain('noopener');
+      expect(link).toHaveAttribute('data-umami-event-placement', 'command_palette');
+    }
+    expect(screen.getByRole('link', { name: 'Download résumé' })).toHaveAttribute('data-umami-event', 'resume_download_clicked');
+  });
+
+  it('resumes typing at the saved selection without losing later characters', async () => {
+    const inputRef = createRef<HTMLInputElement>();
+    const ControlledSearch = () => {
+      const [query, setQuery] = useState('about');
+      return (
+        <SearchModal isOpen query={query} results={[]} isLoading={false}
+          inputRef={inputRef} onQueryChange={setQuery} onClose={vi.fn()} />
+      );
+    };
+    render(<ControlledSearch />);
+    const input = screen.getByRole('textbox');
+    inputRef.current?.focus();
+    inputRef.current?.setSelectionRange(1, 3);
+    screen.getByRole('link', { name: 'Go to About' }).focus();
+    await userEvent.setup().keyboard('Xyz');
+    expect(input).toHaveFocus();
+    expect(input).toHaveValue('aXyzut');
+    expect(inputRef.current?.selectionStart).toBe(4);
+  });
+
+  it('moves focus from the input through command rows with arrow keys', async () => {
+    const inputRef = createRef<HTMLInputElement>();
+    const props = {
+      isOpen: true, query: '', results: [], isLoading: false, inputRef,
+      onQueryChange: vi.fn(), onClose: vi.fn(),
+    };
+    const { rerender } = render(<SearchModal {...props} />);
+    inputRef.current?.focus();
+    const user = userEvent.setup();
+    await user.keyboard('{ArrowDown}');
+    expect(screen.getByRole('link', { name: 'Connect on LinkedIn' })).toHaveFocus();
+    await user.keyboard('{ArrowDown}');
+    expect(screen.getByRole('link', { name: 'Download résumé' })).toHaveFocus();
+    inputRef.current?.focus();
+    rerender(<SearchModal {...props} query="about" />);
+    await user.keyboard('{ArrowDown}');
+    expect(screen.getByRole('link', { name: 'Go to About' })).toHaveFocus();
+  });
+
 });

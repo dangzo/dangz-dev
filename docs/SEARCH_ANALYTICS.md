@@ -20,7 +20,17 @@ Search, article discovery, and reaction lifecycle events share `src/utils/analyt
 
 Script failure clears the shared queue and disables further search, discovery, and reaction collection for that document. No tracker reload, alternative collector, persistent storage, or transport retry bypasses unavailable analytics. Each event gets at most one tracker invocation. A resolved tracker promise does not prove collector acceptance or dashboard visibility.
 
-This reuses #184's readiness integration but does not change its per-article exposure policy. #176's command-palette enhancements remain separate.
+This reuses #184's readiness integration but does not change its per-article exposure policy.
+
+## Command palette
+
+Issue [#176](https://github.com/dangzo/dangz-dev/issues/176) extends the same lazy-loaded dialog with navigation to Home, the post list, and About; light/dark toggling; and résumé, email, GitHub, and LinkedIn shortcuts. Commands use compact rows prefixed with `> ` and sorted alphabetically by label. They appear immediately and filter locally using case-insensitive words and aliases such as posts, articles, CV, and resume. Post matches appear first, followed by matching commands. Post searches retain the two-character minimum and 180 ms debounce.
+
+ArrowDown from the search input moves focus to the first visible row, and Up/Down move focus through the rows with wrapping. Typing or Backspace while a row is focused returns focus to the input and applies that edit at its saved caret or selection. Modifier shortcuts retain their native behavior. Native row focus exposes each label to screen readers; Enter activates the focused link or button. Enter from the input activates the highlighted row, or the first row when none is highlighted. While a post search is pending, including its debounce, Enter requires an explicitly highlighted command. Query changes immediately hide stale post results and reset selection. Command matches remain available if the post request fails. Tab stays inside the dialog, background elements are inert, and dismissal restores the previous focus.
+
+`search_opened` continues to count palette openings. `search_completed` counts only returned posts, and `search_result_selected` retains the article's one-based position within post results. Theme and site-navigation commands emit neither selection nor new command events. Contact shortcuts reuse existing contact events with `placement=command_palette`; see [contact analytics](CONTACT_ANALYTICS.md). Their rendered anchors preserve native activation, targets, and downloads. Middle-click leaves the dialog open.
+
+Other investigated actions were article-specific heading/link copying, table-of-contents navigation, and reaction shortcuts. These depend on article context and remain outside this global-command change.
 
 ## Validation and production handoff
 

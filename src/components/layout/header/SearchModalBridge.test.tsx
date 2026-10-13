@@ -38,7 +38,7 @@ describe('SearchModalBridge', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog', { name: 'Search posts' })).toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: 'Search posts and commands' })).toBeInTheDocument();
     });
     await waitFor(() => {
       expect(onOpenChange).toHaveBeenCalledWith(true);
@@ -51,14 +51,14 @@ describe('SearchModalBridge', () => {
       <SearchModalBridge openRequest={0} closeRequest={0} onOpenChange={onOpenChange} />,
     );
 
-    expect(screen.queryByRole('dialog', { name: 'Search posts' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('dialog', { name: 'Search posts and commands' })).not.toBeInTheDocument();
 
     rerender(
       <SearchModalBridge openRequest={1} closeRequest={0} onOpenChange={onOpenChange} />,
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog', { name: 'Search posts' })).toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: 'Search posts and commands' })).toBeInTheDocument();
     });
   });
 
@@ -69,7 +69,7 @@ describe('SearchModalBridge', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog', { name: 'Search posts' })).toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: 'Search posts and commands' })).toBeInTheDocument();
     });
 
     onOpenChange.mockClear();
@@ -78,7 +78,7 @@ describe('SearchModalBridge', () => {
     );
 
     await waitFor(() => {
-      expect(screen.queryByRole('dialog', { name: 'Search posts' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('dialog', { name: 'Search posts and commands' })).not.toBeInTheDocument();
     });
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
@@ -91,14 +91,14 @@ describe('SearchModalBridge', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog', { name: 'Search posts' })).toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: 'Search posts and commands' })).toBeInTheDocument();
     });
 
     onOpenChange.mockClear();
     await user.keyboard('{Escape}');
 
     await waitFor(() => {
-      expect(screen.queryByRole('dialog', { name: 'Search posts' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('dialog', { name: 'Search posts and commands' })).not.toBeInTheDocument();
     });
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });

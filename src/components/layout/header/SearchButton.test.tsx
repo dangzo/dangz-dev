@@ -66,7 +66,7 @@ describe('SearchButton', () => {
     const button = screen.getByRole('button', { name: 'Search' });
     await user.click(button);
     await waitFor(() => {
-      expect(screen.getByRole('dialog', { name: 'Search posts' })).toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: 'Search posts and commands' })).toBeInTheDocument();
     });
     expect(button).toHaveAttribute('aria-expanded', 'true');
   });
@@ -76,11 +76,11 @@ describe('SearchButton', () => {
     render(<SearchButton />);
     await user.click(screen.getByRole('button', { name: 'Search' }));
     await waitFor(() => {
-      expect(screen.getByRole('dialog', { name: 'Search posts' })).toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: 'Search posts and commands' })).toBeInTheDocument();
     });
     await user.keyboard('{Escape}');
     await waitFor(() => {
-      expect(screen.queryByRole('dialog', { name: 'Search posts' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('dialog', { name: 'Search posts and commands' })).not.toBeInTheDocument();
     });
     expect(screen.getByRole('button', { name: 'Search' })).toHaveAttribute('aria-expanded', 'false');
   });
@@ -91,11 +91,11 @@ describe('SearchButton', () => {
     const button = screen.getByRole('button', { name: 'Search' });
     await user.click(button);
     await waitFor(() => {
-      expect(screen.getByRole('dialog', { name: 'Search posts' })).toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: 'Search posts and commands' })).toBeInTheDocument();
     });
     await user.click(button);
     await waitFor(() => {
-      expect(screen.getByRole('dialog', { name: 'Search posts' })).toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: 'Search posts and commands' })).toBeInTheDocument();
     });
     expect(button).toHaveAttribute('aria-expanded', 'true');
   });
@@ -108,7 +108,7 @@ describe('SearchButton', () => {
     await user.keyboard('{Control>}k{/Control}');
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog', { name: 'Search posts' })).toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: 'Search posts and commands' })).toBeInTheDocument();
     });
     expect(button).toHaveAttribute('aria-expanded', 'true');
   });
@@ -121,7 +121,7 @@ describe('SearchButton', () => {
     await user.keyboard('{Meta>}k{/Meta}');
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog', { name: 'Search posts' })).toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: 'Search posts and commands' })).toBeInTheDocument();
     });
     expect(button).toHaveAttribute('aria-expanded', 'true');
   });
@@ -133,13 +133,13 @@ describe('SearchButton', () => {
 
     await user.keyboard('{Control>}k{/Control}');
     await waitFor(() => {
-      expect(screen.getByRole('dialog', { name: 'Search posts' })).toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: 'Search posts and commands' })).toBeInTheDocument();
       expect(button).toHaveAttribute('aria-expanded', 'true');
     });
 
     await user.keyboard('{Control>}k{/Control}');
     await waitFor(() => {
-      expect(screen.queryByRole('dialog', { name: 'Search posts' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('dialog', { name: 'Search posts and commands' })).not.toBeInTheDocument();
     });
     expect(button).toHaveAttribute('aria-expanded', 'false');
   });
