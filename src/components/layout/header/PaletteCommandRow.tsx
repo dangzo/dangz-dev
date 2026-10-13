@@ -56,7 +56,7 @@ export default function PaletteCommandRow({
       {...itemProps}
       {...command.analytics}
       href={command.href}
-      target="_blank"
+      target={command.href.startsWith('mailto:') ? undefined : '_blank'}
       rel="noopener noreferrer"
       download={command.download}
       onClick={onClose}
