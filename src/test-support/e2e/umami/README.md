@@ -19,6 +19,15 @@ See [pageview validation](../../../../docs/UMAMI_PAGEVIEWS.md).
 This fixture tests the captured tracker version, not future cloud updates.
 Production verification must use the actual deployed tracker separately.
 To update the fixture, fetch the official script, review its behavior, record
-the capture date and SHA-256 here, and rerun the contact browser suite.
+the capture date and SHA-256 here, and rerun every real-tracker browser suite:
+
+```sh
+yarn test:e2e src/tests/e2e/contact-analytics.spec.ts src/tests/e2e/article-analytics.spec.ts --workers=1
+yarn test:e2e:pageviews
+```
+
+Run the commands sequentially: their fixture servers share `.next-e2e` output.
+See [shared evidence limits](../../../../docs/ANALYTICS.md#verification) for
+production verification with the deployed tracker.
 
 Upstream: https://github.com/umami-software/umami. See `LICENSE` for its MIT license.

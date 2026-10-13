@@ -75,9 +75,8 @@ horizontally within the article on mobile.
    normal publication. Record deployment and verification results separately
    from fixture-based evidence.
 
-This task authorizes the additive GraphQL deployment and Studio deployment
-after owner confirmation of the frontend release. Frontend production release
-remains with the owner. Do not publish a test article solely for verification.
+Deployment requires authorization in the current task and confirmation that the
+frontend renderer is live. Do not publish a test article solely for verification.
 
 For rollback, restore the previous Studio deployment to stop new grouped
 authoring. The additive GraphQL schema can remain deployed. If grouped articles
@@ -86,24 +85,11 @@ those specific editorial changes before rolling it back.
 
 ## Rollout checkpoint: 2026-10-09
 
-- The `production/default` GraphQL schema was deployed after a dry run reported
-  no breaking changes. Read-back through the frontend's existing `v2023-08-01`
-  URL confirmed `CodeGroup`, `CodeVariant`, the legacy body union, and an existing
-  article's `bodyRaw`.
-- Local Studio browser checks confirmed variant creation, editing, pointer
-  reordering, Bash editor token colors, and blank-label publication blocking.
-  Authenticated GraphQL draft preview returned the saved order and exact code.
-  The disposable unpublished draft was removed after verification.
-  Local Studio logged background EventSource fetch errors despite successful
-  saves and read-back; verify realtime connectivity in the deployed Studio check.
-- Validation passed: 47 focused unit tests, 28 existing article browser checks,
-  four new viewport/theme checks, frontend/Studio type checks and lint, and both
-  production builds. Frontend lint excluded existing ignored `.tmp/`,
-  `playwright-report/`, and `test-results/` artifacts. Screenshots remain under
-  `.tmp/issue-167/`.
-- Frontend production release remains with the owner. Studio deployment and
-  deployed-frontend verification await confirmation that the renderer is live.
-- The follow-up tab layout uses one shared frame for every snippet, including
-  single-language and legacy blocks. The separate language badge is removed.
-  Validation passed for 18 component tests and four viewport/theme browser
-  checks, including keyboard navigation, copying, and the attached header layout.
+The recorded checkpoint confirmed additive `production/default` GraphQL
+deployment, including the legacy body union and an existing article's `bodyRaw`.
+Local Studio and authenticated draft checks verified authoring, ordering,
+validation, and exact code; the disposable draft was removed. Realtime Studio
+connectivity still needed a deployed check after local EventSource errors.
+Frontend production release, hosted Studio deployment, and verification of the
+live renderer were not established by this checkpoint. Confirm their current
+state before publishing grouped content; local checks alone do not prove rollout.

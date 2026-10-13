@@ -1,393 +1,94 @@
 # dangz-dev
 
-A personal blog and portfolio site built with **Next.js**, **TypeScript**, and **Sanity CMS**.
+Daniele Gazzelloni's portfolio and frontend engineering blog: [dangz.dev](https://dangz.dev/).
+The root `blog` package runs Next.js, React, and TypeScript; the `studio/` Yarn workspace manages Sanity content.
 
-🔗 **Live URL:** [https://dangz.dev/](https://dangz.dev/)
+## Getting started
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Tech Stack](#tech-stack)
-- [Monorepo Structure](#monorepo-structure)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Run Locally](#run-locally)
-  - [Linting](#linting)
-  - [Type Checking](#type-checking)
-  - [Testing Strategy](#testing-strategy)
-    - [Unit Tests (Vitest)](#unit-tests-vitest)
-    - [End-to-End Tests (Playwright)](#end-to-end-tests-playwright)
-- [Yarn Workspaces](#yarn-workspaces)
-  - [Available Scripts](#available-scripts)
-    - [Core Commands](#core-commands)
-    - [Quality Commands](#quality-commands)
-    - [Lighthouse Commands](#lighthouse-commands)
-    - [Utility and Deployment Commands](#utility-and-deployment-commands)
-- [CI/CD Pipeline](#cicd-pipeline)
-  - [CodeRabbit reviews](#coderabbit-reviews)
-  - [Kodiak and automerge](#kodiak-and-automerge)
-  - [PR labels](#pr-labels)
-  - [Issue and PR templates](#issue-and-pr-templates)
-- [Project Structure](#project-structure)
-- [AI Agent Guidance](#ai-agent-guidance)
-- [Deployment](#deployment)
-- [Build Version (Footer Semver)](#build-version-footer-semver)
-  - [How It Is Generated](#how-it-is-generated)
-- [License](#license)
-
----
-
-## Overview
-
-This project serves as a personal web presence for publishing content and showcasing work. It combines a modern frontend stack with a headless CMS setup for flexible content management.
-
-For the blog topic taxonomy, article assignments, and Sanity rollout sequence, see [docs/BLOG_TOPICS.md](docs/BLOG_TOPICS.md).
-
----
-
-## Tech Stack
-
-| Technology | Purpose |
-|---|---|
-| [React](https://reactjs.org/) | UI library for building interactive interfaces |
-| [Next.js](https://nextjs.org/) | App framework for routing, rendering, and deployment |
-| [TypeScript](https://www.typescriptlang.org/) | Static typing and improved developer experience |
-| [Sanity CMS](https://www.sanity.io/) | Headless CMS for structured content management |
-
----
-
-## Monorepo Structure
-
-This project is managed as a **Yarn workspaces** monorepo containing two packages:
-
-| Package | Location | Description |
-|---|---|---|
-| `blog` (Next.js app) | `/` | Personal blog and portfolio frontend |
-| `studio` (Sanity Studio) | `studio/` | Sanity content management studio |
-
-A single `yarn install` from the root installs dependencies for both packages.
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js `>= 24.15`
-- Yarn `>= 1.22.22`
-- `.env` file at the root and `studio/.env` for Sanity Studio env vars
-
-### Installation
+Use the Node version required by [package.json](package.json) and its declared Yarn version. Install both workspaces from the root with the single lockfile:
 
 ```bash
 git clone https://github.com/dangzo/dangz-dev.git
 cd dangz-dev
-yarn install
+yarn install --frozen-lockfile
 ```
 
-### Run Locally
-
-Start the Next.js app:
+Configure root `.env` and `studio/.env` for your Sanity project. Read variable names from the application clients and Studio config/CLI files. Keep tokens and the webhook signing secret server-side; see [WORKFLOW](docs/WORKFLOW.md#run-locally).
 
 ```bash
-yarn dev
+yarn dev                    # site: http://localhost:3000
+yarn workspace studio dev   # Studio: http://localhost:3333
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in the browser.
+Run each server in its own terminal. [ARCHITECTURE](docs/ARCHITECTURE.md) maps source and data flow; [WORKFLOW](docs/WORKFLOW.md) covers checks, fixtures, generated files, and agent tooling. [Package scripts](package.json) are the command inventory.
 
-Start the Sanity Studio:
+## Validation
+
+Select checks by impact using [WORKFLOW](docs/WORKFLOW.md#validate-the-affected-behavior):
 
 ```bash
-cd studio && yarn dev
+yarn ci:lint       # frontend and Studio
+yarn ci:typecheck  # includes Studio config and CLI files
+yarn test:unit     # frontend, Studio, and scripts; excludes browser specs
+yarn test:e2e      # ordinary fixture-backed browser flows
+yarn test:e2e:pageviews # real-tracker pageview/discovery integration
+yarn ci:build      # frontend and Studio production builds
 ```
 
-Open [http://localhost:3333](http://localhost:3333) in the browser.
+Vitest uses jsdom by default; migration tests select Node. Playwright starts isolated fixture servers; ordinary and pageview suites must run sequentially in one checkout because they share `.next-e2e`. Browser tests use functional and targeted layout assertions, with failure screenshots and first-retry traces. Pixel baselines are not maintained.
 
-### Linting
+`yarn ci:test` runs unit, ordinary browser, and pageview suites. `yarn ci` adds lint, types, both Lighthouse presets, and builds. `yarn lint:changed` checks staged JS/TS only; the pre-push hook type-checks the frontend and lints committed changes relative to upstream.
 
-Lint both packages from the root:
+## CI/CD pipeline
 
-```bash
-yarn lint && yarn lint-studio
-```
+[PR Checks](.github/workflows/pr-quality-and-build.yml) runs on opened, updated, reopened, ready-for-review, labeled, and unlabeled PR events. The label gate runs first; dependency setup enables parallel lint, unit/browser tests, type checks, and builds. Mobile and desktop Lighthouse audits reuse the production build on separate runners.
 
-To auto-fix lint issues where supported:
-
-```bash
-yarn lint --fix
-```
-
-### Type Checking
-
-Type-check both packages from the root:
-
-```bash
-yarn typecheck && yarn typecheck-studio
-```
-
-Note: `yarn typecheck-studio` intentionally excludes `studio/sanity.config.ts` and `studio/sanity.cli.ts` for now due a dependency-type duplication conflict between workspace and hoisted Sanity packages. The rest of Studio `.ts/.tsx` files are still type-checked in CI.
-
-### Testing Strategy
-
-This project uses a two-layer testing approach:
-
-- **Unit/component tests** with **Vitest + Testing Library**
-- **End-to-end tests** with **Playwright**
-
-The layers are intentionally separated so unit tests stay fast and deterministic, while e2e tests validate full user flows in a real browser.
-
-#### Unit Tests (Vitest)
-
-- **Command:** `yarn test:unit` (single run)
-- **Runtime:** `jsdom`
-- **Scope:** component tests, hooks, utility functions, API helpers
-- **Location:** `src/**/*.test.ts(x)` and `src/**/*.spec.ts(x)`
-- **Config:** [`vitest.config.ts`](vitest.config.ts)
-
-Vitest explicitly excludes e2e specs under `src/tests/e2e/**`, so `yarn test:unit` does **not** execute Playwright tests.
-
-#### End-to-End Tests (Playwright)
-
-- **Command:** `yarn test:e2e`
-- **Variants:** `yarn test:e2e:headed`, `yarn test:e2e:ui`
-- **Scope:** route-level user journeys and integration behavior (home, blog, article, about, global UI)
-- **Location:** `src/tests/e2e/`
-- **Config:** [`playwright.config.ts`](playwright.config.ts)
-
-Playwright starts an isolated app server automatically via the configured `webServer` command and runs against `http://127.0.0.1:3100` by default.
-
-Browser tests use deterministic E2E CMS fixtures and check user journeys and targeted layout behavior. Automated pixel comparisons and committed screenshot baselines are not used. For UI changes, inspect affected pages at desktop and mobile widths in both light and dark themes, capturing screenshots when useful for review. Playwright retains failure screenshots and first-retry traces for debugging.
-
----
-
-## Yarn Workspaces
-
-This monorepo is managed with Yarn workspaces, and the root `package.json` defines the workspace configuration and shared dependencies. Each package (project root and `studio`) has its own `package.json` for package-specific dependencies and scripts.
-
-### Available Scripts
-
-#### Core Commands
-
-| Command | Description |
-|---|---|
-| `yarn dev` | Starts the Next.js development server |
-| `yarn build` | Builds the Next.js app for production |
-| `yarn start` | Starts the Next.js production server |
-| `yarn preview` | Builds and starts the Next.js app for previewing production build locally |
-| `yarn build-studio` | Builds the Sanity Studio only |
-
-#### Quality Commands
-
-| Command | Description |
-|---|---|
-| `yarn lint` | Lints the Next.js app |
-| `yarn lint:changed` | Lints only staged JS/TS files (useful for quick local checks) |
-| `yarn lint-studio` | Lints the Sanity Studio only |
-| `yarn test:unit` | Runs unit tests once (Vitest run mode) |
-| `yarn test:e2e` | Runs end-to-end tests (Playwright) |
-| `yarn test:e2e:headed` | Runs e2e tests in headed browser mode |
-| `yarn test:e2e:ui` | Opens Playwright UI mode for interactive debugging |
-| `yarn typecheck` | Type-checks the Next.js app |
-| `yarn typecheck-studio` | Type-checks the Sanity Studio only |
-| `yarn ci:lint` | Runs lint (both packages) — mirrors the CI lint job |
-| `yarn ci:test` | Runs full test suite (`test:unit` + `test:e2e`) |
-| `yarn ci:typecheck` | Runs type checks across both packages — mirrors the CI typecheck job |
-| `yarn ci:build` | Builds both packages — mirrors the CI build job |
-| `yarn ci` | Runs all CI checks in sequence (`ci:lint` → `ci:test` → `ci:typecheck` → `ci:lighthouse` → `ci:build`) |
-
-#### Lighthouse Commands
-
-| Command | Description |
-|---|---|
-| `yarn ci:lighthouse` | Runs the Lighthouse CI entrypoint used by the combined CI script |
-| `yarn lhci:mobile` | Runs Lighthouse CI autorun using the mobile preset |
-| `yarn lhci:desktop` | Runs Lighthouse CI autorun using the desktop preset |
-
-#### Utility and Deployment Commands
-
-| Command | Description |
-|---|---|
-| `yarn generate-build-version` | Generates the footer build semver (`YY.Push.MMDD`) from git history |
-| `yarn generate-types` | Generates TypeScript types from Sanity schemas and adds them to the Next.js app |
-| `yarn deploy-studio` | Deploys the Sanity Studio |
-| `yarn deploy-graphql` | Deploys GraphQL schemas to Sanity |
-
----
-
-## CI/CD Pipeline
-
-Pull requests trigger the **PR Checks** workflow ([`.github/workflows/pr-quality-and-build.yml`](.github/workflows/pr-quality-and-build.yml)). The quality checks and production build run in parallel after dependency setup. Mobile and desktop Lighthouse audits then run on separate runners against the same production build:
-
-```mermaid
-flowchart TD
-  gate[Label gates] --> setup[Setup Dependencies]
-  setup --> lint[Lint]
-  setup --> unit[Test: Unit]
-  setup --> e2e[Test: E2E]
-  setup --> types[Type Check]
-  setup --> build[Build]
-  build --> mobile[Lighthouse: mobile]
-  build --> desktop[Lighthouse: desktop]
-  mobile --> lighthouse[Lighthouse]
-  desktop --> lighthouse
-```
-
-| Job | Script | What it does |
-|---|---|---|
-| `gate` | n/a | Reads PR labels and exposes skip flags for downstream jobs |
-| `setup` | n/a | Checks for the exact dependency cache without downloading it; installs and saves both workspaces only on a miss |
-| `lint` | `yarn ci:lint` | Lints both packages (`eslint` + Sanity Studio) |
-| `test-unit` | `yarn test:unit` | Runs Vitest unit/component tests |
-| `test-e2e` | `yarn test:e2e` + `yarn test:e2e:pageviews` | Runs ordinary and pageview Playwright suites after installing Chromium |
-| `typecheck` | `yarn ci:typecheck` | Type-checks both packages with `tsc` |
-| `build` | `yarn ci:build` | Builds Next.js and Studio alongside the quality checks; uploads the Next.js output without `.next/cache` |
-| `lighthouse-audits` | `yarn lhci:mobile` or `yarn lhci:desktop` | Runs both presets on separate runners, downloading the same run's build and starting it with `yarn start` |
-| `lighthouse` | n/a | Preserves the required `Lighthouse` check; fails if either enabled audit fails or is unexpectedly skipped |
-
-Downstream jobs restore only `node_modules` and `studio/node_modules`, with `yarn install --frozen-lockfile` as a cache-miss fallback. Only dependency setup restores the Yarn download cache, and only when installation is needed. Node and the dependency-cache key remain shared across jobs.
-
-The six required check names remain `Lint`, `Test (Unit)`, `Test (E2E)`, `Type Check`, `Build`, and `Lighthouse`. The Lighthouse presets retain all four URLs, three runs per URL, thresholds, and separate mobile/desktop reporting contexts. Local Lighthouse commands still build the app before starting it; CI overrides only the server command to reuse its artifact. `skip-ci` skips every job after the label gate; `skip-lighthouse` skips both audits and their summary.
-
-### CodeRabbit reviews
-
-[CodeRabbit](https://docs.coderabbit.ai/reference/configuration) is configured in [`.coderabbit.yaml`](.coderabbit.yaml) for automatic reviews of eligible pull requests and incremental reviews after new commits are pushed. Manual reviews remain available by posting a comment on the pull request:
-
-| Comment | Action |
-|---|---|
-| `@coderabbitai review` | Request an incremental review of new changes manually |
-| `@coderabbitai full review` | Run a fresh, complete review of the PR |
-| `@coderabbitai configuration` | Show the effective configuration and each setting's source |
-
-Automatic reviews skip PRs labeled `skip-review` or `dependencies` through the `!skip-review` and `!dependencies` label filters. Other eligibility rules use CodeRabbit's defaults, including skipping draft PRs and reviewing PRs targeting the default branch. Automatic incremental reviews can pause under CodeRabbit's default pause policy. Chat replies require an explicit `@coderabbitai` mention. See the [automatic review controls](https://docs.coderabbit.ai/configuration/auto-review) and [review commands](https://docs.coderabbit.ai/reference/review-commands) for details.
-
-Reviews use the `assertive` profile selected by the `reviews.profile` setting in `.coderabbit.yaml` and the repository's agent, architecture, and workflow guidance. Summaries appear in the walkthrough comment, skipped-review messages and decorative output are disabled, and the docstring coverage quota is off. The generated build version is excluded; generated Sanity types and schema remain available for consistency checks, with fixes directed to their sources.
-
-To verify the setup on an eligible PR, check that opening it triggers an automatic review and pushing another commit triggers an incremental review. Confirm that the manual commands above still work. An unmentioned reply should not trigger a chat response. Use `@coderabbitai configuration` to confirm these settings are effective; organization or workspace [global overrides](https://docs.coderabbit.ai/configuration/configuration-inheritance) can take precedence over the repository file even with inheritance disabled.
-
-### Kodiak and automerge
-
-[Kodiak](https://kodiakhq.com/docs/config-reference) is the GitHub app used to automate PR merging. The repository's [`.kodiak.toml`](.kodiak.toml) contains only `version = 1`, so Kodiak uses its default settings, including the `automerge` label. Kodiak requires installation on the repository and branch protection on the target branch.
-
-Once a PR is reviewed and ready to merge, add the `automerge` label from the PR's **Labels** sidebar. This authorizes Kodiak to merge it once the target branch's protection requirements, including required checks and reviews, are satisfied. Remove `automerge` before merging to withdraw that authorization. The label does not bypass branch protection or skip CI.
+Required checks are `Lint`, `Test (Unit)`, `Test (E2E)`, `Type Check`, `Build`, and `Lighthouse`. Each Lighthouse preset checks four URLs three times. Local `yarn lhci:mobile` and `yarn lhci:desktop` build their own server; CI reuses its build artifact. Dependency jobs share exact lockfile-based caches, with frozen installs on misses.
 
 ### PR labels
 
-Add or remove these labels from the PR's **Labels** sidebar:
-
 | Label | Effect |
-|---|---|
-| `automerge` | Authorizes Kodiak to merge the PR when branch protection requirements are satisfied |
-| `skip-ci` | Skips every check after `gate` (setup, lint, tests, typecheck, Lighthouse, and build) |
-| `skip-review` | Skips automatic CodeRabbit reviews; CI is unaffected |
-| `dependencies` | Classifies dependency updates and skips automatic CodeRabbit reviews; CI is unaffected |
-| `skip-lighthouse` | Skips both Lighthouse audits and their summary; quality jobs and build still run |
+| --- | --- |
+| `automerge` | Authorizes Kodiak to merge once branch protection requirements are satisfied |
+| `skip-ci` | Skips every validation job after the label gate |
+| `skip-review` | Skips automatic CodeRabbit reviews |
+| `dependencies` | Classifies dependency updates and skips automatic CodeRabbit reviews |
+| `skip-lighthouse` | Skips both Lighthouse audits and their summary; other checks still run |
 
-PRs that change only `.md` files and do not affect live production behavior must have `skip-ci` and `skip-review` (once available). Check the full PR diff and whether Markdown is consumed by the production site or build; reassess after updates and remove both labels if non-Markdown files or production-affecting changes are added. Add both labels at PR creation so validation jobs and automatic reviews can skip from the start. Use `skip-lighthouse` when performance audits are unnecessary for the change but lint, tests, type checks, and builds should still run. If both CI skip labels are present, `skip-ci` takes precedence. `skip-review` controls automatic reviews independently of CI.
+PRs containing only non-production `.md` changes must receive `skip-ci` and `skip-review` at creation. Check the full diff and whether Markdown is consumed by the site/build. Reassess after updates and remove both labels if code or production-affecting changes are added. See [AGENTS](AGENTS.md) for issue-reference and saved-PR checks.
 
-Adding or removing any label starts a new PR Checks run using the current labels. Changes to `skip-ci` or `skip-lighthouse` cancel the running workflow; other label changes, including `automerge`, queue a new run without cancelling the running workflow. Removing both skip labels restores all checks on the next run. The label gate always runs so unrelated label changes cannot replace failed or pending required checks with skipped results.
+Every label change starts a new PR Checks run. Changes to either CI skip label cancel the current run; other labels queue a run without cancellation. The gate always runs so unrelated labels cannot replace failures with skipped checks. Removing the CI skip labels restores validation; `skip-ci` takes precedence over `skip-lighthouse`. Skip labels do not authorize merging. Avoid `[skip ci]` commit messages: required checks stay pending.
 
-The skip labels control CI independently of `automerge`: they do not authorize a merge, and `automerge` does not restore skipped checks. Check that the selected labels are appropriate before enabling automerge.
+Dependabot applies `skip-lighthouse`, without automatic merge authorization. Remove it to request performance checks. Add `automerge` only when ready; removing it withdraws Kodiak authorization before merge. [.kodiak.toml](.kodiak.toml) uses defaults and requires the installed app and target-branch protection.
 
-`dependencies` classifies dependency updates and skips automatic CodeRabbit reviews. It does not skip CI or enable automerge. Dependabot PRs get `skip-lighthouse` by default (see [`.github/dependabot.yml`](.github/dependabot.yml)), but do not receive `automerge` automatically; add it when an update is ready to merge. Remove `skip-lighthouse` on a given PR to run Lighthouse as well.
+### CodeRabbit reviews
 
-Do not use `[skip ci]` in commit messages: GitHub skips the whole workflow and required checks stay pending.
+[.coderabbit.yaml](.coderabbit.yaml) enables assertive automatic and incremental reviews. PRs labeled `skip-review` or `dependencies` are excluded. Other eligibility and pause behavior use CodeRabbit defaults; draft PRs are normally skipped. Chat replies require an explicit mention.
 
-The workflow runs when a pull request is opened, updated with new commits, reopened, marked ready for review, labeled, or unlabeled, regardless of which files changed.
+| PR comment | Action |
+| --- | --- |
+| `@coderabbitai review` | Review new changes |
+| `@coderabbitai full review` | Request a complete review |
+| `@coderabbitai configuration` | Show effective settings and their sources |
+
+Use the configuration command to diagnose organization/workspace overrides. See [review commands](https://docs.coderabbit.ai/reference/review-commands) and [automatic review controls](https://docs.coderabbit.ai/configuration/auto-review).
 
 ### Issue and PR templates
 
-Choose a bug report, feature/change, or investigation/maintenance template from the [new issue page](https://github.com/dangzo/dangz-dev/issues/new/choose); blank issues remain available. Keep small tasks concise and remove irrelevant optional sections. The default PR template prompts for the problem and result, issue references, focused validation, and relevant risks.
+Choose a bug, feature/change, or investigation/maintenance template from the [issue chooser](https://github.com/dangzo/dangz-dev/issues/new/choose); blank issues remain available. The [PR template](.github/pull_request_template.md) prompts for the result, changes, issue references, validation, and relevant rollout risks. See [template usage](docs/GITHUB_TEMPLATES.md).
 
-See [GitHub template guidance](docs/GITHUB_TEMPLATES.md) for the investigation findings, browser/CLI usage, and examples. Select checks from [WORKFLOW.md](docs/WORKFLOW.md#validate-the-affected-behavior) and follow [AGENTS.md](AGENTS.md) for completed-issue references and the pre-merge default-branch check.
+## AI agent guidance
 
----
+[AGENTS.md](AGENTS.md) contains shared coding/process rules; `CLAUDE.md` points to it. Read architecture/workflow and feature references only when relevant. Shared skills and specialist roles live under `.agents/`, with Claude/Codex host adapters; see [WORKFLOW](docs/WORKFLOW.md#skills-and-specialist-agents).
 
-## Project Structure
-
-```text
-dangz-dev/                         # Yarn workspace root (blog package)
-├── public/                        # Static assets
-├── src/
-│   ├── api/                       # API clients (Apollo, Sanity)
-│   ├── app/                       # Next.js App Router, pages and layouts
-│   ├── components/                # Shared components
-│   │   ├── icons/
-│   │   ├── layout/                # Layout shell components (footer, header, sidebar)
-│   │   └── ui/                    # Primitive UI components (Button, Link, Text, …)
-│   ├── contexts/                  # React context providers (ThemeProvider)
-│   ├── data/                      # Static data (nav links, site metadata)
-│   ├── features/
-│   │   ├── about/
-│   │   ├── blog/
-│   │   └── home/
-│   ├── hooks/                     # Global custom React hooks
-│   ├── styles/                    # Global CSS and font config
-│   ├── types/
-│   └── utils/                     # Utility functions
-├── studio/                        # Yarn workspace package — Sanity Studio
-│   ├── schemaTypes/               # Sanity content schema definitions
-│   ├── static/
-│   ├── sanity.config.ts
-│   └── package.json
-├── next.config.ts
-├── tailwind.config.ts
-├── tsconfig.json
-├── ...
-└── package.json                   # Root workspace manifest
-```
-
----
-
-## AI Agent Guidance
-
-The project's AI guidance is split between a short [AGENTS.md](AGENTS.md) and focused reference files in the root `docs/` folder. This replaces a single growing instructions file with a small set of core coding rules and project context that agents can read when a task needs it:
-
-- [ARCHITECTURE.md](docs/ARCHITECTURE.md): code locations, routing, CMS data flow, and rendering conventions.
-- [WORKFLOW.md](docs/WORKFLOW.md): development commands, focused checks, test fixtures, and generated files.
-- [BLOG_TOPICS.md](docs/BLOG_TOPICS.md): topic taxonomy, article assignments, legacy URL compatibility, and rollout sequence.
-
-Keeping the entry point small reduces the tokens spent on instructions loaded for every task. For example, a copy edit needs no CMS data-flow details, while a routing change benefits from the architecture guide. The separate guides also make project knowledge easier to find and maintain without duplicating this README's setup and CI documentation.
-
----
+For documentation changes, follow [documentation maintenance](AGENTS.md#documentation-maintenance): extend existing guides for lasting knowledge and keep task history in issues/PRs. New files need a distinct recurring purpose.
 
 ## Deployment
 
-The project is deployed on **Vercel**.
+Merges to `main` deploy production on Vercel. Release `dev` through **Actions → Create release PR → Run workflow**, review its `dev → main` PR, and merge after required checks pass. [RELEASES](docs/RELEASES.md) covers authentication, merge method, and rollout. Studio and GraphQL deployments are separate; local type generation does not deploy either.
 
-- ~~Pushes to **`dev`** trigger preview deployments.~~ 
-- Merges to **`main`** trigger production deployments.
-
-Create a release from **Actions → Create release PR → Run workflow** on `dev`.
-The workflow fills in the `dev → main` PR for review; merge it after checks pass.
-See [Releases](docs/RELEASES.md) for authentication setup and rollout guidance.
-
----
-
-## Build Version (Footer Semver)
-
-The footer shows an auto-generated build semver in this format:
-
-`YY.Push.MMDD`
-
-Example: `26.50.0512`
-
-- `YY`: last 2 digits of current UTC year
-- `Push`: git commit count since January 1st (UTC) of the current year
-- `MMDD`: current UTC month and day
-
-### How It Is Generated
-
-- Source script: [`scripts/generate-build-version.mjs`](scripts/generate-build-version.mjs)
-- Generated file: [`src/data/buildVersion.ts`](src/data/buildVersion.ts)
-- Automatically runs on:
-	- `yarn dev` (via `predev`)
-	- `yarn build` (via `prebuild`)
-
-This means no `.env` variable is required for versioning in local dev or Vercel builds.
-
----
+The footer build version is `YY.Push.MMDD`: UTC year, commit count since January 1, and UTC month/day. [generate-build-version.mjs](scripts/generate-build-version.mjs) produces [buildVersion.ts](src/data/buildVersion.ts) during `predev`/`prebuild`; no environment variable is needed. Keep incidental generated changes out of unrelated work.
 
 ## License
 
-This project is personal and not licensed for reuse.
+This project is personal and not licensed for reuse. Bundled third-party fonts and test assets retain their own licenses.
