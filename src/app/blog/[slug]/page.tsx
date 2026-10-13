@@ -8,6 +8,8 @@ import { extractTocFromBody } from '@/features/blog/hooks/usePostInsights';
 import ArticleImageViewer from '@/features/blog/components/images/ArticleImageViewer';
 import ArticleImageTrigger from '@/features/blog/components/images/ArticleImageTrigger';
 import { getArticleImage } from '@/features/blog/utils/articleImage';
+import { getRelatedPosts } from '@/features/blog/api/queries/relatedPosts';
+import RelatedPosts from '@/features/blog/components/RelatedPosts';
 
 interface PostPageProps {
   params: Promise<{ slug: string }>;
@@ -35,13 +37,14 @@ export default async function PostPage({ params, }: Readonly<PostPageProps>) {
     notFound();
   }
 
+  const relatedPosts = await getRelatedPosts(post);
   const lqip = post.image?.asset?.metadata?.lqip;
   const hasToc = extractTocFromBody(post.body).length > 0;
   const imageSizes = `${hasToc ? '(min-width: 1280px) 608px, ' : ''}(min-width: 818px) 770px, (min-width: 640px) calc(100vw - 3rem), calc(100vw - 2rem)`;
 
   return (
     <ArticleImageViewer key={post._id}>
-      <article className="mx-auto min-w-0 max-w-[70ch]">
+      <article data-article-body className="mx-auto min-w-0 max-w-[70ch]">
         {post.image
           ? (
             <div className="mb-5 sm:mb-6 md:mb-8 rounded-lg overflow-hidden">
@@ -73,6 +76,7 @@ export default async function PostPage({ params, }: Readonly<PostPageProps>) {
           : <Text>No content available for this post.</Text>
         }
       </article>
+      <RelatedPosts posts={relatedPosts} />
     </ArticleImageViewer>
   );
 }

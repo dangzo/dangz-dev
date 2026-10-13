@@ -54,6 +54,18 @@ describe('Sanity E2E content perspectives', () => {
     expect(primary.allPost?.[0]).not.toHaveProperty('tags');
   });
 
+  it('serves lightweight related-post metadata from the requested perspective', () => {
+    const request = { operationName: 'AllRelatedPosts', query: primaryFields };
+    const published = getE2EGraphQLResponse(request);
+    const preview = getE2EGraphQLResponse({ ...request, perspective: 'previewDrafts' });
+
+    expect(published.allPost).toHaveLength(15);
+    expect(getPosts(published).some((post) => post._id?.startsWith('drafts.'))).toBe(false);
+    expect(published.allPost?.[0]).not.toHaveProperty('body');
+    expect(preview.allPost).toHaveLength(16);
+    expect(getPosts(published).find((post) => post._id === 'post-8')).toHaveProperty('keywords', ['React.js', 'react']);
+  });
+
   it('resolves article variables and respects draft isolation', () => {
     const published = getE2EGraphQLResponse({ operationName: 'postsBySlug', query: '', variables: { slug: 'stable-visual-regression-tests' } });
     const draft = { operationName: 'postsBySlug', query: '', variables: { slug: 'unpublished-ai-workflow' } };

@@ -5,10 +5,18 @@ Issue [#189](https://github.com/dangzo/dangz-dev/issues/189) measures which arti
 | Property | Values / meaning |
 | --- | --- |
 | `post_id` | Selected Sanity post ID |
-| `source` | `home`, `blog`, or `topic` |
+| `source` | `home`, `blog`, `topic`, or `article` |
 | `placement` | `title`, `cta`, or `reaction_summary` |
 
 Home currently renders title and reading CTA links. Blog and topic cards additionally render reaction-summary links when positive counts with emoji are available. Paginated Blog and topic listings retain their respective sources. Images, topic navigation, pagination controls, and search results are not discovery targets. Search retains its separate `search_result_selected` event.
+
+Article next-read lists render one linked row per recommendation with
+`source=article`, `placement=title`, and the selected destination's `post_id`.
+They omit separate CTAs and reaction summaries. Contextual body
+links are not discovery targets. See [ARTICLE_CROSS_LINKS.md](ARTICLE_CROSS_LINKS.md)
+for ranking, fallback, and the pending owner-applied content edits. The production
+verification below predates this additional source; local intercepted-tracker
+coverage does not establish live collector or dashboard delivery for `article`.
 
 ## Navigation and delivery
 

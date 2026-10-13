@@ -39,7 +39,7 @@ describe('PostCard', () => {
   });
 });
 
-it.each(['blog', 'topic'] as const)('marks only article entry points with source %s', (source) => {
+it.each(['blog', 'topic', 'article'] as const)('marks only article entry points with source %s', (source) => {
   const { container } = render(<PostCard source={source} post={post} preload={false} />);
   const links = container.querySelectorAll('a[data-post-opened-post-id]');
   expect(Array.from(links).map((link) => ({

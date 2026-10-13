@@ -2,6 +2,20 @@ import { UMAMI_READY_EVENT, type UmamiPayload } from './umami';
 
 const data = { post_id: 'post-1', source: 'home', placement: 'title' } as const;
 
+it('accepts article discovery metadata and rejects unknown sources', async () => {
+  const { getPostOpenedAttributes, readPostOpenedData } = await import('./postDiscoveryAnalytics');
+  const anchor = document.createElement('a');
+  const event = { post_id: 'post-2', source: 'article', placement: 'cta' } as const;
+
+  for (const [name, value] of Object.entries(getPostOpenedAttributes(event))) {
+    anchor.setAttribute(name, value);
+  }
+
+  expect(readPostOpenedData(anchor)).toEqual(event);
+  anchor.dataset.postOpenedSource = 'unknown';
+  expect(readPostOpenedData(anchor)).toBeNull();
+});
+
 beforeEach(() => {
   vi.resetModules();
   vi.useFakeTimers();
