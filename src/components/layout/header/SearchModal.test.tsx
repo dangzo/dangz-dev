@@ -1,5 +1,5 @@
 import { createRef } from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import SearchModal from './SearchModal';
@@ -53,6 +53,28 @@ describe('SearchModal', () => {
     expect(trackSearchResultSelected).toHaveBeenCalledExactlyOnceWith(results[1], 1);
     expect(onClose).toHaveBeenCalledOnce();
     expect(vi.mocked(trackSearchResultSelected).mock.invocationCallOrder[0]).toBeLessThan(onClose.mock.invocationCallOrder[0]);
+  });
+
+  it.each([0, 1, 2])('handles auxiliary button %i without closing or cancelling navigation', (button) => {
+    const onClose = vi.fn();
+    const results = [
+      { id: 'first', slug: 'first', title: 'First', excerpt: '', primaryTopic: null },
+      { id: 'second', slug: 'second', title: 'Second', excerpt: '', primaryTopic: null },
+    ];
+    render(<SearchModal isOpen query="second" results={results} isLoading={false}
+      inputRef={createRef<HTMLInputElement>()} onQueryChange={vi.fn()} onClose={onClose} />);
+
+    const event = new MouseEvent('auxclick', { button, bubbles: true, cancelable: true });
+    fireEvent(screen.getByText('Second'), event);
+
+    if (button === 1) {
+      expect(trackSearchResultSelected).toHaveBeenCalledExactlyOnceWith(results[1], 1);
+    } else {
+      expect(trackSearchResultSelected).not.toHaveBeenCalled();
+    }
+
+    expect(onClose).not.toHaveBeenCalled();
+    expect(event.defaultPrevented).toBe(false);
   });
 
   it('portals an accessible dialog when open', () => {

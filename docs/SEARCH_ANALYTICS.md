@@ -10,6 +10,8 @@ Issue [#187](https://github.com/dangzo/dangz-dev/issues/187) measures opening, s
 
 Length means the trimmed query's JavaScript `.length`. Result count measures the returned array, capped by the existing API at 20; it does not estimate the total matching corpus. Aborted, superseded, failed, and malformed responses produce no completion event. There is no error event.
 
+Result links track primary and modified primary clicks through `onClick`, and middle-button activation through `onAuxClick` (issue [#217](https://github.com/dangzo/dangz-dev/issues/217)). Middle-click emits one selection event, preserves native new-tab navigation, and leaves search open in the original tab. Right-button activation emits no selection event. Keyboard selection retains its existing tracking and navigation behavior.
+
 ## Privacy and delivery
 
 The search helper accepts only the three event contracts and reconstructs their properties. It retains no raw query, keystrokes, result title, search API URL, or personal identifier. Search event payloads include only website, hostname, language, screen, query-free source pathname/referrer, occurrence time, event name, and the listed properties. Default tracker IDs and arbitrary metadata are excluded. The search API still receives the query to perform the search; that request is separate from analytics.
@@ -28,7 +30,7 @@ After the change reaches production, record the deployed revision, production ho
 
 1. With the real tracker ready, open using the button, Ctrl+K, and Meta+K where supported. Close/reopen and confirm one `search_opened` per transition.
 2. Execute known nonempty and empty searches. Inspect the complete collector request body: accurate lengths/counts, no raw query or query-derived URL, and no distinct ID. A distinctive temporary query makes accidental leakage easy to detect; do not retain it in evidence.
-3. Select results by mouse, ArrowDown/Enter, and Enter with no highlighted result. Confirm one selection request with the correct ID/position before navigation; test modified clicks separately.
+3. Select results by mouse, ArrowDown/Enter, and Enter with no highlighted result. Confirm one selection request with the correct ID/position before navigation; test modified primary clicks and middle-click separately. Middle-click must open the selected article in a new tab while search remains open in the source tab; right-click must produce no selection request. Verify the selection payload contains no raw query text.
 4. Hold the real tracker script before opening/searching/selecting; release it within 60 seconds. Confirm buffered requests keep the source path and occurrence times, including selection followed by client navigation. Repeated readiness must not duplicate them.
 5. Abort the script in a fresh browser context. Search must still open, return results, close, and navigate without an application error or alternative analytics request. Separately abort collector requests and confirm there is no retry. Intercept search failures and stale responses to confirm no false completion.
 6. **Owner dashboard check:** filter the same UTC window and production hostname in Umami. Verify all three event names and their properties, distinguishing ordinary traffic from the test window. Record dashboard evidence separately from browser requests. If property visibility is unavailable, leave that criterion pending rather than infer success from requests.

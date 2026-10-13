@@ -69,10 +69,10 @@ test('tracks button and shortcut transitions, successful counts, and private pay
   expect(JSON.stringify(payloads)).not.toContain('private-id');
 });
 
-for (const selection of ['mouse', 'arrows', 'enter', 'focused link', 'modified click'] as const) {
+for (const selection of ['mouse', 'arrows', 'enter', 'focused link', 'modified click', 'middle click'] as const) {
   test(`tracks exactly one ${selection} selection and preserves navigation`, async ({ page }) => {
     await page.getByRole('button', { name: 'Search', exact: true }).click();
-    await page.getByRole('textbox', { name: 'Search posts' }).fill('find');
+    await page.getByRole('textbox', { name: 'Search posts' }).fill('private-search-text');
     const second = page.getByRole('link', { name: 'Second result' });
     await expect(second).toBeVisible();
     if (selection === 'mouse') {
@@ -84,9 +84,13 @@ for (const selection of ['mouse', 'arrows', 'enter', 'focused link', 'modified c
     } else if (selection === 'focused link') {
       await page.getByRole('link', { name: 'First result' }).focus();
       await page.keyboard.press('Enter');
-    } else if (selection === 'modified click') {
+    } else if (selection === 'modified click' || selection === 'middle click') {
       const popupPromise = page.context().waitForEvent('page');
-      await second.click({ modifiers: ['Control'] });
+      if (selection === 'middle click') {
+        await second.locator('p').click({ button: 'middle' });
+      } else {
+        await second.click({ modifiers: ['Control'] });
+      }
       const popup = await popupPromise;
       await expect(popup).toHaveURL(/\/blog\/fixture-post-2$/);
       await popup.close();
@@ -95,16 +99,56 @@ for (const selection of ['mouse', 'arrows', 'enter', 'focused link', 'modified c
       await page.keyboard.press('Enter');
     }
     const firstSelected = selection === 'enter' || selection === 'focused link';
-    if (selection !== 'modified click') {
+    if (selection !== 'modified click' && selection !== 'middle click') {
       await expect(page).toHaveURL(firstSelected ? /\/blog\/stable-visual-regression-tests$/ : /\/blog\/fixture-post-2$/);
     }
-    await expect(page.getByRole('dialog')).not.toBeVisible();
+    if (selection === 'middle click') {
+      await expect(page.getByRole('dialog')).toBeVisible();
+    } else {
+      await expect(page.getByRole('dialog')).not.toBeVisible();
+    }
     const selected = (await events(page)).filter((event) => event.name === 'search_result_selected');
     expect(selected).toHaveLength(1);
     expect(selected[0].data).toEqual({ post_id: firstSelected ? 'post-1' : 'post-2', result_position: firstSelected ? 1 : 2 });
     expect(selected[0].url).toBe('/');
+    expect(JSON.stringify(await events(page))).not.toContain('private-search-text');
+    expect(JSON.stringify(await events(page))).not.toContain('private-id');
   });
 }
+
+test('right-click does not track a selection or navigate', async ({ page, context }) => {
+  await page.getByRole('button', { name: 'Search', exact: true }).click();
+  await page.getByRole('textbox', { name: 'Search posts' }).fill('find');
+  const second = page.getByRole('link', { name: 'Second result' });
+  await expect(second).toBeVisible();
+  await second.locator('p').click({ button: 'right' });
+
+  await expect(page).toHaveURL(/\/\?q=private-search-text$/);
+  await expect(page.getByRole('dialog')).toBeVisible();
+  expect(context.pages()).toHaveLength(1);
+  expect((await events(page)).filter((event) => event.name === 'search_result_selected')).toEqual([]);
+});
+
+test('middle-click still opens a new tab when the tracker is unavailable', async ({ page, context }) => {
+  const errors: string[] = [];
+  context.on('weberror', (error) => errors.push(error.error().message));
+  await context.addInitScript(() => { Reflect.deleteProperty(window, 'umami'); });
+  await page.evaluate(() => { Reflect.deleteProperty(window, 'umami'); });
+  await page.getByRole('button', { name: 'Search', exact: true }).click();
+  await page.getByRole('textbox', { name: 'Search posts' }).fill('find');
+  const second = page.getByRole('link', { name: 'Second result' });
+  await expect(second).toBeVisible();
+  const popupPromise = context.waitForEvent('page');
+  await second.locator('p').click({ button: 'middle' });
+  const popup = await popupPromise;
+
+  await expect(popup).toHaveURL(/\/blog\/fixture-post-2$/);
+  await expect(page).toHaveURL(/\/\?q=private-search-text$/);
+  await expect(page.getByRole('dialog')).toBeVisible();
+  expect(await events(page)).toEqual([]);
+  expect(errors).toEqual([]);
+  await popup.close();
+});
 
 test('failed and aborted requests do not produce completions', async ({ page }) => {
   await page.route('**/api/search?q=pending', async (route) => {
