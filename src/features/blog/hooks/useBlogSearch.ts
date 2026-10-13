@@ -16,7 +16,7 @@ export function useBlogSearch() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchHit[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [settledQuery, setSettledQuery] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const latestRequestIdRef = useRef(0);
   const pendingOpenMethodRef = useRef<SearchOpenMethod | null>(null);
@@ -28,7 +28,18 @@ export function useBlogSearch() {
     setIsOpen(false);
     setQuery('');
     setResults([]);
-    setIsLoading(false);
+    setSettledQuery(null);
+  };
+
+  const changeQuery = (value: string) => {
+    if (value === query) {
+      return;
+    }
+
+    latestRequestIdRef.current += 1;
+    setQuery(value);
+    setResults([]);
+    setSettledQuery(null);
   };
 
   const openSearch = (method: SearchOpenMethod = 'button') => {
@@ -94,8 +105,6 @@ export function useBlogSearch() {
         return;
       }
 
-      setIsLoading(true);
-
       try {
         const response = await fetch(
           `/api/search?q=${encodeURIComponent(trimmedQuery)}`,
@@ -140,7 +149,7 @@ export function useBlogSearch() {
         }
       } finally {
         if (isCurrentRequest()) {
-          setIsLoading(false);
+          setSettledQuery(trimmedQuery);
         }
       }
     }, 180);
@@ -155,10 +164,10 @@ export function useBlogSearch() {
     isOpen,
     query,
     results,
-    isLoading,
+    isLoading: isOpen && query.trim().length >= 2 && settledQuery !== query.trim(),
     inputRef,
     openSearch,
     closeSearch,
-    setQuery,
+    setQuery: changeQuery,
   };
 }

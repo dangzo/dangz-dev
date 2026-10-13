@@ -49,6 +49,8 @@ async function loadTracker(page: Page) {
 test.describe('Contact analytics with the pinned real tracker and intercepted collector', () => {
   let events: EventPayload[];
 
+  const paletteEvents = () => events.filter((event) => event.data?.placement === 'command_palette');
+
   test.beforeEach(async ({ context }) => {
     events = [];
     const tracker = await readFile(path.join(process.cwd(), 'src/test-support/e2e/umami/tracker.txt'));
@@ -218,4 +220,84 @@ test.describe('Contact analytics with the pinned real tracker and intercepted co
       await popup.close();
     });
   }
+
+  for (const activation of ['mouse', 'input Enter', 'focused Enter'] as const) {
+    test(`palette contact commands emit one event for ${activation}`, async ({ page }) => {
+      await page.goto('/');
+      await page.evaluate(() => {
+        document.addEventListener('click', (event) => {
+          if (event.target instanceof Element && event.target.closest('a[data-umami-event-placement="command_palette"]')) {
+            event.preventDefault();
+          }
+        }, true);
+      });
+      await loadTracker(page);
+      const commands = [
+        { label: 'Download résumé', query: 'CV', name: 'resume_download_clicked', data: { placement: 'command_palette' } },
+        { label: 'Email me', query: 'email', name: 'contact_clicked', data: { channel: 'email', placement: 'command_palette' } },
+        { label: 'View GitHub', query: 'github', name: 'outbound_link_clicked', data: { destination_host: 'github.com', placement: 'command_palette' } },
+        { label: 'Connect on LinkedIn', query: 'linkedin', name: 'contact_clicked', data: { channel: 'linkedin', placement: 'command_palette' } },
+      ];
+      for (const [index, command] of commands.entries()) {
+        await page.getByRole('button', { name: 'Search', exact: true }).click();
+        const input = page.getByRole('textbox', { name: 'Search posts and commands' });
+        await input.fill(command.query);
+        const link = page.getByRole('dialog').getByRole('link', { name: command.label, exact: true });
+        await expect(link).toBeVisible();
+        // The pinned tracker redirects same-tab links itself; isolate event delivery here.
+        await link.evaluate((element) => element.setAttribute('target', '_blank'));
+        if (activation === 'input Enter') {
+          await input.focus();
+          await page.keyboard.press('ArrowDown');
+          await page.keyboard.press('Enter');
+        } else if (activation === 'focused Enter') {
+          await link.focus();
+          await page.keyboard.press('Enter');
+        } else {
+          await link.click();
+        }
+        await expect(page.getByRole('dialog')).not.toBeVisible();
+        await expect.poll(() => paletteEvents().length).toBe(index + 1);
+        expect(paletteEvents()[index].name).toBe(command.name);
+        expect(paletteEvents()[index].data).toEqual(command.data);
+      }
+    });
+  }
+
+  test('palette résumé command downloads a valid PDF', async ({ page }) => {
+    await page.goto('/');
+    await loadTracker(page);
+    await page.getByRole('button', { name: 'Search', exact: true }).click();
+    const downloadPromise = page.waitForEvent('download');
+    await page.getByRole('dialog').getByRole('link', { name: 'Download résumé', exact: true }).click();
+    const download = await downloadPromise;
+    expect(download.suggestedFilename()).toBe('Daniele-Gazzelloni-Resume-2026.pdf');
+    expect(await download.failure()).toBeNull();
+    const contents = await readFile((await download.path())!);
+    expect(contents.subarray(0, 5).toString()).toBe('%PDF-');
+    await expect(page.getByRole('dialog')).not.toBeVisible();
+    await expect.poll(() => paletteEvents().length).toBe(1);
+    expect(paletteEvents()[0].name).toBe('resume_download_clicked');
+    expect(paletteEvents()[0].data).toEqual({ placement: 'command_palette' });
+  });
+
+  for (const label of ['View GitHub', 'Connect on LinkedIn'] as const) {
+    test(`palette ${label} preserves its native new tab`, async ({ page }) => {
+      await page.goto('/');
+      await loadTracker(page);
+      await page.getByRole('button', { name: 'Search', exact: true }).click();
+      const link = page.getByRole('dialog').getByRole('link', { name: label, exact: true });
+      const destination = await link.getAttribute('href');
+      const popupPromise = page.waitForEvent('popup');
+      await link.click();
+      const popup = await popupPromise;
+      await expect(popup).toHaveURL(destination!);
+      await expect(page).toHaveURL(/\/$/);
+      await expect(page.getByRole('dialog')).not.toBeVisible();
+      await expect.poll(() => paletteEvents().length).toBe(1);
+      expect(paletteEvents()[0].data.placement).toBe('command_palette');
+      await popup.close();
+    });
+  }
+
 });

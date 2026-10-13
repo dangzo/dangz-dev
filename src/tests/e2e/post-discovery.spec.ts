@@ -225,7 +225,7 @@ test.describe('Article discovery with the application integration and intercepte
     await expect.poll(() => pageviews().length).toBe(1);
     await markDocument(page);
     await page.getByRole('button', { name: 'Search', exact: true }).click();
-    await page.getByRole('textbox', { name: 'Search posts' }).fill('stable visual');
+    await page.getByRole('textbox', { name: 'Search posts and commands' }).fill('stable visual');
     const result = page.getByRole('dialog').getByRole('link', { name: /Building stable visual regression tests/ });
     await expect(result).toBeVisible();
     await expect(result).not.toHaveAttribute('data-post-opened-post-id');

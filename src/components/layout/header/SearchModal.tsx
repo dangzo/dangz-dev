@@ -2,9 +2,13 @@
 
 import Link from 'next/link';
 import { createPortal } from 'react-dom';
-import type { RefObject } from 'react';
+import { useRef, type RefObject } from 'react';
+import { useTheme } from 'next-themes';
+import { filterPaletteCommands } from './paletteCommands';
+import { useSearchDialogFocus } from '@/hooks/useSearchDialogFocus';
 import styles from './SearchModal.module.css';
 import HighlightText from './HighlightText';
+import PaletteCommandRow from './PaletteCommandRow';
 import { type SearchHit } from '@/features/blog/hooks/useBlogSearch';
 import { useSearchKeyboardNavigation } from '@/hooks/useSearchKeyboardNavigation';
 import { getSearchShortcutLabel } from './getSearchShortcutLabel';
@@ -12,7 +16,7 @@ import { trackSearchResultSelected } from '@/utils/searchAnalytics';
 
 export type { SearchHit };
 
-type SearchModalProps = {
+type SearchModalProps = Readonly<{
   isOpen: boolean;
   query: string;
   results: SearchHit[];
@@ -20,7 +24,7 @@ type SearchModalProps = {
   inputRef: RefObject<HTMLInputElement | null>;
   onQueryChange: (value: string) => void;
   onClose: () => void;
-};
+}>;
 
 const SearchModal = ({
   isOpen,
@@ -31,23 +35,42 @@ const SearchModal = ({
   onQueryChange,
   onClose,
 }: SearchModalProps) => {
-  const { activeResultIndex, setActiveResultIndex, resultLinkRefs } =
-    useSearchKeyboardNavigation({ isOpen, results, onClose });
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const { resolvedTheme, setTheme } = useTheme();
+  const commands = filterPaletteCommands(query);
+  const visibleResults = query.trim().length >= 2 && !isLoading ? results : [];
+  const itemIds = [...visibleResults.map((result) => `post-${result.id}`), ...commands.map((command) => command.id)];
+  const { activeItemIndex, setActiveItemIndex, itemRefs } = useSearchKeyboardNavigation({
+    isOpen, itemIds, query, isLoading, inputRef, onQueryChange,
+  });
+  useSearchDialogFocus({ isOpen, dialogRef, inputRef });
+
+  const isDark = resolvedTheme === 'dark'
+    || (resolvedTheme === undefined && typeof document !== 'undefined' && document.documentElement.classList.contains('dark'));
+  const commandRowClassName = (index: number) => {
+    return `flex min-h-11 w-full items-center rounded-md px-3 py-1 text-left text-sm transition-colors hover:bg-gray-100 dark:hover:bg-gray-900 focus-visible:outline-2 focus-visible:outline-primary-500 sm:min-h-9 ${activeItemIndex === index ? 'bg-gray-100 dark:bg-gray-900' : ''}`;
+  };
+
+  const rowClassName = (index: number) => {
+    return `block w-full text-left rounded-xl border border-border-light/70 dark:border-border-dark/70 px-4 py-3 transition-colors hover:border-primary-500/60 hover:bg-gray-100 dark:hover:border-primary-400/60 dark:hover:bg-gray-900 focus-visible:outline-2 focus-visible:outline-primary-500 ${styles.resultCard} ${activeItemIndex === index ? 'border-primary-500/70 bg-gray-100 dark:border-primary-400/70 dark:bg-gray-900' : ''}`;
+  };
 
   if (!isOpen) {
     return null;
   }
 
   const modal = (
-    <div className="fixed inset-0 z-[120]" role="dialog" aria-modal="true" aria-label="Search posts">
+    <div ref={dialogRef} className="fixed inset-0 z-[120]" role="dialog" aria-modal="true" aria-label="Search posts and commands">
       <button
         type="button"
         aria-label="Close search"
+        tabIndex={-1}
         onClick={onClose}
         className={`absolute inset-0 bg-white/18 dark:bg-black/45 backdrop-blur-md ${styles.backdrop}`}
       />
 
       <div
+        data-search-panel
         className={`absolute left-1/2 top-[12vh] w-[min(90vw,780px)] max-h-[76vh] overflow-hidden rounded-2xl border border-border-light/80 dark:border-border-dark/80 shadow-[0_24px_80px_rgba(15,23,42,0.16)] dark:shadow-[0_24px_80px_rgba(0,0,0,0.55)] ${styles.popover}`}
       >
         <div className={`border-b border-border-light/70 dark:border-border-dark/70 px-4 py-4 sm:px-6 ${styles.headerSurface}`}>
@@ -71,8 +94,8 @@ const SearchModal = ({
               ref={inputRef}
               value={query}
               onChange={(event) => onQueryChange(event.target.value)}
-              placeholder="Search titles, topics, technologies..."
-              aria-label="Search posts"
+              placeholder="Search posts or type a command..."
+              aria-label="Search posts and commands"
               className="min-w-0 w-full bg-transparent text-base text-main-light dark:text-main-dark outline-none placeholder:text-main-light/60 dark:placeholder:text-main-dark/50"
             />
 
@@ -97,8 +120,8 @@ const SearchModal = ({
         <div className={`max-h-[58vh] overflow-y-auto px-4 py-3 sm:px-6 sm:py-4 ${styles.resultsSurface}`}>
           {query.trim().length < 2
             ? (
-              <p className="text-sm text-main-light dark:text-main-dark/80">
-              Type at least 2 characters to search posts.
+              <p className="mb-6 text-sm text-main-light dark:text-main-dark/80">
+              Type a command, or at least 2 characters to search posts.
               </p>
             )
             : null}
@@ -109,22 +132,22 @@ const SearchModal = ({
             )
             : null}
 
-          {query.trim().length >= 2 && !isLoading && results.length === 0
+          {query.trim().length >= 2 && !isLoading && visibleResults.length === 0 && commands.length === 0
             ? (
               <p className="text-sm text-main-light dark:text-main-dark/80">
-              No results found for "{query.trim()}".
+              No posts or commands found for "{query.trim()}".
               </p>
             )
             : null}
 
-          {!isLoading && results.length > 0
+          {visibleResults.length > 0
             ? (
               <>
                 <p className="mb-4 text-xs text-main-light/70 dark:text-main-dark/60">
-                Tip: Use keyboard [Arrow Keys] to move between results, [Enter] to open
+                Posts — Use arrow keys to select and Enter to open
                 </p>
                 <ul className="space-y-3">
-                  {results.map((result, index) => (
+                  {visibleResults.map((result, index) => (
                     <li key={result.id}>
                       <Link
                         href={`/blog/${result.slug}`}
@@ -138,12 +161,13 @@ const SearchModal = ({
                           }
                         }}
                         ref={(element) => {
-                          resultLinkRefs.current[index] = element;
+                          itemRefs.current[index] = element;
                         }}
                         onMouseEnter={() => {
-                          setActiveResultIndex(index);
+                          setActiveItemIndex(index);
                         }}
-                        className={`block rounded-xl border border-border-light/70 dark:border-border-dark/70 px-4 py-3 transition-colors hover:border-primary-500/60 hover:bg-gray-100 dark:hover:border-primary-400/60 dark:hover:bg-gray-900 ${styles.resultCard} ${activeResultIndex === index ? 'border-primary-500/70 bg-gray-100 dark:border-primary-400/70 dark:bg-gray-900' : ''}`}
+                        onFocus={() => setActiveItemIndex(index)}
+                        className={rowClassName(index)}
                       >
                         <p className="font-semibold text-main-light dark:text-main-dark">
                           <HighlightText text={result.title || 'Untitled post'} query={query} />
@@ -167,6 +191,35 @@ const SearchModal = ({
                   ))}
                 </ul>
               </>
+            )
+            : null}
+          {commands.length > 0
+            ? (
+              <section aria-label="Commands" className={visibleResults.length > 0 ? 'mt-5' : ''}>
+                <h2 className="mb-2 text-xs font-medium text-main-light/70 dark:text-main-dark/60">
+                  Commands — Use arrow keys to select and Enter to run
+                </h2>
+                <ul>
+                  {commands.map((command, commandIndex) => {
+                    const index = visibleResults.length + commandIndex;
+
+                    return (
+                      <li key={command.id}>
+                        <PaletteCommandRow
+                          command={command}
+                          className={commandRowClassName(index)}
+                          elementRef={(element) => {
+                            itemRefs.current[index] = element;
+                          }}
+                          onSelect={() => setActiveItemIndex(index)}
+                          onClose={onClose}
+                          onToggleTheme={() => setTheme(isDark ? 'light' : 'dark')}
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
             )
             : null}
         </div>
