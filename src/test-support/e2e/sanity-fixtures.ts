@@ -192,7 +192,11 @@ const posts = Array.from({ length: 16 }, (_, index) => {
     excerpt: 'A deterministic fixture excerpt that establishes the expected card layout',
     tags: postTags,
     primaryTopic,
-    keywords: index === 9 ? ['pagination-keyword-only'] : index === 15 ? ['draft-only-keyword'] : [],
+    keywords: postNumber === 1 || postNumber === 7
+      ? ['React', 'Testing']
+      : postNumber === 8
+        ? ['React.js', 'react']
+        : index === 9 ? ['pagination-keyword-only'] : index === 15 ? ['draft-only-keyword'] : [],
     body: postNumber === 1
       ? articleBody
       : postNumber === 2
@@ -264,6 +268,25 @@ export function getE2EGraphQLResponse({ operationName, query, variables, perspec
     return {
       allPost: visiblePosts,
       allTopic: /\ballTopic\b/.test(query) ? TOPICS : undefined,
+    };
+  }
+
+  if (operationName === 'AllRelatedPosts') {
+    return {
+      allPost: visiblePosts.map((post) => ({
+        _id: post._id,
+        title: post._id === 'post-8'
+          ? 'Fixture post 8: A deliberately long article title about keeping related reading suggestions accessible and readable across narrow mobile and desktop layouts'
+          : post.title,
+        slug: post.slug,
+        publishedAt: post.publishedAt,
+        excerpt: post.excerpt,
+        imageAltText: post.imageAltText,
+        image: post._id === 'post-8' ? undefined : post.image,
+        ...('primaryTopic' in post ? { primaryTopic: post.primaryTopic } : {}),
+        ...('keywords' in post ? { keywords: post.keywords } : {}),
+        ...('tags' in post ? { tags: post.tags } : {}),
+      })),
     };
   }
 

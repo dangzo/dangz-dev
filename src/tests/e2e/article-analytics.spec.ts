@@ -138,7 +138,7 @@ test.describe('Article analytics with the pinned real tracker and intercepted co
 
   test('native clipboard success reports H2, H3, H4 and duplicate heading IDs exactly once', async ({ page }) => {
     await loadTracker(page);
-    const headings = page.getByLabel('Article content').locator('h2, h3, h4');
+    const headings = page.locator('[data-article-body]').locator('h2, h3, h4');
     await expect(headings).toHaveCount(4);
     const ids = await headings.evaluateAll((elements) => elements.map(({ id }) => id));
     expect(ids).toEqual(['reference-section', 'detailed-references', 'reference-details', 'reference-section-2']);
