@@ -1,21 +1,6 @@
 # Dependency security
 
-## Issue #170 inventory
-
-Reviewed on 2026-10-04: 33 open Dependabot alerts in `yarn.lock`, all for transitive npm dependencies. The updates below remove vulnerable versions for 30 alerts. GitHub closure must be verified after the fixes reach the default branch, `dev`; local version verification does not close alerts.
-
-| Dependency | Alerts | Dependency path | Updated version |
-| --- | --- | --- | --- |
-| `adm-zip` | #166, #174, #188–#192 | Sanity CLI → workbench CLI → module-federation DTS plugin; runtime CLI | 0.6.1 |
-| `undici` | #175, #179–#187 | Sanity CLI → workbench CLI → module-federation DTS plugin | 7.29.1; existing patched 7.30.0 and 8.x branches retained |
-| `js-yaml` | #14, #111, #117, #157, #173 | Sanity CLI → `@vercel/frameworks`; Lighthouse CI utils | 3.15.2; existing patched 4.x branch retained |
-| `brace-expansion` | #198 | ESLint tooling → minimatch | 1.1.21; existing patched 5.0.12 branch retained |
-| `markdown-it` | #56, #178 | Sanity GraphiQL plugin → GraphiQL React | 14.3.1 |
-| `linkify-it` | #110, #124 | GraphiQL React → markdown-it | 5.0.2 |
-| `tmp` | #47, #50 | Lighthouse CI; inquirer → external-editor | 0.2.7 |
-| `uuid` | #49 | Lighthouse CI; Sanity CLI → typeid-js | 11.1.1; existing patched 14.x branch retained |
-
-The source inventory is [Dependabot alerts](https://github.com/dangzo/dangz-dev/security/dependabot), tracked by [issue #170](https://github.com/dangzo/dangz-dev/issues/170). Alert #166 has no first-patched-version metadata, but 0.6.1 is outside its affected range (`>= 0.5.9, <= 0.6.0`).
+The constraints below were recorded during the 2026-10-04 review in [issue #170](https://github.com/dangzo/dangz-dev/issues/170). They are dated assumptions, not a fresh vulnerability assessment. Consult [Dependabot alerts](https://github.com/dangzo/dangz-dev/security/dependabot) and the follow-up issues for current status before dependency work.
 
 ## Resolution policy
 
@@ -41,16 +26,6 @@ Introduced only by Lighthouse CI → Lighthouse → puppeteer-core → `@puppete
 
 Follow-up: [issue #181](https://github.com/dangzo/dangz-dev/issues/181) tracks a compatible Lighthouse/Puppeteer upgrade whose browser downloader no longer depends on extract-zip, or an upstream patched release when available. Keep [alert #161](https://github.com/dangzo/dangz-dev/security/dependabot/161) and [alert #168](https://github.com/dangzo/dangz-dev/security/dependabot/168) open until the vulnerable package is removed.
 
-## Verification and rollout
+## Verify dependency changes
 
-- Install with Node 24.15 and Yarn 1.22.22 using `yarn install --frozen-lockfile`.
-- Inspect resolved versions, including nested packages in both workspaces; every patched package must be outside all corresponding advisory ranges.
-- Run `yarn ci:lint`, `yarn ci:typecheck`, `yarn test:unit`, `yarn test:e2e`, and `yarn ci:build`. Inspect affected desktop/mobile layouts in both themes and smoke-test Studio/GraphiQL plus the overridden UUID/temp-file consumers.
-- Run mobile and desktop Lighthouse checks with an installed Chrome executable. Report unavailable checks or failures separately from successful dependency-version verification.
-- For the #170 remediation described here, the PR targets `dev` and includes `Closes #170`. After that merge, refresh the alert inventory, confirm closure for the 30 addressed alerts, and retain the three exceptions with follow-up tracking. Future dependency work follows its own issue criteria and the current default-branch checks in [AGENTS.md](../AGENTS.md).
-
-Local validation on 2026-10-04: all 292 unit tests and 64 browser tests (including desktop/mobile visual baselines) passed, frontend and Studio type checks passed, and both standard production builds passed. Lint passed with generated `playwright-report/**` and `test-results/**` excluded; the unmodified lint command also scanned pre-existing report bundles. Mobile and desktop Lighthouse assertions passed on all four configured URLs, three runs per URL, using installed Chrome and local report storage.
-
-A clean frozen installation verified every installed copy of the eight fixable packages across both workspaces. It also removed stale Sanity client 7 files under SDK 3.7, which requires client 8; the stale files had caused missing get-it exports in local Studio bundling. Lint, types, unit/browser tests, production builds, the fully bundled Studio build, and UUID/typeid/temp-file/GraphiQL MarkdownContent smoke checks passed after this reset. No workspace hoisting or application compatibility changes were needed.
-
-The fresh Studio development server rendered its project-connection/CORS screen in Chromium without runtime errors. Authenticated content editing was not exercised because the temporary local origin was not registered; no remote project configuration was changed.
+Use the manifest's Node/Yarn versions and a frozen installation. Inspect every resolved copy across both workspaces against current advisory ranges, then select checks from [WORKFLOW.md](WORKFLOW.md#validate-the-affected-behavior). Smoke-test affected overridden consumers, including Studio/GraphiQL and UUID/temp-file APIs. Lighthouse uses an installed trusted Chrome executable. Local version verification does not close GitHub alerts; confirm their status after fixes reach the default branch and retain unresolved follow-up tracking.

@@ -1,14 +1,12 @@
 # Studio topics and content migration
 
-Issue #159 adds the Studio/content side of the #157/#158 topic contract. The approved names are Architecture, Performance, Accessibility, Full-Stack Engineering, Interviews, and AI-Assisted Development.
+Authoring and migration for the [blog topic contract](BLOG_TOPICS.md). Shared definitions, assignments, and historical redirects live in [`src/data/blogTopics.ts`](../src/data/blogTopics.ts).
 
 ## Production migration checkpoint
 
-On 2026-10-04, the additive GraphQL schema and approved production content migration were applied. Schema validation flagged only the added optional `primaryTopic` input field; existing legacy queries remain compatible. The content transaction created six topics and patched nine post variants, including the eight approved published excerpts. Full document verification passed, and a subsequent dry run planned zero changes with zero issues.
+The [#159 migration](https://github.com/dangzo/dangz-dev/issues/159) recorded additive GraphQL deployment and production content application on 2026-10-04: six topics, nine patched post variants, preserved legacy queries/tags, and a repeat dry run with zero changes/issues. Published and preview checks verified eight published articles and an unpublished AI draft at that time. This is historical evidence, not current CMS inventory; frontend mode, hosted Studio, and webhook cutover were separate steps.
 
-Published and authenticated-preview GraphQL checks confirmed the expected topic counts, keyword projections, excerpts, and publication split: eight published posts and the unpublished AI draft. Legacy tags remain intact. The frontend reading mode, hosted Studio, and webhook configuration were not changed by this migration; those rollout steps remain separate.
-
-Private backup, reviewed report, and `applied.json` receipt are under `.tmp/topic-migration/issue-159-apply-review/` in the implementation worktree. The post-application report is under `.tmp/topic-migration/issue-159-post-apply/`. Keep these artifacts for the rollback window. Do not apply the original report again; generate a fresh dry run for any later content work.
+The receipt referenced private artifacts under `.tmp/topic-migration/issue-159-apply-review/` and `.tmp/topic-migration/issue-159-post-apply/` in its implementation worktree. Those paths are historical references, not portable backup locations or proof the files still exist. Locate the retained backup, reviewed report, and `applied.json` before attempting recovery. Generate a fresh dry run for later content work.
 
 ## Authoring
 
@@ -38,7 +36,7 @@ Each run creates:
 - `report.md`: an inventory and change summary without article bodies or unpublished titles.
 - `legacy-tag-map.json`: all approved historical destinations, including GraphQL and Lighthouse, even if their CMS documents are gone.
 
-The initial inventory is eight published posts, the AI draft, 18 stored tag documents, and 20 historical tag URLs. Post assignments and eight proposed excerpts are approved shared data; the AI draft's existing excerpt stays intact. Published/draft variants are patched independently by base ID. IDs, bodies, slugs, asset references, tags, publication state, and unrelated metadata are preserved. The only created documents are the six topic seeds.
+The planner's original expected corpus was eight published posts, an AI draft, 18 stored tag documents, and 20 historical tag URLs. Its shared assignments/excerpts and publication assumptions describe that migration, not today's inventory. Review later editorial changes before reuse. Published/draft variants are patched independently by base ID; IDs, bodies, slugs, asset references, tags, publication state, and unrelated metadata are preserved. Only the six topic seeds are created.
 
 Review the exact changes in `report.json`. The planner fails on unmapped content, missing expected articles, unknown historical slugs, malformed/unresolved references, conflicting assignments, duplicate topic slugs, unexpected AI publication, and content-release variants. Resolve these deliberately and regenerate the report. Already-classified articles with different excerpts require review rather than automatic replacement. A second run after a successful migration plans zero changes.
 
@@ -46,7 +44,7 @@ Review the exact changes in `report.json`. The planner fails on unmapped content
 
 The following commands write remote content and are **not** part of the code/dry-run delivery. Review the report and schedule rollout before using them. Pause editorial changes during the short apply/verification window.
 
-1. Deploy the frontend containing #157/#158 in compatibility mode, with `SANITY_TOPIC_MODEL` unset. Confirm canonical topic destinations and legacy redirects work on the actual production deployment; merging to the repository's default `dev` branch alone does not deploy `main` to production.
+1. Deploy the compatible frontend with `SANITY_TOPIC_MODEL` unset. Confirm canonical topic destinations and legacy redirects on production; merging to `dev` alone does not deploy `main` to production.
 2. Generate a fresh dry run and review its backup and exact changes. For an additional full archive including binaries, use Sanity's dataset export before applying. Keep the archive with the private run artifacts.
 3. Deploy the additive GraphQL schema with `yarn deploy-graphql`. Keep the legacy fields and types. Local `yarn generate-types` only regenerates the two committed artifacts and does not deploy GraphQL. Required fields remain optional in generated document types because incomplete drafts are valid editing states.
 4. Apply the reviewed report using a server-side `SANITY_API_WRITE_TOKEN`:
@@ -68,7 +66,7 @@ The following commands write remote content and are **not** part of the code/dry
    ```
 
    Retain the existing signing secret. The frontend handler already accepts this shape and expires shared content/search caches and affected routes.
-6. Verify primary GraphQL queries and counts under both published and authenticated preview perspectives before setting `SANITY_TOPIC_MODEL=primary`. Expect published distribution 3 Architecture, 2 Performance, and 1 each Accessibility, Full-Stack Engineering, and Interviews. AI-Assisted Development remains draft-only and absent from public navigation, search, and sitemap. Check keyword searches, all legacy redirects (including pagination), article excerpts, Home, topic archives, and signed invalidation.
+6. Verify primary GraphQL queries and counts under published and authenticated preview perspectives before setting `SANITY_TOPIC_MODEL=primary`. Compare against the reviewed inventory and preserve its publication split: draft-only content must stay absent from public navigation, search, and sitemap. Check keyword searches, legacy redirects (including pagination), excerpts, Home, archives, and signed invalidation.
 7. Enable primary-model reads and deploy Studio with the new authoring flow. Exercise create/edit/preview/publish using a disposable test article; ensure invalid topics/excerpts block publication and incomplete drafts save. Remove that test article afterward through the normal editorial workflow. Remove the temporary `LOCAL_EDITORIAL_PREVIEW` helper only after CMS excerpts are verified.
 
 Keep legacy fields and documents throughout the rollback window. Their removal, search-preview helper removal, and any other taxonomy cleanup are follow-up changes after every consumer and redirect is verified.
