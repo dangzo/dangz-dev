@@ -1,4 +1,4 @@
-export type ContactPlacement = 'home' | 'about_intro' | 'about_journey' | 'about_contact' | 'footer';
+export type ContactPlacement = 'home' | 'about_intro' | 'about_journey' | 'about_contact' | 'footer' | 'command_palette';
 
 type ContactAnalyticsEvent =
   | Readonly<{ name: 'contact_clicked'; channel: 'email' | 'linkedin'; placement: ContactPlacement }>

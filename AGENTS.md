@@ -6,6 +6,14 @@
 - Read [docs/WORKFLOW.md](docs/WORKFLOW.md) when running checks or changing schemas, queries, or generated files.
 - Read only task-relevant sections; update guidance when documented behavior changes.
 
+## Documentation maintenance
+
+- Update existing docs for lasting behavior, contracts, non-obvious decisions, or operating/recovery procedures. A feature does not automatically need a new document.
+- Keep task plans, local review/audit reports, approval conversations, test totals, and implementation chronology in the issue/PR or ignored task artifacts. Retain only concise, dated evidence receipts when they are needed for an ongoing operational decision.
+- Add a document only for a distinct recurring need that existing docs cannot serve; explain that need in the PR and link it from the relevant guide. Avoid one file per feature or issue by default.
+- Give each rule one canonical home and link to it elsewhere. Link to executable source for commands, schemas, data inventories, and test coverage instead of copying lists that drift.
+- When changing behavior or completing rollout, reconcile affected guidance, remove expired checkpoints/instructions, and preserve unresolved constraints and recovery safeguards. Historical task authorization is never standing permission for later agents. Check links after moving or deleting docs.
+
 ## Skills and delegation
 
 - Shared skills live in `.agents/skills/`; shared specialist roles live in `.agents/roles/`. See [docs/WORKFLOW.md](docs/WORKFLOW.md#skills-and-specialist-agents) for invocation and maintenance.
@@ -25,10 +33,8 @@
 - Split components for readability; colocate private helpers and extract shared or architecturally public components.
 - Prefer Tailwind utilities over CSS modules and inline styles; reuse existing UI primitives and theme tokens.
 - Reuse About icons from `public/icons/`; ask the developer for an SVG before adding a new icon.
-- Before creating any PR (including drafts and CLI-generated PRs), identify related GitHub issues from the task, branch, commits, and existing issue links. Read each related issue's acceptance criteria to determine whether the PR completes it.
-- Include `Closes #<issue-number>` in the PR description for every completed issue so merging into the repository's default branch automatically closes it. Use `Refs #<issue-number>` only for related or partially completed issues that should remain open, and state what remains. If there are no related issues, write `None` in the Related issues section; do not invent an issue number or create an issue solely to fill this section.
-- Treat issue references as a required PR creation check: do not submit the PR until the prepared description includes every completed issue's closing reference and the target is the repository's current default branch. An explicit user request to target another branch takes precedence; explain that closing references will not automatically close issues on that merge.
-- Immediately after creating or updating a PR, read back its saved description and base branch and correct missing or incorrect issue references. Repeat this check before merging. Supplying a custom body or using a template does not replace these checks.
+- Before creating any PR, including drafts and CLI-generated PRs, identify related issues from the task, branch, commits, and existing links; read each issue's acceptance criteria. Include `Closes #<number>` for every completed issue, or `Refs #<number>` for partial/related work with what remains. With no related issues, write `None`; do not invent or create an issue to fill the section.
+- Submit only after checking every completed issue's closing reference and the repository's current default-branch target. An explicit request for another target takes precedence; explain that its merge will not automatically close issues. Immediately after creation or updates, read back the saved description and base and correct references; repeat before merging. Templates and custom bodies do not replace these checks.
 - PRs that change only `.md` files and do not affect live production behavior must have `skip-ci` to skip CI validation jobs and `skip-review` to skip automatic CodeRabbit reviews. Check the full PR diff, including whether Markdown is consumed by the production site or build, before applying these labels. Add both labels when creating the PR and verify them afterward. Reassess after every update and remove both labels if non-Markdown files or production-affecting changes are added. The label gate still runs; see [README.md](README.md#pr-labels).
 
 <!-- BEGIN:nextjs-agent-rules -->

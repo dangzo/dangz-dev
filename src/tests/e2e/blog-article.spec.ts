@@ -50,7 +50,7 @@ test.describe('Blog Article Page', () => {
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 
     const headingArea = page.locator('article').first();
-    await expect(headingArea.locator('time')).toBeVisible();
+    await expect(headingArea.locator('time').first()).toBeVisible();
     await expect(headingArea.getByText(/min read/i)).toBeVisible();
     await expect(headingArea.locator('a[href^="/blog/topics/"]').first()).toBeVisible();
   });
@@ -134,7 +134,7 @@ for (const theme of ['light', 'dark'] as const) {
         await expect(page.locator('html')).toHaveAttribute('class', theme === 'dark' ? /dark/ : /light/);
 
         const content = page.getByRole('region', { name: 'Article content', exact: true });
-        const body = content.locator('article');
+        const body = content.locator('[data-article-body]');
         const reactions = content.locator('[aria-label="Reactions"]');
 
         await expect(reactions).toBeAttached();
@@ -165,7 +165,7 @@ for (const theme of ['light', 'dark'] as const) {
         expect(readingWidth).toBeGreaterThan(0);
 
         await page.goto('/blog/fixture-post-4');
-        const headinglessBody = page.getByRole('region', { name: 'Article content', exact: true }).locator('article');
+        const headinglessBody = page.getByRole('region', { name: 'Article content', exact: true }).locator('[data-article-body]');
 
         await expect(headinglessBody.locator('p').first()).toBeVisible();
         await expect(page.getByRole('navigation', { name: 'Table of contents' })).toHaveCount(0);
@@ -230,7 +230,7 @@ for (const theme of ['light', 'dark'] as const) {
         expect(href).toBeTruthy();
         await page.keyboard.press('Enter');
         await expect(page).toHaveURL(url => url.hash === href);
-        await expect(page.getByRole('region', { name: 'Article content', exact: true }).locator('h2, h3').last()).toBeFocused();
+        await expect(page.getByRole('region', { name: 'Article content', exact: true }).locator('[data-article-body] h2, [data-article-body] h3').last()).toBeFocused();
 
         if (width < 1280) {
           await expect(page.getByRole('button', { name: 'Show Table of Contents' })).toHaveAttribute('aria-expanded', 'false');
@@ -262,7 +262,7 @@ for (const theme of ['light', 'dark'] as const) {
 
       const lastEntry = page.getByRole('navigation', { name: 'Table of contents' }).getByRole('link').last();
       const content = page.getByRole('region', { name: 'Article content', exact: true });
-      const finalHeading = content.locator('h2, h3').last();
+      const finalHeading = content.locator('[data-article-body] h2, [data-article-body] h3').last();
 
       await expect(content.locator('[aria-label="Reactions"]')).toBeAttached();
       await expect(content.locator('[aria-label="Reactions loading"]')).toHaveCount(0);

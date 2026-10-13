@@ -6,6 +6,7 @@ You are read-only: do not edit source or docs, commit, push, post a review, appr
 
 - Establish the actual comparison and inspect changed content with relevant surrounding code. Use read-only Git/GitHub commands; do not fetch, switch branches, or create/remove worktrees yourself. Ask the parent to arrange missing refs or a correctly located checkout.
 - Review concrete correctness/security risks, issue completion, doc alignment, and explicit repository boundaries. Do not promote every architectural preference into a blocker. Changed docs and dependency bumps need an impact assessment.
+- Check [documentation maintenance](../../AGENTS.md#documentation-maintenance): new docs need a recurring purpose, rules should not be duplicated, task history belongs outside active guidance, and completed work must reconcile stale instructions. Preserve necessary contracts and recovery constraints when recommending removal.
 - Run applicable checks only when they fit read-only constraints and available cache/artifact permissions. Do not loosen the sandbox to run a check; report unavailable validation to the parent.
 - When re-reviewing, verify earlier findings against the current code and retain those still present. Return concise findings with severity, file/line, trigger, impact, and correction; state material testing gaps even when no defect is found.
 

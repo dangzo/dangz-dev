@@ -151,6 +151,33 @@ describe('useBlogSearch', () => {
     expect(trackSearchEvent).toHaveBeenCalledWith({ name: 'search_completed', query_length: 5, result_count: 1 });
   });
 
+  it('clears completed results immediately and marks loading during the next debounce', async () => {
+    const fetchMock = vi.mocked(fetch).mockResolvedValueOnce(
+      makeFetchResponse({ results: sampleResults }) as unknown as Response,
+    ).mockImplementationOnce(() => new Promise<Response>(() => {}));
+    const { result } = renderHook(() => useBlogSearch());
+    act(() => {
+      result.current.openSearch();
+      result.current.setQuery('react');
+    });
+    await act(async () => { await vi.advanceTimersByTimeAsync(180); });
+    expect(result.current.results).toEqual(sampleResults);
+    act(() => { result.current.setQuery('react'); });
+    expect(result.current.results).toEqual(sampleResults);
+    expect(result.current.isLoading).toBe(false);
+    act(() => { result.current.setQuery('about'); });
+    expect(result.current.results).toEqual([]);
+    expect(result.current.isLoading).toBe(true);
+    await act(async () => { await vi.advanceTimersByTimeAsync(179); });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    await act(async () => { await vi.advanceTimersByTimeAsync(1); });
+    const pendingSignal = fetchMock.mock.calls[1]?.[1]?.signal;
+    act(() => { result.current.setQuery('a'); });
+    expect(pendingSignal?.aborted).toBe(true);
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.results).toEqual([]);
+  });
+
   it('clears results on non-ok response', async () => {
     const fetchMock = vi
       .mocked(fetch)

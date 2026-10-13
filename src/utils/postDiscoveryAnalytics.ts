@@ -1,6 +1,6 @@
 import { enqueueAnalyticsEvent } from './analyticsTransport';
 
-export type PostOpenSource = 'home' | 'blog' | 'topic';
+export type PostOpenSource = 'home' | 'blog' | 'topic' | 'article';
 export type PostOpenPlacement = 'title' | 'cta' | 'reaction_summary';
 export type PostOpenedData = Readonly<{
   post_id: string;
@@ -22,7 +22,7 @@ export function readPostOpenedData(anchor: HTMLAnchorElement): PostOpenedData | 
   const placement = anchor.dataset.postOpenedPlacement;
 
   if (!postId?.trim()
-    || (source !== 'home' && source !== 'blog' && source !== 'topic')
+    || (source !== 'home' && source !== 'blog' && source !== 'topic' && source !== 'article')
     || (placement !== 'title' && placement !== 'cta' && placement !== 'reaction_summary')) {
     return null;
   }

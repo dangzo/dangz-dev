@@ -1,51 +1,44 @@
 # Architecture
 
-dangz.dev is Daniele Gazzelloni's personal portfolio and frontend engineering blog.
-Keep content readable, navigation accessible, and layouts usable on mobile and in both themes.
-The root package serves the Next.js App Router site; the `studio/` Yarn workspace manages Sanity content.
-Resolve `@/` imports from `src/`. Check package manifests for current dependency versions.
+dangz.dev is a portfolio and frontend engineering blog. The root package serves the Next.js App Router site; `studio/` manages Sanity content. Resolve `@/` from `src/`; read manifests for versions. Support mobile layouts, both themes, and accessible navigation.
 
 ## Locate changes
 
 | Concern | Source |
 | --- | --- |
 | Pages, layouts, metadata, API routes | `src/app/` |
-| Blog queries, types, rendering, hooks, pagination | `src/features/blog/` |
+| Blog queries, types, rendering, hooks | `src/features/blog/` |
 | Home sections | `src/features/home/components/` |
-| About sections, experience, tool entries | `src/features/about/`; edit entries in `data/aboutMeData.ts` |
-| Shared UI primitives | `src/components/ui/` |
-| Header, search modal, footer | `src/components/layout/` |
-| Theme provider, shared hooks and utilities | `src/contexts/`, `src/hooks/`, `src/utils/` |
-| Site metadata, contact links, navigation | `src/data/siteMetadata.ts`, `src/data/headerNavLinks.ts` |
-| Tailwind theme tokens, global styles, fonts | `src/styles/tailwind.css`, `src/styles/fonts.ts` |
-| Static assets and About tool SVGs | `public/`, `public/icons/` |
-| CMS schemas and Studio configuration | `studio/schemaTypes/`, `studio/sanity.config.ts` |
+| About sections and entries | `src/features/about/`, including `data/aboutMeData.ts` |
+| Shared primitives and layout | `src/components/ui/`, `src/components/layout/` |
+| Theme, shared hooks/utilities | `src/contexts/`, `src/hooks/`, `src/utils/` |
+| Metadata, contacts, navigation | `src/data/siteMetadata.ts`, `src/data/headerNavLinks.ts` |
+| Theme tokens and local fonts | `src/styles/tailwind.css`, `src/styles/fonts.ts` |
+| Static assets and About SVGs | `public/`, `public/icons/` |
+| CMS schemas/config | `studio/schemaTypes/`, `studio/sanity.config.ts` |
 
-Geist, Geist Mono, Roboto, and Roboto Slab are bundled with their licenses in
-`src/styles/fonts/` and loaded through `next/font/local` to avoid Google
-font-loader build failures and build-time font downloads. The bundled Latin
-subsets retain the site's font weights and Roboto's normal and italic styles;
-characters outside those subsets use the theme's fallback font stacks.
+## Rendering and data boundaries
 
-## Follow rendering and data flow
+- Route files compose feature components; shared behavior belongs in the shared directories above. Preserve blog parallel-slot parity: `src/app/blog/layout.tsx` renders `children`, `@heading`, and `@sidebar` for article, topic, legacy-tag, and pagination routes.
+- CMS reads use `src/features/blog/api/queries/` and the server Apollo client in `src/api/apollo-client.ts`. Development with a read token previews drafts; production reads published content with hourly fetch revalidation. Some helpers share reads within a render through React `cache`. Adapt generated Sanity references through feature types such as `PostWithTopic`.
+- Canonical topic seeds, migration assignments, redirects, keywords, and reviewed summaries live in dependency-free `src/data/blogTopics.ts`, shared with Studio/migration code. Archives filter the fetched corpus in JavaScript during the legacy/primary transition: generated GraphQL filters cannot filter legacy `tags` reference arrays. Use shared pagination helpers. See [BLOG_TOPICS](BLOG_TOPICS.md) and [STUDIO_TOPICS](STUDIO_TOPICS.md).
+- Review search and signed revalidation API routes together when changing freshness. The webhook invalidates shared content/search caches and revalidates affected blog routes. Keep reaction writes behind `src/app/api/reactions/route.ts` with server-only write credentials. Shared optimistic reconciliation and initiating-request outcome semantics are in [REACTION_ANALYTICS](REACTION_ANALYTICS.md).
+- Portable Text and Shiki highlighting stay on the server. Client code handles interactive tabs, copying, and image viewing. Preserve the legacy GraphQL body union when extending code schemas; see [CODE_VARIANTS](CODE_VARIANTS.md).
+- Cover/inline image triggers share one article-scoped `ArticleImageViewer`. Its portal isolates focus/background interaction and restores scroll/trigger focus. Viewer images use the original Sanity asset without thumbnail sizing, crop, or hotspot parameters; reuse authored captions/alt text.
+- Search is a lazy-loaded palette with server post results and local navigation/theme/contact commands. Post matches precede commands; native anchors/buttons handle activation. Preserve background isolation and focus restoration; [SEARCH_ANALYTICS](SEARCH_ANALYTICS.md#command-palette) includes keyboard/pending-result behavior.
+- Next-read recommendations use a published-only metadata corpus, exclude the current article, and rank by topic, shared keywords, then recency. Deduplicate IDs/slugs and show up to three linked rows below reactions, outside the body/ToC. See [selection](../src/features/blog/utils/relatedPosts.ts), [query](../src/features/blog/api/queries/relatedPosts.ts), and [discovery contract](POST_DISCOVERY_ANALYTICS.md).
+- Analytics loads through the production Umami integration. Buffered events, pageviews, exposure observations, and delegated anchor events have different delivery/privacy rules; consult [ANALYTICS](ANALYTICS.md) and its feature references when touching them.
 
-- Keep route files focused on composition; place feature behavior under `src/features/` and shared behavior in the shared directories above.
-- Preserve blog route parity: `src/app/blog/layout.tsx` renders `children`, `@heading`, and `@sidebar`. Check matching slots when changing article, topic, legacy tag, or pagination routes.
-- Use `src/features/blog/api/queries/` for CMS reads through the server Apollo client in `src/api/apollo-client.ts`. Development with a read token previews drafts; production reads published content with hourly fetch revalidation. Some query helpers also use React `cache` to share reads within a render.
-- Topic definitions, approved post-ID assignments, the durable legacy tag redirect manifest, search keyword derivation, and reviewed summaries live in dependency-free `src/data/blogTopics.ts`. Existing feature exports remain available to frontend consumers; Studio and the Node migration reuse the same data. Topic queries and archives live beside other blog queries and routes. See [BLOG_TOPICS.md](BLOG_TOPICS.md) for the taxonomy and [STUDIO_TOPICS.md](STUDIO_TOPICS.md) for authoring, migration, and rollout.
-- Topic archives filter the fetched post corpus in JavaScript through shared topic resolution during the legacy/primary model transition. Sanity's generated GraphQL filter cannot filter the legacy `tags` reference array. The legacy tag route remains for permanent redirects; search keywords can include old tag labels without exposing them as topic chips. Reuse `src/features/blog/utils/pagination.ts` for page parsing and sizing.
-- Review `src/app/api/search/route.ts` and `src/app/api/revalidate/route.ts` together when changing content freshness: search caches its published corpus, and the signed Sanity webhook invalidates shared content and search data and revalidates blog routes.
-- Keep reaction mutations behind `src/app/api/reactions/route.ts`; its query helpers use a server write token. `useReactions(postId, placement)` shares optimistic counts, reconciles overlapping submissions, and reports each initiating request's lifecycle. See [REACTION_ANALYTICS.md](REACTION_ANALYTICS.md) for count and delivery contracts.
-- Article discovery uses typed server-safe anchor marks and the root `PostDiscoveryAnalytics` capture listener, preserving Next navigation. See [POST_DISCOVERY_ANALYTICS.md](POST_DISCOVERY_ANALYTICS.md) for sources, placements, and dashboard verification.
-- Search, discovery, heading-copy, and reaction events use typed feature helpers with a shared bounded in-memory transport in `src/utils/analyticsTransport.ts`, flushed by the Umami script readiness integration. See [SEARCH_ANALYTICS.md](SEARCH_ANALYTICS.md) for event contracts, privacy, and production verification.
-- The production Umami script announces readiness through `UmamiScript`; `useBottomReactionsExposure` retains bottom-section exposure only for the mounted post visit. See [UMAMI_EXPOSURE.md](UMAMI_EXPOSURE.md) for the event rename and separate browser/dashboard validation.
-- Pageviews use the root `UmamiPageviews` route observer and `pageviewAnalytics` buffer; automatic Umami pageviews are disabled while click tracking stays initialized. Each committed pathname/query change counts once, fragments are ignored, and visits before readiness retain captured URLs/referrers. See [UMAMI_PAGEVIEWS.md](UMAMI_PAGEVIEWS.md) for queue limits, counting policy, and separate collector/dashboard verification.
-- Contact/profile/résumé links use the server-safe `contactAnalytics` attribute helper. Keep event properties on the anchor, including footer icons. See [CONTACT_ANALYTICS.md](CONTACT_ANALYTICS.md) for placements, historical labels, and validation.
-- Successful article heading copies use a typed blog helper and the shared event buffer; external reference anchors use delegated Umami attributes with the article post ID. See [ARTICLE_ANALYTICS.md](ARTICLE_ANALYTICS.md) for event contracts and production verification.
-- Extend article rendering in `src/features/blog/components/portable-text/`. Keep heading IDs aligned with table-of-contents extraction in `src/features/blog/utils/posts.ts`; keep Shiki highlighting on the server.
-- Article code supports legacy snippets and author-written labeled groups. Studio shares syntax-language options; grouped renderers highlight all variants on the server and use accessible client tabs with active-snippet copying. See [CODE_VARIANTS.md](CODE_VARIANTS.md) for authoring, validation, and the GraphQL/frontend/Studio deployment sequence.
-- Article cover and inline images use button triggers under one article-scoped `ArticleImageViewer` provider in `src/features/blog/components/images/`. The article and Portable Text remain server-rendered; the client viewer portals above the page, isolates focus and background interaction, and restores scroll and trigger focus after dismissal. Its responsive Next Image source uses the original Sanity asset without thumbnail resizing or crop/hotspot parameters; captions and alternative text come from the existing content.
-- Use generated Sanity types through feature adapters such as `PostWithTopic`, which adapt document references to populated query results and the primary-topic model.
-- Home previews use `WritingPreview` independently of blog listing cards. `BlogFrame` positions the `@sidebar` slot as topic navigation above listings. Article headers retain a 1152px limit with centered titles, metadata, and compact reactions; article bodies and bottom reactions share the footer's center axis. The article ToC is a disclosure above the reading column below 1280px and a sticky 240px left rail within a balanced 1152px three-column frame with 32px gaps at larger widths. Only its entry list scrolls, with overflow cues; headingless articles omit the ToC. The shared server-only editorial preview helper overrides known excerpts only in development with `LOCAL_EDITORIAL_PREVIEW=true`; CMS data and public production excerpts remain authoritative.
+## Layout and assets
 
-For schema generation, fixtures, and validation commands, read [WORKFLOW.md](WORKFLOW.md).
+Home uses `WritingPreview` independently of blog cards. `BlogFrame` places topic navigation above listings. Article headers use a centered 1152px limit; hero, prose, and bottom reactions align with the footer. Below 1280px the ToC is a disclosure above the reading column; wider layouts use a balanced `240px minmax(0, 1fr) 240px` frame with 32px gaps. The empty right rail balances the left sticky ToC. Only its entry list scrolls, with overflow cues; active entries reveal inside the list without scrolling the document. Keyboard activation focuses the destination heading; Escape returns focus to the disclosure toggle. Headingless articles omit the ToC and retain a centered 70ch column.
+
+Bundled Latin Geist/Geist Mono/Roboto/Roboto Slab fonts use `next/font/local` to avoid build-time downloads and Google loader failures. Keep colocated source/license notes and theme fallback stacks.
+
+## Known heading-ID limitations
+
+ToC extraction in [usePostInsights.ts](../src/features/blog/hooks/usePostInsights.ts) allocates IDs for h2/h3 only, while the [renderer](../src/features/blog/components/portable-text/PortableText.tsx) shares a factory across h1–h4. `h2 Repeat → h4 Repeat → h3 Repeat` therefore links the h3 ToC entry to `repeat-2` instead of rendered `repeat-3`. The [factory](../src/features/blog/utils/posts.ts) also allows literal `Repeat 2` to collide with a generated `repeat-2` ID.
+
+A future fix should allocate IDs deterministically across all rendered headings while exposing only h2/h3 in the ToC, reserve generated IDs, and preserve ordinary existing anchors. These controlled cases were identified in the #171 review; they are not claims about current published article titles. Historical review evidence is available in Git history.
+
+See [WORKFLOW](WORKFLOW.md) for generation, fixtures, and validation.

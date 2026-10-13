@@ -1,38 +1,29 @@
-# Search analytics
+# Search and command palette
 
-Issue [#187](https://github.com/dangzo/dangz-dev/issues/187) measures opening, successful search responses, and article selection. Instrumentation preserves the existing 180 ms debounce and minimum of two trimmed characters.
+Search analytics preserves the 180 ms debounce and minimum two trimmed characters.
 
 | Event | Properties | Meaning |
 | --- | --- | --- |
-| `search_opened` | `method`: `button` or `shortcut` | One confirmed closed-to-open transition |
-| `search_completed` | `query_length`, `result_count` | A successful current response with a results array, including zero results |
-| `search_result_selected` | `post_id`, one-based `result_position` | An article activation before closing/navigation, from a link or keyboard selection |
+| `search_opened` | `method=button` or `shortcut` | One confirmed closed-to-open transition |
+| `search_completed` | `query_length`, `result_count` | Successful current response with results array, including zero |
+| `search_result_selected` | `post_id`, one-based `result_position` | Article activation before closing/navigation, by link or keyboard |
 
-Length means the trimmed query's JavaScript `.length`. Result count measures the returned array, capped by the existing API at 20; it does not estimate the total matching corpus. Aborted, superseded, failed, and malformed responses produce no completion event. There is no error event.
+Length is trimmed query JavaScript `.length`; result count is the returned array (API cap 20), not total matching corpus. Aborted/superseded/failed/malformed responses emit no completion or error event. The helper reconstructs only listed properties; analytics contains no raw query, keystroke, result title, search API URL or personal identifier. The API still receives the query separately. Use the [shared buffered transport/privacy policy](ANALYTICS.md#delivery-boundaries).
 
-## Privacy and delivery
+Links track primary/modified primary through `onClick`, middle-button through `onAuxClick` ([#217](https://github.com/dangzo/dangz-dev/issues/217)). Middle-click emits one selection, preserves new-tab navigation and leaves the source palette open; right-click emits none. Router-driven keyboard selection must track independently of anchor clicks.
 
-The search helper accepts only the three event contracts and reconstructs their properties. It retains no raw query, keystrokes, result title, search API URL, or personal identifier. Search event payloads include only website, hostname, language, screen, query-free source pathname/referrer, occurrence time, event name, and the listed properties. Default tracker IDs and arbitrary metadata are excluded. The search API still receives the query to perform the search; that request is separate from analytics.
+## Command palette
 
-Search, article discovery, and reaction lifecycle events share `src/utils/analyticsTransport.ts`. Before tracker readiness, at most 50 events across these features are retained in memory for 60 seconds. Overflow drops the oldest event; expiry discards it. Client navigation preserves the original source path and timestamp. A full page unload loses pending events. `UmamiScript` flushes the buffer when the existing production-only lazy-loaded tracker is ready. Subsequent events also attempt a flush when the tracker is present.
+The lazy-loaded dialog offers Home, post list, About, light/dark toggling, résumé, email, GitHub and LinkedIn. Commands appear immediately, sorted alphabetically with `> ` prefixes, and filter locally by case-insensitive words/aliases (posts, articles, CV, resume). Post matches come first; their two-character/debounce rules still apply.
 
-Script failure clears the shared queue and disables further search, discovery, and reaction collection for that document. No tracker reload, alternative collector, persistent storage, or transport retry bypasses unavailable analytics. Each event gets at most one tracker invocation. A resolved tracker promise does not prove collector acceptance or dashboard visibility.
+ArrowDown from input focuses the first visible row; Up/Down wrap. Typing/Backspace from a row restores input focus and applies the edit at saved caret/selection; modifier shortcuts stay native. Native row focus exposes labels to screen readers. Enter activates the focused row; from input it activates the highlighted row or first row if none. While a post search/debounce is pending, Enter requires an explicitly highlighted command. Query changes hide stale posts/reset selection immediately; commands remain available after post-request failure. Tab is trapped, background inert, and dismissal restores previous focus.
 
-This reuses #184's readiness integration but does not change its per-article exposure policy. #176's command-palette enhancements remain separate.
+Openings count `search_opened`; completion counts only posts; article selection positions are within post results. Theme/site navigation emit no selection or new command event. Contact commands reuse [contact events](CONTACT_ANALYTICS.md) with `placement=command_palette` and native anchors/targets/downloads. Middle-click leaves the dialog open.
 
-## Validation and production handoff
+## Validation and reporting
 
-Unit tests cover transition guards, response classification, selection order, privacy, buffering, expiry, overflow, and tracker failures. `src/tests/e2e/search.spec.ts` uses a tracker stub with the normal development fixture server; it verifies browser interactions and payload construction, not real production delivery.
+Unit coverage tests transitions, response classification, keyboard/pending selection, privacy and shared transport failure/retention. Run `yarn test:e2e src/tests/e2e/search.spec.ts`; its development tracker stub proves interactions/payloads, not live delivery.
 
-After the change reaches production, record the deployed revision, production hostname, UTC start/end time, source paths, collector response statuses, and observed event/property counts:
+Follow [production verification](ANALYTICS.md#verification): button/Ctrl+K/Meta+K transitions, nonempty/zero results, mouse/keyboard/modified/middle selection, no right-click event, no query leakage, delayed readiness across navigation, failed/stale responses and blocking/opt-out. Check all three event/property groups separately in the owner dashboard. The [dated evidence limits](ANALYTICS.md#dated-evidence-receipts) do not claim complete production grouping merely from closed [#187](https://github.com/dangzo/dangz-dev/issues/187).
 
-1. With the real tracker ready, open using the button, Ctrl+K, and Meta+K where supported. Close/reopen and confirm one `search_opened` per transition.
-2. Execute known nonempty and empty searches. Inspect the complete collector request body: accurate lengths/counts, no raw query or query-derived URL, and no distinct ID. A distinctive temporary query makes accidental leakage easy to detect; do not retain it in evidence.
-3. Select results by mouse, ArrowDown/Enter, and Enter with no highlighted result. Confirm one selection request with the correct ID/position before navigation; test modified clicks separately.
-4. Hold the real tracker script before opening/searching/selecting; release it within 60 seconds. Confirm buffered requests keep the source path and occurrence times, including selection followed by client navigation. Repeated readiness must not duplicate them.
-5. Abort the script in a fresh browser context. Search must still open, return results, close, and navigate without an application error or alternative analytics request. Separately abort collector requests and confirm there is no retry. Intercept search failures and stale responses to confirm no false completion.
-6. **Owner dashboard check:** filter the same UTC window and production hostname in Umami. Verify all three event names and their properties, distinguishing ordinary traffic from the test window. Record dashboard evidence separately from browser requests. If property visibility is unavailable, leave that criterion pending rather than infer success from requests.
-
-Use existing Umami session/funnel reporting for adoption and reader conversion without adding identifiers. Zero-result rate is zero-result completions divided by successful completions. Raw selection/completion totals describe event activity; they are not a unique-reader conversion rate because one opening can contain multiple searches. Buffer limits and unavailable tracking cause undercounting.
-
-The implementation PR includes `Closes #187` so merging it into the repository default branch, `dev`, closes the issue. Production deployment follows `main`; network and owner dashboard verification remain explicit rollout checks, and their evidence must be recorded separately. Rollback is a revert of the search instrumentation and buffer integration, preserving the independent readiness/exposure work.
+Zero-result rate is zero-result completions / successful completions. One opening can contain multiple searches: raw selection/completion ratios are activity, not unique-reader conversion. Use existing Umami session/funnel reporting without new identifiers. Rollback removes search instrumentation/buffer integration while preserving independent readiness/exposure.

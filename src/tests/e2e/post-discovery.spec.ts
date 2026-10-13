@@ -10,13 +10,14 @@ type Payload = Readonly<{
   data?: Readonly<Record<string, unknown>>;
 }>;
 
-type Source = 'home' | 'blog' | 'topic';
+type Source = 'home' | 'blog' | 'topic' | 'article';
 type Placement = 'title' | 'cta' | 'reaction_summary';
 
 const scriptUrl = 'https://cloud.umami.is/script.js';
 const website = '00000000-0000-0000-0000-000000000186';
 const article = '/blog/stable-visual-regression-tests';
 const sources = [
+  { route: article, source: 'article', postId: 'post-7', placements: ['title'] },
   { route: '/', source: 'home', postId: 'post-1', placements: ['title', 'cta'] },
   { route: '/blog', source: 'blog', postId: 'post-1', placements: ['title', 'cta', 'reaction_summary'] },
   { route: '/blog/topics/architecture', source: 'topic', postId: 'post-1', placements: ['title', 'cta', 'reaction_summary'] },
@@ -196,6 +197,24 @@ test.describe('Article discovery with the application integration and intercepte
     expect(scriptRequests).toBe(1);
   });
 
+  test('next-read Enter activation before readiness retains its article source', async ({ page }) => {
+    await page.goto(article);
+    await expect.poll(() => scriptRequests).toBe(1);
+    await markDocument(page);
+    await discoveryLink(page, 'article', 'title').focus();
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/\/blog\/fixture-post-7$/);
+    await expectOriginalDocument(page);
+    expect(payloads).toEqual([]);
+
+    releaseTracker();
+    await expect.poll(() => opened().length).toBe(1);
+    expect(opened()[0].url).toBe(article);
+    expect(opened()[0].data).toEqual({ post_id: 'post-7', source: 'article', placement: 'title' });
+    await expect.poll(() => pageviews().map(routeOf)).toEqual([article, '/blog/fixture-post-7']);
+    expect(scriptRequests).toBe(1);
+  });
+
   test('topic and pagination navigation produce destination pageviews without discovery', async ({ page }) => {
     releaseTracker();
     await page.goto('/blog');
@@ -225,7 +244,7 @@ test.describe('Article discovery with the application integration and intercepte
     await expect.poll(() => pageviews().length).toBe(1);
     await markDocument(page);
     await page.getByRole('button', { name: 'Search', exact: true }).click();
-    await page.getByRole('textbox', { name: 'Search posts' }).fill('stable visual');
+    await page.getByRole('textbox', { name: 'Search posts and commands' }).fill('stable visual');
     const result = page.getByRole('dialog').getByRole('link', { name: /Building stable visual regression tests/ });
     await expect(result).toBeVisible();
     await expect(result).not.toHaveAttribute('data-post-opened-post-id');
