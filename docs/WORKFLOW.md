@@ -23,6 +23,13 @@ These instructions adapt the generic Claude Code export: local reviews and accep
 
 To validate changes, check skill frontmatter, parse agent YAML/TOML, resolve role links and symlinks, and run `git diff --check`. Verify discovery in both hosts after changing definitions; restart a session if its skill or agent list is stale. Application tests are unnecessary for instructions-only changes. Shared definitions are tracked, while personal Claude settings remain ignored.
 
+## Release from GitHub
+
+Use **Actions → Create release PR → Run workflow** on `dev` to prepare a
+`dev → main` release, then review and merge after required checks pass.
+See [Releases](RELEASES.md) for one-time authentication setup, generated
+descriptions, and rollout steps. The workflow never merges automatically.
+
 ## Run locally
 
 - Use Node and Yarn versions declared in the root `package.json`; keep the single `yarn.lock`.
@@ -45,6 +52,7 @@ Run commands from the repository root. Select checks by the change; report failu
 | Studio schema or code | `yarn lint-studio`, `yarn typecheck-studio`; regenerate types for schema changes |
 | Build or dependency configuration | `yarn ci:build`; add relevant lint, type, and test checks |
 | Documentation only | Check links, command names, and consistency with source; skip application tests |
+| Release PR automation | `yarn test:unit scripts/release-pr.test.ts`, `yarn typecheck`; validate workflow YAML and run `git diff --check` |
 
 - Keep unit tests beside source as `*.test.ts(x)` or `*.spec.ts(x)`. Vitest includes frontend, Studio, and migration tests, uses jsdom and `src/tests/unit/setup.ts`, and excludes E2E specs. Migration tests select the Node environment; React is deduplicated across the workspaces for Studio component tests.
 - Article image viewer checks use `yarn test:e2e src/tests/e2e/article-image-viewer.spec.ts` with the `fixture-post-5` cover and landscape/portrait inline images. Browser image responses are intercepted for deterministic sizing and loading/error checks. Inspect the viewer in both themes at desktop/mobile sizes when changing its styling; component tests cover isolation cleanup and original-image URL construction.
