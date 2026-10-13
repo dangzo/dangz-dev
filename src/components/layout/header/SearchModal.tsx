@@ -132,6 +132,11 @@ const SearchModal = ({
                           trackSearchResultSelected(result, index);
                           onClose();
                         }}
+                        onAuxClick={(event) => {
+                          if (event.button === 1) {
+                            trackSearchResultSelected(result, index);
+                          }
+                        }}
                         ref={(element) => {
                           resultLinkRefs.current[index] = element;
                         }}
