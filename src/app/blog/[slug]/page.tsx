@@ -44,38 +44,40 @@ export default async function PostPage({ params, }: Readonly<PostPageProps>) {
 
   return (
     <ArticleImageViewer key={post._id}>
-      <article data-article-body className="mx-auto min-w-0 max-w-[70ch]">
-        {post.image
-          ? (
-            <div className="mb-5 sm:mb-6 md:mb-8 rounded-lg overflow-hidden">
-              <ArticleImageTrigger image={getArticleImage(post.image, post.imageAltText || '(Image)')}>
-                <Img
-                  source={post.image}
-                  alt={post.imageAltText}
-                  className="w-full h-auto object-cover"
-                  width={930}
-                  height={665}
-                  sizes={imageSizes}
-                  fetchPriority="high"
-                  blurDataURL={lqip}
-                  preload
-                />
-              </ArticleImageTrigger>
-            </div>
-          )
-          : null}
+      <section aria-label="Article content" className="min-w-0 xl:col-start-2 xl:row-start-1 xl:group-not-has-data-article-toc/article:col-start-1">
+        <article data-article-body className="mx-auto min-w-0 max-w-[70ch]">
+          {post.image
+            ? (
+              <div className="mb-5 sm:mb-6 md:mb-8 rounded-lg overflow-hidden">
+                <ArticleImageTrigger image={getArticleImage(post.image, post.imageAltText || '(Image)')}>
+                  <Img
+                    source={post.image}
+                    alt={post.imageAltText}
+                    className="w-full h-auto object-cover"
+                    width={930}
+                    height={665}
+                    sizes={imageSizes}
+                    fetchPriority="high"
+                    blurDataURL={lqip}
+                    preload
+                  />
+                </ArticleImageTrigger>
+              </div>
+            )
+            : null}
 
-        {/* Body Content */}
-        {post.body && post.body.length > 0
-          ? (
-            <>
-              <PortableText value={post.body} postId={post._id} />
-              <ReactionsClient postId={post._id} />
-            </>
-          )
-          : <Text>No content available for this post.</Text>
-        }
-      </article>
+          {/* Body Content */}
+          {post.body && post.body.length > 0
+            ? (
+              <>
+                <PortableText value={post.body} postId={post._id} />
+                <ReactionsClient postId={post._id} />
+              </>
+            )
+            : <Text>No content available for this post.</Text>
+          }
+        </article>
+      </section>
       <RelatedPosts posts={relatedPosts} />
     </ArticleImageViewer>
   );

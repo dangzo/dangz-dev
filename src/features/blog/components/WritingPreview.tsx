@@ -1,29 +1,42 @@
 import Link from 'next/link';
-import { getPostOpenedAttributes } from '@/utils/postDiscoveryAnalytics';
+import { getPostOpenedAttributes, type PostOpenSource } from '@/utils/postDiscoveryAnalytics';
 import { DateText, Img, TagChip } from '@/components/ui';
 import type { PostWithTopic } from '@/features/blog/types/Post.types';
 
 type WritingPreviewProps = Readonly<{
   post: PostWithTopic;
   summary?: string;
+  source: Extract<PostOpenSource, 'home' | 'article'>;
 }>;
 
-export default function WritingPreview({ post, summary }: WritingPreviewProps) {
+export default function WritingPreview({ post, summary, source }: WritingPreviewProps) {
   const href = post.slug?.current ? `/blog/${post.slug.current}` : null;
+  const image = post.image?.asset?.url
+    ? (
+      <Img
+        source={post.image}
+        alt={post.imageAltText}
+        width={720}
+        height={405}
+        sizes="(min-width: 1200px) 368px, (min-width: 1024px) calc((100vw - 6rem) / 3), (min-width: 768px) calc((100vw - 4.5rem) / 2), (min-width: 640px) calc(100vw - 3rem), calc(100vw - 2rem)"
+        className="h-full w-full object-cover"
+        loading="lazy"
+        blurDataURL={post.image.asset.metadata?.lqip}
+      />
+    )
+    : null;
 
   return (
     <article className="flex min-w-0 flex-col overflow-hidden rounded-xl border border-border-light bg-background-main-light dark:border-border-dark dark:bg-background-main-dark">
-      {post.image?.asset?.url && (
+      {image && (
         <div className="aspect-video w-full shrink-0 overflow-hidden bg-background-secondary-light dark:bg-background-secondary-dark">
-          <Img
-            source={post.image}
-            alt={post.imageAltText}
-            width={720}
-            height={405}
-            sizes="(min-width: 1024px) 360px, (min-width: 768px) 45vw, calc(100vw - 2rem)"
-            className="h-full w-full object-cover"
-            blurDataURL={post.image.asset.metadata?.lqip}
-          />
+          {href
+            ? (
+              <Link href={href} aria-label={`Open article: ${post.title}`} className="block h-full w-full focus-visible:-outline-offset-2">
+                {image}
+              </Link>
+            )
+            : image}
         </div>
       )}
 
@@ -36,7 +49,7 @@ export default function WritingPreview({ post, summary }: WritingPreviewProps) {
         {href
           ? (
             <Link
-              {...getPostOpenedAttributes({ post_id: post._id, source: 'home', placement: 'title' })}
+              {...getPostOpenedAttributes({ post_id: post._id, source, placement: 'title' })}
               href={href}
               className="rounded-sm hover:text-accent-light dark:hover:text-accent-dark"
             >
@@ -55,7 +68,7 @@ export default function WritingPreview({ post, summary }: WritingPreviewProps) {
       {href && (
         <div className="mt-auto px-6 pt-5 pb-6 md:px-5 md:pb-5">
           <Link
-            {...getPostOpenedAttributes({ post_id: post._id, source: 'home', placement: 'cta' })}
+            {...getPostOpenedAttributes({ post_id: post._id, source, placement: 'cta' })}
             href={href}
             aria-label={`Read article: ${post.title}`}
             className="inline-block rounded-sm py-1 text-sm font-medium text-accent-light hover:underline dark:text-accent-dark"

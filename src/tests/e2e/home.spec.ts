@@ -49,6 +49,17 @@ test.describe('Home Page', () => {
     await expect(page.getByRole('heading', { level: 1, name: title })).toBeVisible();
   });
 
+  test('latest writing cover image opens its article', async ({ page }) => {
+    const card = page.getByRole('region', { name: 'Latest writing' }).getByRole('article').first();
+    const title = await card.getByRole('heading').innerText();
+    const cover = card.getByRole('link', { name: `Open article: ${title}` });
+    const href = await cover.getAttribute('href');
+
+    await cover.locator('img').click();
+    await expect(page).toHaveURL(href ?? '');
+    await expect(page.getByRole('heading', { level: 1, name: title })).toBeVisible();
+  });
+
   test('latest writing shows four articles only in the two-column tablet layout', async ({ page }) => {
     const articles = page.getByRole('region', { name: 'Latest writing' }).getByRole('article');
 

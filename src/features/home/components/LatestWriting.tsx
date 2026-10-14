@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getPostList } from '@/features/blog/api/queries/posts';
-import WritingPreview from './WritingPreview';
+import WritingPreview from '@/features/blog/components/WritingPreview';
 import { getEditorialSummary } from '@/features/blog/utils/editorial-preview';
 
 export default async function LatestWriting() {
@@ -28,7 +28,7 @@ export default async function LatestWriting() {
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {visiblePosts.map((post, index) => (
         <div key={post._id} className={index === 3 ? 'hidden min-w-0 md:grid lg:hidden' : 'grid min-w-0'}>
-          <WritingPreview post={post} summary={getEditorialSummary(post)} />
+          <WritingPreview source="home" post={post} summary={getEditorialSummary(post)} />
         </div>
       ))}
     </div>

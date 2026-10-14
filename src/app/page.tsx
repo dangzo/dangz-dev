@@ -5,7 +5,7 @@ import { Button } from '@/components/ui';
 import { links } from '@/data/siteMetadata';
 import { contactAnalytics } from '@/utils/contactAnalytics';
 import LatestWriting from '@/features/home/components/LatestWriting';
-import { WritingPreviewSkeleton } from '@/features/home/components/WritingPreview';
+import { WritingPreviewSkeleton } from '@/features/blog/components/WritingPreview';
 import { TopTags, TopTagsSkeleton } from '@/features/home/components/TopTags';
 
 export const metadata: Metadata = {
