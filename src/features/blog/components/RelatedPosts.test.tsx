@@ -32,24 +32,27 @@ it('renders an accessible next-read section with article discovery links', () =>
   expect(screen.getByText(post.excerpt ?? '')).toBeVisible();
 
   const links = section.querySelectorAll('a[data-post-opened-source="article"]');
-  expect(Array.from(links).map((link) => link.getAttribute('data-post-opened-placement'))).toEqual(['title']);
+  expect(Array.from(links).map((link) => link.getAttribute('data-post-opened-placement'))).toEqual(['title', 'cta']);
   expect(section.querySelector('img')).toBeNull();
-  expect(section.querySelector('article')).toBeNull();
+  expect(section.querySelector('article')).not.toBeNull();
+  expect(screen.getByRole('link', { name: `Read article: ${post.title}` })).toHaveAttribute('href', '/blog/next-read');
   expect(section.querySelector('a[data-umami-event]')).toBeNull();
 });
 
-it('keeps a lazy thumbnail inside the same accessible row link', () => {
+it('reuses the writing card with separate cover, title and reading links', () => {
   render(<RelatedPosts posts={[{
     ...post,
     imageAltText: 'Article cover',
     image: { asset: { url: 'https://cdn.sanity.io/images/wdxhl3tc/production/098fa2b1b448e79f99fd53f629d2fb721bdec4a2-1536x1024.png' } },
   }]} />);
 
-  const link = screen.getByRole('link', { name: post.title });
+  const link = screen.getByRole('link', { name: `Open article: ${post.title}` });
   const image = link.querySelector('img');
   expect(image).toHaveAttribute('loading', 'lazy');
-  expect(image).toHaveAttribute('sizes', '112px');
-  expect(image).toHaveAttribute('aria-hidden', 'true');
-  expect(screen.getAllByRole('link')).toHaveLength(1);
-  expect(screen.queryByText('→')).not.toBeInTheDocument();
+  expect(image).toHaveAttribute('width', '720');
+  expect(image).toHaveAttribute('height', '405');
+  expect(image?.getAttribute('sizes')).toContain('(min-width: 1200px) 368px');
+  expect(image).toHaveAttribute('alt', 'Article cover');
+  expect(screen.getAllByRole('link')).toHaveLength(3);
+  expect(screen.getByText('→')).toBeVisible();
 });

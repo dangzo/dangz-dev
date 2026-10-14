@@ -8,7 +8,7 @@
 | `source` | `home`, `blog`, `topic`, `article` |
 | `placement` | `title`, `cta`, `reaction_summary` |
 
-Home renders title/reading CTA links. Blog/topic cards add reaction-summary links for positive emoji counts; pagination retains the source. Article next-read rows use `source=article`, `placement=title`, selected destination ID and no separate CTA/summary. Ranking/fallback live in [relatedPosts](../src/features/blog/utils/relatedPosts.ts); recommendation reads stay published-only. Contextual body links, images, topic/pagination controls and search are excluded. Search uses `search_result_selected`.
+Home renders title/reading CTA links. Blog/topic cards add reaction-summary links for positive emoji counts; pagination retains the source. Article next-read cards share the Home writing component and use `source=article` with `placement=title` or `cta`, and the selected destination ID. Cover images link to the article in both sections but remain excluded from discovery events; topic chips keep their independent archive links. Ranking/fallback live in [relatedPosts](../src/features/blog/utils/relatedPosts.ts); recommendation reads stay published-only. Contextual body links, images, topic/pagination controls and search are excluded. Search uses `search_result_selected`.
 
 ## Navigation and delivery
 

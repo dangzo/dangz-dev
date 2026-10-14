@@ -17,7 +17,7 @@ const scriptUrl = 'https://cloud.umami.is/script.js';
 const website = '00000000-0000-0000-0000-000000000186';
 const article = '/blog/stable-visual-regression-tests';
 const sources = [
-  { route: article, source: 'article', postId: 'post-7', placements: ['title'] },
+  { route: article, source: 'article', postId: 'post-7', placements: ['title', 'cta'] },
   { route: '/', source: 'home', postId: 'post-1', placements: ['title', 'cta'] },
   { route: '/blog', source: 'blog', postId: 'post-1', placements: ['title', 'cta', 'reaction_summary'] },
   { route: '/blog/topics/architecture', source: 'topic', postId: 'post-1', placements: ['title', 'cta', 'reaction_summary'] },
@@ -102,7 +102,7 @@ test.describe('Article discovery with the application integration and intercepte
           await link.locator('span').click();
         } else if (placement === 'reaction_summary') {
           await link.locator('span').last().click();
-        } else if (source !== 'home') {
+        } else if (source !== 'home' && source !== 'article') {
           await link.getByRole('heading').click();
         } else {
           await link.click();
@@ -121,6 +121,24 @@ test.describe('Article discovery with the application integration and intercepte
         await expect(page.locator(`script[src="${scriptUrl}"]`)).toHaveCount(1);
       });
     }
+  }
+
+  for (const route of ['/', article]) {
+    test(`${route} cover navigation preserves client pageviews without discovery events`, async ({ page }) => {
+      releaseTracker();
+      await page.goto(route);
+      await expect.poll(() => pageviews().length).toBe(1);
+      await markDocument(page);
+      const region = page.getByRole('region', { name: route === '/' ? 'Latest writing' : 'What to read next', exact: true });
+      const cover = region.getByRole('link', { name: /^Open article:/ }).first();
+      const destination = await cover.getAttribute('href');
+
+      await cover.locator('img').click();
+      await expect(page).toHaveURL(new RegExp(`${destination}$`));
+      await expectOriginalDocument(page);
+      await expect.poll(() => pageviews().map(routeOf)).toEqual([route, destination]);
+      expect(opened()).toEqual([]);
+    });
   }
 
   test('Enter activation sends one event while preserving client navigation', async ({ page }) => {

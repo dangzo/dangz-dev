@@ -27,7 +27,7 @@ describe('selectRelatedPosts', () => {
     ];
 
     expect(selectRelatedPosts(current, corpus).map(({ _id }) => _id)).toEqual([
-      'same-topic-relevant', 'same-topic-new', 'same-topic-old',
+      'same-topic-relevant', 'same-topic-new', 'same-topic-old', 'other-topic',
     ]);
   });
 
@@ -50,7 +50,7 @@ describe('selectRelatedPosts', () => {
       post('invalid-date', { publishedAt: 'invalid' }),
     ];
 
-    expect(selectRelatedPosts(current, corpus).map(({ _id }) => _id)).toEqual(['newest', 'newer', 'older-frontend']);
+    expect(selectRelatedPosts(current, corpus).map(({ _id }) => _id)).toEqual(['newest', 'newer', 'older-frontend', 'invalid-date']);
   });
 
   it('treats missing and invalid dates as oldest and uses deterministic ID ties', () => {
@@ -90,6 +90,12 @@ describe('selectRelatedPosts', () => {
     const tagged = post('tagged', { tags: [{ _id: 'react', _type: 'tag', _createdAt: '', _updatedAt: '', _rev: '', name: 'React.js' }] });
 
     expect(selectRelatedPosts(post('current', { keywords: ['ReactJS'] }), [newer, tagged])[0]).toBe(tagged);
+  });
+
+  it('selects at most four distinct destinations after deduplication', () => {
+    const corpus = [post('e'), post('a'), post('a'), post('b'), post('c'), post('d')];
+
+    expect(selectRelatedPosts(post('current'), corpus).map(({ _id }) => _id)).toEqual(['a', 'b', 'c', 'd']);
   });
 
   it('returns all eligible entries in a small corpus and handles empty corpora without changing input', () => {

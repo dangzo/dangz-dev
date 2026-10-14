@@ -74,7 +74,7 @@ export function selectRelatedPosts(currentPost: PostWithTopic, corpus: readonly 
     seenSlugs.add(slug);
     result.push(post);
 
-    if (result.length === 3) {
+    if (result.length === 4) {
       break;
     }
   }
