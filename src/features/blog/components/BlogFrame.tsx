@@ -41,9 +41,7 @@ export default function BlogFrame({ children, heading, sidebar }: BlogFrameProps
         <aside className="mx-auto w-full min-w-0 max-w-[70ch] group-not-has-data-article-toc/article:hidden xl:col-start-1 xl:row-start-1">
           {sidebar}
         </aside>
-        <section aria-label="Article content" className="min-w-0 xl:col-start-2 xl:row-start-1 xl:group-not-has-data-article-toc/article:col-start-1">
-          {children}
-        </section>
+        {children}
       </div>
     </article>
   );
