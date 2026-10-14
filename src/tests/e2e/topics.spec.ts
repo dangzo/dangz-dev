@@ -68,7 +68,7 @@ test('client navigation restores topic heading and sidebar after an article visi
 
   await expect(page.getByRole('heading', { level: 1, name: 'Building stable visual regression tests' })).toBeVisible();
   await expect(page.locator('aside').getByRole('heading', { name: 'Contents', exact: true })).toBeVisible();
-  await page.locator('article').first().getByRole('link', { name: 'Architecture' }).click();
+  await page.getByRole('link', { name: 'Architecture', exact: true }).first().click();
 
   await expect(page).toHaveURL(/\/blog\/topics\/architecture$/);
   await expect(page.getByRole('heading', { level: 1, name: 'Architecture' })).toBeVisible();
