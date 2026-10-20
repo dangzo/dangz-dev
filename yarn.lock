@@ -3666,7 +3666,7 @@
   resolved "https://registry.yarnpkg.com/@sanity/icons/-/icons-3.8.0.tgz#20c83dd37c8b158b6f9ca41ce064165d63d16ff3"
   integrity sha512-LXa8eoE6U2e46L/9Pk6VU1aOWNxEqEG1osTb2YWItPIAa8MyXkICRwdNRWwW3kr5gmf+Sh2ZmfKol/Q+oGKSqw==
 
-"@sanity/icons@^5.2.1", "@sanity/icons@^5.2.2", "@sanity/icons@^5.2.3":
+"@sanity/icons@^5.2.1", "@sanity/icons@^5.2.3":
   version "5.2.3"
   resolved "https://registry.yarnpkg.com/@sanity/icons/-/icons-5.2.3.tgz#0eece8c945e409335171805393b1cd9a253b75dd"
   integrity sha512-10nE7IiuXIPIf6ufSKyNwnOE75wghEollUYzkjPUAX+5oenyE5qDFUrMD5MeC+8gxZ8KS61o8sH1mpmhpWx++w==
@@ -3928,13 +3928,13 @@
     "@noble/ed25519" "^3.1.0"
     "@noble/hashes" "^2.3.0"
 
-"@sanity/table@^3.1.17":
-  version "3.1.17"
-  resolved "https://registry.yarnpkg.com/@sanity/table/-/table-3.1.17.tgz#40aca6400f6a6fb7389e38b066debb0a5e26ef3d"
-  integrity sha512-mfISehFTSm8n+VkkkNMTi+dXobENGX3dZxzGjTVngH56U1l83K0dXaENbduR5yOfg7DLn0EzitXPh/E9aXEJhQ==
+"@sanity/table@^3.1.20":
+  version "3.1.20"
+  resolved "https://registry.yarnpkg.com/@sanity/table/-/table-3.1.20.tgz#645f598d5453552d8b535af778db923ac3181211"
+  integrity sha512-lXYrt2vr+X6FERqw9Tcj4vJGrFoSepsMItBcgX8uYDI49yC3GKn0DRAgiE9onvyJHkNwIh63ouaeNQDR/3JhHw==
   dependencies:
-    "@sanity/icons" "^5.2.2"
-    "@sanity/ui" "^4.2.7"
+    "@sanity/icons" "^5.2.3"
+    "@sanity/ui" "^4.4.5"
     "@sanity/uuid" "^3.0.3"
 
 "@sanity/telemetry@^1.1.0":
@@ -3999,19 +3999,18 @@
     react-refractor "^2.2.0"
     use-effect-event "^2.0.3"
 
-"@sanity/ui@^4.0.6", "@sanity/ui@^4.2.1", "@sanity/ui@^4.2.7", "@sanity/ui@^4.3.1", "@sanity/ui@^4.4.0":
-  version "4.4.5"
-  resolved "https://registry.yarnpkg.com/@sanity/ui/-/ui-4.4.5.tgz#a905a3811c342c89d9b0c27f2c4b5cc30273e4ac"
-  integrity sha512-irTM74hvxsGZ5mZUcbqQL7xkaSenhYgmpTLqY7McivbPOMLYBCMFSW7wtCHgSLavBqGIUfuUeyRrCt94wu4qvw==
+"@sanity/ui@^4.0.6", "@sanity/ui@^4.2.1", "@sanity/ui@^4.3.1", "@sanity/ui@^4.4.0", "@sanity/ui@^4.4.5":
+  version "4.4.9"
+  resolved "https://registry.yarnpkg.com/@sanity/ui/-/ui-4.4.9.tgz#5e2b32b40fe52d4d2cc2fb388dea01b8fdb33daf"
+  integrity sha512-4PBMT7tK3HO2Ej8D47kddcBYpAABUexjVhxvE2tRthiucViU1hoeEXmZiCPpvjPkkh62cpodyPr6VU+88zjVFQ==
   dependencies:
     "@floating-ui/react-dom" "^2.1.9"
     "@sanity/color" "^3.0.9"
     "@sanity/icons" "^5.2.3"
-    "@vanilla-extract/dynamic" "^2.1.5"
     clsx "^2.1.1"
     csstype "^3.2.3"
-    motion "^14.2.0"
-    react-is "^19.3.0"
+    motion "^14.3.0"
+    react-is "^19.3.1"
     react-refractor "^4.0.0"
     use-effect-event "^2.0.4"
 
@@ -7378,12 +7377,12 @@ framer-motion@14.1.0:
     motion-utils "14.1.0"
     tslib "^2.4.0"
 
-framer-motion@14.2.0:
-  version "14.2.0"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-14.2.0.tgz#914ed5a13c74a962c2efaba3b8c9f4dbf6e1d1c7"
-  integrity sha512-cD2gfFujHt4r/+dZpcn5yziu7VRwQAQDakwIm/bICYXbafnpHCYokV+PnEXqErnSdv6Eh28a+SRF+f3ndGcMsQ==
+framer-motion@14.4.0:
+  version "14.4.0"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-14.4.0.tgz#c152c9e061a4efb91b730da3f51935ae28365e40"
+  integrity sha512-HtO1fxord2rnXYRyr1laG4uY7+OtgwDc9Szcg1wlMq/LF7BO3/S7a+KEo691U7pSi+i0ueRuRqaD1UaLEmZHuQ==
   dependencies:
-    motion-dom "14.2.0"
+    motion-dom "14.4.0"
     motion-utils "14.1.1"
     tslib "^2.4.0"
 
@@ -9831,10 +9830,10 @@ motion-dom@14.1.0:
   dependencies:
     motion-utils "14.1.0"
 
-motion-dom@14.2.0:
-  version "14.2.0"
-  resolved "https://registry.yarnpkg.com/motion-dom/-/motion-dom-14.2.0.tgz#d9c02f0c1347a46b62b822bdf0de0e0c2fb2c275"
-  integrity sha512-TDdxnjAavh2Qm4lQCQI3uoTx9IR/Id2PI8JNEXW3AcwwV2yvhoimAX3/TnE+x82gDHfPq2yx/cJ58TTw5mMr0A==
+motion-dom@14.4.0:
+  version "14.4.0"
+  resolved "https://registry.yarnpkg.com/motion-dom/-/motion-dom-14.4.0.tgz#847fc4eb997dd27e3bfa96bd490f8b585cebd042"
+  integrity sha512-1q8RyHSdr5COpzrv3JgJ9XRjOO88ZN9CwflpkGgyO/SR/SNRP/dD6EU8SEo092kcKY34IzHC5diJPKrQRMA8lQ==
   dependencies:
     motion-utils "14.1.1"
 
@@ -9876,12 +9875,12 @@ motion@^14.0.0:
     framer-motion "14.1.0"
     tslib "^2.4.0"
 
-motion@^14.2.0:
-  version "14.2.0"
-  resolved "https://registry.yarnpkg.com/motion/-/motion-14.2.0.tgz#1e1a16a0035806461e6773e0bed9f7f6983d90a6"
-  integrity sha512-45cDwjZh0yOMZtnX3hIFPIPmzCWz/RC2bD/niWVIssGBjJlMmosbDILG9a+ZyoP635Z5xrbKvuo10spv9dBdnw==
+motion@^14.3.0:
+  version "14.4.0"
+  resolved "https://registry.yarnpkg.com/motion/-/motion-14.4.0.tgz#d6dbcb89e4f74f1da2dcdb14543ea9aba6c603f8"
+  integrity sha512-JJTIdeNjtF2zi/py0ndRKxQF+8z2pcDUgJYXul7zqbhMvyTLRsPFR9ifE/j4cFCpCMlehQVJkTwd7BZFiPKgQg==
   dependencies:
-    framer-motion "14.2.0"
+    framer-motion "14.4.0"
     tslib "^2.4.0"
 
 ms@2.0.0:
@@ -10853,6 +10852,11 @@ react-is@^19.2.7, react-is@^19.2.8, react-is@^19.3.0:
   version "19.3.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-19.3.0.tgz#716028d67e9993d23a2d353c6d08a3c1ef2bbeb4"
   integrity sha512-UpMYezM4v5/18F28aC66AEsjXIgE02kyEMH6yLdgLXu/UTfa1Ntwck/nNLrbqJsEXW7gPb0coNO9FQse9WTovA==
+
+react-is@^19.3.1:
+  version "19.3.1"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-19.3.1.tgz#81f7f7e431fc9b5bd9781b0a9f19997f08dee51b"
+  integrity sha512-RRieF6IyxQBkcK6pP8xOHprLTPW6QjRkbGdImtqNme+/hYVwCZkLQLdlZGOhUqXwkS9IEynaGvPJtv6XB/cz0Q==
 
 react-loading-skeleton@^3.5.0:
   version "3.5.0"
