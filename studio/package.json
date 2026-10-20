@@ -20,7 +20,7 @@
   ],
   "dependencies": {
     "@sanity/code-input": "^7.3.10",
-    "@sanity/table": "^3.1.17",
+    "@sanity/table": "^3.1.20",
     "@sanity/ui": "^4.2.1",
     "@sanity/vision": "6.18.0",
     "graphql": "^17.0.1",
