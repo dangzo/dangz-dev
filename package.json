@@ -47,7 +47,7 @@
     "migrate:topics": "node --env-file-if-exists=.env --env-file-if-exists=studio/.env scripts/migrate-blog-topics.mts"
   },
   "dependencies": {
-    "@apollo/client": "^4.3.1",
+    "@apollo/client": "^4.3.5",
     "@apollo/client-integration-nextjs": "^0.14.3",
     "@next/third-parties": "^16.4.3",
     "@sanity/code-input": "^7.3.10",
