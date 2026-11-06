@@ -199,7 +199,7 @@ test.describe('Pageviews with the application integration and intercepted real t
     releaseTracker();
     await page.goto(article);
     await expect.poll(() => pageviews().length).toBe(1);
-    const compact = page.getByLabel('Reactions', { exact: true }).first();
+    const compact = page.locator('[aria-label="Reactions"]:not([aria-label="Article content"] *)');
     await compact.getByRole('button', { name: 'Love', exact: true }).click();
     await expect(compact.getByText('4', { exact: true })).toBeVisible();
     const reactions = page.getByLabel('Article content').getByLabel('Reactions', { exact: true });
