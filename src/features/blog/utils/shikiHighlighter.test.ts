@@ -1,3 +1,6 @@
+// @vitest-environment node
+// Shiki loads its WASM engine with Blob.stream(), which jsdom does not provide.
+
 import { highlightCodeWithShiki, normalizeCodeLanguage } from './shikiHighlighter';
 
 describe('normalizeCodeLanguage', () => {
